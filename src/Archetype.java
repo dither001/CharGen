@@ -1,6 +1,17 @@
 
 public enum Archetype {
-	BARBARIAN, BARD, CLERIC, DRUID, FIGHTER, MONK, PALADIN, RANGER, ROGUE, SORCERER, WARLOCK, WIZARD;
+	BARBARIAN(Ability.STRENGTH), BARD(Ability.CHARISMA), CLERIC(Ability.WISDOM), DRUID(Ability.WISDOM), FIGHTER(
+			Ability.STRENGTH), MONK(Ability.WISDOM), PALADIN(Ability.STRENGTH), RANGER(
+					Ability.STRENGTH), ROGUE(Ability.DEXTERITY), SORCERER(
+							Ability.CHARISMA), WARLOCK(Ability.CHARISMA), WIZARD(Ability.INTELLIGENCE);
+
+	// fields
+	private Ability primeRequisite;
+
+	// constructors
+	Archetype(Ability ability) {
+		this.primeRequisite = ability;
+	}
 
 	// methods
 	public static Archetype selectArchetype(Actor actor) {
@@ -56,7 +67,7 @@ public enum Archetype {
 			prime = abilities.getINT();
 			expRate = (prime > 14) ? 1.10f : (prime > 12) ? 1.05f : expRate;
 			expRate = (prime < 6) ? 0.80f : (prime < 9) ? 0.90f : expRate;
-		} else if (job.equals(CLERIC) || job.equals(DRUID)) {
+		} else if (job.equals(CLERIC) || job.equals(DRUID) || job.equals(MONK)) {
 			prime = abilities.getWIS();
 			expRate = (prime > 14) ? 1.10f : (prime > 12) ? 1.05f : expRate;
 			expRate = (prime < 6) ? 0.80f : (prime < 9) ? 0.90f : expRate;
