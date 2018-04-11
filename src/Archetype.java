@@ -41,4 +41,35 @@ public enum Archetype {
 
 		return archetype;
 	}
+
+	public static float primaryAttribute(Actor actor) {
+		float expRate = 1.00f;
+		int prime;
+		AbilityArray abilities = actor.getAbilities();
+		Archetype job = actor.getJob();
+
+		if (job.equals(ROGUE)) {
+			prime = abilities.getDEX();
+			expRate = (prime > 14) ? 1.10f : (prime > 12) ? 1.05f : expRate;
+			expRate = (prime < 6) ? 0.80f : (prime < 9) ? 0.90f : expRate;
+		} else if (job.equals(WIZARD)) {
+			prime = abilities.getINT();
+			expRate = (prime > 14) ? 1.10f : (prime > 12) ? 1.05f : expRate;
+			expRate = (prime < 6) ? 0.80f : (prime < 9) ? 0.90f : expRate;
+		} else if (job.equals(CLERIC) || job.equals(DRUID)) {
+			prime = abilities.getWIS();
+			expRate = (prime > 14) ? 1.10f : (prime > 12) ? 1.05f : expRate;
+			expRate = (prime < 6) ? 0.80f : (prime < 9) ? 0.90f : expRate;
+		} else if (job.equals(BARD) || job.equals(SORCERER) || job.equals(WARLOCK)) {
+			prime = abilities.getCHA();
+			expRate = (prime > 14) ? 1.10f : (prime > 12) ? 1.05f : expRate;
+			expRate = (prime < 6) ? 0.80f : (prime < 9) ? 0.90f : expRate;
+		} else {
+			prime = abilities.getSTR();
+			expRate = (prime > 14) ? 1.10f : (prime > 12) ? 1.05f : expRate;
+			expRate = (prime < 6) ? 0.80f : (prime < 9) ? 0.90f : expRate;
+		}
+
+		return expRate;
+	}
 }
