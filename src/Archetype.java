@@ -53,7 +53,7 @@ public enum Archetype {
 		return archetype;
 	}
 
-	public static float primaryAttribute(Actor actor) {
+	public static float getPrimeRequisite(Actor actor) {
 		float expRate = 1.00f;
 		int prime;
 		AbilityArray abilities = actor.getAbilities();

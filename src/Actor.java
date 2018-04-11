@@ -32,7 +32,7 @@ public class Actor {
 		god = Deity.selectDeity(this);
 
 		// TODO
-		expRate = Archetype.primaryAttribute(this);
+		expRate = Archetype.getPrimeRequisite(this);
 	}
 
 	// methods
