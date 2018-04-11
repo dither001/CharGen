@@ -24,7 +24,7 @@ public class Actor {
 		// GOD requires ALI, JOB, and RACE
 		god = Deity.selectDeity(this);
 	}
-	
+
 	// methods
 	public int getSTR() {return abilities.getSTR();}
 	public int getDEX() {return abilities.getDEX();}
