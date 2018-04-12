@@ -92,6 +92,30 @@ public class Actor {
 		return abilities.getCHA();
 	}
 
+	public int getSTRMod() {
+		return abilities.getSTRMod();
+	}
+
+	public int getDEXMod() {
+		return abilities.getDEXMod();
+	}
+
+	public int getCONMod() {
+		return abilities.getCONMod();
+	}
+
+	public int getINTMod() {
+		return abilities.getINTMod();
+	}
+
+	public int getWISMod() {
+		return abilities.getWISMod();
+	}
+
+	public int getCHAMod() {
+		return abilities.getCHAMod();
+	}
+
 	public Alignment getAli() {
 		return ali;
 	}
