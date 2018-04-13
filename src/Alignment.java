@@ -7,7 +7,10 @@
  */
 
 public enum Alignment {
-	LAW, GOOD, NEUTRAL, EVIL, CHAOS;
+	LAWFUL, GOOD, NEUTRAL, EVIL, CHAOTIC;
+	
+	// fields
+	private static Alignment ali[] = { LAWFUL, GOOD, NEUTRAL, EVIL, CHAOTIC };
 
 	// methods
 	public static Alignment selectALI() {
@@ -34,7 +37,6 @@ public enum Alignment {
 	}
 
 	public static Alignment selectALI(int index) {
-		Alignment ali[] = { LAW, GOOD, NEUTRAL, EVIL, CHAOS };
 		index = (index < 0) ? 0 : (index > 4) ? 4 : index;
 
 		return ali[index];

@@ -73,13 +73,13 @@ public enum Deity {
 		Deity[] evilGods = { ASMODEUS, BANE, TIAMAT, TOROG, VECNA, ZEHIR };
 		Deity[] chaoticGods = { GRUUMSH, KORD, LOLTH, THARIZDUN, TIAMAT, TOROG };
 
-		if (ali.equals(Alignment.LAW)) {
+		if (ali.equals(Alignment.LAWFUL)) {
 			deity = lawfulGods[dieRoll];
 		} else if (ali.equals(Alignment.GOOD)) {
 			deity = goodGods[dieRoll];
 		} else if (ali.equals(Alignment.NEUTRAL)) {
 			deity = neutralGods[dieRoll];
-		} else if (ali.equals(Alignment.CHAOS)) {
+		} else if (ali.equals(Alignment.CHAOTIC)) {
 			deity = chaoticGods[dieRoll];
 		} else {
 			// default is an evil god

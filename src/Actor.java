@@ -132,6 +132,10 @@ public class Actor {
 		return god;
 	}
 
+	public float getEXPRate() {
+		return expRate;
+	}
+	
 	// static methods
 	public static boolean checkNextLevel(Actor actor) {
 		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,

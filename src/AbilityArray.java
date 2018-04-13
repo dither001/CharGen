@@ -41,4 +41,13 @@ public class AbilityArray {
 	public int getWISMod() {return (abilities[4] > 9) ? (abilities[4] - 10) / 2 : (abilities[4] - 11) / 2;} 
 	public int getCHAMod() {return (abilities[5] > 9) ? (abilities[5] - 10) / 2 : (abilities[5] - 11) / 2;} 
 	 
+	@Override
+	public String toString() {
+		String string = "";
+		int STR = abilities[0], DEX = abilities[1], CON = abilities[2];
+		int INT = abilities[3], WIS = abilities[4], CHA = abilities[5];
+		string = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", STR, DEX, CON, INT, WIS, CHA);
+		
+		return string;
+	}
 }

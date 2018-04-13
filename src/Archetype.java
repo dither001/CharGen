@@ -93,11 +93,11 @@ public enum Archetype {
 			archetype = RANGER;
 		} else if (DEX > 12) {
 			archetype = ROGUE;
-		} else if (ali.equals(Alignment.LAW)) {
+		} else if (ali.equals(Alignment.LAWFUL)) {
 			archetype = MONK;
 		} else if (ali.equals(Alignment.GOOD)) {
 			archetype = PALADIN;
-		} else if (ali.equals(Alignment.CHAOS)) {
+		} else if (ali.equals(Alignment.CHAOTIC)) {
 			archetype = BARBARIAN;
 		} else {
 			archetype = FIGHTER;
