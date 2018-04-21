@@ -20,13 +20,13 @@ public enum Race {
 		} else if (dice < 71) {
 			race = DARK_ELF;
 		} else if (dice < 77) {
-			race = DARK_ELF;
-		} else if (dice < 83) {
 			race = GNOME;
-		} else if (dice < 89) {
+		} else if (dice < 83) {
 			race = HALF_ELF;
-		} else if (dice < 95) {
+		} else if (dice < 89) {
 			race = HALF_ORC;
+		} else if (dice < 95) {
+			race = HALFLING;
 		} else {
 			race = TIEFLING;
 		}
