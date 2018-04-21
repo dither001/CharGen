@@ -1,31 +1,31 @@
 import java.util.EnumSet;
 
-//BARBARIAN(Ability.STRENGTH, 12, Armor.getProficiency(Armor.Weight.BARBARIAN)),
-//BARD(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.LIGHT)),
-//CLERIC(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM)),
-//DRUID(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM)),
-//FIGHTER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY)),
-//MONK(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MONK)),
-//PALADIN(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY)),
-//RANGER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.MEDIUM)),
-//ROGUE(Ability.DEXTERITY, 8, Armor.getProficiency(Armor.Weight.LIGHT)),
-//SORCERER(Ability.CHARISMA, 6, Armor.getProficiency(Armor.Weight.MAGE)),
-//WARLOCK(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.WARLOCK)),
-//WIZARD(Ability.INTELLIGENCE, 6, Armor.getProficiency(Armor.Weight.MAGE));
+//BARBARIAN(Ability.STRENGTH, 12, Armor.getProficiency(Armor.Weight.BARBARIAN), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+//BARD(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
+//CLERIC(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
+//DRUID(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.DRUID)),
+//FIGHTER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+//MONK(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MONK), Weapon.getProficiency(Weapon.Weight.MONK)),
+//PALADIN(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+//RANGER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+//ROGUE(Ability.DEXTERITY, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
+//SORCERER(Ability.CHARISMA, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SORCERER)),
+//WARLOCK(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.WARLOCK), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
+//WIZARD(Ability.INTELLIGENCE, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SIMPLE));
 
 public enum Archetype {
-	BARBARIAN(Ability.STRENGTH, 12, Armor.getProficiency(Armor.Weight.BARBARIAN)),
-	BARD(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.LIGHT)),
-	CLERIC(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM)),
-	DRUID(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM)),
-	FIGHTER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY)),
-	MONK(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MONK)),
-	PALADIN(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY)),
-	RANGER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.MEDIUM)),
-	ROGUE(Ability.DEXTERITY, 8, Armor.getProficiency(Armor.Weight.LIGHT)),
-	SORCERER(Ability.CHARISMA, 6, Armor.getProficiency(Armor.Weight.MAGE)),
-	WARLOCK(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.WARLOCK)),
-	WIZARD(Ability.INTELLIGENCE, 6, Armor.getProficiency(Armor.Weight.MAGE));
+	BARBARIAN(Ability.STRENGTH, 12, Armor.getProficiency(Armor.Weight.BARBARIAN), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+	BARD(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
+	CLERIC(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
+	DRUID(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.DRUID)),
+	FIGHTER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+	MONK(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MONK), Weapon.getProficiency(Weapon.Weight.MONK)),
+	PALADIN(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+	RANGER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
+	ROGUE(Ability.DEXTERITY, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
+	SORCERER(Ability.CHARISMA, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SORCERER)),
+	WARLOCK(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.WARLOCK), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
+	WIZARD(Ability.INTELLIGENCE, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SIMPLE));
 
 	// static fields
 	private static final float BEST_XP = 1.10f;
@@ -35,14 +35,22 @@ public enum Archetype {
 
 	// fields
 	private Ability primeRequisite;
+	/*
+	 * TODO - prime requisite was added after general implementation of the
+	 * Archetype class and its experience rate methods; eventually I want to have
+	 * prime requisite be based more upon the abilities put out in the Ability class
+	 * than (necessarily) the classic six ability scores of Dungeons & Dragons
+	 */
 	private int hitDie;
 	private EnumSet<Armor> armorProficiency;
+	private EnumSet<Weapon> weaponProficiency;
 
 	// constructors
-	Archetype(Ability ability, int hitDie, EnumSet<Armor> armorProficiency) {
+	Archetype(Ability ability, int hitDie, EnumSet<Armor> armorProficiency, EnumSet<Weapon> weaponProficiency) {
 		this.primeRequisite = ability;
 		this.setHitDie(hitDie);
 		this.armorProficiency = armorProficiency;
+		this.weaponProficiency = weaponProficiency;
 	}
 
 	// methods
@@ -64,6 +72,18 @@ public enum Archetype {
 
 	public void addAllArmorProficiency(EnumSet<Armor> armor) {
 		this.armorProficiency.addAll(armor);
+	}
+
+	public EnumSet<Weapon> getWeaponProficiency() {
+		return weaponProficiency;
+	}
+
+	public void addWeaponProficiency(Weapon weapon) {
+		this.weaponProficiency.add(weapon);
+	}
+
+	public void addAllWeaponProficiency(EnumSet<Weapon> weapon) {
+		this.weaponProficiency.addAll(weapon);
 	}
 
 	// static methods
