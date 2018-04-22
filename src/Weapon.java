@@ -40,7 +40,7 @@
 import java.util.Arrays;
 import java.util.EnumSet;
 
-public enum Weapon implements Equipment {
+public enum Weapon implements Item {
 	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 	DAGGER(4, Energy.PIERCING, Hand.LIGHT),

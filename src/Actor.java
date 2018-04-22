@@ -5,8 +5,8 @@
  * generated will probably be a) evil, b) human, and c) fighters.
  */
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Vector;
 
 public class Actor {
 	// objects
@@ -15,7 +15,7 @@ public class Actor {
 	private Archetype job;
 	private Race race;
 	private Deity god;
-	private ArrayList<Item> inventory;
+	private Vector<Item> inventory;
 
 	// fields
 	private String name;
