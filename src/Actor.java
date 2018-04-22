@@ -5,6 +5,9 @@
  * generated will probably be a) evil, b) human, and c) fighters.
  */
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class Actor {
 	// objects
 	private AbilityArray abilities;
@@ -12,6 +15,7 @@ public class Actor {
 	private Archetype job;
 	private Race race;
 	private Deity god;
+	private ArrayList<Item> inventory;
 
 	// fields
 	private String name;
@@ -135,7 +139,23 @@ public class Actor {
 	public float getEXPRate() {
 		return expRate;
 	}
-	
+
+	public void addItem(Item item) {
+		inventory.add(item);
+	}
+
+	public void addAllItems(Collection<Item> items) {
+		inventory.addAll(items);
+	}
+
+	public boolean removeItem(Item item) {
+		return inventory.remove(item);
+	}
+
+	public boolean removeAllItems(Collection<Item> items) {
+		return inventory.removeAll(items);
+	}
+
 	// static methods
 	public static boolean checkNextLevel(Actor actor) {
 		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,

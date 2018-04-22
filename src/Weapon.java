@@ -83,7 +83,7 @@ public enum Weapon implements Equipment {
 	public enum Weight {
 		SIMPLE, MARTIAL, DRUID, MONK, ROGUE, SORCERER
 	};
-	
+
 	public enum Hand {
 		LIGHT, ONE, VERSATILE, TWO, HEAVY
 	};
