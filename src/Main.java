@@ -15,8 +15,8 @@ public class Main {
 		Gear g;
 		for (int i = 0; i < actors.length; ++i) {
 			actors[i] = new Actor();
-			it = actors[i].getInventory().iterator();
-			
+			// it = actors[i].getInventory().iterator();
+
 			System.out.print(actors[i].getAbilities().toString());
 			System.out.print(" " + actors[i].getAli().toString());
 			System.out.print(" " + actors[i].getRace().toString());
@@ -25,18 +25,19 @@ public class Main {
 			System.out.print(" (" + actors[i].getEXPRate() + ")");
 			System.out.println("");
 
-			if (actors[i].hasGear()) {
-				while (it.hasNext()) {
-					g = it.next();
-					if (g != null) {
-						System.out.print(g.getName());
-						if (it.hasNext()) {
-							System.out.print(", ");
-						}
-					}
-				}
-				System.out.println("");
-			}
+			// FIXME - used for testing presence of gear
+			// if (actors[i].hasGear()) {
+			// while (it.hasNext()) {
+			// g = it.next();
+			// if (g != null) {
+			// System.out.print(g.getName());
+			// if (it.hasNext()) {
+			// System.out.print(", ");
+			// }
+			// }
+			// }
+			// System.out.println("");
+			// }
 		}
 	}
 

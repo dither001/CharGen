@@ -1,3 +1,4 @@
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -205,24 +206,67 @@ public class Gear {
 		return g;
 	}
 
-	public static Vector<Gear> getStartingGear(Archetype job) {
+	public static Gear randomMartialRanged() {
+		String[] array = { "Blowgun", "Hand Crossbow", "Heavy Crossbow", "Longbow", "Net" };
+		String key = array[Dice.roll(array.length) - 1];
+		Gear g = mundane.get(key);
+
+		return g;
+	}
+
+	public static Gear randomMartialWeapon() {
+		Gear g;
+		if (Dice.roll(2) == 1) {
+			g = randomMartialMelee();
+		} else {
+			g = randomMartialRanged();
+		}
+
+		return g;
+	}
+
+	public static Vector<Gear> getStartingGear(Actor actor) {
+		Archetype job = actor.getJob();
+		AbilityArray abilities = actor.getAbilities();
 		Vector<Gear> gear = new Vector<Gear>();
 
 		switch (job) {
 		case BARBARIAN:
-			gear = getBarbarianGear();
+			gear = barbarianStartingGear();
 			break;
-		// case BARD: gear = getBardGear(); break;
-		// case CLERIC: gear = getClericGear(); break;
-		// case DRUID: gear = getDruidGear(); break;
-		// case FIGHTER: gear = getFighterGear(); break;
-		// case MONK: gear = getMonkGear(); break;
-		// case PALADIN: gear = getPaladinGear(); break;
-		// case RANGER: gear = getRangerGear(); break;
-		// case ROGUE: gear = getRogueGear(); break;
-		// case SORCERER: gear = getSorcererGear(); break;
-		// case WARLOCK: gear = getWarlockGear(); break;
-		// case WIZARD: gear = getWizardGear(); break;
+		case BARD:
+			gear = bardStartingGear();
+			break;
+		case CLERIC:
+			gear = clericStartingGear(actor);
+			break;
+		case DRUID:
+			gear = druidStartingGear();
+			break;
+		case FIGHTER:
+			gear = fighterStartingGear(abilities);
+			break;
+		case MONK:
+			gear = monkStartingGear();
+			break;
+		case PALADIN:
+			gear = paladinStartingGear();
+			break;
+		case RANGER:
+			gear = rangerStartingGear(abilities);
+			break;
+		case ROGUE:
+			gear = rogueStartingGear();
+			break;
+		case SORCERER:
+			gear = sorcererStartingGear();
+			break;
+		case WARLOCK:
+			gear = warlockStartingGear();
+			break;
+		case WIZARD:
+			gear = wizardStartingGear();
+			break;
 		default:
 			break;
 		}
@@ -230,12 +274,12 @@ public class Gear {
 		return gear;
 	}
 
-	public static Vector<Gear> getBarbarianGear() {
+	public static Vector<Gear> barbarianStartingGear() {
 		Vector<Gear> gear = new Vector<Gear>();
 		int dice;
 
 		// first choice
-		dice = Dice.roll(2); 
+		dice = Dice.roll(2);
 		if (dice == 1) {
 			gear.add(mundane.get("Greataxe"));
 		} else {
@@ -243,7 +287,7 @@ public class Gear {
 		}
 
 		// second choice
-		dice = Dice.roll(2); 
+		dice = Dice.roll(2);
 		if (dice == 1) {
 			gear.add(mundane.get("Handaxe"));
 			gear.add(mundane.get("Handaxe"));
@@ -258,6 +302,306 @@ public class Gear {
 		gear.add(mundane.get("Javelin"));
 		gear.add(mundane.get("Javelin"));
 		gear.add(mundane.get("Javelin"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> bardStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(3);
+		if (dice == 1) {
+			gear.add(mundane.get("Rapier"));
+		} else if (dice == 2) {
+			gear.add(mundane.get("Longsword"));
+		} else {
+			gear.add(randomSimpleWeapon());
+		}
+
+		// TODO - add diplomat's or entertainer's pack
+		// TODO - add lute or any instrument
+
+		// receive leather armor + dagger
+		gear.add(mundane.get("Leather Armor"));
+		gear.add(mundane.get("Dagger"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> clericStartingGear(Actor actor) {
+		EnumSet<Weapon> weapons = actor.getJob().getWeaponProficiency();
+		EnumSet<Armor> armors = actor.getJob().getArmorProficiency();
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		if (weapons.contains(Weapon.WARHAMMER)) {
+			gear.add(mundane.get("Warhammer"));
+		} else {
+			gear.add(mundane.get("Mace"));
+		}
+
+		// second choice
+		int strength = actor.getSTR();
+		int dexterity = actor.getDEX();
+		if (dexterity > 15) {
+			gear.add(mundane.get("Leather Armor"));
+		} else if (armors.contains(Armor.CHAIN_MAIL) && strength > 12) {
+			gear.add(mundane.get("Chain Mail"));
+		} else {
+			gear.add(mundane.get("Scale Mail"));
+		}
+
+		// third choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - receive 20 bolts
+			gear.add(mundane.get("Light Crossbow"));
+		} else {
+			gear.add(randomSimpleWeapon());
+		}
+
+		// TODO - add priest's or explorer's pack
+		// TODO - receive shield + holy symbol
+
+		return gear;
+	}
+
+	public static Vector<Gear> druidStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(2);
+		if (true) {
+			// TODO - 50/50 for weapon or wooden shield
+			gear.add(randomSimpleWeapon());
+		}
+
+		// second choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			gear.add(mundane.get("Scimitar"));
+		} else {
+			gear.add(randomSimpleMelee());
+		}
+
+		// TODO - receive explorer's pack + druid focus
+		gear.add(mundane.get("Leather Armor"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> fighterStartingGear(AbilityArray abilities) {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		int strength = abilities.getSTR();
+		int dexterity = abilities.getDEX();
+		if (strength < 13 || dexterity > 15) {
+			// TODO - receive 20 arrows
+			gear.add(mundane.get("Leather Armor"));
+			gear.add(mundane.get("Longbow"));
+		} else {
+			gear.add(mundane.get("Chain Mail"));
+		}
+
+		// second choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - wooden shield
+			gear.add(randomMartialWeapon());
+		} else {
+			gear.add(randomSimpleWeapon());
+		}
+
+		// third choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - receive 20 bolrs
+			gear.add(mundane.get("Light Crossbow"));
+		} else {
+			gear.add(mundane.get("Handaxe"));
+			gear.add(mundane.get("Handaxe"));
+		}
+
+		// TODO - add dungeoneer's or explorer's pack
+
+		return gear;
+	}
+
+	public static Vector<Gear> monkStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			gear.add(mundane.get("Shortsword"));
+		} else {
+			gear.add(randomSimpleWeapon());
+		}
+
+		// TODO - add dungeoneer's or explorer's pack
+		// TODO - receive 10 darts
+		gear.add(mundane.get("Dart"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> paladinStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - wooden shield
+			gear.add(randomMartialWeapon());
+		} else {
+			gear.add(randomMartialWeapon());
+			gear.add(randomMartialWeapon());
+		}
+
+		// second choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - receive 5 javelins
+			gear.add(mundane.get("Javelin"));
+		} else {
+			gear.add(randomSimpleMelee());
+		}
+
+		// TODO - add priest's or explorer's pack
+		// TODO - receive holy symbol
+		gear.add(mundane.get("Chain Mail"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> rangerStartingGear(AbilityArray abilities) {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		int dexterity = abilities.getDEX();
+		if (dexterity > 15) {
+			gear.add(mundane.get("Leather Armor"));
+		} else {
+			gear.add(mundane.get("Scale Mail"));
+		}
+
+		// second choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			gear.add(mundane.get("Shortsword"));
+			gear.add(mundane.get("Shortsword"));
+		} else {
+			gear.add(randomSimpleMelee());
+			gear.add(randomSimpleMelee());
+		}
+
+		// third choice
+		// TODO - add dungeoneer's or explorer's pack
+
+		// TODO - receive longbow + 20 arrows
+		gear.add(mundane.get("Longbow"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> rogueStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			gear.add(mundane.get("Rapier"));
+		} else {
+			gear.add(mundane.get("Shortsword"));
+		}
+
+		// second choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - receive 20 arrows
+			gear.add(mundane.get("Shortbow"));
+		} else {
+			gear.add(mundane.get("Shortsword"));
+		}
+
+		// TODO - add burglar's or dungeoneer's or explorer's pack
+		// TODO - receive thieves' tool
+		gear.add(mundane.get("Leather Armor"));
+		gear.add(mundane.get("Dagger"));
+		gear.add(mundane.get("Dagger"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> sorcererStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - receives 20 bolts
+			gear.add(mundane.get("Light Crossbow"));
+		} else {
+			gear.add(randomSimpleWeapon());
+		}
+
+		// TODO - component pouch or arcane focus
+		// TODO - add dungeoneer's or explorer's pack
+		gear.add(mundane.get("Dagger"));
+		gear.add(mundane.get("Dagger"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> warlockStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			// TODO - receives 20 bolts
+			gear.add(mundane.get("Light Crossbow"));
+		} else {
+			gear.add(randomSimpleWeapon());
+		}
+
+		// TODO - component pouch or arcane focus
+		// TODO - add dungeoneer's or scholar's pack
+		gear.add(mundane.get("Leather Armor"));
+		gear.add(randomSimpleWeapon());
+		gear.add(mundane.get("Dagger"));
+		gear.add(mundane.get("Dagger"));
+
+		return gear;
+	}
+
+	public static Vector<Gear> wizardStartingGear() {
+		Vector<Gear> gear = new Vector<Gear>();
+		int dice;
+
+		// first choice
+		dice = Dice.roll(2);
+		if (dice == 1) {
+			gear.add(mundane.get("Quarterstaff"));
+		} else {
+			gear.add(mundane.get("Dagger"));
+		}
+
+		// TODO - component pouch or arcane focus
+		// TODO - add scholar's or explorer's pack
+		// TODO - receive spellbook
 
 		return gear;
 	}

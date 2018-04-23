@@ -15,7 +15,12 @@ public class Actor {
 	private Archetype job;
 	private Race race;
 	private Deity god;
+	
+	// gear
 	private Vector<Gear> inventory;
+	private Gear armor;
+	private Gear mainHand;
+	private Gear offHand;
 
 	// fields
 	private String name;
@@ -38,7 +43,7 @@ public class Actor {
 		// TODO
 		expRate = Archetype.getPrimeRequisite(this);
 
-		inventory = Gear.getStartingGear(job);
+		inventory = Gear.getStartingGear(this);
 	}
 
 	// methods
@@ -177,6 +182,32 @@ public class Actor {
 
 	public boolean removeAllGear(Collection<Gear> gear) {
 		return inventory.removeAll(gear);
+	}
+
+	public Gear getArmor() {
+		return armor;
+	}
+
+	public void setArmor(Gear armor) {
+		this.armor = armor;
+	}
+
+	public Gear getMainHand() {
+		return mainHand;
+	}
+
+	public void setMainHand(Gear mainHand) {
+		// TODO - make sure when equipping one hand to check the other
+		this.mainHand = mainHand;
+	}
+
+	public Gear getOffHand() {
+		return offHand;
+	}
+
+	public void setOffHand(Gear offHand) {
+		// TODO - make sure when equipping one hand to check the other
+		this.offHand = offHand;
 	}
 
 	// static methods
