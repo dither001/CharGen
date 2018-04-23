@@ -15,7 +15,7 @@ public class Actor {
 	private Archetype job;
 	private Race race;
 	private Deity god;
-	private Vector<Item> inventory;
+	private Vector<Gear> inventory;
 
 	// fields
 	private String name;
@@ -37,9 +37,19 @@ public class Actor {
 
 		// TODO
 		expRate = Archetype.getPrimeRequisite(this);
+
+		inventory = Gear.getStartingGear(job);
 	}
 
 	// methods
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getHitPoints() {
 		return 0;
 	} // TODO
@@ -140,20 +150,33 @@ public class Actor {
 		return expRate;
 	}
 
-	public void addItem(Item item) {
-		inventory.add(item);
+	public boolean hasGear() {
+		boolean hasGear = false;
+		if (inventory.size() > 0) {
+			hasGear = true;
+		}
+
+		return hasGear;
 	}
 
-	public void addAllItems(Collection<Item> items) {
-		inventory.addAll(items);
+	public Vector<Gear> getInventory() {
+		return inventory;
 	}
 
-	public boolean removeItem(Item item) {
-		return inventory.remove(item);
+	public void addGear(Gear gear) {
+		inventory.add(gear);
 	}
 
-	public boolean removeAllItems(Collection<Item> items) {
-		return inventory.removeAll(items);
+	public void addAllGear(Collection<Gear> gear) {
+		inventory.addAll(gear);
+	}
+
+	public boolean removeGear(Gear gear) {
+		return inventory.remove(gear);
+	}
+
+	public boolean removeAllGear(Collection<Gear> gear) {
+		return inventory.removeAll(gear);
 	}
 
 	// static methods
@@ -193,4 +216,5 @@ public class Actor {
 
 		return advanced;
 	}
+
 }
