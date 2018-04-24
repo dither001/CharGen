@@ -1,31 +1,31 @@
-import java.util.EnumSet;
+//	BARBARIAN(Ability.STRENGTH, 12, 2),
+//	BARD(Ability.CHARISMA, 8, 3),
+//	CLERIC(Ability.WISDOM, 8, 2),
+//	DRUID(Ability.WISDOM, 8, 2),
+//	FIGHTER(Ability.STRENGTH, 10, 2),
+//	MONK(Ability.WISDOM, 8, 2),
+//	PALADIN(Ability.STRENGTH, 10, 2),
+//	RANGER(Ability.STRENGTH, 10, 3),
+//	ROGUE(Ability.DEXTERITY, 8, 4),
+//	SORCERER(Ability.CHARISMA, 6, 2),
+//	WARLOCK(Ability.CHARISMA, 8, 2),
+//	WIZARD(Ability.INTELLIGENCE, 6, 2);
 
-//BARBARIAN(Ability.STRENGTH, 12, Armor.getProficiency(Armor.Weight.BARBARIAN), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-//BARD(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
-//CLERIC(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
-//DRUID(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.DRUID)),
-//FIGHTER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-//MONK(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MONK), Weapon.getProficiency(Weapon.Weight.MONK)),
-//PALADIN(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-//RANGER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-//ROGUE(Ability.DEXTERITY, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
-//SORCERER(Ability.CHARISMA, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SORCERER)),
-//WARLOCK(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.WARLOCK), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
-//WIZARD(Ability.INTELLIGENCE, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SIMPLE));
+import java.util.HashSet;
 
 public enum Archetype {
-	BARBARIAN(Ability.STRENGTH, 12, Armor.getProficiency(Armor.Weight.BARBARIAN), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-	BARD(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
-	CLERIC(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
-	DRUID(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.DRUID)),
-	FIGHTER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-	MONK(Ability.WISDOM, 8, Armor.getProficiency(Armor.Weight.MONK), Weapon.getProficiency(Weapon.Weight.MONK)),
-	PALADIN(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.HEAVY), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-	RANGER(Ability.STRENGTH, 10, Armor.getProficiency(Armor.Weight.MEDIUM), Weapon.getProficiency(Weapon.Weight.MARTIAL)),
-	ROGUE(Ability.DEXTERITY, 8, Armor.getProficiency(Armor.Weight.LIGHT), Weapon.getProficiency(Weapon.Weight.ROGUE)),
-	SORCERER(Ability.CHARISMA, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SORCERER)),
-	WARLOCK(Ability.CHARISMA, 8, Armor.getProficiency(Armor.Weight.WARLOCK), Weapon.getProficiency(Weapon.Weight.SIMPLE)),
-	WIZARD(Ability.INTELLIGENCE, 6, Armor.getProficiency(Armor.Weight.MAGE), Weapon.getProficiency(Weapon.Weight.SIMPLE));
+	BARBARIAN(Ability.STRENGTH, 12, 2),
+	BARD(Ability.CHARISMA, 8, 3),
+	CLERIC(Ability.WISDOM, 8, 2),
+	DRUID(Ability.WISDOM, 8, 2),
+	FIGHTER(Ability.STRENGTH, 10, 2),
+	MONK(Ability.WISDOM, 8, 2),
+	PALADIN(Ability.STRENGTH, 10, 2),
+	RANGER(Ability.STRENGTH, 10, 3),
+	ROGUE(Ability.DEXTERITY, 8, 4),
+	SORCERER(Ability.CHARISMA, 6, 2),
+	WARLOCK(Ability.CHARISMA, 8, 2),
+	WIZARD(Ability.INTELLIGENCE, 6, 2);
 
 	// static fields
 	private static final float BEST_XP = 1.10f;
@@ -42,15 +42,13 @@ public enum Archetype {
 	 * than (necessarily) the classic six ability scores of Dungeons & Dragons
 	 */
 	private int hitDie;
-	private EnumSet<Armor> armorProficiency;
-	private EnumSet<Weapon> weaponProficiency;
+	private int numberOfSkills;
 
 	// constructors
-	Archetype(Ability ability, int hitDie, EnumSet<Armor> armorProficiency, EnumSet<Weapon> weaponProficiency) {
+	Archetype(Ability ability, int hitDie, int numberOfSkills) {
 		this.primeRequisite = ability;
 		this.setHitDie(hitDie);
-		this.armorProficiency = armorProficiency;
-		this.weaponProficiency = weaponProficiency;
+		this.numberOfSkills = numberOfSkills;
 	}
 
 	// methods
@@ -62,40 +60,20 @@ public enum Archetype {
 		this.hitDie = hitDie;
 	}
 
-	public EnumSet<Armor> getArmorProficiency() {
-		return armorProficiency;
+	public int getNumberOfSkills() {
+		return numberOfSkills;
 	}
-
-	public void addArmorProficiency(Armor armor) {
-		this.armorProficiency.add(armor);
-	}
-
-	public void addAllArmorProficiency(EnumSet<Armor> armor) {
-		this.armorProficiency.addAll(armor);
-	}
-
-	public EnumSet<Weapon> getWeaponProficiency() {
-		return weaponProficiency;
-	}
-
-	public void addWeaponProficiency(Weapon weapon) {
-		this.weaponProficiency.add(weapon);
-	}
-
-	public void addAllWeaponProficiency(EnumSet<Weapon> weapon) {
-		this.weaponProficiency.addAll(weapon);
-	}
-
+	
 	// static methods
 	public static Archetype selectArchetype(Actor actor) {
 		Archetype archetype;
 		Alignment ali = actor.getAli();
 
 		int DEX, INT, WIS, CHA;
-		DEX = actor.getDEX();
-		INT = actor.getINT();
-		WIS = actor.getWIS();
-		CHA = actor.getCHA();
+		DEX = actor.getAbilities().getDEX();
+		INT = actor.getAbilities().getINT();
+		WIS = actor.getAbilities().getWIS();
+		CHA = actor.getAbilities().getCHA();
 
 		if (CHA > 14) {
 			archetype = SORCERER;
@@ -158,31 +136,32 @@ public enum Archetype {
 	}
 
 	public static Armor selectArmor(Actor actor) {
-		Armor armor = Armor.NONE; // TODO
+		Armor armor = Armor.UNARMORED; // TODO
 
 		// special case for N/PCs who get bonus proficiencies
-		EnumSet<Armor> proficiency = actor.getJob().armorProficiency;
-		boolean canUseHeavy = armor.canUseHeavyArmor(proficiency);
-		boolean canUseMedium = armor.canUseMediumArmor(proficiency);
-		boolean canUseLight = armor.canUseLightArmor(proficiency);
+		HashSet<Proficiency> skills = actor.getSkills();
+		// EnumSet<Armor> proficiency = actor.getJob().armorProficiency;
+		boolean canUseHeavy = armor.canUseHeavyArmor(skills);
+		boolean canUseMedium = armor.canUseMediumArmor(skills);
+		boolean canUseLight = armor.canUseLightArmor(skills);
 
 		Archetype job = actor.getJob();
-		int strScore = actor.getSTR();
-		int dexMod = actor.getDEXMod();
+		int strength = actor.getAbilities().getSTR();
+		int dexterity = actor.getAbilities().getDEX();
+		int constitution = actor.getAbilities().getCON();
 
 		if (job.equals(SORCERER) || job.equals(WARLOCK) || job.equals(WIZARD)) {
 			armor = Armor.MAGE;
 			// end sorcerer/warlock/wizard
 		} else if (job.equals(BARBARIAN)) {
-			int conMod = actor.getCONMod();
-			if (conMod > 0 && dexMod > 3) {
+			if (constitution > 11 && dexterity > 15) {
 				armor = Armor.BARBARIAN;
 			} else {
 				armor = Armor.BREASTPLATE;
 			}
 			// end barbarian
 		} else if (job.equals(DRUID)) {
-			if (dexMod > 3) {
+			if (dexterity > 15) {
 				armor = Armor.STUDDED;
 			} else {
 				armor = Armor.HIDE;
@@ -193,15 +172,15 @@ public enum Archetype {
 			// end monk
 		} else {
 			// first tries to apply heavy armor
-			if (canUseHeavy && strScore > 14) {
+			if (canUseHeavy && strength > 14) {
 				armor = Armor.PLATE;
-			} else if (canUseHeavy && strScore > 12) {
+			} else if (canUseHeavy && strength > 12) {
 				armor = Armor.CHAIN_MAIL;
 			} else if (canUseHeavy) {
 				armor = Armor.BREASTPLATE;
 			} else {
 				// tries to apply light -THEN- medium armor
-				if (canUseMedium && dexMod > 3) {
+				if (canUseMedium && dexterity > 15) {
 					armor = Armor.STUDDED;
 				} else if (canUseMedium) {
 					armor = Armor.BREASTPLATE;

@@ -5,6 +5,7 @@
  * generated will probably be a) evil, b) human, and c) fighters.
  */
 
+import java.util.HashSet;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -15,6 +16,7 @@ public class Actor {
 	private Archetype job;
 	private Race race;
 	private Deity god;
+	private HashSet<Proficiency> skills;
 	
 	// gear
 	private Vector<Gear> inventory;
@@ -31,6 +33,7 @@ public class Actor {
 	// constructors
 	public Actor() {
 		abilities = new AbilityArray();
+		skills = new HashSet<Proficiency>();
 
 		ali = Alignment.selectALI();
 		// JOB requires ability array
@@ -40,6 +43,11 @@ public class Actor {
 		// GOD requires ALI, JOB, and RACE
 		god = Deity.selectDeity(this);
 
+//		skills.addAll(Armor.getProficiency(job));
+//		skills.addAll(Weapon.getProficiency(job));
+		skills.addAll(Skills.getProficiency(job));
+		
+		
 		// TODO
 		expRate = Archetype.getPrimeRequisite(this);
 
@@ -87,52 +95,17 @@ public class Actor {
 		return abilities;
 	}
 
-	public int getSTR() {
-		return abilities.getSTR();
+	public HashSet<Proficiency> getSkills() {
+		return skills;
 	}
 
-	public int getDEX() {
-		return abilities.getDEX();
-	}
+	public boolean hasSkills() {
+		boolean hasSkills = false;
+		if (skills.size() > 0) {
+			hasSkills = true;
+		}
 
-	public int getCON() {
-		return abilities.getCON();
-	}
-
-	public int getINT() {
-		return abilities.getINT();
-	}
-
-	public int getWIS() {
-		return abilities.getWIS();
-	}
-
-	public int getCHA() {
-		return abilities.getCHA();
-	}
-
-	public int getSTRMod() {
-		return abilities.getSTRMod();
-	}
-
-	public int getDEXMod() {
-		return abilities.getDEXMod();
-	}
-
-	public int getCONMod() {
-		return abilities.getCONMod();
-	}
-
-	public int getINTMod() {
-		return abilities.getINTMod();
-	}
-
-	public int getWISMod() {
-		return abilities.getWISMod();
-	}
-
-	public int getCHAMod() {
-		return abilities.getCHAMod();
+		return hasSkills;
 	}
 
 	public Alignment getAli() {

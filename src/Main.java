@@ -11,11 +11,8 @@ public class Main {
 	}
 
 	public static void rollCharacters() {
-		Iterator<Gear> it;
-		Gear g;
 		for (int i = 0; i < actors.length; ++i) {
 			actors[i] = new Actor();
-			// it = actors[i].getInventory().iterator();
 
 			System.out.print(actors[i].getAbilities().toString());
 			System.out.print(" " + actors[i].getAli().toString());
@@ -25,19 +22,38 @@ public class Main {
 			System.out.print(" (" + actors[i].getEXPRate() + ")");
 			System.out.println("");
 
+			// TODO - testing
+			Iterator<Proficiency> itSkills;
+			Proficiency s;
+			itSkills = actors[i].getSkills().iterator();
+			if (actors[i].hasSkills()) {
+				while (itSkills.hasNext()) {
+					s = itSkills.next();
+					if (s != null) {
+						System.out.print(s.toString());
+						if (itSkills.hasNext()) {
+							System.out.print(", ");
+						}
+					}
+				}
+				System.out.println("");
+			}
+
 			// FIXME - used for testing presence of gear
-			// if (actors[i].hasGear()) {
-			// while (it.hasNext()) {
-			// g = it.next();
-			// if (g != null) {
-			// System.out.print(g.getName());
-			// if (it.hasNext()) {
-			// System.out.print(", ");
-			// }
-			// }
-			// }
-			// System.out.println("");
-			// }
+//			Iterator<Gear> itGear = actors[i].getInventory().iterator();
+//			Gear g;
+//			if (actors[i].hasGear()) {
+//				while (itGear.hasNext()) {
+//					g = itGear.next();
+//					if (g != null) {
+//						System.out.print(g.getName());
+//						if (itGear.hasNext()) {
+//							System.out.print(", ");
+//						}
+//					}
+//				}
+//				System.out.println("");
+//			}
 		}
 	}
 

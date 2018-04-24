@@ -1,3 +1,4 @@
+
 //	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 //	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 //	DAGGER(4, Energy.PIERCING, Hand.LIGHT),
@@ -36,11 +37,11 @@
 //	HEAVY_CROSSBOW(10, Energy.PIERCING, Hand.HEAVY),
 //	LONGBOW(8, Energy.PIERCING, Hand.HEAVY),
 //	NET(4, Energy.BLUDGEONING, Hand.ONE);
-	
-import java.util.Arrays;
-import java.util.EnumSet;
 
-public enum Weapon implements Item {
+import java.util.Arrays;
+import java.util.HashSet;
+
+public enum Weapon implements Item, Proficiency {
 	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 	DAGGER(4, Energy.PIERCING, Hand.LIGHT),
@@ -109,53 +110,63 @@ public enum Weapon implements Item {
 	}
 
 	// static methods
-	public static EnumSet<Weapon> simpleMeleeSet() {
+	public static HashSet<Proficiency> simpleMeleeSet() {
 		Weapon[] weapon = { CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE, QUARTERSTAFF, SICKLE, SPEAR,
 				UNARMED };
-		EnumSet<Weapon> list = EnumSet.noneOf(Weapon.class);
+		HashSet<Proficiency> list = new HashSet<Proficiency>();
 
 		list.addAll(Arrays.asList(weapon));
 		return list;
 	}
 
-	public static EnumSet<Weapon> simpleRangedSet() {
+	public static HashSet<Proficiency> simpleRangedSet() {
 		Weapon[] weapon = { LIGHT_CROSSBOW, DART, SHORTBOW, SLING };
-		EnumSet<Weapon> list = EnumSet.noneOf(Weapon.class);
+		HashSet<Proficiency> list = new HashSet<Proficiency>();
 
 		list.addAll(Arrays.asList(weapon));
 		return list;
 	}
 
-	public static EnumSet<Weapon> martialMeleeSet() {
+	public static HashSet<Proficiency> martialMeleeSet() {
 		Weapon[] weapon = { BATTLEAXE, FLAIL, GLAIVE, GREATAXE, GREATSWORD, HALBERD, LANCE, LONGSWORD, MAUL,
 				MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD, TRIDENT, WAR_PICK, WARHAMMER, WHIP };
-		EnumSet<Weapon> list = EnumSet.noneOf(Weapon.class);
+		HashSet<Proficiency> list = new HashSet<Proficiency>();
 
 		list.addAll(Arrays.asList(weapon));
 		return list;
 	}
 
-	public static EnumSet<Weapon> martialRangedSet() {
+	public static HashSet<Proficiency> martialRangedSet() {
 		Weapon[] weapon = { BLOWGUN, HAND_CROSSBOW, HEAVY_CROSSBOW, LONGBOW, NET };
-		EnumSet<Weapon> list = EnumSet.noneOf(Weapon.class);
+		HashSet<Proficiency> list = new HashSet<Proficiency>();
 
 		list.addAll(Arrays.asList(weapon));
 		return list;
 	}
 
-	public static EnumSet<Weapon> getProficiency(Weight weight) {
-		EnumSet<Weapon> list = EnumSet.noneOf(Weapon.class);
+	public static HashSet<Proficiency> getProficiency(Archetype job) {
+		HashSet<Proficiency> list = new HashSet<Proficiency>();
 		list.add(UNARMED);
 
-		if (weight.equals(Weight.SIMPLE)) {
-			list.addAll(simpleMeleeSet());
-			list.addAll(simpleRangedSet());
-		} else if (weight.equals(Weight.MARTIAL)) {
+		switch (job) {
+		case BARBARIAN:
 			list.addAll(simpleMeleeSet());
 			list.addAll(simpleRangedSet());
 			list.addAll(martialMeleeSet());
 			list.addAll(martialRangedSet());
-		} else if (weight.equals(Weight.DRUID)) {
+			break;
+		case BARD:
+			list.addAll(simpleMeleeSet());
+			list.add(LONGSWORD);
+			list.add(RAPIER);
+			list.add(SHORTSWORD);
+			list.add(HAND_CROSSBOW);
+			break;
+		case CLERIC:
+			list.addAll(simpleMeleeSet());
+			list.addAll(simpleRangedSet());
+			break;
+		case DRUID:
 			list.add(CLUB);
 			list.add(DAGGER);
 			list.add(DART);
@@ -166,24 +177,100 @@ public enum Weapon implements Item {
 			list.add(SICKLE);
 			list.add(SLING);
 			list.add(SPEAR);
-		} else if (weight.equals(Weight.MONK)) {
+			break;
+		case FIGHTER:
+			list.addAll(simpleMeleeSet());
+			list.addAll(simpleRangedSet());
+			list.addAll(martialMeleeSet());
+			list.addAll(martialRangedSet());
+			break;
+		case MONK:
 			list.addAll(simpleMeleeSet());
 			list.addAll(simpleRangedSet());
 			list.add(SHORTSWORD);
-		} else if (weight.equals(Weight.ROGUE)) {
+			break;
+		case PALADIN:
+			list.addAll(simpleMeleeSet());
+			list.addAll(simpleRangedSet());
+			list.addAll(martialMeleeSet());
+			list.addAll(martialRangedSet());
+			break;
+		case RANGER:
+			list.addAll(simpleMeleeSet());
+			list.addAll(simpleRangedSet());
+			list.addAll(martialMeleeSet());
+			list.addAll(martialRangedSet());
+			break;
+		case ROGUE:
 			list.addAll(simpleMeleeSet());
 			list.add(LONGSWORD);
 			list.add(RAPIER);
 			list.add(SHORTSWORD);
 			list.add(HAND_CROSSBOW);
-		} else if (weight.equals(Weight.SORCERER)) {
+			break;
+		case SORCERER:
 			list.add(DAGGER);
 			list.add(DART);
 			list.add(QUARTERSTAFF);
 			list.add(SLING);
 			list.add(LIGHT_CROSSBOW);
+			break;
+		case WARLOCK:
+			list.addAll(simpleMeleeSet());
+			list.addAll(simpleRangedSet());
+			break;
+		case WIZARD:
+			list.addAll(simpleMeleeSet());
+			list.addAll(simpleRangedSet());
+			break;
+		default:
+			break;
 		}
 
 		return list;
 	}
+
+//	public static HashSet<Proficiency> getProficiency(Weight weight) {
+//		HashSet<Proficiency> list = new HashSet<Proficiency>();
+//		list.add(UNARMED);
+//
+//		if (weight.equals(Weight.SIMPLE)) {
+//			list.addAll(simpleMeleeSet());
+//			list.addAll(simpleRangedSet());
+//		} else if (weight.equals(Weight.MARTIAL)) {
+//			list.addAll(simpleMeleeSet());
+//			list.addAll(simpleRangedSet());
+//			list.addAll(martialMeleeSet());
+//			list.addAll(martialRangedSet());
+//		} else if (weight.equals(Weight.DRUID)) {
+//			list.add(CLUB);
+//			list.add(DAGGER);
+//			list.add(DART);
+//			list.add(JAVELIN);
+//			list.add(MACE);
+//			list.add(QUARTERSTAFF);
+//			list.add(SCIMITAR);
+//			list.add(SICKLE);
+//			list.add(SLING);
+//			list.add(SPEAR);
+//		} else if (weight.equals(Weight.MONK)) {
+//			list.addAll(simpleMeleeSet());
+//			list.addAll(simpleRangedSet());
+//			list.add(SHORTSWORD);
+//		} else if (weight.equals(Weight.ROGUE)) {
+//			list.addAll(simpleMeleeSet());
+//			list.add(LONGSWORD);
+//			list.add(RAPIER);
+//			list.add(SHORTSWORD);
+//			list.add(HAND_CROSSBOW);
+//		} else if (weight.equals(Weight.SORCERER)) {
+//			list.add(DAGGER);
+//			list.add(DART);
+//			list.add(QUARTERSTAFF);
+//			list.add(SLING);
+//			list.add(LIGHT_CROSSBOW);
+//		}
+//
+//		return list;
+//	}
 }

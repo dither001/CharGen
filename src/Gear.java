@@ -1,4 +1,4 @@
-import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -331,24 +331,25 @@ public class Gear {
 	}
 
 	public static Vector<Gear> clericStartingGear(Actor actor) {
-		EnumSet<Weapon> weapons = actor.getJob().getWeaponProficiency();
-		EnumSet<Armor> armors = actor.getJob().getArmorProficiency();
+		HashSet<Proficiency> skills = actor.getSkills();
+//		EnumSet<Weapon> weapons = actor.getJob().getWeaponProficiency();
+//		EnumSet<Armor> armors = actor.getJob().getArmorProficiency();
 		Vector<Gear> gear = new Vector<Gear>();
 		int dice;
 
 		// first choice
-		if (weapons.contains(Weapon.WARHAMMER)) {
+		if (skills.contains(Weapon.WARHAMMER)) {
 			gear.add(mundane.get("Warhammer"));
 		} else {
 			gear.add(mundane.get("Mace"));
 		}
 
 		// second choice
-		int strength = actor.getSTR();
-		int dexterity = actor.getDEX();
+		int strength = actor.getAbilities().getSTR();
+		int dexterity = actor.getAbilities().getDEX();
 		if (dexterity > 15) {
 			gear.add(mundane.get("Leather Armor"));
-		} else if (armors.contains(Armor.CHAIN_MAIL) && strength > 12) {
+		} else if (skills.contains(Armor.CHAIN_MAIL) && strength > 12) {
 			gear.add(mundane.get("Chain Mail"));
 		} else {
 			gear.add(mundane.get("Scale Mail"));
