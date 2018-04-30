@@ -63,6 +63,10 @@ public enum Armor implements Item, Proficiency {
 	}
 
 	// static methods
+	public static int getArmorClass(Armor armor) {
+		return armor.getArmorClass();
+	}
+	
 	public static HashSet<Proficiency> lightArmorSet() {
 		Armor[] armor = { PADDED, LEATHER, STUDDED };
 		HashSet<Proficiency> list = new HashSet<Proficiency>();

@@ -4,7 +4,6 @@ public class Main {
 	private static Actor[] actors = new Actor[30];
 
 	public static void main(String[] args) {
-		Gear.initialize();
 		// TODO
 
 		rollCharacters();
@@ -21,39 +20,12 @@ public class Main {
 			System.out.print(" " + actors[i].getDeity().toString());
 			System.out.print(" (" + actors[i].getEXPRate() + ")");
 			System.out.println("");
+			System.out.print(actors[i].getInventory().toString());
+			System.out.println("");
+			System.out.print(actors[i].getSkills().toString());
+			//System.out.print(" " + actors[i].getArmorClass());
+			System.out.println("");
 
-			// TODO - testing
-			Iterator<Proficiency> itSkills;
-			Proficiency s;
-			itSkills = actors[i].getSkills().iterator();
-			if (actors[i].hasSkills()) {
-				while (itSkills.hasNext()) {
-					s = itSkills.next();
-					if (s != null) {
-						System.out.print(s.toString());
-						if (itSkills.hasNext()) {
-							System.out.print(", ");
-						}
-					}
-				}
-				System.out.println("");
-			}
-
-			// FIXME - used for testing presence of gear
-//			Iterator<Gear> itGear = actors[i].getInventory().iterator();
-//			Gear g;
-//			if (actors[i].hasGear()) {
-//				while (itGear.hasNext()) {
-//					g = itGear.next();
-//					if (g != null) {
-//						System.out.print(g.getName());
-//						if (itGear.hasNext()) {
-//							System.out.print(", ");
-//						}
-//					}
-//				}
-//				System.out.println("");
-//			}
 		}
 	}
 

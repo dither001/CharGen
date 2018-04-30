@@ -6,6 +6,7 @@
  */
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -17,12 +18,12 @@ public class Actor {
 	private Race race;
 	private Deity god;
 	private HashSet<Proficiency> skills;
-	
+
 	// gear
-	private Vector<Gear> inventory;
-	private Gear armor;
-	private Gear mainHand;
-	private Gear offHand;
+	private Inventory inventory;
+	// private Gear armor;
+	// private Gear mainHand;
+	// private Gear offHand;
 
 	// fields
 	private String name;
@@ -32,6 +33,9 @@ public class Actor {
 
 	// constructors
 	public Actor() {
+		// FIXME
+		// armor = null; mainHand = null; offHand = null;
+
 		abilities = new AbilityArray();
 		skills = new HashSet<Proficiency>();
 
@@ -43,15 +47,16 @@ public class Actor {
 		// GOD requires ALI, JOB, and RACE
 		god = Deity.selectDeity(this);
 
-//		skills.addAll(Armor.getProficiency(job));
-//		skills.addAll(Weapon.getProficiency(job));
+		// skills.addAll(Armor.getProficiency(job));
+		// skills.addAll(Weapon.getProficiency(job));
 		skills.addAll(Skills.getProficiency(job));
-		
-		
+
 		// TODO
 		expRate = Archetype.getPrimeRequisite(this);
 
-		inventory = Gear.getStartingGear(this);
+		// last step, initialize inventory (?) and equip stuff
+		inventory = new Inventory();
+		inventory.startingGear(this);
 	}
 
 	// methods
@@ -63,11 +68,11 @@ public class Actor {
 		this.name = name;
 	}
 
-	public int getHitPoints() {
+	public int getArmorClass() {
 		return 0;
 	} // TODO
 
-	public int getArmorClass() {
+	public int getHitPoints() {
 		return 0;
 	} // TODO
 
@@ -99,15 +104,6 @@ public class Actor {
 		return skills;
 	}
 
-	public boolean hasSkills() {
-		boolean hasSkills = false;
-		if (skills.size() > 0) {
-			hasSkills = true;
-		}
-
-		return hasSkills;
-	}
-
 	public Alignment getAli() {
 		return ali;
 	}
@@ -128,59 +124,8 @@ public class Actor {
 		return expRate;
 	}
 
-	public boolean hasGear() {
-		boolean hasGear = false;
-		if (inventory.size() > 0) {
-			hasGear = true;
-		}
-
-		return hasGear;
-	}
-
-	public Vector<Gear> getInventory() {
+	public Inventory getInventory() {
 		return inventory;
-	}
-
-	public void addGear(Gear gear) {
-		inventory.add(gear);
-	}
-
-	public void addAllGear(Collection<Gear> gear) {
-		inventory.addAll(gear);
-	}
-
-	public boolean removeGear(Gear gear) {
-		return inventory.remove(gear);
-	}
-
-	public boolean removeAllGear(Collection<Gear> gear) {
-		return inventory.removeAll(gear);
-	}
-
-	public Gear getArmor() {
-		return armor;
-	}
-
-	public void setArmor(Gear armor) {
-		this.armor = armor;
-	}
-
-	public Gear getMainHand() {
-		return mainHand;
-	}
-
-	public void setMainHand(Gear mainHand) {
-		// TODO - make sure when equipping one hand to check the other
-		this.mainHand = mainHand;
-	}
-
-	public Gear getOffHand() {
-		return offHand;
-	}
-
-	public void setOffHand(Gear offHand) {
-		// TODO - make sure when equipping one hand to check the other
-		this.offHand = offHand;
 	}
 
 	// static methods

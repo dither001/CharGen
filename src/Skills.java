@@ -18,6 +18,7 @@
 //	STEALTH(Ability.DEXTERITY),
 //	SURVIVAL(Ability.WISDOM);
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 public enum Skills implements Proficiency {
@@ -40,6 +41,9 @@ public enum Skills implements Proficiency {
 	STEALTH(Ability.DEXTERITY),
 	SURVIVAL(Ability.WISDOM);
 
+	// static fields
+	private static Skills[] allSkills = { ACROBATICS, ANIMAL_HANDLING, ARCANA, ATHLETICS, DECEPTION, HISTORY, INSIGHT, INTIMIDATION, INVESTIGATION, MEDICINE, NATURE, PERCEPTION, PERFORMANCE, PERSUASION, RELIGION, SLEIGHT_OF_HAND, STEALTH, SURVIVAL };
+
 	// fields
 	Ability prime;
 
@@ -55,11 +59,11 @@ public enum Skills implements Proficiency {
 	// static methods
 	public static HashSet<Proficiency> getProficiency(Archetype job) {
 		HashSet<Proficiency> list = new HashSet<Proficiency>();
-		
+
 		int number = job.getNumberOfSkills();
 		Skills[] jobSkills = jobSkills(job);
 		Skills candidate;
-		
+
 		for (int i = 0; i < number;) {
 			candidate = jobSkills[Dice.roll(jobSkills.length) - 1];
 			if (list.contains(candidate) != true) {
@@ -67,16 +71,24 @@ public enum Skills implements Proficiency {
 				++i;
 			}
 		}
-		
+
 		return list;
 	}
 
+	public static Skills[] getSkillArray() {
+		return allSkills;
+	}
+	
+	public static HashSet<Proficiency> getSkillSet() {
+		HashSet<Proficiency> list = new HashSet<Proficiency>();
+		list.addAll(Arrays.asList(allSkills));
+		return list;
+	}
+	
 	public static Skills[] jobSkills(Archetype job) {
 		Skills[] jobSkills;
+
 		Skills[] barbarian = { ANIMAL_HANDLING, ATHLETICS, INTIMIDATION, NATURE, PERCEPTION, SURVIVAL };
-		Skills[] bard = { ATHLETICS, ACROBATICS, SLEIGHT_OF_HAND, STEALTH, ARCANA, HISTORY, INVESTIGATION, NATURE,
-				RELIGION, ANIMAL_HANDLING, INSIGHT, MEDICINE, PERCEPTION, SURVIVAL, DECEPTION, INTIMIDATION,
-				PERFORMANCE, PERSUASION };
 		Skills[] cleric = { HISTORY, INSIGHT, MEDICINE, PERSUASION, RELIGION };
 		Skills[] druid = { ARCANA, ANIMAL_HANDLING, INSIGHT, MEDICINE, NATURE, PERCEPTION, RELIGION, SURVIVAL };
 		Skills[] fighter = { ACROBATICS, ANIMAL_HANDLING, ATHLETICS, HISTORY, INSIGHT, INTIMIDATION, PERCEPTION,
@@ -95,7 +107,7 @@ public enum Skills implements Proficiency {
 			jobSkills = barbarian;
 			break;
 		case BARD:
-			jobSkills = bard;
+			jobSkills = allSkills;
 			break;
 		case CLERIC:
 			jobSkills = cleric;

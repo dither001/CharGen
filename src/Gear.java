@@ -4,7 +4,6 @@ import java.util.Vector;
 
 public class Gear {
 	// static fields
-	private static boolean initialized = false;
 	private static HashMap<String, Gear> mundane = new HashMap<String, Gear>();
 	private static HashMap<String, Gear> common = new HashMap<String, Gear>();
 	private static HashMap<String, Gear> uncommon = new HashMap<String, Gear>();
@@ -101,12 +100,9 @@ public class Gear {
 	public void setBaseValue(int baseValue) {
 		this.baseValue = baseValue;
 	}
-
+	
 	// static methods
-	public static void initialize() {
-		if (initialized)
-			return;
-
+	static {
 		// ARMOR
 		new Gear("Padded Armor", Armor.PADDED, 8f, 500);
 		new Gear("Leather Armor", Armor.LEATHER, 10f, 1000);
@@ -164,8 +160,6 @@ public class Gear {
 		new Gear("Heavy Crossbow", Weapon.HEAVY_CROSSBOW, 18f, 5000);
 		new Gear("Longbow", Weapon.LONGBOW, 2f, 5000);
 		new Gear("Net", Weapon.NET, 3f, 100);
-
-		initialized = true;
 	}
 
 	public static Gear randomSimpleMelee() {
@@ -225,51 +219,38 @@ public class Gear {
 		return g;
 	}
 
-	public static Vector<Gear> getStartingGear(Actor actor) {
+	public static Inventory getStartingGear(Actor actor) {
 		Archetype job = actor.getJob();
 		AbilityArray abilities = actor.getAbilities();
-		Vector<Gear> gear = new Vector<Gear>();
+		Inventory gear = new Inventory();
 
-		switch (job) {
-		case BARBARIAN:
-			gear = barbarianStartingGear();
-			break;
-		case BARD:
-			gear = bardStartingGear();
-			break;
-		case CLERIC:
-			gear = clericStartingGear(actor);
-			break;
-		case DRUID:
-			gear = druidStartingGear();
-			break;
-		case FIGHTER:
-			gear = fighterStartingGear(abilities);
-			break;
-		case MONK:
-			gear = monkStartingGear();
-			break;
-		case PALADIN:
-			gear = paladinStartingGear();
-			break;
-		case RANGER:
-			gear = rangerStartingGear(abilities);
-			break;
-		case ROGUE:
-			gear = rogueStartingGear();
-			break;
-		case SORCERER:
-			gear = sorcererStartingGear();
-			break;
-		case WARLOCK:
-			gear = warlockStartingGear();
-			break;
-		case WIZARD:
-			gear = wizardStartingGear();
-			break;
-		default:
-			break;
-		}
+//		int dice;
+//		if (job.equals(Archetype.BARBARIAN)) {
+//			// first choice
+//			dice = Dice.roll(2);
+//			if (dice == 1) {
+//				gear.getWeapons().add(mundane.get("Greataxe"));
+//			} else {
+//				gear.add(randomMartialMelee());
+//			}
+//
+//			// second choice
+//			dice = Dice.roll(2);
+//			if (dice == 1) {
+//				gear.add(mundane.get("Handaxe"));
+//				gear.add(mundane.get("Handaxe"));
+//			} else {
+//				gear.add(randomSimpleWeapon());
+//			}
+//
+//			// TODO - add explorer's pack
+//
+//			// receive 4 javelins
+//			gear.add(mundane.get("Javelin"));
+//			gear.add(mundane.get("Javelin"));
+//			gear.add(mundane.get("Javelin"));
+//			gear.add(mundane.get("Javelin"));
+//		}
 
 		return gear;
 	}
