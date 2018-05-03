@@ -30,6 +30,11 @@ public class Actor {
 	private int experience;
 	private int level;
 	private float expRate;
+	
+	private int armorClass;
+	private int hitPoints;
+	private int attackBonus;
+	private int averageDamage;
 
 	// constructors
 	public Actor() {
@@ -47,16 +52,24 @@ public class Actor {
 		// GOD requires ALI, JOB, and RACE
 		god = Deity.selectDeity(this);
 
-		// skills.addAll(Armor.getProficiency(job));
-		// skills.addAll(Weapon.getProficiency(job));
+		// skills, proficiency
+		skills.addAll(Armor.getProficiency(job));
+		skills.addAll(Weapon.getProficiency(job));
 		skills.addAll(Skills.getProficiency(job));
 
-		// TODO
-		expRate = Archetype.getPrimeRequisite(this);
-
-		// last step, initialize inventory (?) and equip stuff
+		// initialize inventory, equip gear
 		inventory = new Inventory();
 		inventory.startingGear(this);
+		inventory.optimizeArmor();
+		
+		// derived statistics
+		experience = 0;
+		level = 1;
+		expRate = Archetype.getPrimeRequisite(this);
+		armorClass = inventory.calcArmorClass();
+		// roll hit points and verify greater than 0 hp
+		hitPoints = Dice.roll(job.getHitDie()) + abilities.getCONMod();
+		hitPoints = (hitPoints < 1) ? 1 : hitPoints;
 	}
 
 	// methods
@@ -69,20 +82,20 @@ public class Actor {
 	}
 
 	public int getArmorClass() {
-		return 0;
-	} // TODO
+		return armorClass;
+	}
 
 	public int getHitPoints() {
-		return 0;
-	} // TODO
+		return hitPoints;
+	}
 
 	public int getAttackBonus() {
-		return 0;
-	} // TODO
+		return attackBonus;
+	}
 
-	public int getDamage() {
-		return 0;
-	} // TODO
+	public int getAverageDamage() {
+		return averageDamage;
+	}
 
 	public int getEXP() {
 		return experience;

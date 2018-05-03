@@ -1,7 +1,7 @@
 import java.util.Iterator;
 
 public class Main {
-	private static Actor[] actors = new Actor[30];
+	private static Actor[] actors = new Actor[9];
 
 	public static void main(String[] args) {
 		// TODO
@@ -13,17 +13,21 @@ public class Main {
 		for (int i = 0; i < actors.length; ++i) {
 			actors[i] = new Actor();
 
-			System.out.print(actors[i].getAbilities().toString());
+			System.out.print("Name");
 			System.out.print(" " + actors[i].getAli().toString());
 			System.out.print(" " + actors[i].getRace().toString());
 			System.out.print(" " + actors[i].getJob().toString());
 			System.out.print(" " + actors[i].getDeity().toString());
 			System.out.print(" (" + actors[i].getEXPRate() + ")");
+			System.out.print(" AC " + actors[i].getArmorClass());
+			System.out.print(" hp " + actors[i].getHitPoints());
+			System.out.println("");
+			System.out.print(actors[i].getAbilities().toString());
 			System.out.println("");
 			System.out.print(actors[i].getInventory().toString());
+//			System.out.println("");
+//			System.out.print(actors[i].getSkills().toString());
 			System.out.println("");
-			System.out.print(actors[i].getSkills().toString());
-			//System.out.print(" " + actors[i].getArmorClass());
 			System.out.println("");
 
 		}

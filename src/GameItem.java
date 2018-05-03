@@ -26,7 +26,15 @@ public abstract class GameItem {
 	Rarity getRarity() {
 		return rarity;
 	}
-	
+
+	boolean requiresAttunement() {
+		return requiresAttunement;
+	}
+
+	boolean isCursed() {
+		return isCursed;
+	}
+
 	@Override
 	public String toString() {
 		return name;

@@ -14,9 +14,9 @@ public class Inventory {
 	// Helmet brow;
 	// Mask face;
 	// Necklace neck;
-	private Armor armor;
-	private Weapon mainHand;
-	private Weapon offHand;
+	private GameArmor armor;
+	private GameWeapon mainHand;
+	private GameWeapon offHand;
 	// Gloves gloves;
 	// Bracers bracers;
 	// Belt belt;
@@ -29,36 +29,140 @@ public class Inventory {
 		armory = new Vector<GameArmor>();
 		weapons = new Vector<GameWeapon>();
 		// tools = new Vector<GameTool>();
-		
+
 		clearEquipment();
 	}
 
 	// static methods
 
 	// methods
-	public void clearEquipment() {
-		armor = null;
-		mainHand = null;
-		offHand = null;
+	public boolean hasOwner() {
+		return owner != null;
 	}
-	
-	public void optimizeArmor() {
-		if (owner != null) {
-			Archetype job = owner.getJob();
-			int dexterity = owner.getAbilities().getDEX();
-			int constitution = owner.getAbilities().getCON();
-			int wisdom = owner.getAbilities().getWIS();
-			
-			if (job.equals(Archetype.MONK)) {
-				armor = Armor.MONK;
-			} else if (job.equals(Archetype.BARBARIAN)) {
-				if (constitution > 9 && dexterity > 15) {
-				}
+
+	public boolean equippedArmor() {
+		return armor != null;
+	}
+
+	public int calcArmorClass() {
+		int totalAC = 10, armorClass = 10;
+		Archetype job = owner.getJob();
+
+		int dexMod = owner.getAbilities().getDEXMod();
+		int conMod = owner.getAbilities().getCONMod();
+		int wisMod = owner.getAbilities().getWISMod();
+		int maxDex = 10;
+
+		if (equippedArmor()) {
+			armorClass = armor.getArmor().getArmorClass();
+			maxDex = armor.getArmor().getMaxDexterity();
+			if (dexMod > maxDex)
+				dexMod = maxDex;
+		}
+
+		if (job.equals(Archetype.MONK)) {
+			totalAC = 10 + dexMod + wisMod;
+		} else if (job.equals(Archetype.BARBARIAN)) {
+			if (equippedArmor()) {
+				totalAC = maxDex > 0 ? armorClass + dexMod : armorClass;
+			} else {
+				totalAC = 10 + dexMod + conMod;
 			}
-			
+		} else if (owner.getSkills().contains(Armor.MAGE)) {
+			totalAC = 13 + dexMod;
+		} else {
+			if (equippedArmor()) {
+				totalAC = maxDex > 0 ? armorClass + dexMod : armorClass;
+			} else {
+				totalAC = 10 + dexMod;
+			}
+		}
+
+		return totalAC;
+	}
+
+	public void clearEquipment() {
+		if (hasOwner()) {
+			if (armor != null && armor.isCursed != true) {
+				armor = null;
+			} else if (mainHand != null && mainHand.isCursed != true) {
+				armor = null;
+			} else if (offHand != null && offHand.isCursed != true) {
+				armor = null;
+			}
 		}
 	}
-	
+
+	public void optimizeArmor() {
+		if (hasOwner()) {
+			Archetype job = owner.getJob();
+			int dexMod = owner.getAbilities().getDEXMod();
+			int conMod = owner.getAbilities().getCONMod();
+
+			if (armory.size() < 1)
+				return;
+
+			if (job.equals(Archetype.MONK)) {
+				return;
+			} else if (job.equals(Archetype.BARBARIAN)) {
+				if (dexMod > 2 && conMod > 0) {
+					return;
+				} else {
+					armor = bestAvailableArmor(Armor.bestHeavyArmor());
+				}
+			} else if (owner.getSkills().contains(Armor.MAGE)) {
+				return;
+			} else {
+				if (dexMod > 2) {
+					armor = bestAvailableArmor(Armor.bestLightArmor());
+				} else {
+					armor = bestAvailableArmor(Armor.bestHeavyArmor());
+				}
+
+			}
+
+			// END OF METHOD
+		}
+	}
+
+	private GameArmor bestAvailableArmor(Armor best) {
+		HashSet<Proficiency> skills = owner.getSkills();
+		GameArmor bestArmor = null;
+
+		// find the heaviest armor the character can use
+		while (skills.contains(best) != true) {
+			// System.out.println("Cannot use " + best);
+			best = Armor.nextBestArmor(best);
+		}
+
+		// find the heaviest usable armor in inventory
+		while (bestArmor == null) {
+			// System.out.println("Can equip " + best);
+			bestArmor = armorHelper(best);
+			best = Armor.nextBestArmor(best);
+		}
+
+		equipArmor(bestArmor);
+		// System.out.println("Equipped " + bestArmor);
+
+		return bestArmor;
+	}
+
+	private GameArmor armorHelper(Armor best) {
+		GameArmor candidate, optimal = null;
+		for (Iterator<GameArmor> it = armory.iterator(); it.hasNext();) {
+			candidate = it.next();
+			if (candidate.getArmor().equals(best))
+				optimal = candidate;
+		}
+
+		return optimal;
+	}
+
+	public void equipArmor(GameArmor armor) {
+		this.armor = armor;
+	}
+
 	public Vector<GameArmor> getAllArmor() {
 		return armory;
 	}

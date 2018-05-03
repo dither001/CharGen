@@ -178,6 +178,22 @@ public enum Armor implements Item, Proficiency {
 //		return list;
 //	}
 
+	public static Armor bestHeavyArmor() {
+		return PLATE;
+	}
+	
+	public static Armor bestMediumArmor() {
+		return HALF_PLATE;
+	}
+	
+	public static Armor bestLightArmor() {
+		return CHAIN_SHIRT;
+	}
+	
+	public static Armor nextBestArmor() {
+		return nextBestArmor(PLATE);
+	}
+
 	public static Armor nextBestArmor(Armor previous) {
 		Armor nextBest;
 
