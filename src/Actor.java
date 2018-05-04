@@ -1,8 +1,10 @@
 
 /*
- * TODO - humans make up a majority (40%) of all characters; evil is the
- * majority alignment (40%), which means that a significant number of NPCs
- * generated will probably be a) evil, b) human, and c) fighters.
+ * TODO - humans make up a majority (40%) of all characters. Evil is the
+ * majority alignment (40%). After sorting for CHA, WIS, INT, and DEX,
+ * remaining characters are sorted by alignment: L, G, C, and N/E the
+ * majority (40%) being fighters. A significant number of NPCs will most
+ * probably be a) evil, b) human, and c) fighters.
  */
 
 import java.util.HashSet;
@@ -18,12 +20,10 @@ public class Actor {
 	private Race race;
 	private Deity god;
 	private HashSet<Proficiency> skills;
+	private Career career;
 
 	// gear
 	private Inventory inventory;
-	// private Gear armor;
-	// private Gear mainHand;
-	// private Gear offHand;
 
 	// fields
 	private String name;
@@ -56,6 +56,10 @@ public class Actor {
 		skills.addAll(Armor.getProficiency(job));
 		skills.addAll(Weapon.getProficiency(job));
 		skills.addAll(Skills.getProficiency(job));
+		
+		// choose background "career"
+		career = Career.randomCareer();
+		skills.addAll(Skills.careerSkills(this));
 
 		// initialize inventory, equip gear
 		inventory = new Inventory();
@@ -131,6 +135,10 @@ public class Actor {
 
 	public Deity getDeity() {
 		return god;
+	}
+
+	public Career getCareer() {
+		return career;
 	}
 
 	public float getEXPRate() {

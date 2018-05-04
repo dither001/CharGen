@@ -19,6 +19,7 @@
 //	SURVIVAL(Ability.WISDOM);
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 
 public enum Skills implements Proficiency {
@@ -78,13 +79,83 @@ public enum Skills implements Proficiency {
 	public static Skills[] getSkillArray() {
 		return allSkills;
 	}
-	
+
 	public static HashSet<Proficiency> getSkillSet() {
 		HashSet<Proficiency> list = new HashSet<Proficiency>();
 		list.addAll(Arrays.asList(allSkills));
 		return list;
 	}
-	
+
+	public static HashSet<Proficiency> careerSkills(Actor actor) {
+		HashSet<Proficiency> careerSkills = new HashSet<Proficiency>();
+
+		HashSet<Proficiency> skills = actor.getSkills();
+		Career career = actor.getCareer();
+		Skills[] candidates = careerSkillsHelper(career);
+
+		for (int i = 0; i < candidates.length; ++i) {
+			if (skills.contains(candidates[i]) != true && careerSkills.contains(candidates[i]) != true) {
+				careerSkills.add(candidates[i]);
+			} else {
+				while (skills.contains(candidates[i]) || careerSkills.contains(candidates[i])) {
+					// TODO - should also choose from tool proficiencies and such
+					candidates[i] = allSkills[Dice.roll(allSkills.length) - 1];
+				}
+
+				careerSkills.add(candidates[i]);
+			}
+		}
+
+		return careerSkills;
+	}
+
+	private static Skills[] careerSkillsHelper(Career career) {
+		Skills[] careerSkills = { ATHLETICS, SURVIVAL };
+
+		Skills[] acolyte = { INSIGHT, RELIGION };
+		Skills[] charlatan = { DECEPTION, SLEIGHT_OF_HAND };
+		Skills[] criminal = { DECEPTION, STEALTH };
+		Skills[] entertainer = { ACROBATICS, PERFORMANCE };
+		Skills[] folkHero = { ANIMAL_HANDLING, SURVIVAL };
+		Skills[] guildArtisan = { INSIGHT, PERSUASION };
+		Skills[] hermit = { MEDICINE, RELIGION };
+		Skills[] noble = { HISTORY, PERSUASION };
+		Skills[] outlander = { ATHLETICS, SURVIVAL };
+		Skills[] sage = { ARCANA, HISTORY };
+		Skills[] sailor = { ATHLETICS, PERCEPTION };
+		Skills[] soldier = { ATHLETICS, INTIMIDATION };
+		Skills[] urchin = { SLEIGHT_OF_HAND, STEALTH };
+
+		if (career.equals(Career.ACOLYTE))
+			careerSkills = acolyte;
+		else if (career.equals(Career.CHARLATAN))
+			careerSkills = charlatan;
+		else if (career.equals(Career.CRIMINAL))
+			careerSkills = criminal;
+		else if (career.equals(Career.ENTERTAINER))
+			careerSkills = entertainer;
+		else if (career.equals(Career.FOLK_HERO))
+			careerSkills = folkHero;
+		else if (career.equals(Career.GUILD_ARTISAN))
+			careerSkills = guildArtisan;
+		else if (career.equals(Career.HERMIT))
+			careerSkills = hermit;
+		else if (career.equals(Career.NOBLE))
+			careerSkills = noble;
+		else if (career.equals(Career.OUTLANDER))
+			careerSkills = outlander;
+		else if (career.equals(Career.SAGE))
+			careerSkills = sage;
+		else if (career.equals(Career.SAILOR))
+			careerSkills = sailor;
+		else if (career.equals(Career.SOLDIER))
+			careerSkills = soldier;
+		else if (career.equals(Career.URCHIN))
+			careerSkills = urchin;
+
+		return careerSkills;
+	}
+
 	public static Skills[] jobSkills(Archetype job) {
 		Skills[] jobSkills;
 
@@ -102,47 +173,32 @@ public enum Skills implements Proficiency {
 		Skills[] warlock = { ARCANA, DECEPTION, HISTORY, INTIMIDATION, INVESTIGATION, NATURE, RELIGION };
 		Skills[] wizard = { ARCANA, HISTORY, INSIGHT, INVESTIGATION, MEDICINE, RELIGION };
 
-		switch (job) {
-		case BARBARIAN:
+		if (job.equals(Archetype.BARBARIAN))
 			jobSkills = barbarian;
-			break;
-		case BARD:
+		else if (job.equals(Archetype.BARD))
 			jobSkills = allSkills;
-			break;
-		case CLERIC:
+		else if (job.equals(Archetype.CLERIC))
 			jobSkills = cleric;
-			break;
-		case DRUID:
+		else if (job.equals(Archetype.DRUID))
 			jobSkills = druid;
-			break;
-		case FIGHTER:
+		else if (job.equals(Archetype.FIGHTER))
 			jobSkills = fighter;
-			break;
-		case MONK:
+		else if (job.equals(Archetype.MONK))
 			jobSkills = monk;
-			break;
-		case PALADIN:
+		else if (job.equals(Archetype.PALADIN))
 			jobSkills = paladin;
-			break;
-		case RANGER:
+		else if (job.equals(Archetype.RANGER))
 			jobSkills = ranger;
-			break;
-		case ROGUE:
+		else if (job.equals(Archetype.ROGUE))
 			jobSkills = rogue;
-			break;
-		case SORCERER:
+		else if (job.equals(Archetype.SORCERER))
 			jobSkills = sorcerer;
-			break;
-		case WARLOCK:
+		else if (job.equals(Archetype.WARLOCK))
 			jobSkills = warlock;
-			break;
-		case WIZARD:
+		else if (job.equals(Archetype.WIZARD))
 			jobSkills = wizard;
-			break;
-		default:
-			jobSkills = null;
-			break;
-		}
+		else
+			jobSkills = allSkills;
 
 		return jobSkills;
 	}

@@ -16,6 +16,7 @@ public class Main {
 			System.out.print("Name");
 			System.out.print(" " + actors[i].getAli().toString());
 			System.out.print(" " + actors[i].getRace().toString());
+			System.out.print(" " + actors[i].getCareer().toString());
 			System.out.print(" " + actors[i].getJob().toString());
 			System.out.print(" " + actors[i].getDeity().toString());
 			System.out.print(" (" + actors[i].getEXPRate() + ")");
@@ -25,9 +26,9 @@ public class Main {
 			System.out.print(actors[i].getAbilities().toString());
 			System.out.println("");
 			System.out.print(actors[i].getInventory().toString());
-//			System.out.println("");
-//			System.out.print(actors[i].getSkills().toString());
 			System.out.println("");
+//			System.out.print(actors[i].getSkills().toString());
+//			System.out.println("");
 			System.out.println("");
 
 		}

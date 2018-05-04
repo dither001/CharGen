@@ -9,7 +9,7 @@ public class ChallengeRating {
 	public static int evaluateCR(Actor actor) {
 		int hp = actor.getHitPoints();
 		int ac = actor.getArmorClass();
-		int dmg = actor.getDamage();
+		int dmg = actor.getAverageDamage();
 		int atk = actor.getAttackBonus();
 
 		int offense, defense, finalRating = 0;

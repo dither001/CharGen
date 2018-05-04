@@ -301,12 +301,14 @@ public class Inventory {
 
 			// TODO - add priest's or explorer's pack
 			// TODO - receive shield + holy symbol
+			weapons.add(GameWeapon.getWeapon("Shield"));
 		} else if (job.equals(Archetype.DRUID)) {
 			// first choice
 			dice = Dice.roll(2);
-			if (true) {
-				// TODO - 50/50 for weapon or wooden shield
+			if (dice == 1) {
 				weapons.add(GameWeapon.randomSimpleWeapon());
+			} else {
+				weapons.add(GameWeapon.getWeapon("Shield"));
 			}
 
 			// second choice
@@ -334,8 +336,8 @@ public class Inventory {
 			// second choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
-				// TODO - wooden shield
 				weapons.add(GameWeapon.randomMartialWeapon());
+				weapons.add(GameWeapon.getWeapon("Shield"));
 			} else {
 				weapons.add(GameWeapon.randomSimpleWeapon());
 			}
@@ -367,8 +369,8 @@ public class Inventory {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
-				// TODO - wooden shield
 				weapons.add(GameWeapon.randomMartialWeapon());
+				weapons.add(GameWeapon.getWeapon("Shield"));
 			} else {
 				weapons.add(GameWeapon.randomMartialWeapon());
 				weapons.add(GameWeapon.randomMartialWeapon());

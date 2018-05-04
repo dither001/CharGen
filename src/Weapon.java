@@ -36,7 +36,8 @@
 //	HAND_CROSSBOW(6, Energy.PIERCING, Hand.LIGHT),
 //	HEAVY_CROSSBOW(10, Energy.PIERCING, Hand.HEAVY),
 //	LONGBOW(8, Energy.PIERCING, Hand.HEAVY),
-//	NET(4, Energy.BLUDGEONING, Hand.ONE);
+//	NET(4, Energy.BLUDGEONING, Hand.ONE),
+//	SHIELD(4, Energy.BLUDGEONING, Hand.ONE),
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -79,7 +80,8 @@ public enum Weapon implements Item, Proficiency {
 	HAND_CROSSBOW(6, Energy.PIERCING, Hand.LIGHT),
 	HEAVY_CROSSBOW(10, Energy.PIERCING, Hand.HEAVY),
 	LONGBOW(8, Energy.PIERCING, Hand.HEAVY),
-	NET(4, Energy.BLUDGEONING, Hand.ONE);
+	NET(4, Energy.BLUDGEONING, Hand.ONE),
+	SHIELD(4, Energy.BLUDGEONING, Hand.ONE);
 
 	public enum Weight {
 		SIMPLE, MARTIAL, DRUID, MONK, ROGUE, SORCERER
@@ -154,6 +156,7 @@ public enum Weapon implements Item, Proficiency {
 			list.addAll(simpleRangedSet());
 			list.addAll(martialMeleeSet());
 			list.addAll(martialRangedSet());
+			list.add(SHIELD);
 			break;
 		case BARD:
 			list.addAll(simpleMeleeSet());
@@ -165,6 +168,7 @@ public enum Weapon implements Item, Proficiency {
 		case CLERIC:
 			list.addAll(simpleMeleeSet());
 			list.addAll(simpleRangedSet());
+			list.add(SHIELD);
 			break;
 		case DRUID:
 			list.add(CLUB);
@@ -177,12 +181,14 @@ public enum Weapon implements Item, Proficiency {
 			list.add(SICKLE);
 			list.add(SLING);
 			list.add(SPEAR);
+			list.add(SHIELD);
 			break;
 		case FIGHTER:
 			list.addAll(simpleMeleeSet());
 			list.addAll(simpleRangedSet());
 			list.addAll(martialMeleeSet());
 			list.addAll(martialRangedSet());
+			list.add(SHIELD);
 			break;
 		case MONK:
 			list.addAll(simpleMeleeSet());
@@ -194,12 +200,14 @@ public enum Weapon implements Item, Proficiency {
 			list.addAll(simpleRangedSet());
 			list.addAll(martialMeleeSet());
 			list.addAll(martialRangedSet());
+			list.add(SHIELD);
 			break;
 		case RANGER:
 			list.addAll(simpleMeleeSet());
 			list.addAll(simpleRangedSet());
 			list.addAll(martialMeleeSet());
 			list.addAll(martialRangedSet());
+			list.add(SHIELD);
 			break;
 		case ROGUE:
 			list.addAll(simpleMeleeSet());

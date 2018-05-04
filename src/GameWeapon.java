@@ -75,7 +75,9 @@ public class GameWeapon extends GameItem {
 		new GameWeapon("Heavy Crossbow", Weapon.HEAVY_CROSSBOW, 18f, 5000);
 		new GameWeapon("Longbow", Weapon.LONGBOW, 2f, 5000);
 		new GameWeapon("Net", Weapon.NET, 3f, 100);
-	}
+
+		new GameWeapon("Shield", Weapon.SHIELD, 6f, 1000);
+}
 
 	// static methods
 	public static GameWeapon getWeapon(String weapon) {
