@@ -139,6 +139,10 @@ public enum Weapon implements Item, Proficiency {
 	public boolean requiresTwoHands() {
 		return hand.equals(Hand.TWO);
 	}
+
+	public int averageDamage() {
+		return face / 2 * dice;
+	}
 	
 	// static methods
 	public static HashSet<Proficiency> simpleMeleeSet() {
@@ -312,16 +316,16 @@ public enum Weapon implements Item, Proficiency {
 		Weapon bestWeapon = DEFAULT_WEAPON;
 
 		for (int i = 0; i < array.length; ++i) {
-			if (gear.hasWeapon(array[i]) && gear.canUseWeapon(array[i])) {
-				System.out.println("Has " + array[i].toString());
+			if (gear.hasWeaponOfType(array[i]) && gear.canUseWeapon(array[i])) {
+//				System.out.println("Has " + array[i].toString());
 				bestWeapon = array[i];
 				break;
 			}
 		}
 		
-		if (bestWeapon.equals(DEFAULT_WEAPON)) {
-			System.out.println("Couldn't find a melee weapon.");
-		}
+//		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+//			System.out.println("Couldn't find a melee weapon.");
+//		}
 		
 		return bestWeapon;
 	}
@@ -347,9 +351,28 @@ public enum Weapon implements Item, Proficiency {
 		if (bestWeapon.equals(DEFAULT_WEAPON))
 			bestWeapon = bestMeleeWeapon(actor, Hand.ONE, Energy.BLUDGEONING);
 		
-		if (bestWeapon.equals(DEFAULT_WEAPON)) {
-			System.out.println("Couldn't find a melee weapon.");
-		}
+//		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+//			System.out.println("Couldn't find a melee weapon.");
+//		}
+		
+		return bestWeapon;
+	}
+
+	public static Weapon bestOneHandedMelee(Actor actor) {
+		Weapon bestWeapon = DEFAULT_WEAPON;
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.ONE, Energy.SLASHING);
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.ONE, Energy.PIERCING);
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.ONE, Energy.BLUDGEONING);
+		
+//		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+//			System.out.println("Couldn't find a melee weapon.");
+//		}
 		
 		return bestWeapon;
 	}
@@ -360,16 +383,16 @@ public enum Weapon implements Item, Proficiency {
 		Weapon bestWeapon = DEFAULT_WEAPON;
 
 		for (int i = 0; i < array.length; ++i) {
-			if (gear.hasWeapon(array[i]) && gear.canUseWeapon(array[i])) {
-				System.out.println("Has " + array[i].toString());
+			if (gear.hasWeaponOfType(array[i]) && gear.canUseWeapon(array[i])) {
+//				System.out.println("Has " + array[i].toString());
 				bestWeapon = array[i];
 				break;
 			}
 		}
 		
-		if (bestWeapon.equals(DEFAULT_WEAPON)) {
-			System.out.println("Couldn't find a ranged weapon.");
-		}
+//		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+//			System.out.println("Couldn't find a ranged weapon.");
+//		}
 		
 		return bestWeapon;
 	}

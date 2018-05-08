@@ -43,6 +43,10 @@ public class Inventory {
 	public boolean equippedArmor() {
 		return armor != null;
 	}
+	
+	public boolean equippedWeapon() {
+		return mainHand != null;
+	}
 
 	public int calcArmorClass() {
 		int totalAC = 10, armorClass = 10;
@@ -159,20 +163,32 @@ public class Inventory {
 		return optimal;
 	}
 
+	public int calcAverageDamage() {
+		/*
+		 * FIXME - a lot more work needs to go into this, for calculating DPS
+		 */
+		int averageDamage;
+		
+		averageDamage = (equippedWeapon()) ? mainHand.getBaseWeaponType().averageDamage() / 2 : 0;
+		
+		return averageDamage;
+	}
+	
 	public void optimizeWeapon() {
 		if (hasOwner()) {
 			Weapon bestWeapon = Weapon.DEFAULT_WEAPON;
 
+			Archetype job = owner.getJob();
 			boolean prefersMelee = false;
 			// int strMod = owner.getAbilities().getSTRMod();
 			// int dexMod = owner.getAbilities().getDEXMod();
 
-			if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2) {
+			if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2)
 				prefersMelee = true;
-			}
+			else if (job.equals(Archetype.BARBARIAN) || job.equals(Archetype.MONK))
+				prefersMelee = true;
 
-			// Archetype job = owner.getJob();
-
+			
 			if (weapons.size() < 1) {
 				return;
 			} else if (weapons.size() == 1) {
@@ -181,7 +197,7 @@ public class Inventory {
 					return;
 				}
 			} else if (weapons.size() == 2) {
-				if (weapons.contains(Weapon.SHIELD)) {
+				if (hasWeaponOfType(Weapon.SHIELD)) {
 					if (weapons.get(0).getBaseWeaponType().equals(Weapon.SHIELD)) {
 						// shield is index 0
 						equipMainHand(weapons.get(1));
@@ -197,6 +213,13 @@ public class Inventory {
 
 			if (prefersMelee) {
 				// first try melee; failing that try ranged weapon
+				if (hasWeaponOfType(Weapon.SHIELD)) {
+					bestWeapon = Weapon.bestOneHandedMelee(owner);
+					equipMainHand(firstWeaponOfType(bestWeapon));
+					equipOffHand(firstWeaponOfType(Weapon.SHIELD));
+					return;
+				}
+				
 				bestWeapon = Weapon.bestMeleeWeapon(owner);
 				if (bestWeapon.equals(Weapon.DEFAULT_WEAPON))
 					bestWeapon = Weapon.bestRangedWeapon(owner);
@@ -253,7 +276,7 @@ public class Inventory {
 		this.armor = armor;
 	}
 
-	public boolean hasWeapon(Weapon weapon) {
+	public boolean hasWeaponOfType(Weapon weapon) {
 		boolean hasWeapon = false;
 
 		GameWeapon candidate;
@@ -288,12 +311,12 @@ public class Inventory {
 		if (weapon.getBaseWeaponType().requiresTwoHands())
 			offHand = null;
 
-		System.out.println("Equipped " + weapon.toString());
+//		System.out.println("Equipped " + weapon.toString());
 		mainHand = weapon;
 	}
 
 	public void equipOffHand(GameWeapon weapon) {
-		if (mainHand.getBaseWeaponType().requiresTwoHands())
+		if (mainHand != null && mainHand.getBaseWeaponType().requiresTwoHands())
 			return;
 		else
 			offHand = weapon;
@@ -337,6 +360,14 @@ public class Inventory {
 	// tools.addAll(tool);
 	// }
 
+	public GameWeapon getMainHand() {
+		return mainHand;
+	}
+	
+	public GameWeapon getOffHand() {
+		return offHand;
+	}
+	
 	@Override
 	public String toString() {
 		LinkedList<GameItem> list = new LinkedList<GameItem>();

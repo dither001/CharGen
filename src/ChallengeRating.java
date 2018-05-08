@@ -20,7 +20,7 @@ public class ChallengeRating {
 		return finalRating;
 	}
 
-	public static int defenseRating(int hp, int ac) {
+	private static int defenseRating(int hp, int ac) {
 		int defenseRating = hitPointsToCR(hp);
 		int armorRating = armorClassToCR(ac);
 		int hitPointArmor = hitPointsToAC(hp);
@@ -38,7 +38,7 @@ public class ChallengeRating {
 		return defenseRating;
 	}
 
-	public static int hitPointsToCR(int hp) {
+	private static int hitPointsToCR(int hp) {
 		int rating = 31;
 		int[] hitPoints = { 6, 35, 49, 70, 85, 100, 115, 130, 145, 160, 175, 190, 205, 220, 235, 250, 265, 280, 295,
 				310, 325, 340, 355, 400, 445, 490, 535, 580, 625, 670, 715, 760, 805, 850 };
@@ -55,7 +55,7 @@ public class ChallengeRating {
 		return rating;
 	}
 
-	public static int hitPointsToAC(int hp) {
+	private static int hitPointsToAC(int hp) {
 		int armorClass = 13;
 
 		int rating = hitPointsToCR(hp);
@@ -78,7 +78,7 @@ public class ChallengeRating {
 		return armorClass;
 	}
 
-	public static int armorClassToCR(int ac) {
+	private static int armorClassToCR(int ac) {
 		int rating = 17;
 
 		if (ac <= 13) {
@@ -100,7 +100,7 @@ public class ChallengeRating {
 		return rating;
 	}
 
-	public static int offenseRating(int dmg, int atk) {
+	private static int offenseRating(int dmg, int atk) {
 		int offenseRating = damageToCR(dmg);
 		int attackRating = attackToCR(atk);
 		int damageAttack = damageToAttack(dmg);
@@ -118,7 +118,7 @@ public class ChallengeRating {
 		return offenseRating;
 	}
 
-	public static int damageToCR(int dmg) {
+	private static int damageToCR(int dmg) {
 		int rating = 31;
 		int[] damage = { 0, 3, 5, 8, 14, 20, 26, 32, 38, 44, 50, 56, 62, 68, 74, 80, 86, 92, 98, 104, 110, 116, 122,
 				140, 158, 176, 194, 212, 230, 248, 266, 284, 302, 320 };
@@ -135,7 +135,7 @@ public class ChallengeRating {
 		return rating;
 	}
 
-	public static int damageToAttack(int dmg) {
+	private static int damageToAttack(int dmg) {
 		int attackBonus = 3;
 
 		int rating = damageToCR(dmg);
@@ -166,7 +166,7 @@ public class ChallengeRating {
 		return attackBonus;
 	}
 
-	public static int attackToCR(int attack) {
+	private static int attackToCR(int attack) {
 		int rating = 31;
 
 		if (attack <= 3) {

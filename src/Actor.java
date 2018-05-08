@@ -30,7 +30,7 @@ public class Actor {
 	private int experience;
 	private int level;
 	private float expRate;
-	
+
 	private int armorClass;
 	private int hitPoints;
 	private int attackBonus;
@@ -56,7 +56,7 @@ public class Actor {
 		skills.addAll(Armor.getProficiency(job));
 		skills.addAll(Weapon.getProficiency(job));
 		skills.addAll(Skills.getProficiency(job));
-		
+
 		// choose background "career"
 		career = Career.randomCareer(this);
 		skills.addAll(Skills.careerSkills(this));
@@ -66,7 +66,7 @@ public class Actor {
 		inventory.startingGear(this);
 		inventory.optimizeArmor();
 		inventory.optimizeWeapon();
-		
+
 		// derived statistics
 		experience = 0;
 		level = 1;
@@ -95,11 +95,15 @@ public class Actor {
 	}
 
 	public int getAttackBonus() {
-		return attackBonus;
+		// FIXME - calculation method incomplete
+		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
+		int abilityMod = (str > dex) ? str : dex;
+		return proficiencyBonus() + abilityMod;
 	}
 
 	public int getAverageDamage() {
-		return averageDamage;
+		// FIXME - calculation method incomplete
+		return inventory.calcAverageDamage();
 	}
 
 	public int getEXP() {
@@ -114,6 +118,23 @@ public class Actor {
 		return level;
 	}
 
+	public int proficiencyBonus() {
+		int proficiencyBonus;
+
+		if (level > 16)
+			proficiencyBonus = 6;
+		else if (level > 12)
+			proficiencyBonus = 5;
+		else if (level > 8)
+			proficiencyBonus = 4;
+		else if (level > 4)
+			proficiencyBonus = 3;
+		else
+			proficiencyBonus = 2;
+
+		return proficiencyBonus;
+	}
+
 	public AbilityArray getAbilities() {
 		return abilities;
 	}
@@ -124,39 +145,38 @@ public class Actor {
 	public HashSet<Proficiency> getSkills() {
 		return skills;
 	}
-	
+
 	public boolean canUseHeavyArmor() {
 		return skills.contains(Armor.PLATE);
 	}
-	
+
 	public boolean canUseMediumArmor() {
 		return skills.contains(Armor.HALF_PLATE);
 	}
-	
+
 	public boolean canUseLightArmor() {
 		return skills.contains(Armor.STUDDED);
 	}
-	
+
 	public boolean canUseShield() {
 		return skills.contains(Weapon.SHIELD);
 	}
-	
+
 	public boolean canUseMartialMelee() {
 		return skills.contains(Weapon.LONGSWORD);
 	}
-	
+
 	public boolean canUseMartialRanged() {
 		return skills.contains(Weapon.LONGBOW);
 	}
-	
+
 	public boolean canUseSimpleMelee() {
 		return skills.contains(Weapon.LIGHT_HAMMER);
 	}
-	
+
 	public boolean canUseSimpleRanged() {
 		return skills.contains(Weapon.SHORTBOW);
 	}
-	
 
 	public Alignment getAli() {
 		return ali;
