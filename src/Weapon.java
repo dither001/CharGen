@@ -2,7 +2,7 @@
 //	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 //	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 //	DAGGER(4, Energy.PIERCING, Hand.LIGHT),
-//	GREATCLUB(8, Energy.SLASHING, Hand.TWO),
+//	GREATCLUB(8, Energy.PIERCING, Hand.TWO),
 //	HANDAXE(6, Energy.SLASHING, Hand.LIGHT),
 //	JAVELIN(6, Energy.PIERCING, Hand.ONE),
 //	LIGHT_HAMMER(4, Energy.BLUDGEONING, Hand.LIGHT),
@@ -30,14 +30,14 @@
 //	SHORTSWORD(6, Energy.PIERCING, Hand.LIGHT),
 //	TRIDENT(6, Energy.PIERCING, Hand.VERSATILE),
 //	WAR_PICK(8, Energy.PIERCING, Hand.ONE),
-//	WARHAMMER(8, Energy.SLASHING, Hand.VERSATILE),
+//	WARHAMMER(8, Energy.BLUDGEONING, Hand.VERSATILE),
 //	WHIP(4, Energy.SLASHING, Hand.ONE),
 //	BLOWGUN(1, Energy.PIERCING, Hand.ONE),
 //	HAND_CROSSBOW(6, Energy.PIERCING, Hand.LIGHT),
 //	HEAVY_CROSSBOW(10, Energy.PIERCING, Hand.HEAVY),
 //	LONGBOW(8, Energy.PIERCING, Hand.HEAVY),
 //	NET(4, Energy.BLUDGEONING, Hand.ONE),
-//	SHIELD(4, Energy.BLUDGEONING, Hand.ONE),
+//	SHIELD(4, Energy.BLUDGEONING, Hand.ONE);
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -46,7 +46,7 @@ public enum Weapon implements Item, Proficiency {
 	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 	DAGGER(4, Energy.PIERCING, Hand.LIGHT),
-	GREATCLUB(8, Energy.SLASHING, Hand.TWO),
+	GREATCLUB(8, Energy.BLUDGEONING, Hand.TWO),
 	HANDAXE(6, Energy.SLASHING, Hand.LIGHT),
 	JAVELIN(6, Energy.PIERCING, Hand.ONE),
 	LIGHT_HAMMER(4, Energy.BLUDGEONING, Hand.LIGHT),
@@ -74,7 +74,7 @@ public enum Weapon implements Item, Proficiency {
 	SHORTSWORD(6, Energy.PIERCING, Hand.LIGHT),
 	TRIDENT(6, Energy.PIERCING, Hand.VERSATILE),
 	WAR_PICK(8, Energy.PIERCING, Hand.ONE),
-	WARHAMMER(8, Energy.SLASHING, Hand.VERSATILE),
+	WARHAMMER(8, Energy.BLUDGEONING, Hand.VERSATILE),
 	WHIP(4, Energy.SLASHING, Hand.ONE),
 	BLOWGUN(1, Energy.PIERCING, Hand.ONE),
 	HAND_CROSSBOW(6, Energy.PIERCING, Hand.LIGHT),
@@ -238,47 +238,88 @@ public enum Weapon implements Item, Proficiency {
 		return list;
 	}
 
-//	public static HashSet<Proficiency> getProficiency(Weight weight) {
-//		HashSet<Proficiency> list = new HashSet<Proficiency>();
-//		list.add(UNARMED);
-//
-//		if (weight.equals(Weight.SIMPLE)) {
-//			list.addAll(simpleMeleeSet());
-//			list.addAll(simpleRangedSet());
-//		} else if (weight.equals(Weight.MARTIAL)) {
-//			list.addAll(simpleMeleeSet());
-//			list.addAll(simpleRangedSet());
-//			list.addAll(martialMeleeSet());
-//			list.addAll(martialRangedSet());
-//		} else if (weight.equals(Weight.DRUID)) {
-//			list.add(CLUB);
-//			list.add(DAGGER);
-//			list.add(DART);
-//			list.add(JAVELIN);
-//			list.add(MACE);
-//			list.add(QUARTERSTAFF);
-//			list.add(SCIMITAR);
-//			list.add(SICKLE);
-//			list.add(SLING);
-//			list.add(SPEAR);
-//		} else if (weight.equals(Weight.MONK)) {
-//			list.addAll(simpleMeleeSet());
-//			list.addAll(simpleRangedSet());
-//			list.add(SHORTSWORD);
-//		} else if (weight.equals(Weight.ROGUE)) {
-//			list.addAll(simpleMeleeSet());
-//			list.add(LONGSWORD);
-//			list.add(RAPIER);
-//			list.add(SHORTSWORD);
-//			list.add(HAND_CROSSBOW);
-//		} else if (weight.equals(Weight.SORCERER)) {
-//			list.add(DAGGER);
-//			list.add(DART);
-//			list.add(QUARTERSTAFF);
-//			list.add(SLING);
-//			list.add(LIGHT_CROSSBOW);
-//		}
-//
-//		return list;
-//	}
+	public static Weapon nextBestOneHandedBludgeoning(Weapon previous) {
+		Weapon nextBest;
+
+		switch (previous) {
+		case WARHAMMER:
+			nextBest = QUARTERSTAFF;
+			break;
+		case QUARTERSTAFF:
+			nextBest = MACE;
+			break;
+		case MACE:
+			nextBest = LIGHT_HAMMER;
+			break;
+		case LIGHT_HAMMER:
+			nextBest = CLUB;
+			break;
+		default:
+			nextBest = UNARMED;
+			break;
+		}
+
+		return nextBest;
+	}
+
+	public static Weapon nextBestOneHandedPiercing(Weapon previous) {
+		Weapon nextBest;
+
+		switch (previous) {
+		case SPEAR:
+			nextBest = TRIDENT;
+			break;
+		case TRIDENT:
+			nextBest = WAR_PICK;
+			break;
+		case WAR_PICK:
+			nextBest = MORNINGSTAR;
+			break;
+		case MORNINGSTAR:
+			nextBest = RAPIER;
+			break;
+		case RAPIER:
+			nextBest = JAVELIN;
+			break;
+		case JAVELIN:
+			nextBest = SHORTSWORD;
+			break;
+		case SHORTSWORD:
+			nextBest = DAGGER;
+			break;
+		default:
+			nextBest = UNARMED;
+			break;
+		}
+
+		return nextBest;
+	}
+
+	public static Weapon nextBestOneHandedSlashing(Weapon previous) {
+		Weapon nextBest;
+
+		switch (previous) {
+		case WHIP:
+			nextBest = BATTLEAXE;
+			break;
+		case BATTLEAXE:
+			nextBest = LONGSWORD;
+			break;
+		case LONGSWORD:
+			nextBest = SCIMITAR;
+			break;
+		case SCIMITAR:
+			nextBest = HANDAXE;
+			break;
+		case HANDAXE:
+			nextBest = SICKLE;
+			break;
+		default:
+			nextBest = UNARMED;
+			break;
+		}
+
+		return nextBest;
+	}
+	
 }

@@ -1,7 +1,6 @@
-import java.util.Iterator;
 
 public class Main {
-	private static Actor[] actors = new Actor[9];
+	private static Actor[] actors = new Actor[10];
 
 	public static void main(String[] args) {
 		// TODO

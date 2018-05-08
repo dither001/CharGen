@@ -149,35 +149,6 @@ public enum Armor implements Item, Proficiency {
 		return list;
 	}
 
-//	public static HashSet<Proficiency> getProficiency(Weight weight) {
-//		HashSet<Proficiency> list = new HashSet<Proficiency>();
-//		list.add(NONE);
-//
-//		if (weight.equals(Weight.LIGHT)) {
-//			list.addAll(lightArmorSet());
-//		} else if (weight.equals(Weight.MEDIUM)) {
-//			list.addAll(lightArmorSet());
-//			list.addAll(mediumArmorSet());
-//		} else if (weight.equals(Weight.HEAVY)) {
-//			list.addAll(lightArmorSet());
-//			list.addAll(mediumArmorSet());
-//			list.addAll(heavyArmorSet());
-//		} else if (weight.equals(Weight.MAGE)) {
-//			list.add(MAGE);
-//		} else if (weight.equals(Weight.BARBARIAN)) {
-//			list.addAll(lightArmorSet());
-//			list.addAll(mediumArmorSet());
-//			list.add(BARBARIAN);
-//		} else if (weight.equals(Weight.MONK)) {
-//			list.add(MONK);
-//		} else if (weight.equals(Weight.WARLOCK)) {
-//			list.addAll(lightArmorSet());
-//			list.add(MAGE);
-//		}
-//
-//		return list;
-//	}
-
 	public static Armor bestHeavyArmor() {
 		return PLATE;
 	}
