@@ -161,18 +161,20 @@ public class Inventory {
 
 	public void optimizeWeapon() {
 		if (hasOwner()) {
-			boolean prefersMelee = false;
-			int strMod = owner.getAbilities().getSTRMod();
-			int dexMod = owner.getAbilities().getDEXMod();
-			if (strMod > dexMod)
-				prefersMelee = true;
+			// boolean prefersMelee = false;
+			// int strMod = owner.getAbilities().getSTRMod();
+			// int dexMod = owner.getAbilities().getDEXMod();
+
+			// if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2) {
+			// prefersMelee = true;
+			// }
 
 			// Archetype job = owner.getJob();
 
 			if (weapons.size() < 1)
 				return;
 
-			Weapon bestWeapon = Weapon.bestOneHandedMeleePiercing(owner);
+			Weapon bestWeapon = Weapon.bestMeleeWeapon(owner);
 			equipMainHand(firstWeaponOfType(bestWeapon));
 
 			// END OF METHOD

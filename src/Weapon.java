@@ -93,15 +93,18 @@ public enum Weapon implements Item, Proficiency {
 	SHIELD(4, Energy.BLUDGEONING, Hand.ONE);
 
 	// fields
-	public static final Weapon DEFAULT_WEAPON;
+	private static final Weapon DEFAULT_WEAPON = UNARMED;
 	
-	public static final Weapon BEST_ONE_HANDED_MELEE_BLUDGEONING;
-	public static final Weapon BEST_ONE_HANDED_MELEE_PIERCING;
-	public static final Weapon BEST_ONE_HANDED_MELEE_SLASHING;
-
-	public static final Weapon BEST_TWO_HANDED_MELEE_BLUDGEONING;
-	public static final Weapon BEST_TWO_HANDED_MELEE_PIERCING;
-	public static final Weapon BEST_TWO_HANDED_MELEE_SLASHING;
+	// these arrays can't be initialized in my static block for some reason
+	private static final Weapon[] oneHandedMeleeBludgeoning = { WARHAMMER, QUARTERSTAFF, MACE, LIGHT_HAMMER, CLUB };
+	private static final Weapon[] oneHandedMeleePiercing = { SPEAR, TRIDENT, WAR_PICK, MORNINGSTAR, RAPIER, JAVELIN, SHORTSWORD, DAGGER };
+	private static final Weapon[] oneHandedMeleeSlashing = { WHIP, BATTLEAXE, LONGSWORD, SCIMITAR, HANDAXE, SICKLE };
+	
+	private static final Weapon[] twoHandedMeleeBludgeoning = { MAUL, GREATCLUB, WARHAMMER, QUARTERSTAFF };
+	private static final Weapon[] twoHandedMeleePiercing = { PIKE, SPEAR, TRIDENT };
+	private static final Weapon[] twoHandedMeleeSlashing = { HALBERD, GLAIVE, GREATAXE, GREATSWORD, BATTLEAXE, LONGSWORD };
+	
+	private static final Weapon[] ranged = { LONGBOW, SHORTBOW, HEAVY_CROSSBOW, LIGHT_CROSSBOW, HAND_CROSSBOW, SLING, DART, BLOWGUN };
 
 	public enum Weight {
 		SIMPLE, MARTIAL, DRUID, MONK, ROGUE, SORCERER
@@ -115,19 +118,6 @@ public enum Weapon implements Item, Proficiency {
 	private int face;
 	private Energy damage;
 	private Hand hand;
-
-	// initialization
-	static {
-		DEFAULT_WEAPON = UNARMED;
-		
-		BEST_ONE_HANDED_MELEE_BLUDGEONING = WARHAMMER;
-		BEST_ONE_HANDED_MELEE_PIERCING = SPEAR;
-		BEST_ONE_HANDED_MELEE_SLASHING = WHIP;
-
-		BEST_TWO_HANDED_MELEE_BLUDGEONING = MAUL;
-		BEST_TWO_HANDED_MELEE_PIERCING = PIKE;
-		BEST_TWO_HANDED_MELEE_SLASHING = HALBERD;
-	}
 
 	// constructors
 	private Weapon() {
@@ -277,80 +267,46 @@ public enum Weapon implements Item, Proficiency {
 		return list;
 	}
 
-	public static Weapon bestOneHandedBludgeoning() {
-		return BEST_ONE_HANDED_MELEE_BLUDGEONING;
-	}
-
-	public static Weapon bestOneHandedPiercing() {
-		return BEST_ONE_HANDED_MELEE_PIERCING;
-	}
-
-	public static Weapon bestOneHandedSlashing() {
-		return BEST_ONE_HANDED_MELEE_SLASHING;
-	}
-
-	public static Weapon bestTwoHandedBludgeoning() {
-		return BEST_TWO_HANDED_MELEE_BLUDGEONING;
-	}
-
-	public static Weapon bestTwoHandedPiercing() {
-		return BEST_TWO_HANDED_MELEE_PIERCING;
-	}
-
-	public static Weapon bestTwoHandedSlashing() {
-		return BEST_TWO_HANDED_MELEE_SLASHING;
-	}
-
-	public static Weapon nextBestOneHandedBludgeoning() {
-		return nextBestOneHandedBludgeoning(BEST_ONE_HANDED_MELEE_BLUDGEONING);
-	}
-
-//	public static Weapon nextBestOneHandedPiercing() {
-//		return nextBestOneHandedPiercing(BEST_ONE_HANDED_MELEE_PIERCING);
-//	}
-
-	public static Weapon nextBestOneHandedSlashing() {
-		return nextBestOneHandedSlashing(BEST_ONE_HANDED_MELEE_SLASHING);
-	}
-
-	// public static Weapon nextBestTwoHandedBludgeoning() {
-	// return nextBestTwoHandedBludgeoning(BEST_TWO_HANDED_MELEE_BLUDGEONING);
-	// }
-	//
-	// public static Weapon nextBestTwoHandedPiercing() {
-	// return nextBestTwoHandedPiercing(BEST_TWO_HANDED_MELEE_PIERCING);
-	// }
-	//
-	// public static Weapon nextBestTwoHandedSlashing() {
-	// return nextBestTwoHandedSlashing(BEST_TWO_HANDED_MELEE_SLASHING);
-	// }
-
-	public static Weapon nextBestOneHandedBludgeoning(Weapon previous) {
-		Weapon nextBest;
-
-		switch (previous) {
-		case WARHAMMER:
-			nextBest = QUARTERSTAFF;
-			break;
-		case QUARTERSTAFF:
-			nextBest = MACE;
-			break;
-		case MACE:
-			nextBest = LIGHT_HAMMER;
-			break;
-		case LIGHT_HAMMER:
-			nextBest = CLUB;
-			break;
-		default:
-			nextBest = UNARMED;
-			break;
-		}
-
-		return nextBest;
+	public static Weapon bestOneHandedMeleeBludgeoning(Actor actor) {
+		return bestMeleeWeapon(actor, Hand.ONE, Energy.BLUDGEONING);
 	}
 
 	public static Weapon bestOneHandedMeleePiercing(Actor actor) {
-		Weapon[] array = { SPEAR, TRIDENT, WAR_PICK, MORNINGSTAR, RAPIER, JAVELIN, SHORTSWORD, DAGGER };
+		return bestMeleeWeapon(actor, Hand.ONE, Energy.PIERCING);
+	}
+
+	public static Weapon bestOneHandedMeleeSlashing(Actor actor) {
+		return bestMeleeWeapon(actor, Hand.ONE, Energy.SLASHING);
+	}
+
+	public static Weapon bestTwoHandedMeleeBludgeoning(Actor actor) {
+		return bestMeleeWeapon(actor, Hand.TWO, Energy.BLUDGEONING);
+	}
+
+	public static Weapon bestTwoHandedMeleePiercing(Actor actor) {
+		return bestMeleeWeapon(actor, Hand.TWO, Energy.PIERCING);
+	}
+
+	public static Weapon bestTwoHandedMeleeSlashing(Actor actor) {
+		return bestMeleeWeapon(actor, Hand.TWO, Energy.SLASHING);
+	}
+
+	public static Weapon bestMeleeWeapon(Actor actor, Hand hand, Energy energy) {
+		Weapon[] array = oneHandedMeleePiercing;
+		
+		if (hand.equals(Hand.ONE) && energy.equals(Energy.BLUDGEONING)) {
+			array = oneHandedMeleeBludgeoning;
+		} else if (hand.equals(Hand.ONE) && energy.equals(Energy.PIERCING)) {
+			array = oneHandedMeleePiercing;
+		} else if (hand.equals(Hand.ONE) && energy.equals(Energy.SLASHING)) {
+			array = oneHandedMeleeSlashing;
+		} else if (hand.equals(Hand.TWO) && energy.equals(Energy.BLUDGEONING)) {
+			array = twoHandedMeleeBludgeoning;
+		} else if (hand.equals(Hand.TWO) && energy.equals(Energy.PIERCING)) {
+			array = twoHandedMeleePiercing;
+		} else if (hand.equals(Hand.TWO) && energy.equals(Energy.SLASHING)) {
+			array = twoHandedMeleeSlashing;
+		}
 		
 		Inventory gear = actor.getInventory();
 		Weapon bestWeapon = DEFAULT_WEAPON;
@@ -364,88 +320,56 @@ public enum Weapon implements Item, Proficiency {
 		}
 		
 		if (bestWeapon.equals(DEFAULT_WEAPON)) {
-			System.out.println("Couldn't find a one-handed melee piercing weapon.");
+			System.out.println("Couldn't find a melee weapon.");
 		}
 		
 		return bestWeapon;
 	}
-	
-//	public static Weapon nextBestOneHandedPiercing(Weapon previous) {
-//		Weapon nextBest;
-//
-//		switch (previous) {
-//		case SPEAR:
-//			nextBest = TRIDENT;
-//			break;
-//		case TRIDENT:
-//			nextBest = WAR_PICK;
-//			break;
-//		case WAR_PICK:
-//			nextBest = MORNINGSTAR;
-//			break;
-//		case MORNINGSTAR:
-//			nextBest = RAPIER;
-//			break;
-//		case RAPIER:
-//			nextBest = JAVELIN;
-//			break;
-//		case JAVELIN:
-//			nextBest = SHORTSWORD;
-//			break;
-//		case SHORTSWORD:
-//			nextBest = DAGGER;
-//			break;
-//		default:
-//			nextBest = UNARMED;
-//			break;
-//		}
-//
-//		return nextBest;
-//	}
 
-	public static Weapon nextBestOneHandedSlashing(Weapon previous) {
-		Weapon nextBest;
+	public static Weapon bestMeleeWeapon(Actor actor) {
+		Weapon bestWeapon = DEFAULT_WEAPON;
 
-		switch (previous) {
-		case WHIP:
-			nextBest = BATTLEAXE;
-			break;
-		case BATTLEAXE:
-			nextBest = LONGSWORD;
-			break;
-		case LONGSWORD:
-			nextBest = SCIMITAR;
-			break;
-		case SCIMITAR:
-			nextBest = HANDAXE;
-			break;
-		case HANDAXE:
-			nextBest = SICKLE;
-			break;
-		default:
-			nextBest = UNARMED;
-			break;
+		bestWeapon = bestMeleeWeapon(actor, Hand.TWO, Energy.SLASHING);
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.TWO, Energy.PIERCING);
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.TWO, Energy.BLUDGEONING);
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.ONE, Energy.SLASHING);
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.ONE, Energy.PIERCING);
+
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.ONE, Energy.BLUDGEONING);
+		
+		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+			System.out.println("Couldn't find a melee weapon.");
 		}
-
-		return nextBest;
+		
+		return bestWeapon;
 	}
 
-	public static Weapon nextBestTwoHandedBludgeoning(Weapon previous) {
-		Weapon nextBest;
+	public static Weapon bestRangedWeapon(Actor actor) {
+		Weapon[] array = ranged;
+		Inventory gear = actor.getInventory();
+		Weapon bestWeapon = DEFAULT_WEAPON;
 
-		switch (previous) {
-		case MAUL:
-			nextBest = GREATCLUB;
-			break;
-		case GREATCLUB:
-			nextBest = WARHAMMER;
-			break;
-		default:
-			nextBest = nextBestOneHandedBludgeoning(previous);
-			break;
+		for (int i = 0; i < array.length; ++i) {
+			if (gear.hasWeapon(array[i]) && gear.canUseWeapon(array[i])) {
+				System.out.println("Has " + array[i].toString());
+				bestWeapon = array[i];
+				break;
+			}
 		}
-
-		return nextBest;
+		
+		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+			System.out.println("Couldn't find a ranged weapon.");
+		}
+		
+		return bestWeapon;
 	}
-
 }
