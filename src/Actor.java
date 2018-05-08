@@ -58,7 +58,7 @@ public class Actor {
 		skills.addAll(Skills.getProficiency(job));
 		
 		// choose background "career"
-		career = Career.randomCareer();
+		career = Career.randomCareer(this);
 		skills.addAll(Skills.careerSkills(this));
 
 		// initialize inventory, equip gear
