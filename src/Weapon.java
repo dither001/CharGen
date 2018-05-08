@@ -93,15 +93,15 @@ public enum Weapon implements Item, Proficiency {
 	SHIELD(4, Energy.BLUDGEONING, Hand.ONE);
 
 	// fields
-	static final Weapon DEFAULT_WEAPON;
+	public static final Weapon DEFAULT_WEAPON;
 	
-	static final Weapon BEST_ONE_HANDED_MELEE_BLUDGEONING;
-	static final Weapon BEST_ONE_HANDED_MELEE_PIERCING;
-	static final Weapon BEST_ONE_HANDED_MELEE_SLASHING;
+	public static final Weapon BEST_ONE_HANDED_MELEE_BLUDGEONING;
+	public static final Weapon BEST_ONE_HANDED_MELEE_PIERCING;
+	public static final Weapon BEST_ONE_HANDED_MELEE_SLASHING;
 
-	static final Weapon BEST_TWO_HANDED_MELEE_BLUDGEONING;
-	static final Weapon BEST_TWO_HANDED_MELEE_PIERCING;
-	static final Weapon BEST_TWO_HANDED_MELEE_SLASHING;
+	public static final Weapon BEST_TWO_HANDED_MELEE_BLUDGEONING;
+	public static final Weapon BEST_TWO_HANDED_MELEE_PIERCING;
+	public static final Weapon BEST_TWO_HANDED_MELEE_SLASHING;
 
 	public enum Weight {
 		SIMPLE, MARTIAL, DRUID, MONK, ROGUE, SORCERER
@@ -145,6 +145,11 @@ public enum Weapon implements Item, Proficiency {
 		this.hand = hand;
 	}
 
+	// methods
+	public boolean requiresTwoHands() {
+		return hand.equals(Hand.TWO);
+	}
+	
 	// static methods
 	public static HashSet<Proficiency> simpleMeleeSet() {
 		Weapon[] weapon = { CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE, QUARTERSTAFF, SICKLE, SPEAR,
@@ -351,10 +356,15 @@ public enum Weapon implements Item, Proficiency {
 		Weapon bestWeapon = DEFAULT_WEAPON;
 
 		for (int i = 0; i < array.length; ++i) {
-			if (gear.hasWeapon(array[i])) {
+			if (gear.hasWeapon(array[i]) && gear.canUseWeapon(array[i])) {
+				System.out.println("Has " + array[i].toString());
 				bestWeapon = array[i];
 				break;
 			}
+		}
+		
+		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+			System.out.println("Couldn't find a one-handed melee piercing weapon.");
 		}
 		
 		return bestWeapon;

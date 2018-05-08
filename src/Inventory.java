@@ -54,8 +54,8 @@ public class Inventory {
 		int maxDex = 10;
 
 		if (equippedArmor()) {
-			armorClass = armor.getArmor().getArmorClass();
-			maxDex = armor.getArmor().getMaxDexterity();
+			armorClass = armor.getBaseArmorType().getArmorClass();
+			maxDex = armor.getBaseArmorType().getMaxDexterity();
 			if (dexMod > maxDex)
 				dexMod = maxDex;
 		}
@@ -152,26 +152,118 @@ public class Inventory {
 		GameArmor candidate, optimal = null;
 		for (Iterator<GameArmor> it = armory.iterator(); it.hasNext();) {
 			candidate = it.next();
-			if (candidate.getArmor().equals(best))
+			if (candidate.getBaseArmorType().equals(best))
 				optimal = candidate;
 		}
 
 		return optimal;
 	}
 
-	public boolean hasWeapon(Weapon weapon) {
-		boolean hasWeapon = false;
+	public void optimizeWeapon() {
+		if (hasOwner()) {
+			boolean prefersMelee = false;
+			int strMod = owner.getAbilities().getSTRMod();
+			int dexMod = owner.getAbilities().getDEXMod();
+			if (strMod > dexMod)
+				prefersMelee = true;
+
+			// Archetype job = owner.getJob();
+
+			if (weapons.size() < 1)
+				return;
+
+			Weapon bestWeapon = Weapon.bestOneHandedMeleePiercing(owner);
+			equipMainHand(firstWeaponOfType(bestWeapon));
+
+			// END OF METHOD
+		}
+	}
+
+	private GameWeapon firstWeaponOfType(Weapon type) {
+		GameWeapon candidate, firstWeapon = null;
+		for (Iterator<GameWeapon> it = weapons.iterator(); it.hasNext();) {
+			candidate = it.next();
+			if (candidate.getBaseWeaponType().equals(type))
+				firstWeapon = candidate;
+		}
+
+		return firstWeapon;
+	}
+
+	public boolean hasArmor(Armor armor) {
+		boolean hasArmor = false;
+
+		GameArmor candidate;
+		for (Iterator<GameArmor> it = armory.iterator(); it.hasNext();) {
+			candidate = it.next();
+			if (candidate.getBaseArmorType().equals(armor)) {
+				hasArmor = true;
+				break;
+			}
+		}
+
+		return hasArmor;
+	}
+
+	public boolean canUseArmor(Armor armor) {
+		boolean canUseArmor = false;
 		HashSet<Proficiency> skills = owner.getSkills();
 
-		if (skills.contains(weapon)) {
-			hasWeapon = true;
+		if (skills.contains(armor)) {
+			canUseArmor = true;
+		}
+
+		return canUseArmor;
+	}
+
+	public void equipArmor(GameArmor armor) {
+		this.armor = armor;
+	}
+
+	public boolean hasWeapon(Weapon weapon) {
+		boolean hasWeapon = false;
+
+		GameWeapon candidate;
+		for (Iterator<GameWeapon> it = weapons.iterator(); it.hasNext();) {
+			candidate = it.next();
+			if (candidate.getBaseWeaponType().equals(weapon)) {
+				hasWeapon = true;
+				break;
+			}
 		}
 
 		return hasWeapon;
 	}
 
-	public void equipArmor(GameArmor armor) {
-		this.armor = armor;
+	public boolean canUseWeapon(Weapon weapon) {
+		boolean canUseWeapon = false;
+		HashSet<Proficiency> skills = owner.getSkills();
+
+		if (skills.contains(weapon)) {
+			canUseWeapon = true;
+		}
+
+		return canUseWeapon;
+	}
+
+	public void equipMainHand(GameWeapon weapon) {
+		if (weapon == null) {
+			System.out.println("Failed to equip anything.");
+			return;
+		}
+
+		if (weapon.getBaseWeaponType().requiresTwoHands())
+			offHand = null;
+
+		System.out.println("Equipped " + weapon.toString());
+		mainHand = weapon;
+	}
+
+	public void equipOffHand(GameWeapon weapon) {
+		if (mainHand.getBaseWeaponType().requiresTwoHands())
+			return;
+		else
+			offHand = weapon;
 	}
 
 	public Vector<GameArmor> getAllArmor() {

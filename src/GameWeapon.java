@@ -79,6 +79,11 @@ public class GameWeapon extends GameItem {
 		new GameWeapon("Shield", Weapon.SHIELD, 6f, 1000);
 }
 
+	// methods
+	public Weapon getBaseWeaponType() {
+		return weapon;
+	}
+	
 	// static methods
 	public static GameWeapon getWeapon(String weapon) {
 		return weapons.get(weapon);

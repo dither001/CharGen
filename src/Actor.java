@@ -65,6 +65,7 @@ public class Actor {
 		inventory = new Inventory();
 		inventory.startingGear(this);
 		inventory.optimizeArmor();
+		inventory.optimizeWeapon();
 		
 		// derived statistics
 		experience = 0;

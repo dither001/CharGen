@@ -58,22 +58,22 @@ public class GameArmor extends GameItem {
 	}
 
 	// methods
-	public Armor getArmor() {
+	public Armor getBaseArmorType() {
 		return armor;
 	}
-	
+
 	public boolean canEquip(HashSet<Proficiency> skills) {
 		boolean canEquip = false;
 		if (skills.contains(armor)) {
 			canEquip = true;
 		}
-		
+
 		return canEquip;
 	}
 
 	public int reduce() {
 		int totalBonus;
-		totalBonus = this.getArmor().getArmorClass();
+		totalBonus = this.getBaseArmorType().getArmorClass();
 		// TODO - need to include bonuses from magic, etc
 		return totalBonus;
 	}
