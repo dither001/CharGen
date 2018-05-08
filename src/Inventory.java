@@ -159,6 +159,17 @@ public class Inventory {
 		return optimal;
 	}
 
+	public boolean hasWeapon(Weapon weapon) {
+		boolean hasWeapon = false;
+		HashSet<Proficiency> skills = owner.getSkills();
+
+		if (skills.contains(weapon)) {
+			hasWeapon = true;
+		}
+
+		return hasWeapon;
+	}
+
 	public void equipArmor(GameArmor armor) {
 		this.armor = armor;
 	}

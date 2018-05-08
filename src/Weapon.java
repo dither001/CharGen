@@ -1,4 +1,13 @@
 
+/*
+ * TODO - I have an idea for a rewrite of the entire Armor/Weapon equip
+ * algorithm. Next time, instead of cycling through switches, I want to create
+ * a try-catch block that first attempts to locate said weapon/armor in the
+ * inventory, then attempts to equip it. On success, the method ends. On
+ * failure, it simply iterates through an ARRAY of the best armor/weapons
+ * instead of using complicated switch hierarchies.
+ */
+
 //	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 //	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 //	DAGGER(4, Energy.PIERCING, Hand.LIGHT),
@@ -83,6 +92,17 @@ public enum Weapon implements Item, Proficiency {
 	NET(4, Energy.BLUDGEONING, Hand.ONE),
 	SHIELD(4, Energy.BLUDGEONING, Hand.ONE);
 
+	// fields
+	static final Weapon DEFAULT_WEAPON;
+	
+	static final Weapon BEST_ONE_HANDED_MELEE_BLUDGEONING;
+	static final Weapon BEST_ONE_HANDED_MELEE_PIERCING;
+	static final Weapon BEST_ONE_HANDED_MELEE_SLASHING;
+
+	static final Weapon BEST_TWO_HANDED_MELEE_BLUDGEONING;
+	static final Weapon BEST_TWO_HANDED_MELEE_PIERCING;
+	static final Weapon BEST_TWO_HANDED_MELEE_SLASHING;
+
 	public enum Weight {
 		SIMPLE, MARTIAL, DRUID, MONK, ROGUE, SORCERER
 	};
@@ -96,6 +116,20 @@ public enum Weapon implements Item, Proficiency {
 	private Energy damage;
 	private Hand hand;
 
+	// initialization
+	static {
+		DEFAULT_WEAPON = UNARMED;
+		
+		BEST_ONE_HANDED_MELEE_BLUDGEONING = WARHAMMER;
+		BEST_ONE_HANDED_MELEE_PIERCING = SPEAR;
+		BEST_ONE_HANDED_MELEE_SLASHING = WHIP;
+
+		BEST_TWO_HANDED_MELEE_BLUDGEONING = MAUL;
+		BEST_TWO_HANDED_MELEE_PIERCING = PIKE;
+		BEST_TWO_HANDED_MELEE_SLASHING = HALBERD;
+	}
+
+	// constructors
 	private Weapon() {
 		this(1, 4, Energy.BLUDGEONING, Hand.ONE);
 	}
@@ -238,6 +272,54 @@ public enum Weapon implements Item, Proficiency {
 		return list;
 	}
 
+	public static Weapon bestOneHandedBludgeoning() {
+		return BEST_ONE_HANDED_MELEE_BLUDGEONING;
+	}
+
+	public static Weapon bestOneHandedPiercing() {
+		return BEST_ONE_HANDED_MELEE_PIERCING;
+	}
+
+	public static Weapon bestOneHandedSlashing() {
+		return BEST_ONE_HANDED_MELEE_SLASHING;
+	}
+
+	public static Weapon bestTwoHandedBludgeoning() {
+		return BEST_TWO_HANDED_MELEE_BLUDGEONING;
+	}
+
+	public static Weapon bestTwoHandedPiercing() {
+		return BEST_TWO_HANDED_MELEE_PIERCING;
+	}
+
+	public static Weapon bestTwoHandedSlashing() {
+		return BEST_TWO_HANDED_MELEE_SLASHING;
+	}
+
+	public static Weapon nextBestOneHandedBludgeoning() {
+		return nextBestOneHandedBludgeoning(BEST_ONE_HANDED_MELEE_BLUDGEONING);
+	}
+
+//	public static Weapon nextBestOneHandedPiercing() {
+//		return nextBestOneHandedPiercing(BEST_ONE_HANDED_MELEE_PIERCING);
+//	}
+
+	public static Weapon nextBestOneHandedSlashing() {
+		return nextBestOneHandedSlashing(BEST_ONE_HANDED_MELEE_SLASHING);
+	}
+
+	// public static Weapon nextBestTwoHandedBludgeoning() {
+	// return nextBestTwoHandedBludgeoning(BEST_TWO_HANDED_MELEE_BLUDGEONING);
+	// }
+	//
+	// public static Weapon nextBestTwoHandedPiercing() {
+	// return nextBestTwoHandedPiercing(BEST_TWO_HANDED_MELEE_PIERCING);
+	// }
+	//
+	// public static Weapon nextBestTwoHandedSlashing() {
+	// return nextBestTwoHandedSlashing(BEST_TWO_HANDED_MELEE_SLASHING);
+	// }
+
 	public static Weapon nextBestOneHandedBludgeoning(Weapon previous) {
 		Weapon nextBest;
 
@@ -262,38 +344,54 @@ public enum Weapon implements Item, Proficiency {
 		return nextBest;
 	}
 
-	public static Weapon nextBestOneHandedPiercing(Weapon previous) {
-		Weapon nextBest;
+	public static Weapon bestOneHandedMeleePiercing(Actor actor) {
+		Weapon[] array = { SPEAR, TRIDENT, WAR_PICK, MORNINGSTAR, RAPIER, JAVELIN, SHORTSWORD, DAGGER };
+		
+		Inventory gear = actor.getInventory();
+		Weapon bestWeapon = DEFAULT_WEAPON;
 
-		switch (previous) {
-		case SPEAR:
-			nextBest = TRIDENT;
-			break;
-		case TRIDENT:
-			nextBest = WAR_PICK;
-			break;
-		case WAR_PICK:
-			nextBest = MORNINGSTAR;
-			break;
-		case MORNINGSTAR:
-			nextBest = RAPIER;
-			break;
-		case RAPIER:
-			nextBest = JAVELIN;
-			break;
-		case JAVELIN:
-			nextBest = SHORTSWORD;
-			break;
-		case SHORTSWORD:
-			nextBest = DAGGER;
-			break;
-		default:
-			nextBest = UNARMED;
-			break;
+		for (int i = 0; i < array.length; ++i) {
+			if (gear.hasWeapon(array[i])) {
+				bestWeapon = array[i];
+				break;
+			}
 		}
-
-		return nextBest;
+		
+		return bestWeapon;
 	}
+	
+//	public static Weapon nextBestOneHandedPiercing(Weapon previous) {
+//		Weapon nextBest;
+//
+//		switch (previous) {
+//		case SPEAR:
+//			nextBest = TRIDENT;
+//			break;
+//		case TRIDENT:
+//			nextBest = WAR_PICK;
+//			break;
+//		case WAR_PICK:
+//			nextBest = MORNINGSTAR;
+//			break;
+//		case MORNINGSTAR:
+//			nextBest = RAPIER;
+//			break;
+//		case RAPIER:
+//			nextBest = JAVELIN;
+//			break;
+//		case JAVELIN:
+//			nextBest = SHORTSWORD;
+//			break;
+//		case SHORTSWORD:
+//			nextBest = DAGGER;
+//			break;
+//		default:
+//			nextBest = UNARMED;
+//			break;
+//		}
+//
+//		return nextBest;
+//	}
 
 	public static Weapon nextBestOneHandedSlashing(Weapon previous) {
 		Weapon nextBest;
@@ -321,5 +419,23 @@ public enum Weapon implements Item, Proficiency {
 
 		return nextBest;
 	}
-	
+
+	public static Weapon nextBestTwoHandedBludgeoning(Weapon previous) {
+		Weapon nextBest;
+
+		switch (previous) {
+		case MAUL:
+			nextBest = GREATCLUB;
+			break;
+		case GREATCLUB:
+			nextBest = WARHAMMER;
+			break;
+		default:
+			nextBest = nextBestOneHandedBludgeoning(previous);
+			break;
+		}
+
+		return nextBest;
+	}
+
 }

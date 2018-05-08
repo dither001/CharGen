@@ -2,17 +2,28 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public enum Armor implements Item, Proficiency {
-	UNARMORED, BARBARIAN, MAGE(13), MONK, PADDED(11), LEATHER(11), STUDDED(12), HIDE(12, 2), CHAIN_SHIRT(13, 2), SCALE_MAIL(
-			14,
-			2), BREASTPLATE(14, 2), HALF_PLATE(15, 2), RING_MAIL(14, 0), CHAIN_MAIL(16, 0), SPLINT(17, 0), PLATE(18, 0);
+	UNARMORED, BARBARIAN, MAGE(13), MONK, PADDED(11), LEATHER(11), STUDDED(12), HIDE(12, 2), CHAIN_SHIRT(13,
+			2), SCALE_MAIL(14, 2), BREASTPLATE(14,
+					2), HALF_PLATE(15, 2), RING_MAIL(14, 0), CHAIN_MAIL(16, 0), SPLINT(17, 0), PLATE(18, 0);
 
-//	public enum Weight {
-//		NONE, BARBARIAN, MONK, WARLOCK, MAGE, LIGHT, MEDIUM, HEAVY
-//	};
+	// public enum Weight {
+	// NONE, BARBARIAN, MONK, WARLOCK, MAGE, LIGHT, MEDIUM, HEAVY
+	// };
 
 	// fields
+	private static final Armor BEST_HEAVY_ARMOR;
+	private static final Armor BEST_MEDIUM_ARMOR;
+	private static final Armor BEST_LIGHT_ARMOR;
+
 	private int armorClass;
 	private int maxDexterity;
+
+	// initialization
+	static {
+		BEST_HEAVY_ARMOR = PLATE;
+		BEST_MEDIUM_ARMOR = HALF_PLATE;
+		BEST_LIGHT_ARMOR = STUDDED;
+	}
 
 	// constructors
 	Armor() {
@@ -66,7 +77,7 @@ public enum Armor implements Item, Proficiency {
 	public static int getArmorClass(Armor armor) {
 		return armor.getArmorClass();
 	}
-	
+
 	public static HashSet<Proficiency> lightArmorSet() {
 		Armor[] armor = { PADDED, LEATHER, STUDDED };
 		HashSet<Proficiency> list = new HashSet<Proficiency>();
@@ -150,19 +161,19 @@ public enum Armor implements Item, Proficiency {
 	}
 
 	public static Armor bestHeavyArmor() {
-		return PLATE;
+		return BEST_HEAVY_ARMOR;
 	}
-	
+
 	public static Armor bestMediumArmor() {
-		return HALF_PLATE;
+		return BEST_MEDIUM_ARMOR;
 	}
-	
+
 	public static Armor bestLightArmor() {
-		return CHAIN_SHIRT;
+		return BEST_LIGHT_ARMOR;
 	}
-	
+
 	public static Armor nextBestArmor() {
-		return nextBestArmor(PLATE);
+		return nextBestArmor(bestHeavyArmor());
 	}
 
 	public static Armor nextBestArmor(Armor previous) {
