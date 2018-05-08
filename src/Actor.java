@@ -118,9 +118,45 @@ public class Actor {
 		return abilities;
 	}
 
+	/*
+	 * GETTER FOR SKILLS AND SOME QUICK CHECKS
+	 */
 	public HashSet<Proficiency> getSkills() {
 		return skills;
 	}
+	
+	public boolean canUseHeavyArmor() {
+		return skills.contains(Armor.PLATE);
+	}
+	
+	public boolean canUseMediumArmor() {
+		return skills.contains(Armor.HALF_PLATE);
+	}
+	
+	public boolean canUseLightArmor() {
+		return skills.contains(Armor.STUDDED);
+	}
+	
+	public boolean canUseShield() {
+		return skills.contains(Weapon.SHIELD);
+	}
+	
+	public boolean canUseMartialMelee() {
+		return skills.contains(Weapon.LONGSWORD);
+	}
+	
+	public boolean canUseMartialRanged() {
+		return skills.contains(Weapon.LONGBOW);
+	}
+	
+	public boolean canUseSimpleMelee() {
+		return skills.contains(Weapon.LIGHT_HAMMER);
+	}
+	
+	public boolean canUseSimpleRanged() {
+		return skills.contains(Weapon.SHORTBOW);
+	}
+	
 
 	public Alignment getAli() {
 		return ali;

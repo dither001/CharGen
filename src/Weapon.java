@@ -93,7 +93,7 @@ public enum Weapon implements Item, Proficiency {
 	SHIELD(4, Energy.BLUDGEONING, Hand.ONE);
 
 	// fields
-	private static final Weapon DEFAULT_WEAPON = UNARMED;
+	public static final Weapon DEFAULT_WEAPON = UNARMED;
 	
 	// these arrays can't be initialized in my static block for some reason
 	private static final Weapon[] oneHandedMeleeBludgeoning = { WARHAMMER, QUARTERSTAFF, MACE, LIGHT_HAMMER, CLUB };
@@ -329,7 +329,8 @@ public enum Weapon implements Item, Proficiency {
 	public static Weapon bestMeleeWeapon(Actor actor) {
 		Weapon bestWeapon = DEFAULT_WEAPON;
 
-		bestWeapon = bestMeleeWeapon(actor, Hand.TWO, Energy.SLASHING);
+		if (bestWeapon.equals(DEFAULT_WEAPON))
+			bestWeapon = bestMeleeWeapon(actor, Hand.TWO, Energy.SLASHING);
 
 		if (bestWeapon.equals(DEFAULT_WEAPON))
 			bestWeapon = bestMeleeWeapon(actor, Hand.TWO, Energy.PIERCING);

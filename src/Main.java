@@ -1,6 +1,6 @@
 
 public class Main {
-	private static Actor[] actors = new Actor[10];
+	private static Actor[] actors = new Actor[100000];
 
 	public static void main(String[] args) {
 		// TODO

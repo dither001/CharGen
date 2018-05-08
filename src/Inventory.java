@@ -161,22 +161,53 @@ public class Inventory {
 
 	public void optimizeWeapon() {
 		if (hasOwner()) {
-			// boolean prefersMelee = false;
+			Weapon bestWeapon = Weapon.DEFAULT_WEAPON;
+
+			boolean prefersMelee = false;
 			// int strMod = owner.getAbilities().getSTRMod();
 			// int dexMod = owner.getAbilities().getDEXMod();
 
-			// if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2) {
-			// prefersMelee = true;
-			// }
+			if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2) {
+				prefersMelee = true;
+			}
 
 			// Archetype job = owner.getJob();
 
-			if (weapons.size() < 1)
+			if (weapons.size() < 1) {
 				return;
+			} else if (weapons.size() == 1) {
+				if (canUseWeapon(weapons.get(0).getBaseWeaponType())) {
+					equipMainHand(weapons.get(0));
+					return;
+				}
+			} else if (weapons.size() == 2) {
+				if (weapons.contains(Weapon.SHIELD)) {
+					if (weapons.get(0).getBaseWeaponType().equals(Weapon.SHIELD)) {
+						// shield is index 0
+						equipMainHand(weapons.get(1));
+						equipOffHand(weapons.get(0));
+					} else {
+						// shield is index 1
+						equipMainHand(weapons.get(0));
+						equipOffHand(weapons.get(1));
+					}
+					return;
+				}
+			}
 
-			Weapon bestWeapon = Weapon.bestMeleeWeapon(owner);
+			if (prefersMelee) {
+				// first try melee; failing that try ranged weapon
+				bestWeapon = Weapon.bestMeleeWeapon(owner);
+				if (bestWeapon.equals(Weapon.DEFAULT_WEAPON))
+					bestWeapon = Weapon.bestRangedWeapon(owner);
+			} else {
+				// first try ranged; failing that try melee weapon
+				bestWeapon = Weapon.bestRangedWeapon(owner);
+				if (bestWeapon.equals(Weapon.DEFAULT_WEAPON))
+					bestWeapon = Weapon.bestMeleeWeapon(owner);
+			}
+
 			equipMainHand(firstWeaponOfType(bestWeapon));
-
 			// END OF METHOD
 		}
 	}
