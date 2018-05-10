@@ -22,6 +22,7 @@ public class Main {
 			System.out.print(" " + actors[i].getRace().toString());
 			System.out.print(" " + actors[i].getCareer().toString());
 			System.out.print(" " + actors[i].getJob().toString());
+			System.out.print(" (" + actors[i].getArchetype().toString() + ")");
 			System.out.print(" " + actors[i].getDeity().toString());
 			System.out.print(" (" + actors[i].getEXPRate() + ")");
 			

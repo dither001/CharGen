@@ -26,7 +26,7 @@ public enum Class {
 	SORCERER(Ability.CHARISMA, 6, 2),
 	WARLOCK(Ability.CHARISMA, 8, 2),
 	WIZARD(Ability.INTELLIGENCE, 6, 2);
-
+	
 	// static fields
 	private static final float BEST_XP = 1.10f;
 	private static final float GOOD_XP = 1.05f;
@@ -110,19 +110,19 @@ public enum Class {
 		AbilityArray abilities = actor.getAbilities();
 		Class job = actor.getJob();
 
-		if (job.equals(ROGUE)) {
+		if (job.equals(RANGER) || job.equals(ROGUE)) {
 			prime = abilities.getDEX();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
-		} else if (job.equals(WIZARD)) {
+		} else if (job.equals(BARD) || job.equals(WIZARD)) {
 			prime = abilities.getINT();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
-		} else if (job.equals(CLERIC) || job.equals(DRUID) || job.equals(MONK)) {
+		} else if (job.equals(CLERIC) || job.equals(DRUID)) {
 			prime = abilities.getWIS();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
-		} else if (job.equals(BARD) || job.equals(SORCERER) || job.equals(WARLOCK)) {
+		} else if (job.equals(SORCERER) || job.equals(WARLOCK)) {
 			prime = abilities.getCHA();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
@@ -135,65 +135,65 @@ public enum Class {
 		return expRate;
 	}
 
-	public static Armor selectArmor(Actor actor) {
-		Armor armor = Armor.UNARMORED; // TODO
-
-		// special case for N/PCs who get bonus proficiencies
-		HashSet<Proficiency> skills = actor.getSkills();
-		// EnumSet<Armor> proficiency = actor.getJob().armorProficiency;
-		boolean canUseHeavy = armor.canUseHeavyArmor(skills);
-		boolean canUseMedium = armor.canUseMediumArmor(skills);
-		boolean canUseLight = armor.canUseLightArmor(skills);
-
-		Class job = actor.getJob();
-		int strength = actor.getAbilities().getSTR();
-		int dexterity = actor.getAbilities().getDEX();
-		int constitution = actor.getAbilities().getCON();
-
-		if (job.equals(SORCERER) || job.equals(WARLOCK) || job.equals(WIZARD)) {
-			armor = Armor.MAGE;
-			// end sorcerer/warlock/wizard
-		} else if (job.equals(BARBARIAN)) {
-			if (constitution > 11 && dexterity > 15) {
-				armor = Armor.BARBARIAN;
-			} else {
-				armor = Armor.BREASTPLATE;
-			}
-			// end barbarian
-		} else if (job.equals(DRUID)) {
-			if (dexterity > 15) {
-				armor = Armor.STUDDED;
-			} else {
-				armor = Armor.HIDE;
-			}
-			// end druid
-		} else if (job.equals(MONK)) {
-			armor = Armor.MONK;
-			// end monk
-		} else {
-			// first tries to apply heavy armor
-			if (canUseHeavy && strength > 14) {
-				armor = Armor.PLATE;
-			} else if (canUseHeavy && strength > 12) {
-				armor = Armor.CHAIN_MAIL;
-			} else if (canUseHeavy) {
-				armor = Armor.BREASTPLATE;
-			} else {
-				// tries to apply light -THEN- medium armor
-				if (canUseMedium && dexterity > 15) {
-					armor = Armor.STUDDED;
-				} else if (canUseMedium) {
-					armor = Armor.BREASTPLATE;
-				} else {
-					// finally tries to apply light armor
-					if (canUseLight) {
-						armor = Armor.STUDDED;
-					}
-				}
-			}
-			// end of applies armor
-		}
-
-		return armor;
-	}
+//	public static Armor selectArmor(Actor actor) {
+//		Armor armor = Armor.UNARMORED; // TODO
+//
+//		// special case for N/PCs who get bonus proficiencies
+//		HashSet<Proficiency> skills = actor.getSkills();
+//		// EnumSet<Armor> proficiency = actor.getJob().armorProficiency;
+//		boolean canUseHeavy = armor.canUseHeavyArmor(skills);
+//		boolean canUseMedium = armor.canUseMediumArmor(skills);
+//		boolean canUseLight = armor.canUseLightArmor(skills);
+//
+//		Class job = actor.getJob();
+//		int strength = actor.getAbilities().getSTR();
+//		int dexterity = actor.getAbilities().getDEX();
+//		int constitution = actor.getAbilities().getCON();
+//
+//		if (job.equals(SORCERER) || job.equals(WARLOCK) || job.equals(WIZARD)) {
+//			armor = Armor.MAGE;
+//			// end sorcerer/warlock/wizard
+//		} else if (job.equals(BARBARIAN)) {
+//			if (constitution > 11 && dexterity > 15) {
+//				armor = Armor.BARBARIAN;
+//			} else {
+//				armor = Armor.BREASTPLATE;
+//			}
+//			// end barbarian
+//		} else if (job.equals(DRUID)) {
+//			if (dexterity > 15) {
+//				armor = Armor.STUDDED;
+//			} else {
+//				armor = Armor.HIDE;
+//			}
+//			// end druid
+//		} else if (job.equals(MONK)) {
+//			armor = Armor.MONK;
+//			// end monk
+//		} else {
+//			// first tries to apply heavy armor
+//			if (canUseHeavy && strength > 14) {
+//				armor = Armor.PLATE;
+//			} else if (canUseHeavy && strength > 12) {
+//				armor = Armor.CHAIN_MAIL;
+//			} else if (canUseHeavy) {
+//				armor = Armor.BREASTPLATE;
+//			} else {
+//				// tries to apply light -THEN- medium armor
+//				if (canUseMedium && dexterity > 15) {
+//					armor = Armor.STUDDED;
+//				} else if (canUseMedium) {
+//					armor = Armor.BREASTPLATE;
+//				} else {
+//					// finally tries to apply light armor
+//					if (canUseLight) {
+//						armor = Armor.STUDDED;
+//					}
+//				}
+//			}
+//			// end of applies armor
+//		}
+//
+//		return armor;
+//	}
 }

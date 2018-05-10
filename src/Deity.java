@@ -2,7 +2,23 @@
 public enum Deity {
 	ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR;
 
-	// methods
+	// static methods
+	public static Deity domainToDeity(Class job) {
+		/* TODO
+		 * death		Raven Queen, Torog, Vecna, Zehir, 
+		 * knowledge	Erathis, Ioun, Moradin, Vecna, 
+		 * life			Bahamut, Pelor, Raven Queen, 
+		 * light		Corellon, Pelor, 
+		 * nature		Melora, 
+		 * tempest		Gruumsh, Kord, Melora, 
+		 * trickery		Asmodeus, Avandra, Lolth, Sehanine, Tharizdun, Tiamat, Zehir, 
+		 * war			Bahamut, Bane, Gruumsh, Moradin, Tiamat, 
+		 */
+
+		
+		return null;
+	}
+	
 	public static Deity selectDeity(Actor actor) {
 		Alignment ali = actor.getAli();
 		Class job = actor.getJob();
