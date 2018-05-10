@@ -2,34 +2,58 @@
 public enum Deity {
 	ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR;
 
-	// static methods
-	public static Deity domainToDeity(Class job) {
-		/* TODO
-		 * death		Raven Queen, Torog, Vecna, Zehir, 
-		 * knowledge	Erathis, Ioun, Moradin, Vecna, 
-		 * life			Bahamut, Pelor, Raven Queen, 
-		 * light		Corellon, Pelor, 
-		 * nature		Melora, 
-		 * tempest		Gruumsh, Kord, Melora, 
-		 * trickery		Asmodeus, Avandra, Lolth, Sehanine, Tharizdun, Tiamat, Zehir, 
-		 * war			Bahamut, Bane, Gruumsh, Moradin, Tiamat, 
-		 */
-
-		
-		return null;
-	}
 	
+	private static final Deity[] DEATH_GODS = { RAVEN_QUEEN, TOROG, VECNA };
+	private static final Deity[] KNOWLEDGE_GODS = { ERATHIS, IOUN, MORADIN, VECNA }; 
+	private static final Deity[] LIFE_GODS = { BAHAMUT, PELOR, RAVEN_QUEEN }; 
+	private static final Deity[] LIGHT_GODS = { CORELLON, PELOR }; 
+	private static final Deity[] NATURE_GODS = { MELORA }; 
+	private static final Deity[] TEMPEST_GODS = { GRUUMSH, KORD, MELORA }; 
+	private static final Deity[] TRICKERY_GODS = { ASMODEUS, AVANDRA, LOLTH, SEHANINE, THARIZDUN, TIAMAT, ZEHIR }; 
+	private static final Deity[] WAR_GODS = { BAHAMUT, BANE, GRUUMSH, MORADIN, TIAMAT }; 
+	
+	// static methods
 	public static Deity selectDeity(Actor actor) {
 		Alignment ali = actor.getAli();
 		Class job = actor.getJob();
 		Race race = actor.getRace();
+		Deity deity;
 		
-		Deity[] gods = { racialDeity(race), idealDeity(ali), jobDeity(job), randomDeity() };
-		Deity deity = gods[Dice.roll(4) - 1];
+		if (job.equals(Class.CLERIC)) {
+			deity = domainToDeity(actor);
+		} else {
+			Deity[] gods = { racialDeity(race), idealDeity(ali), jobDeity(job), randomDeity() };
+			deity = gods[Dice.roll(4) - 1];
+		}
 		
 		return deity;
 	}
 
+	public static Deity domainToDeity(Actor actor) {
+		Deity deity = null;
+		Archetype domain = actor.getArchetype();
+		
+		if (domain.equals(Archetype.DEATH)) {
+			deity = DEATH_GODS[Dice.roll(DEATH_GODS.length) - 1];
+		} else if (domain.equals(Archetype.KNOWLEDGE)) {
+			deity = KNOWLEDGE_GODS[Dice.roll(KNOWLEDGE_GODS.length) - 1];
+		} else if (domain.equals(Archetype.LIFE)) {
+			deity = LIFE_GODS[Dice.roll(LIFE_GODS.length) - 1];
+		} else if (domain.equals(Archetype.LIGHT)) {
+			deity = LIGHT_GODS[Dice.roll(LIGHT_GODS.length) - 1];
+		} else if (domain.equals(Archetype.NATURE)) {
+			deity = NATURE_GODS[Dice.roll(NATURE_GODS.length) - 1];
+		} else if (domain.equals(Archetype.TEMPEST)) {
+			deity = TEMPEST_GODS[Dice.roll(TEMPEST_GODS.length) - 1];
+		} else if (domain.equals(Archetype.TRICKERY)) {
+			deity = TRICKERY_GODS[Dice.roll(TRICKERY_GODS.length) - 1];
+		} else if (domain.equals(Archetype.WAR)) {
+			deity = WAR_GODS[Dice.roll(WAR_GODS.length) - 1];
+		}
+		
+		return deity;
+	}
+	
 	public static Deity randomDeity() {
 		Deity[] gods = { ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA,
 				MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR };

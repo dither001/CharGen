@@ -5,10 +5,10 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		rollCharacters();
-//		for (int i = 0; i < 1000000; ++i) {
-//			rollOneCharacter();
-//		}
+//		rollCharacters();
+		for (int i = 0; i < 100; ++i) {
+			rollOneCharacter();
+		}
 	}
 
 	public static void rollCharacters() {
@@ -58,6 +58,7 @@ public class Main {
 		System.out.print(" " + actor.getRace().toString());
 		System.out.print(" " + actor.getCareer().toString());
 		System.out.print(" " + actor.getJob().toString());
+		System.out.print(" (" + actor.getArchetype().toString() + ")");
 		System.out.print(" " + actor.getDeity().toString());
 		System.out.print(" (" + actor.getEXPRate() + ")");
 		System.out.println("");
