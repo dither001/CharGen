@@ -16,7 +16,7 @@ public class Actor {
 	// objects
 	private AbilityArray abilities;
 	private Alignment ali;
-	private Archetype job;
+	private Class job;
 	private Race race;
 	private Deity god;
 	private HashSet<Proficiency> skills;
@@ -46,7 +46,7 @@ public class Actor {
 
 		ali = Alignment.selectALI();
 		// JOB requires ability array
-		job = Archetype.selectArchetype(this);
+		job = Class.selectClass(this);
 		// RACE is chosen specifically after JOB
 		race = Race.selectRace();
 		// GOD requires ALI, JOB, and RACE
@@ -70,7 +70,7 @@ public class Actor {
 		// derived statistics
 		experience = 0;
 		level = 1;
-		expRate = Archetype.getPrimeRequisite(this);
+		expRate = Class.getPrimeRequisite(this);
 		armorClass = inventory.calcArmorClass();
 		// roll hit points and verify greater than 0 hp
 		hitPoints = Dice.roll(job.getHitDie()) + abilities.getCONMod();
@@ -97,13 +97,16 @@ public class Actor {
 	public int getAttackBonus() {
 		// FIXME - calculation method incomplete
 		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
-		int abilityMod = (str > dex) ? str : dex;
+		int abilityMod = (str >= dex) ? str : dex;
 		return proficiencyBonus() + abilityMod;
 	}
 
 	public int getAverageDamage() {
 		// FIXME - calculation method incomplete
-		return inventory.calcAverageDamage();
+		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
+		int abilityMod = (str >= dex) ? str : dex;
+		
+		return inventory.calcAverageDamage() + abilityMod;
 	}
 
 	public int getEXP() {
@@ -182,7 +185,7 @@ public class Actor {
 		return ali;
 	}
 
-	public Archetype getJob() {
+	public Class getJob() {
 		return job;
 	}
 

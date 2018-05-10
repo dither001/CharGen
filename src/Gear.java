@@ -220,7 +220,7 @@ public class Gear {
 	}
 
 	public static Inventory getStartingGear(Actor actor) {
-		Archetype job = actor.getJob();
+		Class job = actor.getJob();
 		AbilityArray abilities = actor.getAbilities();
 		Inventory gear = new Inventory();
 

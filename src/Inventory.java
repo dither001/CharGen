@@ -50,7 +50,7 @@ public class Inventory {
 
 	public int calcArmorClass() {
 		int totalAC = 10, armorClass = 10;
-		Archetype job = owner.getJob();
+		Class job = owner.getJob();
 
 		int dexMod = owner.getAbilities().getDEXMod();
 		int conMod = owner.getAbilities().getCONMod();
@@ -64,9 +64,9 @@ public class Inventory {
 				dexMod = maxDex;
 		}
 
-		if (job.equals(Archetype.MONK)) {
+		if (job.equals(Class.MONK)) {
 			totalAC = 10 + dexMod + wisMod;
-		} else if (job.equals(Archetype.BARBARIAN)) {
+		} else if (job.equals(Class.BARBARIAN)) {
 			if (equippedArmor()) {
 				totalAC = maxDex > 0 ? armorClass + dexMod : armorClass;
 			} else {
@@ -99,16 +99,16 @@ public class Inventory {
 
 	public void optimizeArmor() {
 		if (hasOwner()) {
-			Archetype job = owner.getJob();
+			Class job = owner.getJob();
 			int dexMod = owner.getAbilities().getDEXMod();
 			int conMod = owner.getAbilities().getCONMod();
 
 			if (armory.size() < 1)
 				return;
 
-			if (job.equals(Archetype.MONK)) {
+			if (job.equals(Class.MONK)) {
 				return;
-			} else if (job.equals(Archetype.BARBARIAN)) {
+			} else if (job.equals(Class.BARBARIAN)) {
 				if (dexMod > 2 && conMod > 0) {
 					return;
 				} else {
@@ -178,14 +178,14 @@ public class Inventory {
 		if (hasOwner()) {
 			Weapon bestWeapon = Weapon.DEFAULT_WEAPON;
 
-			Archetype job = owner.getJob();
+			Class job = owner.getJob();
 			boolean prefersMelee = false;
 			// int strMod = owner.getAbilities().getSTRMod();
 			// int dexMod = owner.getAbilities().getDEXMod();
 
 			if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2)
 				prefersMelee = true;
-			else if (job.equals(Archetype.BARBARIAN) || job.equals(Archetype.MONK))
+			else if (job.equals(Class.BARBARIAN) || job.equals(Class.MONK))
 				prefersMelee = true;
 
 			
@@ -391,12 +391,12 @@ public class Inventory {
 
 	public void startingGear(Actor actor) {
 		owner = actor;
-		Archetype job = actor.getJob();
+		Class job = actor.getJob();
 		AbilityArray abilities = actor.getAbilities();
 		HashSet<Proficiency> skills = actor.getSkills();
 
 		int dice;
-		if (job.equals(Archetype.BARBARIAN)) {
+		if (job.equals(Class.BARBARIAN)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
@@ -421,7 +421,7 @@ public class Inventory {
 			weapons.add(GameWeapon.getWeapon("Javelin"));
 			weapons.add(GameWeapon.getWeapon("Javelin"));
 			weapons.add(GameWeapon.getWeapon("Javelin"));
-		} else if (job.equals(Archetype.BARD)) {
+		} else if (job.equals(Class.BARD)) {
 			dice = Dice.roll(3);
 			if (dice == 1) {
 				weapons.add(GameWeapon.getWeapon("Rapier"));
@@ -437,7 +437,7 @@ public class Inventory {
 			// receive leather armor + dagger
 			armory.add(GameArmor.getArmor("Leather Armor"));
 			weapons.add(GameWeapon.getWeapon("Dagger"));
-		} else if (job.equals(Archetype.CLERIC)) {
+		} else if (job.equals(Class.CLERIC)) {
 			int strength = abilities.getSTR();
 			int dexterity = abilities.getDEX();
 
@@ -469,7 +469,7 @@ public class Inventory {
 			// TODO - add priest's or explorer's pack
 			// TODO - receive shield + holy symbol
 			weapons.add(GameWeapon.getWeapon("Shield"));
-		} else if (job.equals(Archetype.DRUID)) {
+		} else if (job.equals(Class.DRUID)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
@@ -488,7 +488,7 @@ public class Inventory {
 
 			// TODO - receive explorer's pack + druid focus
 			armory.add(GameArmor.getArmor("Leather Armor"));
-		} else if (job.equals(Archetype.FIGHTER)) {
+		} else if (job.equals(Class.FIGHTER)) {
 			// first choice
 			int strength = abilities.getSTR();
 			int dexterity = abilities.getDEX();
@@ -520,7 +520,7 @@ public class Inventory {
 			}
 
 			// TODO - add dungeoneer's or explorer's pack
-		} else if (job.equals(Archetype.MONK)) {
+		} else if (job.equals(Class.MONK)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
@@ -532,7 +532,7 @@ public class Inventory {
 			// TODO - add dungeoneer's or explorer's pack
 			// TODO - receive 10 darts
 			weapons.add(GameWeapon.getWeapon("Dart"));
-		} else if (job.equals(Archetype.PALADIN)) {
+		} else if (job.equals(Class.PALADIN)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
@@ -555,7 +555,7 @@ public class Inventory {
 			// TODO - add priest's or explorer's pack
 			// TODO - receive holy symbol
 			armory.add(GameArmor.getArmor("Chain Mail"));
-		} else if (job.equals(Archetype.RANGER)) {
+		} else if (job.equals(Class.RANGER)) {
 			// first choice
 			int dexterity = abilities.getDEX();
 			if (dexterity > 15) {
@@ -579,7 +579,7 @@ public class Inventory {
 
 			// TODO - receive longbow + 20 arrows
 			weapons.add(GameWeapon.getWeapon("Longbow"));
-		} else if (job.equals(Archetype.ROGUE)) {
+		} else if (job.equals(Class.ROGUE)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
@@ -602,7 +602,7 @@ public class Inventory {
 			armory.add(GameArmor.getArmor("Leather Armor"));
 			weapons.add(GameWeapon.getWeapon("Dagger"));
 			weapons.add(GameWeapon.getWeapon("Dagger"));
-		} else if (job.equals(Archetype.SORCERER)) {
+		} else if (job.equals(Class.SORCERER)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
@@ -616,7 +616,7 @@ public class Inventory {
 			// TODO - add dungeoneer's or explorer's pack
 			weapons.add(GameWeapon.getWeapon("Dagger"));
 			weapons.add(GameWeapon.getWeapon("Dagger"));
-		} else if (job.equals(Archetype.WARLOCK)) {
+		} else if (job.equals(Class.WARLOCK)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
@@ -632,7 +632,7 @@ public class Inventory {
 			weapons.add(GameWeapon.randomSimpleWeapon());
 			weapons.add(GameWeapon.getWeapon("Dagger"));
 			weapons.add(GameWeapon.getWeapon("Dagger"));
-		} else if (job.equals(Archetype.WIZARD)) {
+		} else if (job.equals(Class.WIZARD)) {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {

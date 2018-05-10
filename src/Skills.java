@@ -58,7 +58,7 @@ public enum Skills implements Proficiency {
 	}
 
 	// static methods
-	public static HashSet<Proficiency> getProficiency(Archetype job) {
+	public static HashSet<Proficiency> getProficiency(Class job) {
 		HashSet<Proficiency> list = new HashSet<Proficiency>();
 
 		int number = job.getNumberOfSkills();
@@ -156,7 +156,7 @@ public enum Skills implements Proficiency {
 		return careerSkills;
 	}
 
-	public static Skills[] jobSkills(Archetype job) {
+	public static Skills[] jobSkills(Class job) {
 		Skills[] jobSkills;
 
 		Skills[] barbarian = { ANIMAL_HANDLING, ATHLETICS, INTIMIDATION, NATURE, PERCEPTION, SURVIVAL };
@@ -173,29 +173,29 @@ public enum Skills implements Proficiency {
 		Skills[] warlock = { ARCANA, DECEPTION, HISTORY, INTIMIDATION, INVESTIGATION, NATURE, RELIGION };
 		Skills[] wizard = { ARCANA, HISTORY, INSIGHT, INVESTIGATION, MEDICINE, RELIGION };
 
-		if (job.equals(Archetype.BARBARIAN))
+		if (job.equals(Class.BARBARIAN))
 			jobSkills = barbarian;
-		else if (job.equals(Archetype.BARD))
+		else if (job.equals(Class.BARD))
 			jobSkills = allSkills;
-		else if (job.equals(Archetype.CLERIC))
+		else if (job.equals(Class.CLERIC))
 			jobSkills = cleric;
-		else if (job.equals(Archetype.DRUID))
+		else if (job.equals(Class.DRUID))
 			jobSkills = druid;
-		else if (job.equals(Archetype.FIGHTER))
+		else if (job.equals(Class.FIGHTER))
 			jobSkills = fighter;
-		else if (job.equals(Archetype.MONK))
+		else if (job.equals(Class.MONK))
 			jobSkills = monk;
-		else if (job.equals(Archetype.PALADIN))
+		else if (job.equals(Class.PALADIN))
 			jobSkills = paladin;
-		else if (job.equals(Archetype.RANGER))
+		else if (job.equals(Class.RANGER))
 			jobSkills = ranger;
-		else if (job.equals(Archetype.ROGUE))
+		else if (job.equals(Class.ROGUE))
 			jobSkills = rogue;
-		else if (job.equals(Archetype.SORCERER))
+		else if (job.equals(Class.SORCERER))
 			jobSkills = sorcerer;
-		else if (job.equals(Archetype.WARLOCK))
+		else if (job.equals(Class.WARLOCK))
 			jobSkills = warlock;
-		else if (job.equals(Archetype.WIZARD))
+		else if (job.equals(Class.WIZARD))
 			jobSkills = wizard;
 		else
 			jobSkills = allSkills;

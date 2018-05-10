@@ -5,7 +5,7 @@ public enum Deity {
 	// methods
 	public static Deity selectDeity(Actor actor) {
 		Alignment ali = actor.getAli();
-		Archetype job = actor.getJob();
+		Class job = actor.getJob();
 		Race race = actor.getRace();
 		
 		Deity[] gods = { racialDeity(race), idealDeity(ali), jobDeity(job), randomDeity() };
@@ -89,7 +89,7 @@ public enum Deity {
 		return deity;
 	}
 
-	public static Deity jobDeity(Archetype job) {
+	public static Deity jobDeity(Class job) {
 		Deity deity;
 		
 		switch (job) {

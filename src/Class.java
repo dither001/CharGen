@@ -13,7 +13,7 @@
 
 import java.util.HashSet;
 
-public enum Archetype {
+public enum Class {
 	BARBARIAN(Ability.STRENGTH, 12, 2),
 	BARD(Ability.CHARISMA, 8, 3),
 	CLERIC(Ability.WISDOM, 8, 2),
@@ -45,7 +45,7 @@ public enum Archetype {
 	private int numberOfSkills;
 
 	// constructors
-	Archetype(Ability ability, int hitDie, int numberOfSkills) {
+	Class(Ability ability, int hitDie, int numberOfSkills) {
 		this.primeRequisite = ability;
 		this.setHitDie(hitDie);
 		this.numberOfSkills = numberOfSkills;
@@ -65,8 +65,8 @@ public enum Archetype {
 	}
 	
 	// static methods
-	public static Archetype selectArchetype(Actor actor) {
-		Archetype archetype;
+	public static Class selectClass(Actor actor) {
+		Class archetype;
 		Alignment ali = actor.getAli();
 
 		int DEX, INT, WIS, CHA;
@@ -108,7 +108,7 @@ public enum Archetype {
 		float expRate = 1.00f;
 		int prime;
 		AbilityArray abilities = actor.getAbilities();
-		Archetype job = actor.getJob();
+		Class job = actor.getJob();
 
 		if (job.equals(ROGUE)) {
 			prime = abilities.getDEX();
@@ -145,7 +145,7 @@ public enum Archetype {
 		boolean canUseMedium = armor.canUseMediumArmor(skills);
 		boolean canUseLight = armor.canUseLightArmor(skills);
 
-		Archetype job = actor.getJob();
+		Class job = actor.getJob();
 		int strength = actor.getAbilities().getSTR();
 		int dexterity = actor.getAbilities().getDEX();
 		int constitution = actor.getAbilities().getCON();

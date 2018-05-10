@@ -179,7 +179,7 @@ public enum Weapon implements Item, Proficiency {
 		return list;
 	}
 
-	public static HashSet<Proficiency> getProficiency(Archetype job) {
+	public static HashSet<Proficiency> getProficiency(Class job) {
 		HashSet<Proficiency> list = new HashSet<Proficiency>();
 		list.add(UNARMED);
 
