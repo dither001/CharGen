@@ -52,6 +52,7 @@ public class Main {
 
 	public static void rollOneCharacter() {
 		Actor actor = new Actor();
+		int rating = ChallengeRating.evaluateCR(actor);
 
 		System.out.print("Name");
 		System.out.print(" " + actor.getAli().toString());
@@ -61,9 +62,15 @@ public class Main {
 		System.out.print(" (" + actor.getArchetype().toString() + ")");
 		System.out.print(" " + actor.getDeity().toString());
 		System.out.print(" (" + actor.getEXPRate() + ")");
+		
 		System.out.println("");
 		System.out.print("AC " + actor.getArmorClass());
 		System.out.print(" hp " + actor.getHitPoints());
+		System.out.print(" atk " + actor.getAttackBonus());
+		System.out.print(" dmg " + actor.getAverageDamage());
+		System.out.print(" || CR " + rating);
+		System.out.print(" exp " + ChallengeRating.challengeToXP(rating));
+		
 		if (actor.getInventory().equippedWeapon()) {
 			System.out.println("");
 			System.out.print("Wielding " + actor.getInventory().getMainHand().toString());

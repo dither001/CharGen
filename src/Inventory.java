@@ -43,7 +43,7 @@ public class Inventory {
 	public boolean equippedArmor() {
 		return armor != null;
 	}
-	
+
 	public boolean equippedWeapon() {
 		return mainHand != null;
 	}
@@ -168,12 +168,12 @@ public class Inventory {
 		 * FIXME - a lot more work needs to go into this, for calculating DPS
 		 */
 		int averageDamage;
-		
+
 		averageDamage = (equippedWeapon()) ? mainHand.getBaseWeaponType().averageDamage() / 2 : 0;
-		
+
 		return averageDamage;
 	}
-	
+
 	public void optimizeWeapon() {
 		if (hasOwner()) {
 			Weapon bestWeapon = Weapon.DEFAULT_WEAPON;
@@ -188,7 +188,6 @@ public class Inventory {
 			else if (job.equals(Class.BARBARIAN) || job.equals(Class.MONK))
 				prefersMelee = true;
 
-			
 			if (weapons.size() < 1) {
 				return;
 			} else if (weapons.size() == 1) {
@@ -196,19 +195,19 @@ public class Inventory {
 					equipMainHand(weapons.get(0));
 					return;
 				}
-			} else if (weapons.size() == 2) {
-				if (hasWeaponOfType(Weapon.SHIELD)) {
-					if (weapons.get(0).getBaseWeaponType().equals(Weapon.SHIELD)) {
-						// shield is index 0
-						equipMainHand(weapons.get(1));
-						equipOffHand(weapons.get(0));
-					} else {
-						// shield is index 1
-						equipMainHand(weapons.get(0));
-						equipOffHand(weapons.get(1));
-					}
-					return;
-				}
+				// } else if (weapons.size() == 2) {
+				// if (hasWeaponOfType(Weapon.SHIELD)) {
+				// if (weapons.get(0).getBaseWeaponType().equals(Weapon.SHIELD)) {
+				// // shield is index 0
+				// equipMainHand(weapons.get(1));
+				// equipOffHand(weapons.get(0));
+				// } else {
+				// // shield is index 1
+				// equipMainHand(weapons.get(0));
+				// equipOffHand(weapons.get(1));
+				// }
+				// return;
+				// }
 			}
 
 			if (prefersMelee) {
@@ -219,7 +218,7 @@ public class Inventory {
 					equipOffHand(firstWeaponOfType(Weapon.SHIELD));
 					return;
 				}
-				
+
 				bestWeapon = Weapon.bestMeleeWeapon(owner);
 				if (bestWeapon.equals(Weapon.DEFAULT_WEAPON))
 					bestWeapon = Weapon.bestRangedWeapon(owner);
@@ -311,14 +310,14 @@ public class Inventory {
 		if (weapon.getBaseWeaponType().requiresTwoHands())
 			offHand = null;
 
-//		System.out.println("Equipped " + weapon.toString());
+		// System.out.println("Equipped " + weapon.toString());
 		mainHand = weapon;
 	}
 
 	public void equipOffHand(GameWeapon weapon) {
-		if (mainHand != null && mainHand.getBaseWeaponType().requiresTwoHands())
-			return;
-		else
+		// if (mainHand != null && mainHand.getBaseWeaponType().requiresTwoHands())
+		// return;
+		// else
 			offHand = weapon;
 	}
 
@@ -363,11 +362,11 @@ public class Inventory {
 	public GameWeapon getMainHand() {
 		return mainHand;
 	}
-	
+
 	public GameWeapon getOffHand() {
 		return offHand;
 	}
-	
+
 	@Override
 	public String toString() {
 		LinkedList<GameItem> list = new LinkedList<GameItem>();

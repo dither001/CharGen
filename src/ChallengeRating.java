@@ -204,7 +204,8 @@ public class ChallengeRating {
 				11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000, 62000, 75000, 90000, 105000,
 				120000, 135000, 155000 };
 
-		exp = (rating < -3) ? 0 : (rating > 30) ? rewards[30] : rewards[rating];
+		// originally, this checked to see rating less than -3
+		exp = (rating < 0) ? 0 : (rating > 30) ? rewards[30] : rewards[rating];
 
 		return exp;
 	}
