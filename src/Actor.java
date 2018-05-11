@@ -37,6 +37,12 @@ public class Actor {
 	private int attackBonus;
 	private int averageDamage;
 
+	private String trait1;
+	private String trait2;
+	private String ideal;
+	private String bond;
+	private String flaw;
+
 	// constructors
 	public Actor() {
 		// FIXME
@@ -77,6 +83,13 @@ public class Actor {
 		// roll hit points and verify greater than 0 hp
 		hitPoints = Dice.roll(job.getHitDie()) + abilities.getCONMod();
 		hitPoints = (hitPoints < 1) ? 1 : hitPoints;
+
+		// traits, ideals, bonds, flaws
+		trait1 = Career.randomTrait(career);
+		trait2 = Career.randomTrait(career, trait1);
+		ideal = Career.randomIdeal(career);
+		bond = Career.randomBond(career);
+		flaw = Career.randomFlaw(career);
 	}
 
 	// methods
@@ -107,7 +120,7 @@ public class Actor {
 		// FIXME - calculation method incomplete
 		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
 		int abilityMod = (str >= dex) ? str : dex;
-		
+
 		return inventory.calcAverageDamage() + abilityMod;
 	}
 
@@ -213,6 +226,26 @@ public class Actor {
 
 	public Inventory getInventory() {
 		return inventory;
+	}
+
+	public String getTraitOne() {
+		return trait1;
+	}
+
+	public String getTraitTwo() {
+		return trait2;
+	}
+
+	public String getIdeal() {
+		return ideal;
+	}
+
+	public String getBond() {
+		return bond;
+	}
+
+	public String getFlaw() {
+		return flaw;
 	}
 
 	// static methods
