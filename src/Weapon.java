@@ -105,6 +105,7 @@ public enum Weapon implements Item, Proficiency {
 	private static final Weapon[] twoHandedMeleeSlashing = { HALBERD, GLAIVE, GREATAXE, GREATSWORD, BATTLEAXE, LONGSWORD };
 	
 	private static final Weapon[] ranged = { LONGBOW, SHORTBOW, HEAVY_CROSSBOW, LIGHT_CROSSBOW, HAND_CROSSBOW, SLING, DART, BLOWGUN };
+	private static final Weapon[] oneHandedRanged = { NET, HAND_CROSSBOW, SLING, DART, BLOWGUN };
 
 	public enum Weight {
 		SIMPLE, MARTIAL, DRUID, MONK, ROGUE, SORCERER
@@ -379,6 +380,26 @@ public enum Weapon implements Item, Proficiency {
 
 	public static Weapon bestRangedWeapon(Actor actor) {
 		Weapon[] array = ranged;
+		Inventory gear = actor.getInventory();
+		Weapon bestWeapon = DEFAULT_WEAPON;
+
+		for (int i = 0; i < array.length; ++i) {
+			if (gear.hasWeaponOfType(array[i]) && gear.canUseWeapon(array[i])) {
+//				System.out.println("Has " + array[i].toString());
+				bestWeapon = array[i];
+				break;
+			}
+		}
+		
+//		if (bestWeapon.equals(DEFAULT_WEAPON)) {
+//			System.out.println("Couldn't find a ranged weapon.");
+//		}
+		
+		return bestWeapon;
+	}
+
+	public static Weapon bestOneHandedRanged(Actor actor) {
+		Weapon[] array = oneHandedRanged;
 		Inventory gear = actor.getInventory();
 		Weapon bestWeapon = DEFAULT_WEAPON;
 

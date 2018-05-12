@@ -62,12 +62,12 @@ public class Main {
 		System.out.print(" " + actor.getDeity().toString());
 		System.out.print(" (" + actor.getEXPRate() + ")");
 
-		System.out.println("");
-		System.out.print(actor.getTraitOne() + "\n");
-		System.out.print(actor.getTraitTwo() + "\n");
-		System.out.print(actor.getIdeal() + "\n");
-		System.out.print(actor.getBond() + "\n");
-		System.out.print(actor.getFlaw());
+//		System.out.println("");
+//		System.out.print(actor.getTraitOne() + "\n");
+//		System.out.print(actor.getTraitTwo() + "\n");
+//		System.out.print(actor.getIdeal() + "\n");
+//		System.out.print(actor.getBond() + "\n");
+//		System.out.print(actor.getFlaw());
 
 		System.out.println("");
 		System.out.print("AC " + actor.getArmorClass());
@@ -80,6 +80,10 @@ public class Main {
 		if (actor.getInventory().equippedWeapon()) {
 			System.out.println("");
 			System.out.print("Wielding " + actor.getInventory().getMainHand().toString());
+		}
+		if (actor.getInventory().getOffHand() != null) {
+			System.out.println("");
+			System.out.print("Wielding " + actor.getInventory().getOffHand().toString());
 		}
 		System.out.println("");
 		System.out.print(actor.getAbilities().toString());

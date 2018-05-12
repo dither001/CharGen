@@ -48,6 +48,10 @@ public class Inventory {
 		return mainHand != null;
 	}
 
+	public boolean equippedShield() {
+		return offHand != null && offHand.getBaseWeaponType().equals(Weapon.SHIELD);
+	}
+
 	public int calcArmorClass() {
 		int totalAC = 10, armorClass = 10;
 		Class job = owner.getJob();
@@ -72,14 +76,23 @@ public class Inventory {
 			} else {
 				totalAC = 10 + dexMod + conMod;
 			}
+			
+			// TODO - update this when magical shields have bounses greater than +2
+			totalAC += (equippedShield()) ? 2 : 0;
 		} else if (owner.getSkills().contains(Armor.MAGE)) {
 			totalAC = 13 + dexMod;
+
+			// TODO - update this when magical shields have bounses greater than +2
+			totalAC += (equippedShield()) ? 2 : 0;
 		} else {
 			if (equippedArmor()) {
 				totalAC = maxDex > 0 ? armorClass + dexMod : armorClass;
 			} else {
 				totalAC = 10 + dexMod;
 			}
+			
+			// TODO - update this when magical shields have bounses greater than +2
+			totalAC += (equippedShield()) ? 2 : 0;
 		}
 
 		return totalAC;
@@ -214,8 +227,16 @@ public class Inventory {
 				// first try melee; failing that try ranged weapon
 				if (hasWeaponOfType(Weapon.SHIELD)) {
 					bestWeapon = Weapon.bestOneHandedMelee(owner);
-					equipMainHand(firstWeaponOfType(bestWeapon));
-					equipOffHand(firstWeaponOfType(Weapon.SHIELD));
+					if (bestWeapon.equals(Weapon.DEFAULT_WEAPON))
+						bestWeapon = Weapon.bestOneHandedRanged(owner);
+
+					if (bestWeapon.equals(Weapon.DEFAULT_WEAPON)) {
+						bestWeapon = Weapon.bestMeleeWeapon(owner);
+						equipMainHand(firstWeaponOfType(bestWeapon));
+					} else {
+						equipMainHand(firstWeaponOfType(bestWeapon));
+						equipOffHand(firstWeaponOfType(Weapon.SHIELD));
+					}
 					return;
 				}
 
@@ -225,8 +246,10 @@ public class Inventory {
 			} else {
 				// first try ranged; failing that try melee weapon
 				bestWeapon = Weapon.bestRangedWeapon(owner);
-				if (bestWeapon.equals(Weapon.DEFAULT_WEAPON))
+
+				if (bestWeapon.equals(Weapon.DEFAULT_WEAPON)) {
 					bestWeapon = Weapon.bestMeleeWeapon(owner);
+				}
 			}
 
 			equipMainHand(firstWeaponOfType(bestWeapon));
@@ -303,7 +326,7 @@ public class Inventory {
 
 	public void equipMainHand(GameWeapon weapon) {
 		if (weapon == null) {
-			System.out.println("Failed to equip anything.");
+			System.out.println("Failed to equip main hand.");
 			return;
 		}
 
@@ -315,9 +338,10 @@ public class Inventory {
 	}
 
 	public void equipOffHand(GameWeapon weapon) {
-		// if (mainHand != null && mainHand.getBaseWeaponType().requiresTwoHands())
-		// return;
-		// else
+		if (mainHand != null && mainHand.getBaseWeaponType().requiresTwoHands()) {
+			System.out.println("Failed to equip offhand.");
+			return;
+		} else
 			offHand = weapon;
 	}
 
