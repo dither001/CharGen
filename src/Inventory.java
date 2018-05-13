@@ -76,7 +76,7 @@ public class Inventory {
 			} else {
 				totalAC = 10 + dexMod + conMod;
 			}
-			
+
 			// TODO - update this when magical shields have bounses greater than +2
 			totalAC += (equippedShield()) ? 2 : 0;
 		} else if (owner.getSkills().contains(Armor.MAGE)) {
@@ -90,7 +90,7 @@ public class Inventory {
 			} else {
 				totalAC = 10 + dexMod;
 			}
-			
+
 			// TODO - update this when magical shields have bounses greater than +2
 			totalAC += (equippedShield()) ? 2 : 0;
 		}
@@ -193,12 +193,10 @@ public class Inventory {
 
 			Class job = owner.getJob();
 			boolean prefersMelee = false;
-			// int strMod = owner.getAbilities().getSTRMod();
-			// int dexMod = owner.getAbilities().getDEXMod();
 
-			if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2)
+			if (job.equals(Class.BARBARIAN) || job.equals(Class.MONK))
 				prefersMelee = true;
-			else if (job.equals(Class.BARBARIAN) || job.equals(Class.MONK))
+			else if (armor != null && armor.getBaseArmorType().getMaxDexterity() <= 2)
 				prefersMelee = true;
 
 			if (weapons.size() < 1) {
@@ -208,19 +206,6 @@ public class Inventory {
 					equipMainHand(weapons.get(0));
 					return;
 				}
-				// } else if (weapons.size() == 2) {
-				// if (hasWeaponOfType(Weapon.SHIELD)) {
-				// if (weapons.get(0).getBaseWeaponType().equals(Weapon.SHIELD)) {
-				// // shield is index 0
-				// equipMainHand(weapons.get(1));
-				// equipOffHand(weapons.get(0));
-				// } else {
-				// // shield is index 1
-				// equipMainHand(weapons.get(0));
-				// equipOffHand(weapons.get(1));
-				// }
-				// return;
-				// }
 			}
 
 			if (prefersMelee) {
@@ -253,6 +238,8 @@ public class Inventory {
 			}
 
 			equipMainHand(firstWeaponOfType(bestWeapon));
+			if (hasWeaponOfType(Weapon.SHIELD))
+				equipOffHand(firstWeaponOfType(Weapon.SHIELD));
 			// END OF METHOD
 		}
 	}
@@ -496,7 +483,7 @@ public class Inventory {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
-				weapons.add(GameWeapon.randomSimpleWeapon());
+				weapons.add(GameWeapon.randomDruidSimple());
 			} else {
 				weapons.add(GameWeapon.getWeapon("Shield"));
 			}
@@ -506,7 +493,7 @@ public class Inventory {
 			if (dice == 1) {
 				weapons.add(GameWeapon.getWeapon("Scimitar"));
 			} else {
-				weapons.add(GameWeapon.randomSimpleMelee());
+				weapons.add(GameWeapon.randomDruidMelee());
 			}
 
 			// TODO - receive explorer's pack + druid focus

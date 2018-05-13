@@ -1,13 +1,64 @@
 public class Main {
-	private static Actor[] actors = new Actor[10];
+	private static int PCS_TO_ROLL = 10000;
+
+	private static Actor[] actors = new Actor[PCS_TO_ROLL];
 
 	public static void main(String[] args) {
 		// TODO
 
 		// rollCharacters();
-		for (int i = 0; i < 100; ++i) {
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
 			rollOneCharacter();
 		}
+	}
+
+	public static void rollOneCharacter() {
+		Actor actor = new Actor();
+		int rating = ChallengeRating.evaluateCR(actor);
+
+		System.out.print("Name");
+		System.out.print(" " + actor.getAli().toString());
+		System.out.print(" " + actor.getRace().toString());
+		System.out.print(" " + actor.getCareer().toString());
+		System.out.print(" " + actor.getJob().toString());
+		System.out.print(" (" + actor.getArchetype().toString() + ")");
+		System.out.print(" " + actor.getDeity().toString());
+		System.out.print(" (" + actor.getEXPRate() + ")");
+
+		// System.out.println("");
+		// System.out.print(actor.getTraitOne() + "\n");
+		// System.out.print(actor.getTraitTwo() + "\n");
+		// System.out.print(actor.getIdeal() + "\n");
+		// System.out.print(actor.getBond() + "\n");
+		// System.out.print(actor.getFlaw());
+
+		System.out.println("");
+		System.out.print("AC " + actor.getArmorClass());
+		System.out.print(" hp " + actor.getHitPoints());
+		System.out.print(" atk " + actor.getAttackBonus());
+		System.out.print(" dmg " + actor.getAverageDamage());
+		System.out.print(" || CR " + rating);
+		System.out.print(" exp " + ChallengeRating.challengeToXP(rating));
+
+		if (actor.getInventory().equippedWeapon()) {
+			System.out.println("");
+			System.out.print("Wielding " + actor.getInventory().getMainHand().toString());
+		}
+
+		if (actor.getInventory().equippedShield()) {
+			System.out.println("");
+			System.out.print("Wielding " + actor.getInventory().getOffHand().toString());
+		}
+
+		System.out.println("");
+		System.out.print(actor.getAbilities().toString());
+		System.out.println("");
+		System.out.print(actor.getInventory().toString());
+		System.out.println("");
+		// System.out.print(actor.getSkills().toString());
+		// System.out.println("");
+		System.out.println("");
+
 	}
 
 	public static void rollCharacters() {
@@ -47,53 +98,6 @@ public class Main {
 			System.out.println("");
 
 		}
-	}
-
-	public static void rollOneCharacter() {
-		Actor actor = new Actor();
-		int rating = ChallengeRating.evaluateCR(actor);
-
-		System.out.print("Name");
-		System.out.print(" " + actor.getAli().toString());
-		System.out.print(" " + actor.getRace().toString());
-		System.out.print(" " + actor.getCareer().toString());
-		System.out.print(" " + actor.getJob().toString());
-		System.out.print(" (" + actor.getArchetype().toString() + ")");
-		System.out.print(" " + actor.getDeity().toString());
-		System.out.print(" (" + actor.getEXPRate() + ")");
-
-//		System.out.println("");
-//		System.out.print(actor.getTraitOne() + "\n");
-//		System.out.print(actor.getTraitTwo() + "\n");
-//		System.out.print(actor.getIdeal() + "\n");
-//		System.out.print(actor.getBond() + "\n");
-//		System.out.print(actor.getFlaw());
-
-		System.out.println("");
-		System.out.print("AC " + actor.getArmorClass());
-		System.out.print(" hp " + actor.getHitPoints());
-		System.out.print(" atk " + actor.getAttackBonus());
-		System.out.print(" dmg " + actor.getAverageDamage());
-		System.out.print(" || CR " + rating);
-		System.out.print(" exp " + ChallengeRating.challengeToXP(rating));
-
-		if (actor.getInventory().equippedWeapon()) {
-			System.out.println("");
-			System.out.print("Wielding " + actor.getInventory().getMainHand().toString());
-		}
-		if (actor.getInventory().getOffHand() != null) {
-			System.out.println("");
-			System.out.print("Wielding " + actor.getInventory().getOffHand().toString());
-		}
-		System.out.println("");
-		System.out.print(actor.getAbilities().toString());
-		System.out.println("");
-		System.out.print(actor.getInventory().toString());
-		System.out.println("");
-		// System.out.print(actor.getSkills().toString());
-		// System.out.println("");
-		System.out.println("");
-
 	}
 
 	// public static void testCR() {

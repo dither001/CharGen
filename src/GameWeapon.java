@@ -145,4 +145,20 @@ public class GameWeapon extends GameItem {
 
 		return gw;
 	}
+
+	public static GameWeapon randomDruidSimple() {
+		String[] array = { "Club", "Dagger", "Javelin", "Mace", "Quarterstaff", "Sickle", "Spear", "Dart", "Sling" };
+		String key = array[Dice.roll(array.length) - 1];
+		GameWeapon gw = weapons.get(key);
+
+		return gw;
+	}
+	
+	public static GameWeapon randomDruidMelee() {
+		String[] array = { "Club", "Dagger", "Javelin", "Mace", "Quarterstaff", "Sickle", "Spear" };
+		String key = array[Dice.roll(array.length) - 1];
+		GameWeapon gw = weapons.get(key);
+
+		return gw;
+	}
 }

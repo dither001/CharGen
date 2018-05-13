@@ -106,6 +106,9 @@ public enum Weapon implements Item, Proficiency {
 	
 	private static final Weapon[] ranged = { LONGBOW, SHORTBOW, HEAVY_CROSSBOW, LIGHT_CROSSBOW, HAND_CROSSBOW, SLING, DART, BLOWGUN };
 	private static final Weapon[] oneHandedRanged = { NET, HAND_CROSSBOW, SLING, DART, BLOWGUN };
+	
+	private static final Weapon[] druidWeapon = { SPEAR, QUARTERSTAFF, SCIMITAR, JAVELIN, MACE, SICKLE, CLUB, DAGGER, DART, SLING };
+	private static final Weapon[] druidSimple = { SPEAR, QUARTERSTAFF, JAVELIN, MACE, SICKLE, CLUB, DAGGER, DART, SLING };
 
 	public enum Weight {
 		SIMPLE, MARTIAL, DRUID, MONK, ROGUE, SORCERER
