@@ -77,12 +77,12 @@ public class Inventory {
 				totalAC = 10 + dexMod + conMod;
 			}
 
-			// TODO - update this when magical shields have bounses greater than +2
+			// TODO - update this when magical shields have bonuses greater than +2
 			totalAC += (equippedShield()) ? 2 : 0;
 		} else if (owner.getSkills().contains(Armor.MAGE)) {
 			totalAC = 13 + dexMod;
 
-			// TODO - update this when magical shields have bounses greater than +2
+			// TODO - update this when magical shields have bonuses greater than +2
 			totalAC += (equippedShield()) ? 2 : 0;
 		} else {
 			if (equippedArmor()) {
@@ -91,7 +91,7 @@ public class Inventory {
 				totalAC = 10 + dexMod;
 			}
 
-			// TODO - update this when magical shields have bounses greater than +2
+			// TODO - update this when magical shields have bonuses greater than +2
 			totalAC += (equippedShield()) ? 2 : 0;
 		}
 

@@ -35,11 +35,15 @@ public enum Class {
 
 	// fields
 	private Ability primeRequisite;
+	private int experience;
+	private int level;
+	private float expRate;
+
 	/*
 	 * TODO - prime requisite was added after general implementation of the
-	 * Archetype class and its experience rate methods; eventually I want to have
-	 * prime requisite be based more upon the abilities put out in the Ability class
-	 * than (necessarily) the classic six ability scores of Dungeons & Dragons
+	 * experience rate methods; eventually I want to have prime requisite be
+	 * based more upon the abilities put out in the Ability class than
+	 * (necessarily) the classic six ability scores of Dungeons & Dragons
 	 */
 	private int hitDie;
 	private int numberOfSkills;
@@ -134,66 +138,4 @@ public enum Class {
 
 		return expRate;
 	}
-
-//	public static Armor selectArmor(Actor actor) {
-//		Armor armor = Armor.UNARMORED; // TODO
-//
-//		// special case for N/PCs who get bonus proficiencies
-//		HashSet<Proficiency> skills = actor.getSkills();
-//		// EnumSet<Armor> proficiency = actor.getJob().armorProficiency;
-//		boolean canUseHeavy = armor.canUseHeavyArmor(skills);
-//		boolean canUseMedium = armor.canUseMediumArmor(skills);
-//		boolean canUseLight = armor.canUseLightArmor(skills);
-//
-//		Class job = actor.getJob();
-//		int strength = actor.getAbilities().getSTR();
-//		int dexterity = actor.getAbilities().getDEX();
-//		int constitution = actor.getAbilities().getCON();
-//
-//		if (job.equals(SORCERER) || job.equals(WARLOCK) || job.equals(WIZARD)) {
-//			armor = Armor.MAGE;
-//			// end sorcerer/warlock/wizard
-//		} else if (job.equals(BARBARIAN)) {
-//			if (constitution > 11 && dexterity > 15) {
-//				armor = Armor.BARBARIAN;
-//			} else {
-//				armor = Armor.BREASTPLATE;
-//			}
-//			// end barbarian
-//		} else if (job.equals(DRUID)) {
-//			if (dexterity > 15) {
-//				armor = Armor.STUDDED;
-//			} else {
-//				armor = Armor.HIDE;
-//			}
-//			// end druid
-//		} else if (job.equals(MONK)) {
-//			armor = Armor.MONK;
-//			// end monk
-//		} else {
-//			// first tries to apply heavy armor
-//			if (canUseHeavy && strength > 14) {
-//				armor = Armor.PLATE;
-//			} else if (canUseHeavy && strength > 12) {
-//				armor = Armor.CHAIN_MAIL;
-//			} else if (canUseHeavy) {
-//				armor = Armor.BREASTPLATE;
-//			} else {
-//				// tries to apply light -THEN- medium armor
-//				if (canUseMedium && dexterity > 15) {
-//					armor = Armor.STUDDED;
-//				} else if (canUseMedium) {
-//					armor = Armor.BREASTPLATE;
-//				} else {
-//					// finally tries to apply light armor
-//					if (canUseLight) {
-//						armor = Armor.STUDDED;
-//					}
-//				}
-//			}
-//			// end of applies armor
-//		}
-//
-//		return armor;
-//	}
 }

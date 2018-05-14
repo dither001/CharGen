@@ -25,6 +25,7 @@ public class Actor {
 
 	// gear
 	private Inventory inventory;
+	private Combat combat;
 
 	// fields
 	private String name;
@@ -79,10 +80,10 @@ public class Actor {
 		experience = 0;
 		level = 1;
 		expRate = Class.getPrimeRequisite(this);
-		armorClass = inventory.calcArmorClass();
-		// roll hit points and verify greater than 0 hp
-		hitPoints = Dice.roll(job.getHitDie()) + abilities.getCONMod();
-		hitPoints = (hitPoints < 1) ? 1 : hitPoints;
+		combat = new Combat(this);
+//		armorClass = inventory.calcArmorClass();
+//		hitPoints = Dice.roll(job.getHitDie()) + abilities.getCONMod();
+//		hitPoints = (hitPoints < 1) ? 1 : hitPoints;
 
 		// traits, ideals, bonds, flaws
 		trait1 = Career.randomTrait(career);
@@ -102,26 +103,19 @@ public class Actor {
 	}
 
 	public int getArmorClass() {
-		return armorClass;
+		return combat.getArmorClass();
 	}
 
 	public int getHitPoints() {
-		return hitPoints;
+		return combat.getHitPoints();
 	}
 
 	public int getAttackBonus() {
-		// FIXME - calculation method incomplete
-		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
-		int abilityMod = (str >= dex) ? str : dex;
-		return proficiencyBonus() + abilityMod;
+		return combat.getAttackBonus();
 	}
 
 	public int getAverageDamage() {
-		// FIXME - calculation method incomplete
-		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
-		int abilityMod = (str >= dex) ? str : dex;
-
-		return inventory.calcAverageDamage() + abilityMod;
+		return combat.getAverageDamage();
 	}
 
 	public int getEXP() {

@@ -1,5 +1,5 @@
 public class Main {
-	private static int PCS_TO_ROLL = 10000;
+	private static int PCS_TO_ROLL = 100;
 
 	private static Actor[] actors = new Actor[PCS_TO_ROLL];
 
