@@ -1,14 +1,49 @@
+import java.util.HashSet;
+import java.util.Iterator;
+
 public class Main {
 	private static int PCS_TO_ROLL = 100;
+	private static int SPELLBOOK_LEVEL = 17;
 
 	private static Actor[] actors = new Actor[PCS_TO_ROLL];
 
 	public static void main(String[] args) {
 		// TODO
 
-		// rollCharacters();
 		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			rollOneCharacter();
+			rollOneSpellbook();
+		}
+
+		// rollCharacters();
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// rollOneCharacter();
+		// }
+	}
+
+	public static void rollOneSpellbook() {
+		HashSet<Spells> spellbook = Spells.randomWizardSpellbook(SPELLBOOK_LEVEL);
+		Spells[][] spellsByLevel = new Spells[10][8];
+
+		Spells current;
+		int level;
+		for (Iterator<Spells> it = spellbook.iterator(); it.hasNext();) {
+			current = it.next();
+			level = current.getLevel();
+
+			for (int i = 0; i < 8; ++i) {
+				if (spellsByLevel[level][i] == null) {
+					spellsByLevel[level][i] = current;
+					break;
+				}
+			}
+		}
+
+		for (Spells[] em : spellsByLevel) {
+			for (Spells el : em) {
+				if (el != null)
+					System.out.print(el.toString() + ", ");
+			}
+			System.out.println();
 		}
 	}
 
