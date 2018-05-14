@@ -4,6 +4,8 @@ bin/
 .settings/
 .project
 
+src\ReadCSV.java
+
 # Compiled class file
 
 *.class
