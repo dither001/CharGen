@@ -2,7 +2,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class Main {
-	private static int PCS_TO_ROLL = 100;
+	private static int PCS_TO_ROLL = 10000;
 	private static int SPELLBOOK_LEVEL = 17;
 
 	private static Actor[] actors = new Actor[PCS_TO_ROLL];
