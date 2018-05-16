@@ -40,18 +40,30 @@ public class Spellcasting {
 		this.job = actor.getJob();
 
 		int level = actor.getLevel();
+		this.spellSlots = getSpellSlots(actor, level);
+	}
+
+	// static methods
+	public static int[] getSpellSlots(Actor actor, int level) {
+		Class job = actor.getJob();
+		int[] slots = new int[0];
+		int[][] array;
 
 		if (job.equals(Class.BARD) || job.equals(Class.CLERIC) || job.equals(Class.DRUID) || job.equals(Class.SORCERER)
 				|| job.equals(Class.WIZARD)) {
-			spellSlots = wizardSlots[level - 1];
+			array = wizardSlots;
+			slots = (level > array.length) ? array[array.length - 1] : array[level - 1];
 		} else if (job.equals(Class.FIGHTER) || job.equals(Class.ROGUE)) {
-			spellSlots = fighterSlots[level - 1];
+			array = fighterSlots;
+			slots = (level > array.length) ? array[array.length - 1] : array[level - 1];
 		} else if (job.equals(Class.PALADIN) || job.equals(Class.RANGER)) {
-			spellSlots = paladinSlots[level - 1];
+			array = paladinSlots;
+			slots = (level > array.length) ? array[array.length - 1] : array[level - 1];
 		} else if (job.equals(Class.WARLOCK)) {
-			spellSlots = warlockSlots[level - 1];
+			array = warlockSlots;
+			slots = (level > array.length) ? array[array.length - 1] : array[level - 1];
 		}
 
-		// END CONSTRUCTOR
+		return slots;
 	}
 }

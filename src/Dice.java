@@ -21,4 +21,19 @@ public class Dice {
 		
 		return result;
 	}
+	
+	public static int advantage(int faces) {
+		int firstRoll = roll(1, faces);
+		int secondRoll = roll(1, faces);
+		
+		return (firstRoll > secondRoll) ? firstRoll : secondRoll;
+	}
+	
+	public static int disadvantage(int faces) {
+		int firstRoll = roll(1, faces);
+		int secondRoll = roll(1, faces);
+		
+		return (firstRoll > secondRoll) ? secondRoll : firstRoll;
+	}
+
 }
