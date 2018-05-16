@@ -10,14 +10,20 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-//		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-//			rollOneSpellbook();
-//		}
+		ArraySet<Actor> ladder = new ArraySet<Actor>();
+		
+		for (int i = 0; i < 50; ++i) {
+			System.out.println(ladder.add(new Actor()));
+		}
+
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// rollOneSpellbook();
+		// }
 
 		// rollCharacters();
-		 for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		 rollOneCharacter();
-		 }
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// rollOneCharacter();
+		// }
 	}
 
 	public static void rollOneSpellbook() {

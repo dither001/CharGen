@@ -1,5 +1,4 @@
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
@@ -7,6 +6,8 @@ import java.util.Set;
 public class Ladder<T> implements Set<T> {
 	// static fields
 	private static final int DEFAULT_SIZE = 21;
+	private static final int HIGHEST_TIER = 1;
+	private static final int LOWEST_TIER = 5;
 	private static final int[] TIER_INDICES = { 0, 0, 1, 3, 7, 15, DEFAULT_SIZE };
 
 	// fields
@@ -21,16 +22,18 @@ public class Ladder<T> implements Set<T> {
 	// constructors
 	Ladder() {
 		structure = (T[]) new Object[DEFAULT_SIZE];
+		members = new LinkedList<Member>();
+		removed = new LinkedList<Member>();
 	}
 
 	// inner classes
 	public class Member implements Comparable<Member> {
-		private Object data;
+		private T data;
 		private boolean identified;
 		private int power;
 
-		public Member(T data) {
-			this(data, false, 1);
+		public Member(T e) {
+			this(e, false, 1);
 		}
 
 		public Member(T data, boolean identified, int power) {
@@ -72,22 +75,32 @@ public class Ladder<T> implements Set<T> {
 		}
 	}
 
-	
+	public int validateTier(int tier) {
+		return tier = (tier < HIGHEST_TIER) ? HIGHEST_TIER : (tier > LOWEST_TIER) ? LOWEST_TIER : tier;
+	}
+
+	public int nextLowerTier(int tier) {
+		return validateTier(tier + 1);
+	}
+
+	public int nextHigherTier(int tier) {
+		return validateTier(tier - 1);
+	}
+
 	public boolean isTierEmpty(int tier) {
 		boolean isTierEmpty = true;
-		
-		for (int i = TIER_INDICES[tier]; i < TIER_INDICES[tier+1]; ++i) {
-			
+		tier = validateTier(tier);
+
+		for (int i = TIER_INDICES[tier]; i < TIER_INDICES[tier + 1]; ++i) {
+			if (structure[i] != null) {
+				isTierEmpty = false;
+				break;
+			}
 		}
-		
-		
-		
+
 		return isTierEmpty;
 	}
-	
-	
-	
-	
+
 	@Override
 	public boolean add(T e) {
 		boolean added = false;
@@ -128,7 +141,7 @@ public class Ladder<T> implements Set<T> {
 	public void clear() {
 		members.clear();
 		removed.clear();
-		
+
 		for (int i = 0; i < structure.length; ++i)
 			structure[i] = null;
 	}
