@@ -10,14 +10,14 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			rollOneSpellbook();
-		}
+//		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+//			rollOneSpellbook();
+//		}
 
 		// rollCharacters();
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollOneCharacter();
-		// }
+		 for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		 rollOneCharacter();
+		 }
 	}
 
 	public static void rollOneSpellbook() {
