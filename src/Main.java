@@ -2,7 +2,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class Main {
-	private static int PCS_TO_ROLL = 10000;
+	private static int PCS_TO_ROLL = 100;
 	private static int SPELLBOOK_LEVEL = 17;
 
 	private static Actor[] actors = new Actor[PCS_TO_ROLL];
@@ -10,20 +10,17 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		ArraySet<Actor> ladder = new ArraySet<Actor>();
 		
-		for (int i = 0; i < 50; ++i) {
-			System.out.println(ladder.add(new Actor()));
-		}
+		
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// rollOneSpellbook();
 		// }
 
 		// rollCharacters();
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollOneCharacter();
-		// }
+//		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+//			rollOneCharacter();
+//		}
 	}
 
 	public static void rollOneSpellbook() {
