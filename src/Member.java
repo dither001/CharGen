@@ -1,4 +1,6 @@
 
+// copied into Ladder as inner class
+
 public class Member implements Comparable<Member> {
 	private Actor actor;
 
