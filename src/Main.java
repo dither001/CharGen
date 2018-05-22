@@ -10,21 +10,49 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		for (int i = 0; i < 10; ++i) {
+			System.out.println(Career.randomMeans());
+			System.out.println(Career.randomMotive());
+			System.out.println(Career.randomOpportunity());
+			System.out.println();
+		}
 		
 		
+		
+		
+		// encounterSpread();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollOneSpellbook();
+		// rollOneSpellbook(7);
 		// }
 
 		// rollCharacters();
-//		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-//			rollOneCharacter();
-//		}
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// rollOneCharacter();
+		// }
+	}
+
+	public static void encounterSpread() {
+		int one, two, three, seven, eleven, fifteen;
+		for (int i = 1; i < 21; ++i) {
+			one = ChallengeRating.deadlyEncounter(i, 1);
+			two = ChallengeRating.deadlyEncounter(i, 2);
+			three = ChallengeRating.deadlyEncounter(i, 3);
+			seven = ChallengeRating.deadlyEncounter(i, 7);
+			eleven = ChallengeRating.deadlyEncounter(i, 11);
+			fifteen = ChallengeRating.deadlyEncounter(i, 15);
+			// System.out.println("One " + one + " || Two " + two);
+			System.out.printf("level %2d: one %2d || two %2d || three %2d || seven %2d || eleven %2d || fifteen %2d%n",
+					i, one, two, three, seven, eleven, fifteen);
+		}
 	}
 
 	public static void rollOneSpellbook() {
-		HashSet<Spells> spellbook = Spells.randomWizardSpellbook(SPELLBOOK_LEVEL);
+		rollOneSpellbook(SPELLBOOK_LEVEL);
+	}
+
+	public static void rollOneSpellbook(int bookLevel) {
+		HashSet<Spells> spellbook = Spells.randomWizardSpellbook(bookLevel);
 		Spells[][] spellsByLevel = new Spells[10][8];
 
 		Spells current;
@@ -41,13 +69,21 @@ public class Main {
 			}
 		}
 
+		int spellsPrinted;
 		for (Spells[] em : spellsByLevel) {
+			spellsPrinted = 0;
 			for (Spells el : em) {
-				if (el != null)
+				if (el != null) {
+					++spellsPrinted;
 					System.out.print(el.toString() + ", ");
+				}
 			}
-			System.out.println();
+
+			if (spellsPrinted > 0)
+				System.out.println();
 		}
+
+		System.out.println();
 	}
 
 	public static void rollOneCharacter() {
@@ -137,27 +173,4 @@ public class Main {
 
 		}
 	}
-
-	// public static void testCR() {
-	// int[] hitPoints = { 6, 35, 49, 70, 85, 100, 115, 130, 145, 160, 175, 190,
-	// 205, 220, 235, 250, 265, 280, 295,
-	// 310, 325, 340, 355, 400, 445, 490, 535, 580, 625, 670, 715, 760, 805, 850 };
-	// int armorClass = 13;
-	//
-	// for (int i = 0; i < hitPoints.length; ++i) {
-	// armorClass = i / 4 + 10;
-	// System.out.println(ChallengeRating.defenseRating(hitPoints[i], armorClass));
-	// }
-	//
-	// int[] damage = { 0, 3, 5, 8, 14, 20, 26, 32, 38, 44, 50, 56, 62, 68, 74, 80,
-	// 86, 92, 98, 104, 110, 116, 122,
-	// 140, 158, 176, 194, 212, 230, 248, 266, 284, 302, 320 };
-	// int attackBonus = 10;
-	//
-	// for (int i = 0; i < damage.length; ++i) {
-	// attackBonus = i / 4;
-	// System.out.println(ChallengeRating.offenseRating(damage[i], attackBonus));
-	// }
-	// }
-
 }
