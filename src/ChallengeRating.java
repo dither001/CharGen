@@ -4,6 +4,21 @@
  */
 
 public class ChallengeRating {
+	// fields
+	private static final int[] REWARDS = { 10, 25, 50, 100, 200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900,
+			7200, 8400, 10000, 11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000, 62000, 75000,
+			90000, 105000, 120000, 135000, 155000 };
+
+	private static final int[] EASY = { 25, 50, 75, 125, 250, 300, 350, 450, 550, 600, 800, 1000, 1100, 1250, 1400,
+			1600, 2000, 2100, 2400, 2800 };
+	private static final int[] MEDIUM = { 50, 100, 150, 250, 500, 600, 750, 900, 1100, 1200, 1600, 2000, 2200, 2500,
+			2800, 3200, 3900, 4200, 4900, 5700 };
+	private static final int[] HARD = { 75, 150, 225, 375, 750, 900, 1100, 1400, 1600, 1900, 2400, 3000, 3400, 3800,
+			4300, 4800, 5900, 6300, 7300, 8500 };
+	private static final int[] DEADLY = { 100, 200, 400, 500, 1100, 1400, 1700, 2100, 2400, 2800, 3600, 4500, 5100,
+			5700, 6400, 7200, 8800, 9500, 10900, 12700 };
+
+	private static final int[] DEFAULT_DIFFICULTY = MEDIUM;
 
 	// methods
 	public static int evaluateCR(Actor actor) {
@@ -199,14 +214,67 @@ public class ChallengeRating {
 	}
 
 	public static int challengeToXP(int rating) {
-		int exp = 0;
-		int[] rewards = { 10, 25, 50, 100, 200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000,
-				11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000, 62000, 75000, 90000, 105000,
-				120000, 135000, 155000 };
-
-		// originally, this checked to see rating less than -3
-		exp = (rating < 0) ? 0 : (rating > 30) ? rewards[30] : rewards[rating];
-
+		int exp = (rating < -3) ? 0 : (rating > 30) ? REWARDS[30] : REWARDS[rating + 3];
 		return exp;
+	}
+
+	public static int monsterEncounter(int APL, int numberOfPlayers, int difficulty, int numberOfEnemies) {
+		double[] multiplier = { 0.5, 1, 1.5, 2, 2.5, 3, 4, 5 };
+		int rating = 1, index = 0, budget;
+		int[] threshold = MEDIUM;
+
+		if (difficulty == 1)
+			threshold = EASY;
+		else if (difficulty == 2)
+			threshold = MEDIUM;
+		else if (difficulty == 3)
+			threshold = HARD;
+		else if (difficulty == 4)
+			threshold = DEADLY;
+
+		budget = threshold[APL - 1] * numberOfPlayers;
+
+		if (numberOfEnemies == 1)
+			index = 1;
+		else if (numberOfEnemies == 2)
+			index = 2;
+		else if (numberOfEnemies > 2 && numberOfEnemies < 7)
+			index = 3;
+		else if (numberOfEnemies > 6 && numberOfEnemies < 11)
+			index = 4;
+		else if (numberOfEnemies > 10 && numberOfEnemies < 15)
+			index = 5;
+		else if (numberOfEnemies > 14)
+			index = 6;
+
+		if (numberOfPlayers < 3)
+			++index;
+		else if (numberOfPlayers > 5)
+			--index;
+
+		for (int i = REWARDS.length - 1; i > 0; --i) {
+			if ((int) (REWARDS[i] * multiplier[index]) <= budget) {
+				rating = i;
+				break;
+			}
+		}
+
+		return rating - 3;
+	}
+
+	public static int mediumEncounter(int APL, int numberOfEnemies) {
+			return monsterEncounter(APL, 4, 2, numberOfEnemies);
+	}
+
+	public static int deadlyEncounter(int APL, int numberOfEnemies) {
+		return monsterEncounter(APL, 4, 4, numberOfEnemies);
+}
+
+	// public static int mediumEncounter(int APL, int numberOfEnemies) {
+	// return monsterEncounter(APL, numberOfEnemies);
+	// }
+
+	public static int soloMediumEncounter(int APL) {
+		return mediumEncounter(APL, 1);
 	}
 }
