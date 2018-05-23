@@ -10,17 +10,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		for (int i = 0; i < 10; ++i) {
-			System.out.println(Career.randomMeans());
-			System.out.println(Career.randomMotive());
-			System.out.println(Career.randomOpportunity());
-			System.out.println();
-		}
+		for (int i = 0; i < 10; ++i)
+			agendaReaction();
 		
-		
-		
-		
-		// encounterSpread();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// rollOneSpellbook(7);
@@ -32,19 +24,33 @@ public class Main {
 		// }
 	}
 
+
+	public static void agendaReaction() {
+		System.out.println("Agenda: " + Encounter.randomAgenda());
+		System.out.println("Reaction: " + Encounter.reaction());
+		System.out.println();
+	}
+	
 	public static void encounterSpread() {
 		int one, two, three, seven, eleven, fifteen;
-		for (int i = 1; i < 21; ++i) {
-			one = ChallengeRating.deadlyEncounter(i, 1);
-			two = ChallengeRating.deadlyEncounter(i, 2);
-			three = ChallengeRating.deadlyEncounter(i, 3);
-			seven = ChallengeRating.deadlyEncounter(i, 7);
-			eleven = ChallengeRating.deadlyEncounter(i, 11);
-			fifteen = ChallengeRating.deadlyEncounter(i, 15);
+		for (int i = 1; i <= 20; ++i) {
+			one = Encounter.mediumEncounter(i, 1);
+			two = Encounter.mediumEncounter(i, 2);
+			three = Encounter.mediumEncounter(i, 3);
+			seven = Encounter.mediumEncounter(i, 7);
+			eleven = Encounter.mediumEncounter(i, 11);
+			fifteen = Encounter.mediumEncounter(i, 15);
 			// System.out.println("One " + one + " || Two " + two);
 			System.out.printf("level %2d: one %2d || two %2d || three %2d || seven %2d || eleven %2d || fifteen %2d%n",
 					i, one, two, three, seven, eleven, fifteen);
 		}
+	}
+
+	public static void rollVillainousPlot() {
+		System.out.println(Career.randomMeans());
+		System.out.println(Career.randomMotive());
+		System.out.println(Career.randomOpportunity());
+		System.out.println();
 	}
 
 	public static void rollOneSpellbook() {
