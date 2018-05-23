@@ -8,7 +8,8 @@ public class Ladder<T> implements Set<T> {
 	private static int LOWEST_RANK;
 
 	// fields
-	private Vector<Node> nodes;
+	private Vector<Node> members;
+	private Vector<Node> formerMembers;
 	private int lowestRank;
 
 	// initialization
@@ -18,7 +19,8 @@ public class Ladder<T> implements Set<T> {
 
 	// constructors
 	public Ladder() {
-		nodes = new Vector<Node>();
+		members = new Vector<Node>();
+		formerMembers = new Vector<Node>();
 		lowestRank = 1;
 	}
 
@@ -32,7 +34,7 @@ public class Ladder<T> implements Set<T> {
 
 		// constructors
 		public Node(T data) {
-			this(data, 0, false, 0, 0);
+			this(data, lowestRank, false, 0, 0);
 		}
 
 		public Node(T data, int rank, boolean identified, int power, int age) {
@@ -80,10 +82,6 @@ public class Ladder<T> implements Set<T> {
 			this.age = age;
 		}
 
-		public int updateAge() {
-			return ++age;
-		}
-
 		@Override
 		public int compareTo(Node other) {
 			int compares = 0;
@@ -98,13 +96,38 @@ public class Ladder<T> implements Set<T> {
 
 		@Override
 		public String toString() {
-			return String.format("Rank: %2d || Power: %2d || Age: %2d || Known: %s", rank, power, age, identified);
+			// return String.format("Rank: %2d || Power: %2d || Age: %2d || Known: %s",
+			// rank, power, age, identified);
+			String known = (identified) ? "" : "Unknown ";
+			return String.format("%sAge/Power/Rank %2d/%2d/%2d", known, age, power, rank);
+		}
+
+		public boolean dominate(Node target) {
+			System.out.println(target.toString() + " challenged by " + this.toString());
+			boolean dominated = false;
+
+			int challenger = (unknown()) ? Dice.disadvantage(20) + power : Dice.roll(20) + power;
+			int defender = (target.unknown()) ? Dice.disadvantage(20) + target.power : Dice.roll(20) + target.power;
+
+			dominated = (challenger > defender);
+			String winner = (dominated) ? "Challenger" : "Defender";
+			System.out.println(winner + " successful.");
+
+			if (dominated)
+				++this.power;
+			else
+				++target.power;
+			
+			return dominated;
 		}
 	}
 
 	public void updateAges() {
-		for (Node el : nodes)
-			el.updateAge();
+		for (Node el : members)
+			++el.age;
+
+		for (Node el : formerMembers)
+			++el.age;
 	}
 
 	public int peerageVacancies(int rank) {
@@ -115,7 +138,7 @@ public class Ladder<T> implements Set<T> {
 		Vector<Node> peers = new Vector<Node>();
 
 		Node candidate;
-		for (Iterator<Node> it = nodes.iterator(); it.hasNext();) {
+		for (Iterator<Node> it = members.iterator(); it.hasNext();) {
 			candidate = it.next();
 			if (candidate.rank == rank)
 				peers.add(candidate);
@@ -124,9 +147,58 @@ public class Ladder<T> implements Set<T> {
 		return peers;
 	}
 
+	public Node weakestPeer(int rank) {
+		Node candidate, weakling = null;
+		for (Iterator<Node> it = allPeersOfRank(rank).iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (weakling == null)
+				weakling = candidate;
+
+			if (candidate.power < weakling.power)
+				weakling = candidate;
+		}
+
+		return weakling;
+	}
+
+	@Override
+	public String toString() {
+		String memberStrings = "";
+
+		for (Iterator<Node> it = members.iterator(); it.hasNext();)
+			memberStrings += it.next().toString() + "\n";
+
+		return memberStrings;
+	}
+
+	// Set methods
 	@Override
 	public boolean add(T e) {
-		boolean added = nodes.add(new Node(e));
+		Node candidate;
+		boolean added = false;
+
+		if (peerageVacancies(lowestRank) > 0) {
+			candidate = new Node(e);
+			added = members.add(candidate);
+			System.out.println("Newest member " + candidate.toString());
+		} else if (lowestRank < LOWEST_RANK) {
+			++lowestRank;
+			candidate = new Node(e);
+			added = members.add(candidate);
+			System.out.println("Newest member " + candidate.toString());
+		} else {
+			candidate = new Node(e);
+			Node weakestPeer = weakestPeer(lowestRank);
+
+			if (candidate.dominate(weakestPeer)) {
+				members.remove(weakestPeer);
+				added = members.add(candidate);
+			}
+
+			System.out.println("Newest member " + candidate.toString());
+		}
+
 		if (added)
 			updateAges();
 
@@ -141,12 +213,13 @@ public class Ladder<T> implements Set<T> {
 
 	@Override
 	public void clear() {
-		nodes.clear();
+		formerMembers.addAll(members);
+		members.clear();
 	}
 
 	@Override
 	public boolean contains(Object o) {
-		return nodes.contains(o);
+		return members.contains(o);
 	}
 
 	@Override
@@ -157,19 +230,20 @@ public class Ladder<T> implements Set<T> {
 
 	@Override
 	public boolean isEmpty() {
-		return nodes.isEmpty();
+		return members.isEmpty();
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-		return (Iterator<T>) nodes.iterator();
+		return (Iterator<T>) members.iterator();
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		boolean removed = nodes.remove(o);
+		boolean removed = members.remove(o);
+
 		if (removed)
-			updateAges();
+			formerMembers.add(new Node((T) o));
 
 		return removed;
 	}
@@ -188,7 +262,7 @@ public class Ladder<T> implements Set<T> {
 
 	@Override
 	public int size() {
-		return nodes.size();
+		return members.size();
 	}
 
 	@Override
@@ -202,5 +276,4 @@ public class Ladder<T> implements Set<T> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

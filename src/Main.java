@@ -10,8 +10,14 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		for (int i = 0; i < 10; ++i)
-			agendaReaction();
+
+		Ladder<Actor> ladder = new Ladder<Actor>();
+		for (int i = 0; i < 50; ++i) {
+			ladder.add(new Actor());
+		}
+		
+		System.out.println();
+		System.out.println(ladder.toString());
 		
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
