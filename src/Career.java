@@ -885,7 +885,11 @@ public enum Career {
 		String[] events = { "EVENT_1", "EVENT_2", "EVENT_3", "EVENT_4", "EVENT_5", "EVENT_6", "EVENT_7", "EVENT_8", "EVENT_9", "EVENT_10", "EVENT_11", "EVENT_12", "EVENT_13", "EVENT_14", "EVENT_15", "EVENT_16", "EVENT_17", "EVENT_18", "EVENT_19", "EVENT_20", "EVENT_21", "EVENT_22", "EVENT_23", "EVENT_24", "EVENT_25", "EVENT_26", "EVENT_27", "EVENT_28", "EVENT_29", "EVENT_30", "EVENT_31", "EVENT_32", "EVENT_33", "EVENT_34", "EVENT_35", "EVENT_36", "EVENT_37", "EVENT_38", "EVENT_39", "EVENT_40", "EVENT_41", "EVENT_42", "EVENT_43", "EVENT_44", "EVENT_45", "EVENT_46", "EVENT_47" };
 		int dice = Dice.roll(events.length) - 1;
 
-		String candidate = traits.get(events[dice]);
+		String candidate;
+		if (Dice.roll(50) < 50)
+			candidate = traits.get(events[dice]);
+		else
+			candidate = traits.get(events[dice]) + " -AND- " + traits.get(events[Dice.roll(events.length) - 1]);
 		
 		return "Opportunity: " + candidate;
 	}

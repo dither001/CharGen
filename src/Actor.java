@@ -33,6 +33,8 @@ public class Actor {
 	private int level;
 	private float expRate;
 
+	private byte[] hitDice;
+	
 	private int armorClass;
 	private int hitPoints;
 	private int attackBonus;
@@ -77,13 +79,14 @@ public class Actor {
 		inventory.optimizeWeapon();
 
 		// derived statistics
+		hitDice = new byte[20];
+		for (int i = 0; i < hitDice.length; ++i)
+			hitDice[i] = (byte) Dice.roll(job.getHitDie());
+		
 		experience = 0;
 		level = 1;
 		expRate = Class.getPrimeRequisite(this);
 		combat = new Combat(this);
-//		armorClass = inventory.calcArmorClass();
-//		hitPoints = Dice.roll(job.getHitDie()) + abilities.getCONMod();
-//		hitPoints = (hitPoints < 1) ? 1 : hitPoints;
 
 		// traits, ideals, bonds, flaws
 		trait1 = Career.randomTrait(career);
