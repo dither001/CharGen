@@ -12,6 +12,8 @@ public class Ladder<T> implements Set<T> {
 	private Vector<Node> formerMembers;
 	private int lowestRank;
 
+	private Node hierarch;
+
 	// initialization
 	static {
 		LOWEST_RANK = 6;
@@ -24,110 +26,32 @@ public class Ladder<T> implements Set<T> {
 		lowestRank = 1;
 	}
 
-	// inner class
-	public class Node implements Comparable<Node> {
-		private T data;
-		private int rank;
-		private boolean identified;
-		private int power;
-		private int age;
-
-		// constructors
-		public Node(T data) {
-			this(data, lowestRank, false, 0, 0);
+	// methods
+	public void updateTime() {
+		for (Node el : members) {
+			++el.age;
+			++el.turnsSinceLastAction;
 		}
 
-		public Node(T data, int rank, boolean identified, int power, int age) {
-			this.data = data;
-			this.rank = rank;
-			this.identified = identified;
-			this.power = power;
-			this.age = age;
-		}
-
-		// methods
-		public T getData() {
-			return data;
-		}
-
-		public int getRank() {
-			return rank;
-		}
-
-		public void setRank(int rank) {
-			this.rank = rank;
-		}
-
-		public boolean unknown() {
-			return (identified == false);
-		}
-
-		public void identify() {
-			identified = true;
-		}
-
-		public int getPower() {
-			return power;
-		}
-
-		public void setPower(int power) {
-			this.power = power;
-		}
-
-		public int getAge() {
-			return age;
-		}
-
-		public void setAge(int age) {
-			this.age = age;
-		}
-
-		@Override
-		public int compareTo(Node other) {
-			int compares = 0;
-
-			if (power > other.power)
-				compares = 1;
-			else if (power < other.power)
-				compares = -1;
-
-			return compares;
-		}
-
-		@Override
-		public String toString() {
-			// return String.format("Rank: %2d || Power: %2d || Age: %2d || Known: %s",
-			// rank, power, age, identified);
-			String known = (identified) ? "" : "Unknown ";
-			return String.format("%sAge/Power/Rank %2d/%2d/%2d", known, age, power, rank);
-		}
-
-		public boolean dominate(Node target) {
-			System.out.println(target.toString() + " challenged by " + this.toString());
-			boolean dominated = false;
-
-			int challenger = (unknown()) ? Dice.disadvantage(20) + power : Dice.roll(20) + power;
-			int defender = (target.unknown()) ? Dice.disadvantage(20) + target.power : Dice.roll(20) + target.power;
-
-			dominated = (challenger > defender);
-			String winner = (dominated) ? "Challenger" : "Defender";
-			System.out.println(winner + " successful.");
-
-			if (dominated)
-				++this.power;
-			else
-				++target.power;
-			
-			return dominated;
+		for (Node el : formerMembers) {
+			++el.age;
+			++el.turnsSinceLastAction;
 		}
 	}
 
-	public void updateAges() {
-		for (Node el : members)
-			++el.age;
+	public void updatePower(int rank, int increase) {
+		Vector<Node> peers = allPeersOfRank(rank);
 
-		for (Node el : formerMembers)
-			++el.age;
+		for (Node el : peers)
+			el.power += increase;
+	}
+
+	public Node getHierarch() {
+		return (hierarch != null) ? hierarch : null;
+	}
+
+	public void setHierarch(Node hierarch) {
+		this.hierarch = hierarch;
 	}
 
 	public int peerageVacancies(int rank) {
@@ -162,6 +86,15 @@ public class Ladder<T> implements Set<T> {
 		return weakling;
 	}
 
+	public void powerCascade(int rank) {
+		int increase = 1;
+		for (int i = rank; i > 0; --i) {
+			updatePower(i, increase);
+			++increase;
+			System.out.println("Rank " + i + " powered up.");
+		}
+	}
+
 	@Override
 	public String toString() {
 		String memberStrings = "";
@@ -181,12 +114,13 @@ public class Ladder<T> implements Set<T> {
 		if (peerageVacancies(lowestRank) > 0) {
 			candidate = new Node(e);
 			added = members.add(candidate);
-			System.out.println("Newest member " + candidate.toString());
+
+			hierarch = (candidate.rank == 1) ? candidate : hierarch;
 		} else if (lowestRank < LOWEST_RANK) {
 			++lowestRank;
 			candidate = new Node(e);
 			added = members.add(candidate);
-			System.out.println("Newest member " + candidate.toString());
+			powerCascade(lowestRank - 1);
 		} else {
 			candidate = new Node(e);
 			Node weakestPeer = weakestPeer(lowestRank);
@@ -195,12 +129,12 @@ public class Ladder<T> implements Set<T> {
 				members.remove(weakestPeer);
 				added = members.add(candidate);
 			}
-
-			System.out.println("Newest member " + candidate.toString());
 		}
 
-		if (added)
-			updateAges();
+		if (added) {
+			updateTime();
+			System.out.println("Newest member " + candidate.toString() + " of rank " + lowestRank);
+		}
 
 		return added;
 	}
@@ -219,7 +153,18 @@ public class Ladder<T> implements Set<T> {
 
 	@Override
 	public boolean contains(Object o) {
-		return members.contains(o);
+		boolean contains = false;
+
+		Node candidate;
+		for (Iterator<Node> it = members.iterator(); it.hasNext();) {
+			candidate = it.next();
+			if (candidate.data.equals(o)) {
+				contains = true;
+				break;
+			}
+		}
+
+		return contains;
 	}
 
 	@Override
@@ -275,5 +220,122 @@ public class Ladder<T> implements Set<T> {
 	public <T> T[] toArray(T[] a) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	// inner class
+	public class Node implements Comparable<Node> {
+		private T data;
+		private int rank;
+		private boolean identified;
+		private int power;
+		private int age;
+
+		//
+		private int turnsSinceLastAction;
+
+		// constructors
+		public Node(T data) {
+			this(data, lowestRank, false, 0, 0);
+		}
+
+		public Node(T data, int rank, boolean identified, int power, int age) {
+			this.data = data;
+			this.rank = rank;
+			this.identified = identified;
+			this.power = power;
+			this.age = age;
+
+			//
+			this.turnsSinceLastAction = 0;
+		}
+
+		// methods
+		public T getData() {
+			return data;
+		}
+
+		public int getRank() {
+			return rank;
+		}
+
+		public void setRank(int rank) {
+			this.rank = rank;
+		}
+
+		public boolean unknown() {
+			return (identified == false);
+		}
+
+		public void identify() {
+			identified = true;
+		}
+
+		public int getPower() {
+			return power;
+		}
+
+		public void setPower(int power) {
+			this.power = power;
+		}
+
+		public int getAge() {
+			return age;
+		}
+
+		public void setAge(int age) {
+			this.age = age;
+		}
+
+		public int getTurnsSinceLastAction() {
+			return turnsSinceLastAction;
+		}
+
+		public void setTurnsSinceLastAction(int turns) {
+			this.turnsSinceLastAction = turns;
+		}
+
+		@Override
+		public int compareTo(Node other) {
+			int compares = 0;
+
+			if (power > other.power)
+				compares = 1;
+			else if (power < other.power)
+				compares = -1;
+
+			return compares;
+		}
+
+		@Override
+		public String toString() {
+			// return String.format("Rank: %2d || Power: %2d || Age: %2d || Known: %s",
+			// rank, power, age, identified);
+			String known = (identified) ? "" : "Unknown ";
+			return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d)", known, age, power, rank,
+					turnsSinceLastAction, timeToAct());
+		}
+
+		public int timeToAct() {
+			return turnsSinceLastAction / ((lowestRank - rank > 0) ? lowestRank - rank : 1);
+		}
+
+		public boolean dominate(Node target) {
+			System.out.println(target.toString() + " challenged by " + this.toString());
+			boolean dominated = false;
+
+			int challenger = (unknown()) ? Dice.disadvantage(20) + power : Dice.roll(20) + power;
+			int defender = (target.unknown()) ? Dice.disadvantage(20) + target.power : Dice.roll(20) + target.power;
+
+			dominated = (challenger > defender);
+			String winner = (dominated) ? "Challenger" : "Defender";
+			System.out.println(winner + " successful.");
+
+			if (dominated)
+				++this.power;
+			else
+				++target.power;
+
+			return dominated;
+		}
 	}
 }

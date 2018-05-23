@@ -1,5 +1,6 @@
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Vector;
 
 public class Main {
 	private static int PCS_TO_ROLL = 100;
@@ -10,15 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-
-		Ladder<Actor> ladder = new Ladder<Actor>();
-		for (int i = 0; i < 50; ++i) {
-			ladder.add(new Actor());
-		}
-		
-		System.out.println();
-		System.out.println(ladder.toString());
-		
+		setupActorLadder();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// rollOneSpellbook(7);
@@ -30,13 +23,37 @@ public class Main {
 		// }
 	}
 
+	public static void setupActorLadder() {
+		Vector<Actor> actors = new Vector<Actor>();
+		for (int i = 0; i < 50; ++i) {
+			actors.add(new Actor());
+		}
+
+		Ladder<Actor> ladder = new Ladder<Actor>();
+		for (Iterator<Actor> it = actors.iterator(); it.hasNext();) {
+			ladder.add(it.next());
+		}
+
+		System.out.println();
+		System.out.println(ladder.toString());
+		System.out.println();
+		System.out.println(ladder.getHierarch().toString());
+		System.out.println();
+		
+		int contains = 0;
+		for (int i = 0; i < actors.size(); ++i) {
+			contains += (ladder.contains(actors.get(i))) ? 1 : 0;
+		}
+		System.out.println("Actors in ladder: " + contains);
+		
+	}
 
 	public static void agendaReaction() {
 		System.out.println("Agenda: " + Encounter.randomAgenda());
 		System.out.println("Reaction: " + Encounter.reaction());
 		System.out.println();
 	}
-	
+
 	public static void encounterSpread() {
 		int one, two, three, seven, eleven, fifteen;
 		for (int i = 1; i <= 20; ++i) {
