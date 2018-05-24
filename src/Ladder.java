@@ -1,26 +1,35 @@
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 public class Ladder<T> implements Set<T> {
+	public enum SORT_METHOD {
+		AGE, RANK, POWER, READY
+	};
+
 	// static fields
 	private static int LOWEST_RANK;
+	private static int NODES_TO_ACT;
 
 	// fields
+	private SORT_METHOD sortMethod;
+
 	private Vector<Node> members;
 	private Vector<Node> formerMembers;
-	private int lowestRank;
-
 	private Node hierarch;
+	private int lowestRank;
 
 	// initialization
 	static {
 		LOWEST_RANK = 6;
+		NODES_TO_ACT = 4;
 	}
 
 	// constructors
 	public Ladder() {
+		sortMethod = SORT_METHOD.POWER;
 		members = new Vector<Node>();
 		formerMembers = new Vector<Node>();
 		lowestRank = 1;
@@ -93,6 +102,20 @@ public class Ladder<T> implements Set<T> {
 			++increase;
 			System.out.println("Rank " + i + " powered up.");
 		}
+	}
+
+	public Vector<Node> readyToAct() {
+		Vector<Node> readyToAct = new Vector<Node>();
+		TreeSet<Node> treeSort = new TreeSet<Node>();
+
+		sortMethod = SORT_METHOD.READY;
+		treeSort.addAll(members);
+
+		for (int i = 0; i < NODES_TO_ACT; ++i) {
+			readyToAct.add(treeSort.pollLast());
+		}
+
+		return readyToAct;
 	}
 
 	@Override
@@ -296,12 +319,44 @@ public class Ladder<T> implements Set<T> {
 
 		@Override
 		public int compareTo(Node other) {
+			// AGE, RANK, POWER, READY
 			int compares = 0;
 
-			if (power > other.power)
-				compares = 1;
-			else if (power < other.power)
-				compares = -1;
+			if (sortMethod.equals(SORT_METHOD.AGE)) {
+				if (age > other.age)
+					compares = 1;
+				else if (age < other.age)
+					compares = -1;
+			} else if (sortMethod.equals(SORT_METHOD.RANK)) {
+				if (rank > other.rank)
+					compares = 1;
+				else if (rank < other.rank)
+					compares = -1;
+			} else if (sortMethod.equals(SORT_METHOD.POWER)) {
+				if (power > other.power)
+					compares = 1;
+				else if (power < other.power)
+					compares = -1;
+			} else if (sortMethod.equals(SORT_METHOD.READY)) {
+				int ready = timeToAct(), waiting = other.timeToAct();
+				if (ready > waiting)
+					compares = 1;
+				else if (ready < waiting)
+					compares = -1;
+			} else {
+				// default is to simply compare power
+				if (power > other.power)
+					compares = 1;
+				else if (power < other.power)
+					compares = -1;
+			}
+
+			if (compares == 0) {
+				if (age > other.age)
+					compares = 1;
+				else if (age < other.age)
+					compares = -1;
+			}
 
 			return compares;
 		}
@@ -311,8 +366,10 @@ public class Ladder<T> implements Set<T> {
 			// return String.format("Rank: %2d || Power: %2d || Age: %2d || Known: %s",
 			// rank, power, age, identified);
 			String known = (identified) ? "" : "Unknown ";
-			return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d)", known, age, power, rank,
-					turnsSinceLastAction, timeToAct());
+			return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d) %s", known, age, power, rank,
+					turnsSinceLastAction, timeToAct(), data.toString());
+
+			// return known + data.toString();
 		}
 
 		public int timeToAct() {

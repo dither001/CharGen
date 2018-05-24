@@ -3,7 +3,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 public class Main {
-	private static int PCS_TO_ROLL = 100;
+	private static int PCS_TO_ROLL = 50;
 	private static int SPELLBOOK_LEVEL = 17;
 
 	private static Actor[] actors = new Actor[PCS_TO_ROLL];
@@ -25,7 +25,7 @@ public class Main {
 
 	public static void setupActorLadder() {
 		Vector<Actor> actors = new Vector<Actor>();
-		for (int i = 0; i < 50; ++i) {
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
 			actors.add(new Actor());
 		}
 
@@ -39,13 +39,15 @@ public class Main {
 		System.out.println();
 		System.out.println(ladder.getHierarch().toString());
 		System.out.println();
-		
+
 		int contains = 0;
 		for (int i = 0; i < actors.size(); ++i) {
 			contains += (ladder.contains(actors.get(i))) ? 1 : 0;
 		}
 		System.out.println("Actors in ladder: " + contains);
-		
+		System.out.println();
+		System.out.println(ladder.readyToAct().toString());
+
 	}
 
 	public static void agendaReaction() {

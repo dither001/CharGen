@@ -100,6 +100,13 @@ public class Actor {
 	}
 
 	// methods
+	@Override
+	public String toString() {
+		String toString = String.format("%s %s %s", ali.toString(), race.toString(), job.toString());
+		
+		return toString;
+	}
+	
 	public String getName() {
 		return name;
 	}
