@@ -30,23 +30,30 @@ public class Main {
 		}
 
 		Ladder<Actor> ladder = new Ladder<Actor>();
-		for (Iterator<Actor> it = actors.iterator(); it.hasNext();) {
-			ladder.add(it.next());
+		for (int i = 0; i < actors.size(); ++i) {
+			ladder.add(actors.get(i));
+
+			if (i > 20)
+				System.out.println(ladder.size());
 		}
 
 		System.out.println();
 		System.out.println(ladder.toString());
 		System.out.println();
-		System.out.println(ladder.getHierarch().toString());
+		System.out.println("Hierarch: " + ladder.getHierarch().toString());
 		System.out.println();
 
-		int contains = 0;
-		for (int i = 0; i < actors.size(); ++i) {
-			contains += (ladder.contains(actors.get(i))) ? 1 : 0;
-		}
-		System.out.println("Actors in ladder: " + contains);
+		// test contains
+		// int contains = 0;
+		// for (int i = 0; i < actors.size(); ++i) {
+		// contains += (ladder.contains(actors.get(i))) ? 1 : 0;
+		// }
+		// System.out.println("Ladder contains " + contains + " of " + actors.size() + "
+		// actors added.");
+
 		System.out.println();
-		System.out.println(ladder.readyToAct().toString());
+		ladder.challenge(ladder.readyToAct());
+		// System.out.println(ladder.readyToAct().toString());
 
 	}
 

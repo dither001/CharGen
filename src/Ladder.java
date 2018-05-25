@@ -24,7 +24,7 @@ public class Ladder<T> implements Set<T> {
 	// initialization
 	static {
 		LOWEST_RANK = 6;
-		NODES_TO_ACT = 4;
+		NODES_TO_ACT = 1; // TODO - DEFAULT IS FOUR
 	}
 
 	// constructors
@@ -104,7 +104,7 @@ public class Ladder<T> implements Set<T> {
 		}
 	}
 
-	public Vector<Node> readyToAct() {
+	public Node readyToAct() {
 		Vector<Node> readyToAct = new Vector<Node>();
 		TreeSet<Node> treeSort = new TreeSet<Node>();
 
@@ -115,7 +115,39 @@ public class Ladder<T> implements Set<T> {
 			readyToAct.add(treeSort.pollLast());
 		}
 
-		return readyToAct;
+		return readyToAct.get(0);
+	}
+
+	public void challenge(Node challenger) {
+		// testing A
+		System.out.println();
+		System.out.println(challenger.toString());
+
+		// testing B
+		TreeSet<Node> candidates = new TreeSet<Node>();
+		sortMethod = SORT_METHOD.POWER;
+		candidates.addAll(allPeersOfRank(challenger.rank - 1));
+		System.out.println();
+		System.out.println(candidates.toString());
+
+		// testing C
+		Node target = candidates.pollFirst();
+		System.out.println();
+		System.out.println(target.toString());
+
+		int result = challenger.dominate(target);
+		if (result > 4) {
+			members.remove(target);
+			++challenger.rank;
+			challenger.turnsSinceLastAction = 0;
+			System.out.println(target + " has been exiled. (" + result + ")");
+		} else if (result < -4) {
+			members.remove(challenger);
+			challenger.turnsSinceLastAction /= 2;
+			System.out.println(challenger + " has been exiled. (" + result + ")");
+		}
+
+		System.out.println("Actors in ladder: " + size());
 	}
 
 	@Override
@@ -148,7 +180,7 @@ public class Ladder<T> implements Set<T> {
 			candidate = new Node(e);
 			Node weakestPeer = weakestPeer(lowestRank);
 
-			if (candidate.dominate(weakestPeer)) {
+			if (candidate.dominate(weakestPeer) > 0) {
 				members.remove(weakestPeer);
 				added = members.add(candidate);
 			}
@@ -254,6 +286,7 @@ public class Ladder<T> implements Set<T> {
 		private int age;
 
 		//
+		private boolean isBusy;
 		private int turnsSinceLastAction;
 
 		// constructors
@@ -269,6 +302,7 @@ public class Ladder<T> implements Set<T> {
 			this.age = age;
 
 			//
+			this.isBusy = false;
 			this.turnsSinceLastAction = 0;
 		}
 
@@ -307,6 +341,14 @@ public class Ladder<T> implements Set<T> {
 
 		public void setAge(int age) {
 			this.age = age;
+		}
+
+		public boolean isBusy() {
+			return isBusy;
+		}
+
+		public boolean isFree() {
+			return (isBusy != true);
 		}
 
 		public int getTurnsSinceLastAction() {
@@ -365,18 +407,20 @@ public class Ladder<T> implements Set<T> {
 		public String toString() {
 			// return String.format("Rank: %2d || Power: %2d || Age: %2d || Known: %s",
 			// rank, power, age, identified);
-			String known = (identified) ? "" : "Unknown ";
-			return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d) %s", known, age, power, rank,
-					turnsSinceLastAction, timeToAct(), data.toString());
 
-			// return known + data.toString();
+			// String known = (identified) ? "" : "Unknown ";
+			// return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d)
+			// %s", known, age, power, rank,
+			// turnsSinceLastAction, timeToAct(), data.toString());
+
+			return String.format("%2d/%2d/%2d %s", age, power, rank, data.toString());
 		}
 
 		public int timeToAct() {
 			return turnsSinceLastAction / ((lowestRank - rank > 0) ? lowestRank - rank : 1);
 		}
 
-		public boolean dominate(Node target) {
+		public int dominate(Node target) {
 			System.out.println(target.toString() + " challenged by " + this.toString());
 			boolean dominated = false;
 
@@ -392,7 +436,7 @@ public class Ladder<T> implements Set<T> {
 			else
 				++target.power;
 
-			return dominated;
+			return challenger - defender;
 		}
 	}
 }
