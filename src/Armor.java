@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.HashSet;
 
-public enum Armor implements Item, Proficiency {
+public enum Armor implements Proficiency {
 	UNARMORED, BARBARIAN, MAGE(13), MONK, PADDED(11), LEATHER(11), STUDDED(12), HIDE(12, 2), CHAIN_SHIRT(13,
 			2), SCALE_MAIL(14, 2), BREASTPLATE(14,
 					2), HALF_PLATE(15, 2), RING_MAIL(14, 0), CHAIN_MAIL(16, 0), SPLINT(17, 0), PLATE(18, 0);

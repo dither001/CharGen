@@ -22,7 +22,7 @@ public class Inventory {
 	// Belt belt;
 	// Boots boots;
 	// Ring ring1, ring2, ring3;
-	// ArrayList<Gear> wondrous;
+	// ArrayList<> wondrous;
 
 	// constructors
 	public Inventory() {

@@ -24,7 +24,7 @@ public class Ladder<T> implements Set<T> {
 	// initialization
 	static {
 		LOWEST_RANK = 6;
-		NODES_TO_ACT = 1; // TODO - DEFAULT IS FOUR
+		NODES_TO_ACT = 4; // TODO - DEFAULT IS FOUR
 	}
 
 	// constructors
@@ -80,6 +80,30 @@ public class Ladder<T> implements Set<T> {
 		return peers;
 	}
 
+	public Node findWeakerThan(Node actor) {
+		Node candidate;
+
+		TreeSet<Node> candidates = new TreeSet<Node>();
+		sortMethod = SORT_METHOD.RANK;
+		candidates.addAll(members);
+
+		candidate = null;
+		// FIXME - currently this for-loop never breaks because the "acting" characters
+		// have too low a power to trigger all the conditions to break the loop; before
+		// I can continue, I need to have some other actions for them to take besides
+		// challenge higher-ranked characters
+		for (int i = candidates.size(); i > 0; --i) {
+			// System.out.println("Did this run?");
+			if (candidate != null && candidate.isFree() && actor.power > candidate.power && candidate.rank > actor.rank)
+				break;
+			else
+				candidate = candidates.pollFirst();
+		}
+
+		candidate.setBusy();
+		return candidate;
+	}
+
 	public Node weakestPeer(int rank) {
 		Node candidate, weakling = null;
 		for (Iterator<Node> it = allPeersOfRank(rank).iterator(); it.hasNext();) {
@@ -104,18 +128,35 @@ public class Ladder<T> implements Set<T> {
 		}
 	}
 
-	public Node readyToAct() {
+	public void updateTurn() {
+		// TODO
+		Vector<Node> actors = readyToAct();
+
+		for (Node el : actors) {
+			System.out.println();
+			System.out.println(el.toString());
+			System.out.println(findWeakerThan(el).toString());
+		}
+	}
+
+	public Vector<Node> readyToAct() {
 		Vector<Node> readyToAct = new Vector<Node>();
 		TreeSet<Node> treeSort = new TreeSet<Node>();
 
 		sortMethod = SORT_METHOD.READY;
 		treeSort.addAll(members);
 
+		Node candidate;
 		for (int i = 0; i < NODES_TO_ACT; ++i) {
-			readyToAct.add(treeSort.pollLast());
+			candidate = treeSort.pollLast();
+
+			if (candidate.isFree())
+				readyToAct.add(candidate);
+			else
+				--i;
 		}
 
-		return readyToAct.get(0);
+		return readyToAct;
 	}
 
 	public void challenge(Node challenger) {
@@ -135,6 +176,7 @@ public class Ladder<T> implements Set<T> {
 		System.out.println();
 		System.out.println(target.toString());
 
+		// actual challenge
 		int result = challenger.dominate(target);
 		if (result > 4) {
 			members.remove(target);
@@ -351,6 +393,14 @@ public class Ladder<T> implements Set<T> {
 			return (isBusy != true);
 		}
 
+		public void setBusy() {
+			this.isBusy = true;
+		}
+
+		public void setFree() {
+			this.isBusy = false;
+		}
+
 		public int getTurnsSinceLastAction() {
 			return turnsSinceLastAction;
 		}
@@ -436,6 +486,8 @@ public class Ladder<T> implements Set<T> {
 			else
 				++target.power;
 
+			this.setFree();
+			target.setFree();
 			return challenger - defender;
 		}
 	}
