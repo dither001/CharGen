@@ -52,7 +52,10 @@ public class Main {
 		// actors added.");
 
 		System.out.println();
-		ladder.updateTurn();
+		ladder.printReady();
+		
+		
+//		ladder.updateTurn();
 		// System.out.println(ladder.readyToAct().toString());
 
 	}

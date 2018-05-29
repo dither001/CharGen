@@ -1,8 +1,12 @@
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
+//import java.util.Vector;
 
 public class Ladder<T> implements Set<T> {
 	public enum SORT_METHOD {
@@ -16,8 +20,8 @@ public class Ladder<T> implements Set<T> {
 	// fields
 	private SORT_METHOD sortMethod;
 
-	private Vector<Node> members;
-	private Vector<Node> formerMembers;
+	private ArrayList<Node> members;
+	private ArrayList<Node> formerMembers;
 	private Node hierarch;
 	private int lowestRank;
 
@@ -30,8 +34,8 @@ public class Ladder<T> implements Set<T> {
 	// constructors
 	public Ladder() {
 		sortMethod = SORT_METHOD.POWER;
-		members = new Vector<Node>();
-		formerMembers = new Vector<Node>();
+		members = new ArrayList<Node>();
+		formerMembers = new ArrayList<Node>();
 		lowestRank = 1;
 	}
 
@@ -49,7 +53,7 @@ public class Ladder<T> implements Set<T> {
 	}
 
 	public void updatePower(int rank, int increase) {
-		Vector<Node> peers = allPeersOfRank(rank);
+		ArrayList<Node> peers = allPeersOfRank(rank);
 
 		for (Node el : peers)
 			el.power += increase;
@@ -67,8 +71,8 @@ public class Ladder<T> implements Set<T> {
 		return rank - allPeersOfRank(rank).size();
 	}
 
-	public Vector<Node> allPeersOfRank(int rank) {
-		Vector<Node> peers = new Vector<Node>();
+	public ArrayList<Node> allPeersOfRank(int rank) {
+		ArrayList<Node> peers = new ArrayList<Node>();
 
 		Node candidate;
 		for (Iterator<Node> it = members.iterator(); it.hasNext();) {
@@ -83,24 +87,38 @@ public class Ladder<T> implements Set<T> {
 	public Node findWeakerThan(Node actor) {
 		Node candidate;
 
-		TreeSet<Node> candidates = new TreeSet<Node>();
-		sortMethod = SORT_METHOD.RANK;
-		candidates.addAll(members);
+		ArrayList<Node> nodes = new ArrayList<Node>(members);
+		RankCompareDescending compareRank = new RankCompareDescending();
+		Collections.sort(nodes, compareRank);
 
 		candidate = null;
-		// FIXME - currently this for-loop never breaks because the "acting" characters
+		// FIXME - currently this loop never breaks because the "acting" characters
 		// have too low a power to trigger all the conditions to break the loop; before
 		// I can continue, I need to have some other actions for them to take besides
 		// challenge higher-ranked characters
-		for (int i = candidates.size(); i > 0; --i) {
-			// System.out.println("Did this run?");
-			if (candidate != null && candidate.isFree() && actor.power > candidate.power && candidate.rank > actor.rank)
+		for (Node el : nodes) {
+			if (el != null && el.isFree() && actor.power > el.power && el.rank > actor.rank) {
+				candidate = el;
 				break;
-			else
-				candidate = candidates.pollFirst();
+			}
 		}
 
-		candidate.setBusy();
+		// TreeSet<Node> candidates = new TreeSet<Node>();
+		// sortMethod = SORT_METHOD.RANK;
+		// candidates.addAll(members);
+
+		// candidate = null;
+		// for (int i = candidates.size(); i > 0; --i) {
+		// // System.out.println("Did this run?");
+		// if (candidate != null && candidate.isFree() && actor.power > candidate.power
+		// && candidate.rank > actor.rank)
+		// break;
+		// else
+		// candidate = candidates.pollFirst();
+		// }
+
+		if (candidate != null)
+			candidate.setBusy();
 		return candidate;
 	}
 
@@ -130,7 +148,7 @@ public class Ladder<T> implements Set<T> {
 
 	public void updateTurn() {
 		// TODO
-		Vector<Node> actors = readyToAct();
+		List<Node> actors = readyToAct();
 
 		for (Node el : actors) {
 			System.out.println();
@@ -139,24 +157,36 @@ public class Ladder<T> implements Set<T> {
 		}
 	}
 
-	public Vector<Node> readyToAct() {
-		Vector<Node> readyToAct = new Vector<Node>();
-		TreeSet<Node> treeSort = new TreeSet<Node>();
+	public ArrayList<Node> readyToAct() {
+		List<Ladder<T>.Node> nodes = new ArrayList<Node>(members);
+		ArrayList<Node> ready = new ArrayList<Node>();
 
-		sortMethod = SORT_METHOD.READY;
-		treeSort.addAll(members);
+		ReadyCompareDescending readyRank = new ReadyCompareDescending();
+		Collections.sort(nodes, readyRank);
+		//
 
-		Node candidate;
+		// int length = (nodes.size() < NODES_TO_ACT) ? nodes.size() : NODES_TO_ACT;
+		// nodes = nodes.subList(length - NODES_TO_ACT, nodes.size());
+
 		for (int i = 0; i < NODES_TO_ACT; ++i) {
-			candidate = treeSort.pollLast();
-
-			if (candidate.isFree())
-				readyToAct.add(candidate);
-			else
-				--i;
+			ready.add(nodes.get(i));
 		}
 
-		return readyToAct;
+		// TreeSet<Node> treeSort = new TreeSet<Node>();
+		// sortMethod = SORT_METHOD.READY;
+		// treeSort.addAll(members);
+		//
+		// Node candidate;
+		// for (int i = 0; i < NODES_TO_ACT; ++i) {
+		// candidate = treeSort.pollLast();
+		//
+		// if (candidate.isFree())
+		// readyToAct.add(candidate);
+		// else
+		// --i;
+		// }
+
+		return ready;
 	}
 
 	public void challenge(Node challenger) {
@@ -412,45 +442,45 @@ public class Ladder<T> implements Set<T> {
 		@Override
 		public int compareTo(Node other) {
 			// AGE, RANK, POWER, READY
-			int compares = 0;
+			// int compares = 0;
+			//
+			// if (sortMethod.equals(SORT_METHOD.AGE)) {
+			// if (age > other.age)
+			// compares = 1;
+			// else if (age < other.age)
+			// compares = -1;
+			// } else if (sortMethod.equals(SORT_METHOD.RANK)) {
+			// if (rank > other.rank)
+			// compares = 1;
+			// else if (rank < other.rank)
+			// compares = -1;
+			// } else if (sortMethod.equals(SORT_METHOD.POWER)) {
+			// if (power > other.power)
+			// compares = 1;
+			// else if (power < other.power)
+			// compares = -1;
+			// } else if (sortMethod.equals(SORT_METHOD.READY)) {
+			// int ready = timeToAct(), waiting = other.timeToAct();
+			// if (ready > waiting)
+			// compares = 1;
+			// else if (ready < waiting)
+			// compares = -1;
+			// } else {
+			// // default is to simply compare power
+			// if (power > other.power)
+			// compares = 1;
+			// else if (power < other.power)
+			// compares = -1;
+			// }
+			//
+			// if (compares == 0) {
+			// if (age > other.age)
+			// compares = 1;
+			// else if (age < other.age)
+			// compares = -1;
+			// }
 
-			if (sortMethod.equals(SORT_METHOD.AGE)) {
-				if (age > other.age)
-					compares = 1;
-				else if (age < other.age)
-					compares = -1;
-			} else if (sortMethod.equals(SORT_METHOD.RANK)) {
-				if (rank > other.rank)
-					compares = 1;
-				else if (rank < other.rank)
-					compares = -1;
-			} else if (sortMethod.equals(SORT_METHOD.POWER)) {
-				if (power > other.power)
-					compares = 1;
-				else if (power < other.power)
-					compares = -1;
-			} else if (sortMethod.equals(SORT_METHOD.READY)) {
-				int ready = timeToAct(), waiting = other.timeToAct();
-				if (ready > waiting)
-					compares = 1;
-				else if (ready < waiting)
-					compares = -1;
-			} else {
-				// default is to simply compare power
-				if (power > other.power)
-					compares = 1;
-				else if (power < other.power)
-					compares = -1;
-			}
-
-			if (compares == 0) {
-				if (age > other.age)
-					compares = 1;
-				else if (age < other.age)
-					compares = -1;
-			}
-
-			return compares;
+			return this.age - other.age;
 		}
 
 		@Override
@@ -491,4 +521,60 @@ public class Ladder<T> implements Set<T> {
 			return challenger - defender;
 		}
 	}
+
+	class PowerCompareAscending implements Comparator<Node> {
+		@Override
+		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+			return n1.power - n2.power;
+		}
+	}
+
+	class PowerCompareDescending implements Comparator<Node> {
+		@Override
+		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+			return n2.power - n1.power;
+		}
+	}
+
+	class RankCompareAscending implements Comparator<Node> {
+		@Override
+		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+			return n1.rank - n2.rank;
+		}
+	}
+
+	class RankCompareDescending implements Comparator<Node> {
+		@Override
+		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+			return n2.rank - n1.rank;
+		}
+	}
+
+	class ReadyCompareAscending implements Comparator<Node> {
+		@Override
+		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+			int ready = n1.timeToAct(), waiting = n2.timeToAct();
+			return ready - waiting;
+		}
+	}
+
+	class ReadyCompareDescending implements Comparator<Node> {
+		@Override
+		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+			int ready = n1.timeToAct(), waiting = n2.timeToAct();
+			return waiting - ready;
+		}
+	}
+
+	public void printReady() {
+		List<Ladder<T>.Node> nodes = new ArrayList<Node>(members);
+		ReadyCompareDescending readyRank = new ReadyCompareDescending();
+		Collections.sort(nodes, readyRank);
+
+		for (Iterator<Node> it = nodes.iterator(); it.hasNext();) {
+			System.out.println(it.next().toString());
+		}
+
+	}
+
 }
