@@ -33,12 +33,12 @@ public class Main {
 		for (int i = 0; i < actors.size(); ++i) {
 			ladder.add(actors.get(i));
 
-			if (i > 20)
-				System.out.println(ladder.size());
+			// if (i > 20)
+			// System.out.println(ladder.size());
 		}
 
-		System.out.println();
-		System.out.println(ladder.toString());
+		// System.out.println();
+		// System.out.println(ladder.toString());
 		System.out.println();
 		System.out.println("Hierarch: " + ladder.getHierarch().toString());
 		System.out.println();
@@ -51,11 +51,13 @@ public class Main {
 		// System.out.println("Ladder contains " + contains + " of " + actors.size() + "
 		// actors added.");
 
-		System.out.println();
-		ladder.printReady();
-		
-		
-//		ladder.updateTurn();
+		for (int i = 0; i < 10; ++i) {
+			ladder.updateTurn();
+
+			System.out.println();
+			System.out.println(ladder.toString());
+		}
+
 		// System.out.println(ladder.readyToAct().toString());
 
 	}

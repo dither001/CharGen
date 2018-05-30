@@ -5,25 +5,18 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-//import java.util.Vector;
 
 public class Ladder<T> implements Set<T> {
-	public enum SORT_METHOD {
-		AGE, RANK, POWER, READY
-	};
-
 	// static fields
 	private static int LOWEST_RANK;
 	private static int NODES_TO_ACT;
 
 	// fields
-	private SORT_METHOD sortMethod;
-
 	private ArrayList<Node> members;
 	private ArrayList<Node> formerMembers;
 	private Node hierarch;
 	private int lowestRank;
+	private int turnsTaken;
 
 	// initialization
 	static {
@@ -33,10 +26,10 @@ public class Ladder<T> implements Set<T> {
 
 	// constructors
 	public Ladder() {
-		sortMethod = SORT_METHOD.POWER;
 		members = new ArrayList<Node>();
 		formerMembers = new ArrayList<Node>();
 		lowestRank = 1;
+		turnsTaken = 0;
 	}
 
 	// methods
@@ -53,7 +46,7 @@ public class Ladder<T> implements Set<T> {
 	}
 
 	public void updatePower(int rank, int increase) {
-		ArrayList<Node> peers = allPeersOfRank(rank);
+		ArrayList<Node> peers = peersOfRank(rank);
 
 		for (Node el : peers)
 			el.power += increase;
@@ -67,18 +60,50 @@ public class Ladder<T> implements Set<T> {
 		this.hierarch = hierarch;
 	}
 
-	public int peerageVacancies(int rank) {
-		return rank - allPeersOfRank(rank).size();
+	public boolean majorityUnknown() {
+		boolean majorityUnknown = false;
+
+		float nobodies = 0f;
+		for (Node el : members)
+			nobodies += (el.unknown()) ? 1 : 0;
+
+		if (nobodies / members.size() > 0.4)
+			majorityUnknown = true;
+
+		return majorityUnknown;
 	}
 
-	public ArrayList<Node> allPeersOfRank(int rank) {
+	public int peerageVacancies(int rank) {
+		return rank - peersOfRank(rank).size();
+	}
+
+	/*
+	 * LIST-CREATION METHODS
+	 */
+	public List<Node> freeAndActive() {
+		List<Node> list = new ArrayList<Node>();
+
+		for (Node el : members) {
+			if (el.isActive && el.isFree())
+				list.add(el);
+		}
+
+		return list;
+	}
+
+	public List<Node> everyoneExcept(List<Node> exceptions) {
+		List<Node> list = new ArrayList<Node>(members);
+		list.removeAll(exceptions);
+
+		return list;
+	}
+
+	public ArrayList<Node> peersOfRank(int rank) {
 		ArrayList<Node> peers = new ArrayList<Node>();
 
-		Node candidate;
-		for (Iterator<Node> it = members.iterator(); it.hasNext();) {
-			candidate = it.next();
-			if (candidate.rank == rank)
-				peers.add(candidate);
+		for (Node el : members) {
+			if (el.rank == rank)
+				peers.add(el);
 		}
 
 		return peers;
@@ -103,90 +128,129 @@ public class Ladder<T> implements Set<T> {
 			}
 		}
 
-		// TreeSet<Node> candidates = new TreeSet<Node>();
-		// sortMethod = SORT_METHOD.RANK;
-		// candidates.addAll(members);
-
-		// candidate = null;
-		// for (int i = candidates.size(); i > 0; --i) {
-		// // System.out.println("Did this run?");
-		// if (candidate != null && candidate.isFree() && actor.power > candidate.power
-		// && candidate.rank > actor.rank)
-		// break;
-		// else
-		// candidate = candidates.pollFirst();
-		// }
-
 		if (candidate != null)
 			candidate.setBusy();
 		return candidate;
 	}
 
-	public Node weakestPeer(int rank) {
-		Node candidate, weakling = null;
-		for (Iterator<Node> it = allPeersOfRank(rank).iterator(); it.hasNext();) {
-			candidate = it.next();
+	public List<Node> weakestPeers(int rank) {
+		List<Node> list = new ArrayList<Node>(peersOfRank(rank));
+		PowerCompareAscending readyRank = new PowerCompareAscending();
+		Collections.sort(list, readyRank);
 
-			if (weakling == null)
-				weakling = candidate;
+		return list;
+	}
 
-			if (candidate.power < weakling.power)
-				weakling = candidate;
+	/*
+	 * TURN METHODS
+	 */
+	public void updateTurn() {
+		// TODO
+		++turnsTaken;
+		updateTime();
+		System.out.println("Turn #" + turnsTaken);
+		List<Node> actors = readyForAction();
+
+		// mark actors as busy
+		for (Node el : actors)
+			el.setBusy();
+
+		// give actors something to do
+		for (Node el : actors) {
+			chooseAction(el);
 		}
 
-		return weakling;
+		// set actors free
+		for (Node el : actors) {
+			el.actionsTaken += 1;
+			el.turnsSinceLastAction = 0;
+			el.setFree();
+		}
+
+		// update turns since last acted
+		List<Node> toUpdate = everyoneExcept(actors);
+		for (Node el : toUpdate)
+			el.turnsSinceLastAction += 1;
+
+	}
+
+	public List<Node> readyForAction() {
+		List<Node> list = new ArrayList<Node>(members);
+		List<Node> ready;
+
+		if (list.size() < NODES_TO_ACT) {
+			ready = list;
+		} else {
+			ready = new ArrayList<Node>();
+
+			ReadyCompareDescending readyRank = new ReadyCompareDescending();
+			Collections.sort(list, readyRank);
+
+			for (int i = 0; i < NODES_TO_ACT; ++i) {
+				ready.add(list.get(i));
+			}
+		}
+
+		return ready;
 	}
 
 	public void powerCascade(int rank) {
+		// TODO
 		int increase = 1;
 		for (int i = rank; i > 0; --i) {
 			updatePower(i, increase);
 			++increase;
-			System.out.println("Rank " + i + " powered up.");
+			// System.out.println("Rank " + i + " powered up.");
 		}
 	}
 
-	public void updateTurn() {
+	/*
+	 * MEMBER ACTIONS
+	 */
+	public void chooseAction(Node node) {
+		int dice;
+
+		if (node.unknown() && majorityUnknown()) {
+			dice = Dice.roll(2);
+
+			if (dice == 1) {
+				debut(node);
+			} else {
+				// TODO
+				doNothing(node);
+			}
+		} else {
+			// TODO
+			doNothing(node);
+		}
+	}
+
+	public void doNothing(Node node) {
 		// TODO
-		List<Node> actors = readyToAct();
-
-		for (Node el : actors) {
-			System.out.println();
-			System.out.println(el.toString());
-			System.out.println(findWeakerThan(el).toString());
-		}
+		System.out.println(node.toString() + " does nothing.");
 	}
 
-	public ArrayList<Node> readyToAct() {
-		List<Ladder<T>.Node> nodes = new ArrayList<Node>(members);
-		ArrayList<Node> ready = new ArrayList<Node>();
+	public void debut(Node node) {
+		node.identify();
+		// TODO
 
-		ReadyCompareDescending readyRank = new ReadyCompareDescending();
-		Collections.sort(nodes, readyRank);
+		System.out.println(node.toString() + " has appeared!");
+	}
+
+	public void fight(Node challenger) {
+		// TODO
+
+		// testing A
+		System.out.println();
+		System.out.println(challenger.toString());
+
+		// testing B
+		List<Node> nodes = new ArrayList<Node>(peersOfRank(challenger.rank));
+		PowerCompareAscending powerRank = new PowerCompareAscending();
+		Collections.sort(nodes, powerRank);
+
 		//
 
-		// int length = (nodes.size() < NODES_TO_ACT) ? nodes.size() : NODES_TO_ACT;
-		// nodes = nodes.subList(length - NODES_TO_ACT, nodes.size());
-
-		for (int i = 0; i < NODES_TO_ACT; ++i) {
-			ready.add(nodes.get(i));
-		}
-
-		// TreeSet<Node> treeSort = new TreeSet<Node>();
-		// sortMethod = SORT_METHOD.READY;
-		// treeSort.addAll(members);
-		//
-		// Node candidate;
-		// for (int i = 0; i < NODES_TO_ACT; ++i) {
-		// candidate = treeSort.pollLast();
-		//
-		// if (candidate.isFree())
-		// readyToAct.add(candidate);
-		// else
-		// --i;
-		// }
-
-		return ready;
 	}
 
 	public void challenge(Node challenger) {
@@ -195,14 +259,17 @@ public class Ladder<T> implements Set<T> {
 		System.out.println(challenger.toString());
 
 		// testing B
-		TreeSet<Node> candidates = new TreeSet<Node>();
-		sortMethod = SORT_METHOD.POWER;
-		candidates.addAll(allPeersOfRank(challenger.rank - 1));
+		List<Node> nodes = new ArrayList<Node>(peersOfRank(challenger.rank - 1));
+		ArrayList<Node> ready = new ArrayList<Node>();
+
+		PowerCompareAscending powerRank = new PowerCompareAscending();
+		Collections.sort(nodes, powerRank);
+
 		System.out.println();
-		System.out.println(candidates.toString());
+		System.out.println(nodes.toString());
 
 		// testing C
-		Node target = candidates.pollFirst();
+		Node target = nodes.get(0);
 		System.out.println();
 		System.out.println(target.toString());
 
@@ -219,14 +286,18 @@ public class Ladder<T> implements Set<T> {
 			System.out.println(challenger + " has been exiled. (" + result + ")");
 		}
 
-		System.out.println("Actors in ladder: " + size());
+		// System.out.println("Actors in ladder: " + size());
 	}
 
 	@Override
 	public String toString() {
+		// TODO
 		String memberStrings = "";
+		List<Node> list = new ArrayList<Node>(members);
+		ReadyCompareDescending compareReady = new ReadyCompareDescending();
+		Collections.sort(list, compareReady);
 
-		for (Iterator<Node> it = members.iterator(); it.hasNext();)
+		for (Iterator<Node> it = list.iterator(); it.hasNext();)
 			memberStrings += it.next().toString() + "\n";
 
 		return memberStrings;
@@ -250,17 +321,18 @@ public class Ladder<T> implements Set<T> {
 			powerCascade(lowestRank - 1);
 		} else {
 			candidate = new Node(e);
-			Node weakestPeer = weakestPeer(lowestRank);
+			Node defender = weakestPeers(lowestRank).get(0);
 
-			if (candidate.dominate(weakestPeer) > 0) {
-				members.remove(weakestPeer);
+			if (candidate.dominate(defender) > 0) {
+				members.remove(defender);
 				added = members.add(candidate);
 			}
 		}
 
 		if (added) {
 			updateTime();
-			System.out.println("Newest member " + candidate.toString() + " of rank " + lowestRank);
+			// System.out.println("Newest member " + candidate.toString() + " of rank " +
+			// lowestRank);
 		}
 
 		return added;
@@ -358,8 +430,10 @@ public class Ladder<T> implements Set<T> {
 		private int age;
 
 		//
+		private boolean isActive;
 		private boolean isBusy;
 		private int turnsSinceLastAction;
+		private int actionsTaken;
 
 		// constructors
 		public Node(T data) {
@@ -374,8 +448,10 @@ public class Ladder<T> implements Set<T> {
 			this.age = age;
 
 			//
+			this.isActive = true;
 			this.isBusy = false;
 			this.turnsSinceLastAction = 0;
+			this.actionsTaken = 0;
 		}
 
 		// methods
@@ -415,6 +491,14 @@ public class Ladder<T> implements Set<T> {
 			this.age = age;
 		}
 
+		public boolean isActive() {
+			return isActive;
+		}
+
+		public boolean isInactive() {
+			return (isActive != true);
+		}
+
 		public boolean isBusy() {
 			return isBusy;
 		}
@@ -441,45 +525,6 @@ public class Ladder<T> implements Set<T> {
 
 		@Override
 		public int compareTo(Node other) {
-			// AGE, RANK, POWER, READY
-			// int compares = 0;
-			//
-			// if (sortMethod.equals(SORT_METHOD.AGE)) {
-			// if (age > other.age)
-			// compares = 1;
-			// else if (age < other.age)
-			// compares = -1;
-			// } else if (sortMethod.equals(SORT_METHOD.RANK)) {
-			// if (rank > other.rank)
-			// compares = 1;
-			// else if (rank < other.rank)
-			// compares = -1;
-			// } else if (sortMethod.equals(SORT_METHOD.POWER)) {
-			// if (power > other.power)
-			// compares = 1;
-			// else if (power < other.power)
-			// compares = -1;
-			// } else if (sortMethod.equals(SORT_METHOD.READY)) {
-			// int ready = timeToAct(), waiting = other.timeToAct();
-			// if (ready > waiting)
-			// compares = 1;
-			// else if (ready < waiting)
-			// compares = -1;
-			// } else {
-			// // default is to simply compare power
-			// if (power > other.power)
-			// compares = 1;
-			// else if (power < other.power)
-			// compares = -1;
-			// }
-			//
-			// if (compares == 0) {
-			// if (age > other.age)
-			// compares = 1;
-			// else if (age < other.age)
-			// compares = -1;
-			// }
-
 			return this.age - other.age;
 		}
 
@@ -488,12 +533,12 @@ public class Ladder<T> implements Set<T> {
 			// return String.format("Rank: %2d || Power: %2d || Age: %2d || Known: %s",
 			// rank, power, age, identified);
 
-			// String known = (identified) ? "" : "Unknown ";
-			// return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d)
-			// %s", known, age, power, rank,
-			// turnsSinceLastAction, timeToAct(), data.toString());
+			String known = (identified) ? "" : "Unknown ";
+			return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d) %s", known, age, power, rank,
+					turnsSinceLastAction, timeToAct(), data.toString());
 
-			return String.format("%2d/%2d/%2d %s", age, power, rank, data.toString());
+			// return String.format("%s%2d/%2d/%2d %s", known, age, power, rank,
+			// data.toString());
 		}
 
 		public int timeToAct() {
@@ -501,15 +546,15 @@ public class Ladder<T> implements Set<T> {
 		}
 
 		public int dominate(Node target) {
-			System.out.println(target.toString() + " challenged by " + this.toString());
+			// System.out.println(target.toString() + " challenged by " + this.toString());
 			boolean dominated = false;
 
 			int challenger = (unknown()) ? Dice.disadvantage(20) + power : Dice.roll(20) + power;
 			int defender = (target.unknown()) ? Dice.disadvantage(20) + target.power : Dice.roll(20) + target.power;
 
 			dominated = (challenger > defender);
-			String winner = (dominated) ? "Challenger" : "Defender";
-			System.out.println(winner + " successful.");
+			// String winner = (dominated) ? "Challenger" : "Defender";
+			// System.out.println(winner + " successful.");
 
 			if (dominated)
 				++this.power;
@@ -522,37 +567,44 @@ public class Ladder<T> implements Set<T> {
 		}
 	}
 
+	class AgeCompareDescending implements Comparator<Node> {
+		@Override
+		public int compare(Node n1, Node n2) {
+			return n2.age - n1.age;
+		}
+	}
+
 	class PowerCompareAscending implements Comparator<Node> {
 		@Override
-		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+		public int compare(Node n1, Node n2) {
 			return n1.power - n2.power;
 		}
 	}
 
 	class PowerCompareDescending implements Comparator<Node> {
 		@Override
-		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+		public int compare(Node n1, Node n2) {
 			return n2.power - n1.power;
 		}
 	}
 
 	class RankCompareAscending implements Comparator<Node> {
 		@Override
-		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+		public int compare(Node n1, Node n2) {
 			return n1.rank - n2.rank;
 		}
 	}
 
 	class RankCompareDescending implements Comparator<Node> {
 		@Override
-		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+		public int compare(Node n1, Node n2) {
 			return n2.rank - n1.rank;
 		}
 	}
 
 	class ReadyCompareAscending implements Comparator<Node> {
 		@Override
-		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+		public int compare(Node n1, Node n2) {
 			int ready = n1.timeToAct(), waiting = n2.timeToAct();
 			return ready - waiting;
 		}
@@ -560,14 +612,14 @@ public class Ladder<T> implements Set<T> {
 
 	class ReadyCompareDescending implements Comparator<Node> {
 		@Override
-		public int compare(Ladder<T>.Node n1, Ladder<T>.Node n2) {
+		public int compare(Node n1, Node n2) {
 			int ready = n1.timeToAct(), waiting = n2.timeToAct();
 			return waiting - ready;
 		}
 	}
 
 	public void printReady() {
-		List<Ladder<T>.Node> nodes = new ArrayList<Node>(members);
+		List<Node> nodes = new ArrayList<Node>(members);
 		ReadyCompareDescending readyRank = new ReadyCompareDescending();
 		Collections.sort(nodes, readyRank);
 
