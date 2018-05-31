@@ -31,23 +31,23 @@ public enum Deity {
 
 	public static Deity domainToDeity(Actor actor) {
 		Deity deity = null;
-		Archetype domain = actor.getArchetype();
+		Class.Subclass domain = actor.getArchetype();
 		
-		if (domain.equals(Archetype.DEATH)) {
+		if (domain.equals(Class.Subclass.DEATH)) {
 			deity = DEATH_GODS[Dice.roll(DEATH_GODS.length) - 1];
-		} else if (domain.equals(Archetype.KNOWLEDGE)) {
+		} else if (domain.equals(Class.Subclass.KNOWLEDGE)) {
 			deity = KNOWLEDGE_GODS[Dice.roll(KNOWLEDGE_GODS.length) - 1];
-		} else if (domain.equals(Archetype.LIFE)) {
+		} else if (domain.equals(Class.Subclass.LIFE)) {
 			deity = LIFE_GODS[Dice.roll(LIFE_GODS.length) - 1];
-		} else if (domain.equals(Archetype.LIGHT)) {
+		} else if (domain.equals(Class.Subclass.LIGHT)) {
 			deity = LIGHT_GODS[Dice.roll(LIGHT_GODS.length) - 1];
-		} else if (domain.equals(Archetype.NATURE)) {
+		} else if (domain.equals(Class.Subclass.NATURE)) {
 			deity = NATURE_GODS[Dice.roll(NATURE_GODS.length) - 1];
-		} else if (domain.equals(Archetype.TEMPEST)) {
+		} else if (domain.equals(Class.Subclass.TEMPEST)) {
 			deity = TEMPEST_GODS[Dice.roll(TEMPEST_GODS.length) - 1];
-		} else if (domain.equals(Archetype.TRICKERY)) {
+		} else if (domain.equals(Class.Subclass.TRICKERY)) {
 			deity = TRICKERY_GODS[Dice.roll(TRICKERY_GODS.length) - 1];
-		} else if (domain.equals(Archetype.WAR)) {
+		} else if (domain.equals(Class.Subclass.WAR)) {
 			deity = WAR_GODS[Dice.roll(WAR_GODS.length) - 1];
 		}
 		

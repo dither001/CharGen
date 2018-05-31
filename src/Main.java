@@ -13,16 +13,16 @@ public class Main {
 
 		// setupActorLadder();
 
-		encounterSpread();
+		// encounterSpread();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// rollOneSpellbook(7);
 		// }
 
-		// rollCharacters();
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollOneCharacter();
-		// }
+		rollCharacters();
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			rollOneCharacter();
+		}
 	}
 
 	public static void setupActorLadder() {

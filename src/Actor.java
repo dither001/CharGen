@@ -8,16 +8,13 @@
  */
 
 import java.util.HashSet;
-//import java.util.Iterator;
-//import java.util.Collection;
-//import java.util.Vector;
 
 public class Actor {
 	// objects
 	private AbilityArray abilities;
 	private Alignment ali;
 	private Class job;
-	private Archetype archetype;
+	private Class.Subclass archetype;
 	private Race race;
 	private Deity god;
 	private HashSet<Proficiency> skills;
@@ -60,7 +57,7 @@ public class Actor {
 		ali = Alignment.selectALI();
 		// JOB requires ability array
 		job = Class.selectClass(this);
-		archetype = Archetype.selectArchetype(this);
+		archetype = Class.Subclass.selectSubclass(this);
 		// RACE is chosen specifically after JOB
 		race = Race.selectRace();
 		// GOD requires ALI, JOB, and RACE
@@ -217,7 +214,7 @@ public class Actor {
 		return job;
 	}
 
-	public Archetype getArchetype() {
+	public Class.Subclass getArchetype() {
 		return archetype;
 	}
 
