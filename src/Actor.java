@@ -22,6 +22,7 @@ public class Actor {
 	private Deity god;
 	private HashSet<Proficiency> skills;
 	private Career career;
+	private HashSet<Feature> features;
 
 	// gear
 	private Inventory inventory;
@@ -54,6 +55,7 @@ public class Actor {
 
 		abilities = new AbilityArray();
 		skills = new HashSet<Proficiency>();
+		features = new HashSet<Feature>();
 
 		ali = Alignment.selectALI();
 		// JOB requires ability array
@@ -201,6 +203,10 @@ public class Actor {
 
 	public boolean canUseSimpleRanged() {
 		return skills.contains(Weapon.SHORTBOW);
+	}
+
+	public HashSet<Feature> getFeatures() {
+		return features;
 	}
 
 	public Alignment getAli() {

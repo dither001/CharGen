@@ -11,7 +11,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		setupActorLadder();
+		// setupActorLadder();
+
+		encounterSpread();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// rollOneSpellbook(7);
@@ -51,12 +53,24 @@ public class Main {
 		// System.out.println("Ladder contains " + contains + " of " + actors.size() + "
 		// actors added.");
 
-		for (int i = 0; i < 10; ++i) {
-			ladder.updateTurn();
+		// for (int i = 0; i < 10; ++i) {
+		// ladder.updateTurn();
+		//
+		// System.out.println();
+		// System.out.println(ladder.toString());
+		// }
+
+		int previous = 0;
+		while (ladder.hierarchTurns() < 20) {
+			ladder.update();
 
 			System.out.println();
-			System.out.println(ladder.toString());
+			if (ladder.hierarchTurns() == previous) {
+				// System.out.println(ladder.toString());
+				++previous;
+			}
 		}
+		ladder.printTurnsDescending();
 
 		// System.out.println(ladder.readyToAct().toString());
 

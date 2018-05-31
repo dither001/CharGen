@@ -60,6 +60,10 @@ public class Ladder<T> implements Set<T> {
 		this.hierarch = hierarch;
 	}
 
+	public int hierarchTurns() {
+		return (hierarch != null) ? hierarch.actionsTaken : 0;
+	}
+
 	public boolean majorityUnknown() {
 		boolean majorityUnknown = false;
 
@@ -144,12 +148,14 @@ public class Ladder<T> implements Set<T> {
 	/*
 	 * TURN METHODS
 	 */
-	public void updateTurn() {
+	public void update() {
 		// TODO
 		++turnsTaken;
 		updateTime();
 		System.out.println("Turn #" + turnsTaken);
 		List<Node> actors = readyForAction();
+		if (actors.contains(hierarch))
+			System.out.println("The hierarch is in play. (Turn #" + (1 + hierarch.actionsTaken) + ")");
 
 		// mark actors as busy
 		for (Node el : actors)
@@ -211,7 +217,7 @@ public class Ladder<T> implements Set<T> {
 		int dice;
 
 		if (node.unknown() && majorityUnknown()) {
-			dice = Dice.roll(2);
+			dice = Dice.roll(3);
 
 			if (dice == 1) {
 				debut(node);
@@ -225,16 +231,17 @@ public class Ladder<T> implements Set<T> {
 		}
 	}
 
-	public void doNothing(Node node) {
-		// TODO
-		System.out.println(node.toString() + " does nothing.");
-	}
-
 	public void debut(Node node) {
 		node.identify();
+		node.power += 2;
 		// TODO
 
 		System.out.println(node.toString() + " has appeared!");
+	}
+
+	public void doNothing(Node node) {
+		// TODO
+		System.out.println(node.toString() + " does nothing.");
 	}
 
 	public void fight(Node challenger) {
@@ -534,8 +541,11 @@ public class Ladder<T> implements Set<T> {
 			// rank, power, age, identified);
 
 			String known = (identified) ? "" : "Unknown ";
-			return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d) %s", known, age, power, rank,
-					turnsSinceLastAction, timeToAct(), data.toString());
+			// return String.format("%sAge/Power/Rank %2d/%2d/%2d (last turn %3d) (act? %d)
+			// %s", known, age, power, rank,
+			// turnsSinceLastAction, timeToAct(), data.toString());
+
+			return String.format("%s%2d/%2d/%2d %s (priority %d)", known, age, power, rank, data.toString(), timeToAct());
 
 			// return String.format("%s%2d/%2d/%2d %s", known, age, power, rank,
 			// data.toString());
@@ -618,6 +628,20 @@ public class Ladder<T> implements Set<T> {
 		}
 	}
 
+	class TurnsCompareAscending implements Comparator<Node> {
+		@Override
+		public int compare(Node n1, Node n2) {
+			return n1.actionsTaken - n2.actionsTaken;
+		}
+	}
+
+	class TurnsCompareDescending implements Comparator<Node> {
+		@Override
+		public int compare(Node n1, Node n2) {
+			return n2.actionsTaken - n1.actionsTaken;
+		}
+	}
+
 	public void printReady() {
 		List<Node> nodes = new ArrayList<Node>(members);
 		ReadyCompareDescending readyRank = new ReadyCompareDescending();
@@ -625,6 +649,19 @@ public class Ladder<T> implements Set<T> {
 
 		for (Iterator<Node> it = nodes.iterator(); it.hasNext();) {
 			System.out.println(it.next().toString());
+		}
+
+	}
+
+	public void printTurnsDescending() {
+		List<Node> nodes = new ArrayList<Node>(members);
+		TurnsCompareDescending turnsRank = new TurnsCompareDescending();
+		Collections.sort(nodes, turnsRank);
+
+		Node current;
+		for (Iterator<Node> it = nodes.iterator(); it.hasNext();) {
+			current = it.next();
+			System.out.println("(" + current.actionsTaken + ") " + current.toString());
 		}
 
 	}
