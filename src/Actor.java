@@ -115,6 +115,9 @@ public class Actor {
 
 		if (advanced) {
 			features.addAll(Feature.getClassFeatures(this));
+			combat.calcHitPoints();
+			combat.calcAttackBonus();
+			combat.calcAverageDamage();
 		}
 	}
 
@@ -135,6 +138,10 @@ public class Actor {
 
 	public int getHitPoints() {
 		return combat.getHitPoints();
+	}
+
+	public byte[] getHitDice() {
+		return hitDice;
 	}
 
 	public int getAttackBonus() {

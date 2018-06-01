@@ -1,3 +1,4 @@
+import java.util.HashSet;
 
 public class Combat {
 	public enum Role {
@@ -61,7 +62,50 @@ public class Combat {
 		averageDamage = inventory.calcAverageDamage() + abilityMod;
 	}
 
-	// methods
+	//
+	public void calcHitPoints() {
+		// TODO - doesn't take into account magical bonuses or other features
+		int level = owner.getLevel();
+		byte[] hitDice = owner.getHitDice();
+		int CON = owner.getAbilities().getCONMod();
+
+		int hp = 0;
+		for (int i = 0; i < level - 1; ++i) {
+			hp += (hitDice[i] + CON > 0) ? hitDice[i] + CON : 1;
+		}
+
+		hitPoints = hp;
+	}
+
+	public void calcAttackBonus() {
+		// TODO - doesn't take into account magical bonuses or other features
+		AbilityArray abilities = owner.getAbilities();
+		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
+		int abilityMod = (str >= dex) ? str : dex;
+
+		int proficiencyBonus = owner.proficiencyBonus();
+
+		attackBonus = proficiencyBonus + abilityMod;
+	}
+
+	public void calcAverageDamage() {
+		// TODO - doesn't take into account magical bonuses or other features
+		AbilityArray abilities = owner.getAbilities();
+		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
+		int abilityMod = (str >= dex) ? str : dex;
+
+		Inventory inventory = owner.getInventory();
+
+		int extraAttackMultiplier = 1;
+		HashSet<Feature> features = owner.getFeatures();
+		// TODO
+		if (features.contains(Feature.EXTRA_ATTACK_1))
+			extraAttackMultiplier = 2;
+
+		averageDamage = (inventory.calcAverageDamage() + abilityMod) * extraAttackMultiplier;
+	}
+
+	// basic getter methods
 	public boolean hasOwner() {
 		return owner != null;
 	}

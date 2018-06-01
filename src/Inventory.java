@@ -182,7 +182,7 @@ public class Inventory {
 		 */
 		int averageDamage;
 
-		averageDamage = (equippedWeapon()) ? mainHand.getBaseWeaponType().averageDamage() / 2 : 0;
+		averageDamage = (equippedWeapon()) ? mainHand.getBaseWeaponType().averageDamage() : 0;
 
 		return averageDamage;
 	}

@@ -177,12 +177,12 @@ public class Main {
 		System.out.print(" " + actor.getDeity().toString());
 		System.out.print(" (" + actor.getEXPRate() + ")");
 
-		// System.out.println("");
-		// System.out.print(actor.getTraitOne() + "\n");
-		// System.out.print(actor.getTraitTwo() + "\n");
-		// System.out.print(actor.getIdeal() + "\n");
-		// System.out.print(actor.getBond() + "\n");
-		// System.out.print(actor.getFlaw());
+		System.out.println();
+		System.out.print(actor.getTraitOne() + "\n");
+		System.out.print(actor.getTraitTwo() + "\n");
+		System.out.print(actor.getIdeal() + "\n");
+		System.out.print(actor.getBond() + "\n");
+		System.out.print(actor.getFlaw());
 
 		System.out.println("");
 		System.out.print("AC " + actor.getArmorClass());
@@ -207,8 +207,8 @@ public class Main {
 		System.out.println("");
 		System.out.print(actor.getInventory().toString());
 		System.out.println("");
-		// System.out.print(actor.getSkills().toString());
-		// System.out.println("");
+		System.out.print(actor.getSkills().toString());
+		System.out.println("");
 		System.out.print(actor.getFeatures().toString());
 		System.out.println("");
 		System.out.println("");
