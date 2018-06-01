@@ -11,6 +11,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		levelUpTest();
+
 		// setupActorLadder();
 
 		// encounterSpread();
@@ -19,9 +21,25 @@ public class Main {
 		// rollOneSpellbook(7);
 		// }
 
-		rollCharacters();
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			rollOneCharacter();
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// rollOneCharacter();
+		// }
+	}
+
+	public static void levelUpTest() {
+		Actor test = new Actor();
+		while (test.getJob().equals(Class.BARBARIAN) != true) {
+			test = new Actor();
+		}
+
+		rollOneCharacter(test);
+		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
+
+		for (int i = 0; test.getLevel() < 20 && i < 50; ++i) {
+			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
+			test.advance();
+			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
+			rollOneCharacter(test);
 		}
 	}
 
@@ -144,7 +162,10 @@ public class Main {
 	}
 
 	public static void rollOneCharacter() {
-		Actor actor = new Actor();
+		rollOneCharacter(new Actor());
+	}
+
+	public static void rollOneCharacter(Actor actor) {
 		int rating = ChallengeRating.evaluateCR(actor);
 
 		System.out.print("Name");
@@ -188,46 +209,10 @@ public class Main {
 		System.out.println("");
 		// System.out.print(actor.getSkills().toString());
 		// System.out.println("");
+		System.out.print(actor.getFeatures().toString());
+		System.out.println("");
 		System.out.println("");
 
 	}
 
-	public static void rollCharacters() {
-		int rating;
-		for (int i = 0; i < actors.length; ++i) {
-			actors[i] = new Actor();
-			rating = ChallengeRating.evaluateCR(actors[i]);
-
-			System.out.print("Name");
-			System.out.print(" " + actors[i].getAli().toString());
-			System.out.print(" " + actors[i].getRace().toString());
-			System.out.print(" " + actors[i].getCareer().toString());
-			System.out.print(" " + actors[i].getJob().toString());
-			System.out.print(" (" + actors[i].getArchetype().toString() + ")");
-			System.out.print(" " + actors[i].getDeity().toString());
-			System.out.print(" (" + actors[i].getEXPRate() + ")");
-
-			System.out.println("");
-			System.out.print("AC " + actors[i].getArmorClass());
-			System.out.print(" hp " + actors[i].getHitPoints());
-			System.out.print(" atk " + actors[i].getAttackBonus());
-			System.out.print(" dmg " + actors[i].getAverageDamage());
-			System.out.print(" || CR " + rating);
-			System.out.print(" exp " + ChallengeRating.challengeToXP(rating));
-
-			if (actors[i].getInventory().equippedWeapon()) {
-				System.out.println("");
-				System.out.print("Wielding " + actors[i].getInventory().getMainHand().toString());
-			}
-			System.out.println("");
-			System.out.print(actors[i].getAbilities().toString());
-			System.out.println("");
-			System.out.print(actors[i].getInventory().toString());
-			System.out.println("");
-			// System.out.print(actors[i].getSkills().toString());
-			// System.out.println("");
-			System.out.println("");
-
-		}
-	}
 }

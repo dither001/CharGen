@@ -33,7 +33,7 @@ public class Actor {
 
 	private byte hitDie;
 	private byte[] hitDice;
-	
+
 	private int armorClass;
 	private int hitPoints;
 	private int attackBonus;
@@ -72,12 +72,6 @@ public class Actor {
 		career = Career.randomCareer(this);
 		skills.addAll(Skills.careerSkills(this));
 
-		// initialize inventory, equip gear
-		inventory = new Inventory();
-		inventory.startingGear(this);
-		inventory.optimizeArmor();
-		inventory.optimizeWeapon();
-
 		// derived statistics
 		experience = 0;
 		level = 1;
@@ -88,6 +82,16 @@ public class Actor {
 		for (int i = 0; i < hitDice.length; ++i)
 			hitDice[i] = (byte) Dice.roll(hitDie);
 
+		// race & class features (requires level)
+		features.addAll(Feature.getClassFeatures(this));
+
+		// initialize inventory, equip gear
+		inventory = new Inventory();
+		inventory.startingGear(this);
+		inventory.optimizeArmor();
+		inventory.optimizeWeapon();
+
+		// combat block
 		combat = new Combat(this);
 
 		// traits, ideals, bonds, flaws
@@ -102,10 +106,21 @@ public class Actor {
 	@Override
 	public String toString() {
 		String toString = String.format("%s %s %s", ali.toString(), race.toString(), job.toString());
-		
+
 		return toString;
 	}
-	
+
+	public void advance() {
+		boolean advanced = checkNextLevel(this);
+
+		if (advanced) {
+			features.addAll(Feature.getClassFeatures(this));
+		}
+	}
+
+	/*
+	 * GETTERS AND SETTERS
+	 */
 	public String getName() {
 		return name;
 	}
@@ -138,6 +153,10 @@ public class Actor {
 		this.experience = exp;
 	}
 
+	public void gainEXP(int exp) {
+		this.experience = (int) (exp * expRate);
+	}
+	
 	public int getLevel() {
 		return level;
 	}
@@ -263,34 +282,15 @@ public class Actor {
 		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,
 				165000, 195000, 225000, 265000, 305000, 355000 };
 		int totalXP = actor.getEXP();
-		int currentLevel = actor.getLevel();
-		int nextLevel = 20;
+		int level = actor.getLevel();
 		boolean advanced = false;
 
-		if (currentLevel < 20) {
-			// iterate through experience chart
-			for (int i = 0; i < requires.length; ++i) {
-				if (totalXP < requires[i]) {
-					nextLevel = i + 1;
-					break;
-				}
-			}
+		if (level < 20 && totalXP >= requires[level]) {
+			actor.level += 1;
+			advanced = true;
 
-			// compare "next" level to current level
-			if (nextLevel - currentLevel > 0) {
-				// DING!
-				advanced = true;
-				if (nextLevel - currentLevel > 1) {
-					/*
-					 * You can only advance one level at a time (per adventure). EXP in excess of
-					 * the required amount is wasted. If you have more than you need, then your EXP
-					 * is set to one less than what is needed to advance to the level -AFTER- the
-					 * one you just gained (so, you can earn like, 1.99% levels at once).
-					 */
-					nextLevel = currentLevel + 1;
-					actor.setEXP(requires[nextLevel] - 1);
-				}
-			}
+			if (level < 19 && totalXP >= requires[level + 1])
+				actor.experience = requires[level + 1] - 1;
 		}
 
 		return advanced;
