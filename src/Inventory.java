@@ -48,6 +48,10 @@ public class Inventory {
 		return mainHand != null;
 	}
 
+	public boolean equippedOffHand() {
+		return offHand != null;
+	}
+
 	public boolean equippedShield() {
 		return offHand != null && offHand.getBaseWeaponType().equals(Weapon.SHIELD);
 	}

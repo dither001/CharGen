@@ -83,7 +83,11 @@ public class GameWeapon extends GameItem {
 	public Weapon getBaseWeaponType() {
 		return weapon;
 	}
-	
+
+	public Weapon.Trait[] getBasicTraits() {
+		return weapon.getTraits();
+	}
+
 	// static methods
 	public static GameWeapon getWeapon(String weapon) {
 		return weapons.get(weapon);
