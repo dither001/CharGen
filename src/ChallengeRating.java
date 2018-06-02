@@ -20,11 +20,11 @@ public class ChallengeRating {
 		defense = defenseRating(hp, ac);
 		offense = offenseRating(dmg, atk);
 
-		finalRating = (offense + defense) / 2 - 4;
+		finalRating = (offense + defense) / 2;
 		return finalRating;
 	}
 
-	private static int defenseRating(int hp, int ac) {
+	public static int defenseRating(int hp, int ac) {
 		int defenseRating = hitPointsToCR(hp);
 		int armorRating = armorClassToCR(ac);
 		int hitPointArmor = hitPointsToAC(hp);
@@ -104,7 +104,7 @@ public class ChallengeRating {
 		return rating;
 	}
 
-	private static int offenseRating(int dmg, int atk) {
+	public static int offenseRating(int dmg, int atk) {
 		int offenseRating = damageToCR(dmg);
 		int attackRating = attackToCR(atk);
 		int damageAttack = damageToAttack(dmg);

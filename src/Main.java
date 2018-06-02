@@ -11,7 +11,11 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		levelUpTest();
+		// Weapon[] weapons = Weapon.handsDescendingArray();
+		// for (Weapon el : weapons)
+		// System.out.println(el.toString());
+
+		// levelUpTest();
 
 		// setupActorLadder();
 
@@ -21,9 +25,9 @@ public class Main {
 		// rollOneSpellbook(7);
 		// }
 
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollOneCharacter();
-		// }
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			rollOneCharacter();
+		}
 	}
 
 	public static void levelUpTest() {
@@ -166,7 +170,12 @@ public class Main {
 	}
 
 	public static void rollOneCharacter(Actor actor) {
+		int ac = actor.getArmorClass(), hp = actor.getHitPoints();
+		int atk = actor.getAttackBonus(), dmg = actor.getAverageDamage();
+
 		int rating = ChallengeRating.evaluateCR(actor);
+		int dCR = ChallengeRating.defenseRating(hp, ac);
+		int oCR = ChallengeRating.offenseRating(atk, dmg);
 
 		System.out.print("Name");
 		System.out.print(" " + actor.getAli().toString());
@@ -177,39 +186,70 @@ public class Main {
 		System.out.print(" " + actor.getDeity().toString());
 		System.out.print(" (" + actor.getEXPRate() + ")");
 
-		System.out.println();
-		System.out.print(actor.getTraitOne() + "\n");
-		System.out.print(actor.getTraitTwo() + "\n");
-		System.out.print(actor.getIdeal() + "\n");
-		System.out.print(actor.getBond() + "\n");
-		System.out.print(actor.getFlaw());
+		// System.out.println();
+		// System.out.print(actor.getTraitOne() + "\n");
+		// System.out.print(actor.getTraitTwo() + "\n");
+		// System.out.print(actor.getIdeal() + "\n");
+		// System.out.print(actor.getBond() + "\n");
+		// System.out.print(actor.getFlaw());
 
 		System.out.println("");
-		System.out.print("AC " + actor.getArmorClass());
-		System.out.print(" hp " + actor.getHitPoints());
-		System.out.print(" atk " + actor.getAttackBonus());
-		System.out.print(" dmg " + actor.getAverageDamage());
-		System.out.print(" || CR " + rating);
-		System.out.print(" exp " + ChallengeRating.challengeToXP(rating));
+		// String s = String.format("AC %2d hp %3d atk +%-2d (%2d) || oCR %2d dCR %2d",
+		// ac, hp, atk, dmg, oCR, dCR);
+		String s = String.format("AC %2d hp %3d atk +%-2d (%2d) || CR %2d", ac, hp, atk, dmg, rating);
+		System.out.print(s);
+		System.out.print(" || exp " + ChallengeRating.challengeToXP(rating));
 
 		if (actor.getInventory().equippedWeapon()) {
+			GameWeapon weapon = actor.getInventory().getMainHand();
+
 			System.out.println("");
-			System.out.print("Wielding " + actor.getInventory().getMainHand().toString());
+			System.out.print("Wielding " + weapon.toString());
+
+			Weapon.Trait[] traits = weapon.getBasicTraits();
+			if (traits.length > 0) {
+				for (int i = 0; i < traits.length; ++i) {
+					if (i == 0)
+						System.out.print(" [" + traits[i]);
+					
+					if (i > 0)
+						System.out.print(", " + traits[i]);
+					
+					if (i == traits.length - 1)
+						System.out.print("]");
+				}
+			}
 		}
 
-		if (actor.getInventory().equippedShield()) {
+		if (actor.getInventory().equippedOffHand()) {
+			GameWeapon weapon = actor.getInventory().getOffHand();
+
 			System.out.println("");
-			System.out.print("Wielding " + actor.getInventory().getOffHand().toString());
+			System.out.print("Wielding " + weapon.toString());
+
+			Weapon.Trait[] traits = weapon.getBasicTraits();
+			if (traits.length > 0) {
+				for (int i = 0; i < traits.length; ++i) {
+					if (i == 0)
+						System.out.print(" [" + traits[i]);
+					
+					if (i > 0)
+						System.out.print(", " + traits[i]);
+					
+					if (i == traits.length - 1)
+						System.out.print("]");
+				}
+			}
 		}
 
 		System.out.println("");
 		System.out.print(actor.getAbilities().toString());
-		System.out.println("");
-		System.out.print(actor.getInventory().toString());
-		System.out.println("");
-		System.out.print(actor.getSkills().toString());
-		System.out.println("");
-		System.out.print(actor.getFeatures().toString());
+		// System.out.println("");
+		// System.out.print(actor.getInventory().toString());
+		// System.out.println("");
+		// System.out.print(actor.getSkills().toString());
+		// System.out.println("");
+		// System.out.print(actor.getFeatures().toString());
 		System.out.println("");
 		System.out.println("");
 
