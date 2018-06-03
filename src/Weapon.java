@@ -1,13 +1,4 @@
 
-/*
- * TODO - I have an idea for a rewrite of the entire Armor/Weapon equip
- * algorithm. Next time, instead of cycling through switches, I want to create
- * a try-catch block that first attempts to locate said weapon/armor in the
- * inventory, then attempts to equip it. On success, the method ends. On
- * failure, it simply iterates through an ARRAY of the best armor/weapons
- * instead of using complicated switch hierarchies.
- */
-
 //	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 //	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 //	DAGGER(4, Energy.PIERCING, Hand.LIGHT),

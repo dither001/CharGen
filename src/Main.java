@@ -6,8 +6,6 @@ public class Main {
 	private static int PCS_TO_ROLL = 50;
 	private static int SPELLBOOK_LEVEL = 17;
 
-	private static Actor[] actors = new Actor[PCS_TO_ROLL];
-
 	public static void main(String[] args) {
 		// TODO
 
@@ -15,7 +13,7 @@ public class Main {
 		// for (Weapon el : weapons)
 		// System.out.println(el.toString());
 
-		// levelUpTest();
+		 levelUpTest();
 
 		// setupActorLadder();
 
@@ -25,9 +23,9 @@ public class Main {
 		// rollOneSpellbook(7);
 		// }
 
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			rollOneCharacter();
-		}
+//		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+//			rollCharacter();
+//		}
 	}
 
 	public static void levelUpTest() {
@@ -36,14 +34,14 @@ public class Main {
 			test = new Actor();
 		}
 
-		rollOneCharacter(test);
+		rollCharacter(test);
 		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
 
 		for (int i = 0; test.getLevel() < 20 && i < 50; ++i) {
 			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
 			test.advance();
 			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
-			rollOneCharacter(test);
+			rollCharacter(test);
 		}
 	}
 
@@ -165,11 +163,11 @@ public class Main {
 		System.out.println();
 	}
 
-	public static void rollOneCharacter() {
-		rollOneCharacter(new Actor());
+	public static void rollCharacter() {
+		rollCharacter(new Actor());
 	}
 
-	public static void rollOneCharacter(Actor actor) {
+	public static void rollCharacter(Actor actor) {
 		int ac = actor.getArmorClass(), hp = actor.getHitPoints();
 		int atk = actor.getAttackBonus(), dmg = actor.getAverageDamage();
 
@@ -196,7 +194,7 @@ public class Main {
 		System.out.println("");
 		// String s = String.format("AC %2d hp %3d atk +%-2d (%2d) || oCR %2d dCR %2d",
 		// ac, hp, atk, dmg, oCR, dCR);
-		String s = String.format("AC %2d hp %3d atk +%-2d (%2d) || CR %2d", ac, hp, atk, dmg, rating);
+		String s = String.format("AC %2d hp %3d atk %2d (%2d) || CR %2d", ac, hp, atk, dmg, rating);
 		System.out.print(s);
 		System.out.print(" || exp " + ChallengeRating.challengeToXP(rating));
 
@@ -248,8 +246,8 @@ public class Main {
 		// System.out.print(actor.getInventory().toString());
 		// System.out.println("");
 		// System.out.print(actor.getSkills().toString());
-		// System.out.println("");
-		// System.out.print(actor.getFeatures().toString());
+		 System.out.println("");
+		 System.out.print(actor.getFeatures().toString());
 		System.out.println("");
 		System.out.println("");
 

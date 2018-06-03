@@ -50,7 +50,7 @@ public class Actor {
 		// FIXME
 		// armor = null; mainHand = null; offHand = null;
 
-		abilities = new AbilityArray();
+		abilities = new AbilityArray(this);
 		skills = new HashSet<Proficiency>();
 		features = new HashSet<Feature>();
 
@@ -115,9 +115,9 @@ public class Actor {
 
 		if (advanced) {
 			features.addAll(Feature.getClassFeatures(this));
-			combat.calcHitPoints();
-			combat.calcAttackBonus();
-			combat.calcAverageDamage();
+			abilities.updateScores();
+
+			combat.update();
 		}
 	}
 
@@ -163,7 +163,7 @@ public class Actor {
 	public void gainEXP(int exp) {
 		this.experience = (int) (exp * expRate);
 	}
-	
+
 	public int getLevel() {
 		return level;
 	}
@@ -186,6 +186,10 @@ public class Actor {
 	}
 
 	public AbilityArray getAbilities() {
+		return abilities.current();
+	}
+
+	public AbilityArray getBasicAbilities() {
 		return abilities;
 	}
 

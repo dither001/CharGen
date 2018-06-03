@@ -48,21 +48,27 @@ public class Combat {
 			this.role = Role.CONTROLLER;
 		}
 
-		armorClass = inventory.calcArmorClass();
-
-		hitPoints = Dice.roll(job.getHitDie()) + abilities.getCONMod();
-		hitPoints = (hitPoints < 1) ? 1 : hitPoints;
-
-		// attack bonus and average damage are weak approximations
-		int proficiencyBonus = owner.proficiencyBonus();
-		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
-		int abilityMod = (str >= dex) ? str : dex;
-
-		attackBonus = proficiencyBonus + abilityMod;
-		averageDamage = inventory.calcAverageDamage() + abilityMod;
+		// TODO - to prevent this from being called 20 times
+		calcArmorClass();
+		calcHitPoints();
+		calcAttackBonus();
+		calcAverageDamage();
 	}
 
 	//
+	public void update() {
+		calcArmorClass();
+		calcHitPoints();
+		calcAttackBonus();
+		calcAverageDamage();
+	}
+	
+	public void calcArmorClass() {
+		// TODO
+		Inventory inventory = owner.getInventory();
+		armorClass = inventory.calcArmorClass();
+	}
+	
 	public void calcHitPoints() {
 		// TODO - doesn't take into account magical bonuses or other features
 		int level = owner.getLevel();
@@ -70,7 +76,7 @@ public class Combat {
 		int CON = owner.getAbilities().getCONMod();
 
 		int hp = 0;
-		for (int i = 0; i < level - 1; ++i) {
+		for (int i = 0; i < level; ++i) {
 			hp += (hitDice[i] + CON > 0) ? hitDice[i] + CON : 1;
 		}
 
@@ -80,10 +86,19 @@ public class Combat {
 	public void calcAttackBonus() {
 		// TODO - doesn't take into account magical bonuses or other features
 		AbilityArray abilities = owner.getAbilities();
-		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
-		int abilityMod = (str >= dex) ? str : dex;
-
 		int proficiencyBonus = owner.proficiencyBonus();
+		int str = abilities.getSTRMod(), dex = abilities.getDEXMod(), abilityMod = str;
+		
+		Inventory inventory = owner.getInventory();
+		if (inventory.equippedWeapon()) {
+			Weapon weapon = inventory.getMainHand().getBaseWeaponType();
+			if (weapon.contains(Weapon.Trait.AMMUNITION))
+				abilityMod = dex;
+			else if (weapon.contains(Weapon.Trait.FINESSE))
+				abilityMod = (str >= dex) ? str : dex;
+			else
+				abilityMod = str;
+		}
 
 		attackBonus = proficiencyBonus + abilityMod;
 	}
@@ -91,10 +106,18 @@ public class Combat {
 	public void calcAverageDamage() {
 		// TODO - doesn't take into account magical bonuses or other features
 		AbilityArray abilities = owner.getAbilities();
-		int str = abilities.getSTRMod(), dex = abilities.getDEXMod();
-		int abilityMod = (str >= dex) ? str : dex;
-
+		int str = abilities.getSTRMod(), dex = abilities.getDEXMod(), abilityMod = str;
+		
 		Inventory inventory = owner.getInventory();
+		if (inventory.equippedWeapon()) {
+			Weapon weapon = inventory.getMainHand().getBaseWeaponType();
+			if (weapon.contains(Weapon.Trait.AMMUNITION))
+				abilityMod = dex;
+			else if (weapon.contains(Weapon.Trait.FINESSE))
+				abilityMod = (str >= dex) ? str : dex;
+			else
+				abilityMod = str;
+		}
 
 		int extraAttackMultiplier = 1;
 		HashSet<Feature> features = owner.getFeatures();
