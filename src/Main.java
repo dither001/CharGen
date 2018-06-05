@@ -9,11 +9,18 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		for (int i = 1; i < 20; ++i) {
+			System.out.println(Spells.filterSpellsBySchool(Spells.School.TRANSMUTATION, i));
+			System.out.println();
+		}
+		
+		
+		
 		// Weapon[] weapons = Weapon.handsDescendingArray();
 		// for (Weapon el : weapons)
 		// System.out.println(el.toString());
 
-		 levelUpTest();
+		// levelUpTest();
 
 		// setupActorLadder();
 
@@ -23,9 +30,9 @@ public class Main {
 		// rollOneSpellbook(7);
 		// }
 
-//		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-//			rollCharacter();
-//		}
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// rollCharacter();
+		// }
 	}
 
 	public static void levelUpTest() {
@@ -209,10 +216,10 @@ public class Main {
 				for (int i = 0; i < traits.length; ++i) {
 					if (i == 0)
 						System.out.print(" [" + traits[i]);
-					
+
 					if (i > 0)
 						System.out.print(", " + traits[i]);
-					
+
 					if (i == traits.length - 1)
 						System.out.print("]");
 				}
@@ -230,10 +237,10 @@ public class Main {
 				for (int i = 0; i < traits.length; ++i) {
 					if (i == 0)
 						System.out.print(" [" + traits[i]);
-					
+
 					if (i > 0)
 						System.out.print(", " + traits[i]);
-					
+
 					if (i == traits.length - 1)
 						System.out.print("]");
 				}
@@ -246,8 +253,8 @@ public class Main {
 		// System.out.print(actor.getInventory().toString());
 		// System.out.println("");
 		// System.out.print(actor.getSkills().toString());
-		 System.out.println("");
-		 System.out.print(actor.getFeatures().toString());
+		System.out.println("");
+		System.out.print(actor.getFeatures().toString());
 		System.out.println("");
 		System.out.println("");
 
