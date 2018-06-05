@@ -5,6 +5,7 @@ bin/
 .project
 
 src/ReadCSV.java
+src/Tesseract.java
 
 # Compiled class file
 
