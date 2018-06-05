@@ -1,5 +1,8 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 public enum Spells {
 	ACID_SPLASH(0, School.CONJURATION), 
@@ -561,6 +564,46 @@ public enum Spells {
 	}
 
 	// static methods
+	public static HashSet<Spells> spellbookSetup(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		HashSet<Spells> spellbook = new HashSet<Spells>();
+		List<Spells> candidates = new ArrayList<Spells>();
+
+		spellbook.add(MAGE_ARMOR);
+		if (Dice.roll(2) == 1)
+			spellbook.add(FIND_FAMILIAR);
+		if (Dice.roll(2) == 1)
+			spellbook.add(IDENTIFY);
+
+		if (archetype.equals(Class.Subclass.ABJURER))
+			candidates.addAll(filterSpellsBySchool(School.ABJURATION, 1));
+		else if (archetype.equals(Class.Subclass.CONJUROR))
+			candidates.addAll(filterSpellsBySchool(School.CONJURATION, 1));
+		else if (archetype.equals(Class.Subclass.DIVINER))
+			candidates.addAll(filterSpellsBySchool(School.DIVINATION, 1));
+		else if (archetype.equals(Class.Subclass.ENCHANTER))
+			candidates.addAll(filterSpellsBySchool(School.ENCHANTMENT, 1));
+		else if (archetype.equals(Class.Subclass.EVOKER))
+			candidates.addAll(filterSpellsBySchool(School.EVOCATION, 1));
+		else if (archetype.equals(Class.Subclass.ILLUSIONIST))
+			candidates.addAll(filterSpellsBySchool(School.ILLUSION, 1));
+		else if (archetype.equals(Class.Subclass.NECROMANCER))
+			candidates.addAll(filterSpellsBySchool(School.NECROMANCY, 1));
+		else if (archetype.equals(Class.Subclass.TRANSMUTER))
+			candidates.addAll(filterSpellsBySchool(School.TRANSMUTATION, 1));
+
+		Collections.shuffle(candidates);
+		for (int i = 0; candidates.isEmpty() != true && i < 3; ++i) {
+			spellbook.add(candidates.remove(0));
+		}
+
+		while (spellbook.size() < 6) {
+			spellbook.add(randomWizardSpell(1));
+		}
+
+		return spellbook;
+	}
+
 	public static Spells randomWizardSpell(int level) {
 		Spells[] array = wizardSpells[level];
 		int dice = Dice.roll(array.length) - 1;
@@ -568,10 +611,23 @@ public enum Spells {
 		return array[dice];
 	}
 
+	public static List<Spells> filterSpellsBySchool(School school, int level) {
+		List<Spells> list = new ArrayList<Spells>();
+
+		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
+		List<Spells> spells = new ArrayList<Spells>(Arrays.asList(wizardSpells[level]));
+		for (Spells el : spells) {
+			if (el.getSchool().equals(school))
+				list.add(el);
+		}
+
+		return list;
+	}
+
 	public static HashSet<Spells> randomWizardSpellbook(int bookLevel) {
 		HashSet<Spells> spellbook = new HashSet<Spells>();
 		Spells candidate;
-		int dice, spellLevel;
+		int spellLevel;
 
 		if (bookLevel > 20)
 			bookLevel = 20;

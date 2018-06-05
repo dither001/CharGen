@@ -19,7 +19,6 @@
 //	SURVIVAL(Ability.WISDOM);
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 
 public enum Skills implements Proficiency {
@@ -43,7 +42,7 @@ public enum Skills implements Proficiency {
 	SURVIVAL(Ability.WISDOM);
 
 	// static fields
-	private static Skills[] allSkills = { ACROBATICS, ANIMAL_HANDLING, ARCANA, ATHLETICS, DECEPTION, HISTORY, INSIGHT, INTIMIDATION, INVESTIGATION, MEDICINE, NATURE, PERCEPTION, PERFORMANCE, PERSUASION, RELIGION, SLEIGHT_OF_HAND, STEALTH, SURVIVAL };
+	private static final Skills[] ALL_SKILLS = { ACROBATICS, ANIMAL_HANDLING, ARCANA, ATHLETICS, DECEPTION, HISTORY, INSIGHT, INTIMIDATION, INVESTIGATION, MEDICINE, NATURE, PERCEPTION, PERFORMANCE, PERSUASION, RELIGION, SLEIGHT_OF_HAND, STEALTH, SURVIVAL };
 
 	// fields
 	Ability prime;
@@ -76,13 +75,20 @@ public enum Skills implements Proficiency {
 		return list;
 	}
 
+	public static HashSet<Proficiency> filterForSkills(Actor actor) {
+		HashSet<Proficiency> set = new HashSet<Proficiency>(actor.getSkills());
+		set.retainAll(Arrays.asList(ALL_SKILLS));
+		
+		return set;
+	}
+	
 	public static Skills[] getSkillArray() {
-		return allSkills;
+		return ALL_SKILLS;
 	}
 
 	public static HashSet<Proficiency> getSkillSet() {
 		HashSet<Proficiency> list = new HashSet<Proficiency>();
-		list.addAll(Arrays.asList(allSkills));
+		list.addAll(Arrays.asList(ALL_SKILLS));
 		return list;
 	}
 
@@ -99,7 +105,7 @@ public enum Skills implements Proficiency {
 			} else {
 				while (skills.contains(candidates[i]) || careerSkills.contains(candidates[i])) {
 					// TODO - should also choose from tool proficiencies and such
-					candidates[i] = allSkills[Dice.roll(allSkills.length) - 1];
+					candidates[i] = ALL_SKILLS[Dice.roll(ALL_SKILLS.length) - 1];
 				}
 
 				careerSkills.add(candidates[i]);
@@ -176,7 +182,7 @@ public enum Skills implements Proficiency {
 		if (job.equals(Class.BARBARIAN))
 			jobSkills = barbarian;
 		else if (job.equals(Class.BARD))
-			jobSkills = allSkills;
+			jobSkills = ALL_SKILLS;
 		else if (job.equals(Class.CLERIC))
 			jobSkills = cleric;
 		else if (job.equals(Class.DRUID))
@@ -198,7 +204,7 @@ public enum Skills implements Proficiency {
 		else if (job.equals(Class.WIZARD))
 			jobSkills = wizard;
 		else
-			jobSkills = allSkills;
+			jobSkills = ALL_SKILLS;
 
 		return jobSkills;
 	}
