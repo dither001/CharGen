@@ -604,7 +604,48 @@ public enum Spells {
 		return spellbook;
 	}
 
+	public static HashSet<Spells> spellbookUpdate(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		int level = actor.getLevel();
+
+		// TODO - needs to add original spellbook as starting point
+		HashSet<Spells> spellbook = new HashSet<Spells>();
+		List<Spells> candidates = new ArrayList<Spells>();
+
+		if (archetype.equals(Class.Subclass.ABJURER))
+			candidates.addAll(filterSpellsBySchool(School.ABJURATION, level));
+		else if (archetype.equals(Class.Subclass.CONJUROR))
+			candidates.addAll(filterSpellsBySchool(School.CONJURATION, level));
+		else if (archetype.equals(Class.Subclass.DIVINER))
+			candidates.addAll(filterSpellsBySchool(School.DIVINATION, level));
+		else if (archetype.equals(Class.Subclass.ENCHANTER))
+			candidates.addAll(filterSpellsBySchool(School.ENCHANTMENT, level));
+		else if (archetype.equals(Class.Subclass.EVOKER))
+			candidates.addAll(filterSpellsBySchool(School.EVOCATION, level));
+		else if (archetype.equals(Class.Subclass.ILLUSIONIST))
+			candidates.addAll(filterSpellsBySchool(School.ILLUSION, level));
+		else if (archetype.equals(Class.Subclass.NECROMANCER))
+			candidates.addAll(filterSpellsBySchool(School.NECROMANCY, level));
+		else if (archetype.equals(Class.Subclass.TRANSMUTER))
+			candidates.addAll(filterSpellsBySchool(School.TRANSMUTATION, level));
+
+		Collections.shuffle(candidates);
+		int targetNumber = spellbook.size() + 2;
+
+		for (int i = 0; candidates.isEmpty() != true && i < 1; ++i) {
+			if (spellbook.add(candidates.remove(0)) != true)
+				--i;
+		}
+
+		while (spellbook.size() < targetNumber) {
+			spellbook.add(randomWizardSpell(level));
+		}
+
+		return spellbook;
+	}
+
 	public static Spells randomWizardSpell(int level) {
+		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
 		Spells[] array = wizardSpells[level];
 		int dice = Dice.roll(array.length) - 1;
 

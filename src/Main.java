@@ -9,12 +9,12 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		for (int i = 1; i < 20; ++i) {
-			System.out.println(Spells.filterSpellsBySchool(Spells.School.TRANSMUTATION, i));
-			System.out.println();
-		}
+//		for (int i = 1; i < 20; ++i) {
+//			System.out.println(Spells.filterSpellsBySchool(Spells.School.TRANSMUTATION, i));
+//			System.out.println();
+//		}
 		
-		
+		spellbookTest();
 		
 		// Weapon[] weapons = Weapon.handsDescendingArray();
 		// for (Weapon el : weapons)
@@ -33,6 +33,24 @@ public class Main {
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// rollCharacter();
 		// }
+	}
+
+	public static void spellbookTest() {
+		Actor test = new Actor();
+		while (test.getJob().equals(Class.WIZARD) != true) {
+			test = new Actor();
+		}
+		
+		rollCharacter(test);
+		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
+
+		for (int i = 0; test.getLevel() < 20 && i < 50; ++i) {
+			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
+			test.advance();
+			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
+//			rollCharacter(test);
+			System.out.println(Spells.spellbookUpdate(test).toString());
+		}
 	}
 
 	public static void levelUpTest() {

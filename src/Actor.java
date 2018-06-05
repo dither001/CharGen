@@ -15,6 +15,8 @@ public class Actor {
 	private Alignment ali;
 	private Class job;
 	private Class.Subclass archetype;
+	private Spellcasting spellcasting;
+
 	private Race race;
 	private Deity god;
 	private HashSet<Proficiency> skills;
@@ -58,6 +60,7 @@ public class Actor {
 		// JOB requires ability array
 		job = Class.selectClass(this);
 		archetype = Class.Subclass.selectSubclass(this);
+
 		// RACE is chosen specifically after JOB
 		race = Race.selectRace();
 		// GOD requires ALI, JOB, and RACE
