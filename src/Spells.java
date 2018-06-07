@@ -373,7 +373,7 @@ public enum Spells {
 	}
 
 	// spell lists
-	private static Spells[][] bardSpells = {
+	private static final Spells[][] BARD_SPELLS = {
 			{ BLADE_WARD, DANCING_LIGHTS, FRIENDS, LIGHT, MAGE_HAND, MENDING, MESSAGE, MINOR_ILLUSION, PRESTIDIGITATION,
 					TRUE_STRIKE, VICIOUS_MOCKERY },
 			{ ANIMAL_FRIENDSHIP, BANE, CHARM_PERSON, COMPREHEND_LANGUAGES, CURE_WOUNDS, DETECT_MAGIC, DISGUISE_SELF,
@@ -399,7 +399,7 @@ public enum Spells {
 			{ DOMINATE_MONSTER, FEEBLEMIND, GLIBNESS, MIND_BLANK, POWER_WORD_STUN },
 			{ FORESIGHT, POWER_WORD_HEAL, POWER_WORD_KILL, TRUE_POLYMORPH } };
 
-	private static Spells[][] clericSpells = {
+	private static final Spells[][] CLERIC_SPELLS = {
 			{ GUIDANCE, LIGHT, MENDING, RESISTANCE, SACRED_FLAME, SPARE_THE_DYING, THAUMATURGY },
 			{ BANE, BLESS, COMMAND, CREATE_OR_DESTROY_WATER, CURE_WOUNDS, DETECT_EVIL_AND_GOOD, DETECT_MAGIC,
 					DETECT_POISON_AND_DISEASE, GUIDING_BOLT, HEALING_WORD, INFLICT_WOUNDS,
@@ -421,7 +421,7 @@ public enum Spells {
 			{ ANTIMAGIC_FIELD, CONTROL_WEATHER, EARTHQUAKE, HOLY_AURA },
 			{ ASTRAL_PROJECTION, GATE, MASS_HEAL, TRUE_RESURRECTION } };
 
-	private static Spells[][] druidSpells = {
+	private static final Spells[][] DRUID_SPELLS = {
 			{ DRUIDCRAFT, GUIDANCE, MENDING, POISON_SPRAY, PRODUCE_FLAME, RESISTANCE, SHILLELAGH, THORN_WHIP },
 			{ ANIMAL_FRIENDSHIP, CHARM_PERSON, CREATE_OR_DESTROY_WATER, CURE_WOUNDS, DETECT_MAGIC,
 					DETECT_POISON_AND_DISEASE, ENTANGLE, FAERIE_FIRE, FOG_CLOUD, GOODBERRY, HEALING_WORD, JUMP,
@@ -442,7 +442,7 @@ public enum Spells {
 			{ ANIMAL_SHAPES, ANTIPATHY_SYMPATHY, CONTROL_WEATHER, EARTHQUAKE, FEEBLEMIND, SUNBURST, TSUNAMI },
 			{ FORESIGHT, SHAPECHANGE, STORM_OF_VENGEANCE, TRUE_RESURRECTION } };
 
-	private static Spells[][] paladinSpells = { {},
+	private static Spells[][] PALADIN_SPELLS = { {},
 			{ BLESS, COMMAND, COMPELLED_DUEL, CURE_WOUNDS, DETECT_EVIL_AND_GOOD, DETECT_MAGIC,
 					DETECT_POISON_AND_DISEASE, DIVINE_FAVOR, HEROISM, PROTECTION_FROM_EVIL_AND_GOOD,
 					PURIFY_FOOD_AND_DRINK, SEARING_SMITE, SHIELD_OF_FAITH, THUNDEROUS_SMITE, WRATHFUL_SMITE },
@@ -453,7 +453,7 @@ public enum Spells {
 			{ AURA_OF_LIFE, AURA_OF_PURITY, BANISHMENT, DEATH_WARD, LOCATE_CREATURE, STAGGERING_SMITE },
 			{ BANISHING_SMITE, CIRCLE_OF_POWER, DESTRUCTIVE_WAVE, DISPEL_EVIL_AND_GOOD, GEAS, RAISE_DEAD } };
 
-	private static Spells[][] rangerSpells = { {},
+	private static Spells[][] RANGER_SPELLS = { {},
 			{ ALARM, ANIMAL_FRIENDSHIP, CURE_WOUNDS, DETECT_MAGIC, DETECT_POISON_AND_DISEASE, ENSNARING_STRIKE,
 					FOG_CLOUD, GOODBERRY, HAIL_OF_THORNS, HUNTERS_MARK, JUMP, LONGSTRIDER, SPEAK_WITH_ANIMALS },
 			{ ANIMAL_MESSENGER, BARKSKIN, BEAST_SENSE, CORDON_OF_ARROWS, DARKVISION, FIND_TRAPS, LESSER_RESTORATION,
@@ -464,7 +464,7 @@ public enum Spells {
 			{ CONJURE_WOODLAND_BEINGS, FREEDOM_OF_MOVEMENT, GRASPING_VINE, LOCATE_CREATURE, STONESKIN },
 			{ COMMUNE_WITH_NATURE, CONJURE_VOLLEY, SWIFT_QUIVER, TREE_STRIDE } };
 
-	private static Spells[][] sorcererSpells = {
+	private static Spells[][] SORCERER_SPELLS = {
 			{ ACID_SPLASH, BLADE_WARD, CHILL_TOUCH, DANCING_LIGHTS, FIREBOLT, FRIENDS, LIGHT, MAGE_HAND, MENDING,
 					MESSAGE, MINOR_ILLUSION, POISON_SPRAY, PRESTIDIGITATION, RAY_OF_FROST, SHOCKING_GRASP,
 					TRUE_STRIKE },
@@ -489,7 +489,7 @@ public enum Spells {
 			{ DOMINATE_MONSTER, EARTHQUAKE, INCENDIARY_CLOUD, POWER_WORD_STUN, SUNBURST },
 			{ GATE, METEOR_SWARM, POWER_WORD_KILL, TIME_STOP, WISH } };
 
-	private static Spells[][] warlockSpells = {
+	private static Spells[][] WARLOCK_SPELLS = {
 			{ BLADE_WARD, CHILL_TOUCH, ELDRITCH_BLAST, FRIENDS, MAGE_HAND, MINOR_ILLUSION, POISON_SPRAY,
 					PRESTIDIGITATION, TRUE_STRIKE },
 			{ CLOUD_OF_DAGGERS, CROWN_OF_MADNESS, DARKNESS, ENTHRALL, HOLD_PERSON, INVISIBILITY, MIRROR_IMAGE,
@@ -504,7 +504,7 @@ public enum Spells {
 			{ DEMIPLANE, DOMINATE_MONSTER, FEEBLEMIND, GLIBNESS, POWER_WORD_STUN },
 			{ ASTRAL_PROJECTION, FORESIGHT, IMPRISONMENT, POWER_WORD_KILL, TRUE_POLYMORPH } };
 
-	private static Spells[][] wizardSpells = {
+	private static Spells[][] WIZARD_SPELLS = {
 			{ ACID_SPLASH, BLADE_WARD, CHILL_TOUCH, DANCING_LIGHTS, FIREBOLT, FRIENDS, LIGHT, MAGE_HAND, MENDING,
 					MESSAGE, MINOR_ILLUSION, POISON_SPRAY, PRESTIDIGITATION, RAY_OF_FROST, SHOCKING_GRASP,
 					TRUE_STRIKE },
@@ -544,6 +544,14 @@ public enum Spells {
 			{ ASTRAL_PROJECTION, FORESIGHT, GATE, IMPRISONMENT, METEOR_SWARM, POWER_WORD_KILL, PRISMATIC_WALL,
 					SHAPECHANGE, TIME_STOP, TRUE_POLYMORPH, WEIRD, WISH } };
 
+	//
+	private static final int[] BARD_KNOWN = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 15, 16, 18, 19, 19, 20, 22, 22, 22 };
+	// used by ELDRITCH_KNIGHT fighter and ARCANE_TRICKSTER rogue
+	private static final int[] FIGHTER_KNOWN = { 0, 0, 3, 4, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11, 11, 12, 13 };
+	private static final int[] RANGER_KNOWN = { 0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11 };
+	private static final int[] SORCERER_KNOWN = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14, 14, 15, 15, 15, 15 };
+	private static final int[] WARLOCK_KNOWN = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15 };
+
 	// fields
 	private School school;
 	private int level;
@@ -564,6 +572,48 @@ public enum Spells {
 	}
 
 	// static methods
+	public static HashSet<Spells> bardSetup(Actor actor) {
+		int level = actor.getLevel();
+		HashSet<Spells> spellsKnown = new HashSet<Spells>();
+
+		int dice = Dice.roll(3);
+		if (dice == 1)
+			spellsKnown.add(CURE_WOUNDS);
+		else if (dice == 2)
+			spellsKnown.add(HEALING_WORD);
+
+		dice = Dice.roll(3);
+		if (dice == 1)
+			spellsKnown.add(ANIMAL_FRIENDSHIP);
+		else if (dice == 2)
+			spellsKnown.add(CHARM_PERSON);
+
+		dice = Dice.roll(3);
+		if (dice == 1)
+			spellsKnown.add(DISSONANT_WHISPERS);
+		else if (dice == 2)
+			spellsKnown.add(THUNDERWAVE);
+
+		while (spellsKnown.size() < BARD_KNOWN[level]) {
+			spellsKnown.add(randomBardSpell(level));
+		}
+
+		return spellsKnown;
+	}
+
+	public static HashSet<Spells> bardUpdate(Actor actor) {
+		// TODO
+		int level = actor.getLevel();
+		Spellcasting spellcasting = actor.getSpellcasting();
+		HashSet<Spells> spellsKnown = spellcasting.getSpellsKnown();
+
+		while (spellsKnown.size() < BARD_KNOWN[level]) {
+			spellsKnown.add(randomBardSpell(level));
+		}
+
+		return spellsKnown;
+	}
+
 	public static HashSet<Spells> spellbookSetup(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		HashSet<Spells> spellbook = new HashSet<Spells>();
@@ -605,11 +655,19 @@ public enum Spells {
 	}
 
 	public static HashSet<Spells> spellbookUpdate(Actor actor) {
+		// TODO - requires updates
+		Spellcasting spellcasting = actor.getSpellcasting();
+		HashSet<Spells> spellsKnown = spellcasting.getSpellsKnown();
+
 		Class.Subclass archetype = actor.getArchetype();
 		int level = actor.getLevel();
 
-		// TODO - needs to add original spellbook as starting point
-		HashSet<Spells> spellbook = new HashSet<Spells>();
+		/*
+		 * FIXME - ABSOLUTELY needs to check for existing wizard's spellbook before simply
+		 * adding to the character's new "spells known." I'm going to have to work out
+		 * exactly how a wizard will replace a lost spellbook (i.e. by the rules)
+		 */
+		HashSet<Spells> spellbook = new HashSet<Spells>(spellsKnown);
 		List<Spells> candidates = new ArrayList<Spells>();
 
 		if (archetype.equals(Class.Subclass.ABJURER))
@@ -644,9 +702,17 @@ public enum Spells {
 		return spellbook;
 	}
 
+	public static Spells randomBardSpell(int level) {
+		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
+		Spells[] array = BARD_SPELLS[level];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
 	public static Spells randomWizardSpell(int level) {
 		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
-		Spells[] array = wizardSpells[level];
+		Spells[] array = WIZARD_SPELLS[level];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
@@ -656,7 +722,7 @@ public enum Spells {
 		List<Spells> list = new ArrayList<Spells>();
 
 		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
-		List<Spells> spells = new ArrayList<Spells>(Arrays.asList(wizardSpells[level]));
+		List<Spells> spells = new ArrayList<Spells>(Arrays.asList(WIZARD_SPELLS[level]));
 		for (Spells el : spells) {
 			if (el.getSchool().equals(school))
 				list.add(el);
@@ -676,7 +742,7 @@ public enum Spells {
 		Spells[] array;
 		for (int i = 1; i <= bookLevel; ++i) {
 			spellLevel = ((i - 1) / 2 + 1 > 9) ? 9 : ((i - 1) / 2 + 1 < 1) ? 1 : (i - 1) / 2 + 1;
-			array = wizardSpells[spellLevel];
+			array = WIZARD_SPELLS[spellLevel];
 
 			for (int j = 0; j < ((i == 1) ? 6 : 2); ++j) {
 				candidate = array[Dice.roll(array.length) - 1];

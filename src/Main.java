@@ -9,12 +9,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-//		for (int i = 1; i < 20; ++i) {
-//			System.out.println(Spells.filterSpellsBySchool(Spells.School.TRANSMUTATION, i));
-//			System.out.println();
-//		}
-		
-		spellbookTest();
+		characterAdvance(Class.BARD);
 		
 		// Weapon[] weapons = Weapon.handsDescendingArray();
 		// for (Weapon el : weapons)
@@ -35,12 +30,12 @@ public class Main {
 		// }
 	}
 
-	public static void spellbookTest() {
+	public static void characterAdvance(Class job) {
 		Actor test = new Actor();
-		while (test.getJob().equals(Class.WIZARD) != true) {
+		while (test.getJob().equals(job) != true) {
 			test = new Actor();
 		}
-		
+
 		rollCharacter(test);
 		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
 
@@ -48,8 +43,24 @@ public class Main {
 			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
 			test.advance();
 			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
-//			rollCharacter(test);
-			System.out.println(Spells.spellbookUpdate(test).toString());
+			rollCharacter(test);
+		}
+	}
+
+	public static void spellbookTest() {
+		Actor test = new Actor();
+		while (test.getJob().equals(Class.WIZARD) != true) {
+			test = new Actor();
+		}
+
+		rollCharacter(test);
+		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
+
+		for (int i = 0; test.getLevel() < 20 && i < 50; ++i) {
+			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
+			test.advance();
+			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
+			rollCharacter(test);
 		}
 	}
 
@@ -265,6 +276,9 @@ public class Main {
 			}
 		}
 
+		// TODO - used below
+		Spellcasting spellcasting = actor.getSpellcasting();
+
 		System.out.println("");
 		System.out.print(actor.getAbilities().toString());
 		// System.out.println("");
@@ -273,6 +287,12 @@ public class Main {
 		// System.out.print(actor.getSkills().toString());
 		System.out.println("");
 		System.out.print(actor.getFeatures().toString());
+		if (spellcasting != null) {
+			System.out.println("");
+			System.out.println("Spells known: " + spellcasting.getSpellsKnown().size());
+			System.out.println(spellcasting.getSpellsKnown().toString());
+		}
+
 		System.out.println("");
 		System.out.println("");
 

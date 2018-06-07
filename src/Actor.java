@@ -60,6 +60,7 @@ public class Actor {
 		// JOB requires ability array
 		job = Class.selectClass(this);
 		archetype = Class.Subclass.selectSubclass(this);
+		spellcasting = new Spellcasting(this);
 
 		// RACE is chosen specifically after JOB
 		race = Race.selectRace();
@@ -118,6 +119,7 @@ public class Actor {
 
 		if (advanced) {
 			features.addAll(Feature.getClassFeatures(this));
+			spellcasting.update();
 			abilities.updateScores();
 
 			combat.update();
@@ -249,6 +251,10 @@ public class Actor {
 
 	public Class.Subclass getArchetype() {
 		return archetype;
+	}
+
+	public Spellcasting getSpellcasting() {
+		return spellcasting;
 	}
 
 	public Race getRace() {
