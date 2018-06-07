@@ -594,7 +594,7 @@ public enum Spells {
 		else if (dice == 2)
 			spellsKnown.add(THUNDERWAVE);
 
-		while (spellsKnown.size() < BARD_KNOWN[level]) {
+		while (spellsKnown.size() < BARD_KNOWN[0]) {
 			spellsKnown.add(randomBardSpell(level));
 		}
 
@@ -607,7 +607,7 @@ public enum Spells {
 		Spellcasting spellcasting = actor.getSpellcasting();
 		HashSet<Spells> spellsKnown = spellcasting.getSpellsKnown();
 
-		while (spellsKnown.size() < BARD_KNOWN[level]) {
+		while (spellsKnown.size() < BARD_KNOWN[level - 1]) {
 			spellsKnown.add(randomBardSpell(level));
 		}
 
