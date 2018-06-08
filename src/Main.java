@@ -10,7 +10,7 @@ public class Main {
 		// TODO
 
 		characterAdvance(Class.BARD);
-		
+
 		// Weapon[] weapons = Weapon.handsDescendingArray();
 		// for (Weapon el : weapons)
 		// System.out.println(el.toString());
@@ -278,13 +278,14 @@ public class Main {
 
 		// TODO - used below
 		Spellcasting spellcasting = actor.getSpellcasting();
+		// HashSet<Proficiency> skills = Skills.filterForSkills(actor);
 
 		System.out.println("");
 		System.out.print(actor.getAbilities().toString());
 		// System.out.println("");
 		// System.out.print(actor.getInventory().toString());
-		// System.out.println("");
-		// System.out.print(actor.getSkills().toString());
+		System.out.println("");
+		System.out.print(actor.getSkills().toString());
 		System.out.println("");
 		System.out.print(actor.getFeatures().toString());
 		if (spellcasting != null) {

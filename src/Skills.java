@@ -18,7 +18,9 @@
 //	STEALTH(Ability.DEXTERITY),
 //	SURVIVAL(Ability.WISDOM);
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 public enum Skills implements Proficiency {
@@ -57,6 +59,21 @@ public enum Skills implements Proficiency {
 	}
 
 	// static methods
+	public static Proficiency randomSkill(Actor actor) {
+		HashSet<Proficiency> actorSkills = actor.getSkills();
+		ArrayList<Skills> list = new ArrayList<Skills>(Arrays.asList(ALL_SKILLS));
+		Collections.shuffle(list);
+
+		Proficiency skill = list.get(0);
+		list.remove(0);
+		while (actorSkills.contains(skill)) {
+			skill = list.get(0);
+			list.remove(0);
+		}
+		
+		return skill;
+	}
+	
 	public static HashSet<Proficiency> getProficiency(Class job) {
 		HashSet<Proficiency> list = new HashSet<Proficiency>();
 

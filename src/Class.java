@@ -22,7 +22,7 @@
 
 public enum Class {
 	BARBARIAN(Ability.STRENGTH, 12, 2),
-	BARD(Ability.CHARISMA, 8, 3),
+	BARD(Ability.INTELLIGENCE, 8, 3),
 	CLERIC(Ability.WISDOM, 8, 2),
 	DRUID(Ability.WISDOM, 8, 2),
 	FIGHTER(Ability.STRENGTH, 10, 2),
