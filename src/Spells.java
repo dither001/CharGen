@@ -572,6 +572,38 @@ public enum Spells {
 	}
 
 	// static methods
+	public static void bardCantripSetup(Actor actor) {
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+		
+		int dice = Dice.roll(3);
+		if (dice == 1)
+			toAdd.add(VICIOUS_MOCKERY);
+
+		dice = Dice.roll(6);
+		if (dice == 1)
+			toAdd.add(DANCING_LIGHTS);
+		else if (dice == 2)
+			toAdd.add(MAGE_HAND);
+		else if (dice == 3)
+			toAdd.add(MESSAGE);
+		else if (dice == 4)
+			toAdd.add(MINOR_ILLUSION);
+		else if (dice == 5)
+			toAdd.add(PRESTIDIGITATION);
+
+	}
+
+	private static void bardCantripHelper(Actor actor) {
+		HashSet<Spells> cantrips = actor.getCantrips().getSpellsKnown();
+		Spells[] array = BARD_SPELLS[0];
+
+		Spells candidate = array[Dice.roll(array.length) - 1];
+		while (cantrips.contains(candidate)) {
+			candidate = array[Dice.roll(array.length) - 1];
+		}
+		
+	}
+
 	public static HashSet<Spells> bardSetup(Actor actor) {
 		int level = actor.getLevel();
 		HashSet<Spells> spellsKnown = new HashSet<Spells>();

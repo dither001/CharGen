@@ -36,29 +36,44 @@ public class Spellcasting {
 	private Actor owner;
 	private Class job;
 	private Class.Subclass archetype;
+	private boolean cantrips;
 	private int[] spellSlots;
 	private HashSet<Spells> spellsKnown;
 
 	// constructors
 	public Spellcasting(Actor actor) {
+		this(actor, false);
+	}
+	
+	public Spellcasting(Actor actor, boolean cantrips) {
 		this.owner = actor;
 		this.job = actor.getJob();
 		this.archetype = actor.getArchetype();
+		this.cantrips = cantrips;
 
-		int level = actor.getLevel();
-		this.spellSlots = getSpellSlots(actor, level);
-		
-		if (job.equals(Class.BARD))
-			spellsKnown = Spells.bardSetup(owner);
-		else if (job.equals(Class.WIZARD))
-			spellsKnown = Spells.spellbookSetup(owner);
+		spellsKnown = new HashSet<Spells>();
+		if (cantrips) {
+			
+		} else {
+			int level = actor.getLevel();
+			this.spellSlots = getSpellSlots(actor, level);
+			
+			if (job.equals(Class.BARD))
+				spellsKnown = Spells.bardSetup(owner);
+			else if (job.equals(Class.WIZARD))
+				spellsKnown = Spells.spellbookSetup(owner);
 
-//		else if (job.equals(Class.SORCERER))
-//			
-//		else if (job.equals(Class.WARLOCK))
+//			else if (job.equals(Class.SORCERER))
+//				
+//			else if (job.equals(Class.WARLOCK))
+		}
 	}
 
 	// methods
+	public boolean hasSpells() {
+		return spellsKnown.size() > 0;
+	}
+	
 	public void update() {
 		if (job.equals(Class.BARD)) {
 			spellsKnown = Spells.bardUpdate(owner);

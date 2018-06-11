@@ -11,6 +11,10 @@ public class Main {
 
 		characterAdvance(Class.BARD);
 
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// rollCharacter();
+		// }
+
 		// Weapon[] weapons = Weapon.handsDescendingArray();
 		// for (Weapon el : weapons)
 		// System.out.println(el.toString());
@@ -25,9 +29,6 @@ public class Main {
 		// rollOneSpellbook(7);
 		// }
 
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollCharacter();
-		// }
 	}
 
 	public static void characterAdvance(Class job) {
@@ -289,9 +290,11 @@ public class Main {
 		System.out.println("");
 		System.out.print(actor.getFeatures().toString());
 		if (spellcasting != null) {
-			System.out.println("");
-			System.out.println("Spells known: " + spellcasting.getSpellsKnown().size());
-			System.out.println(spellcasting.getSpellsKnown().toString());
+			if (spellcasting.hasSpells()) {
+				System.out.println("");
+				System.out.println("Spells known: " + spellcasting.getSpellsKnown().size());
+				System.out.println(spellcasting.getSpellsKnown().toString());
+			}
 		}
 
 		System.out.println("");

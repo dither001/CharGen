@@ -15,6 +15,7 @@ public class Actor {
 	private Alignment ali;
 	private Class job;
 	private Class.Subclass archetype;
+	private Spellcasting cantrips;
 	private Spellcasting spellcasting;
 
 	private Race race;
@@ -251,6 +252,10 @@ public class Actor {
 
 	public Class.Subclass getArchetype() {
 		return archetype;
+	}
+
+	public Spellcasting getCantrips() {
+		return cantrips;
 	}
 
 	public Spellcasting getSpellcasting() {
