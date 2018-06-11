@@ -572,10 +572,9 @@ public enum Spells {
 	}
 
 	// static methods
-	public static void bardCantripSetup(Actor actor) {
+	public static HashSet<Spells> bardCantripSetup(Actor actor) {
 		HashSet<Spells> toAdd = new HashSet<Spells>();
-		
-		int dice = Dice.roll(3);
+		int dice = Dice.roll(2);
 		if (dice == 1)
 			toAdd.add(VICIOUS_MOCKERY);
 
@@ -591,17 +590,117 @@ public enum Spells {
 		else if (dice == 5)
 			toAdd.add(PRESTIDIGITATION);
 
+		while (toAdd.size() < 2) {
+			toAdd.add(randomBardCantrip());
+		}
+
+		return toAdd;
 	}
 
-	private static void bardCantripHelper(Actor actor) {
-		HashSet<Spells> cantrips = actor.getCantrips().getSpellsKnown();
-		Spells[] array = BARD_SPELLS[0];
+	public static HashSet<Spells> clericCantripSetup(Actor actor) {
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+		int dice = Dice.roll(2);
+		if (dice == 1)
+			toAdd.add(SACRED_FLAME);
 
-		Spells candidate = array[Dice.roll(array.length) - 1];
-		while (cantrips.contains(candidate)) {
-			candidate = array[Dice.roll(array.length) - 1];
+		dice = Dice.roll(3);
+		if (dice == 1)
+			toAdd.add(THAUMATURGY);
+
+		while (toAdd.size() < 3) {
+			toAdd.add(randomClericCantrip());
 		}
-		
+
+		return toAdd;
+	}
+
+	public static HashSet<Spells> druidCantripSetup(Actor actor) {
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+		int dice = Dice.roll(5);
+		if (dice == 1)
+			toAdd.add(POISON_SPRAY);
+		else if (dice == 2)
+			toAdd.add(PRODUCE_FLAME);
+		else if (dice == 3)
+			toAdd.add(SHILLELAGH);
+		else if (dice == 4)
+			toAdd.add(THORN_WHIP);
+
+		dice = Dice.roll(3);
+		if (dice == 1)
+			toAdd.add(DRUIDCRAFT);
+
+		while (toAdd.size() < 3) {
+			toAdd.add(randomDruidCantrip());
+		}
+
+		return toAdd;
+	}
+
+	public static HashSet<Spells> sorcererCantripSetup(Actor actor) {
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+		int dice = Dice.roll(6);
+		if (dice == 1)
+			toAdd.add(ACID_SPLASH);
+		else if (dice == 2)
+			toAdd.add(CHILL_TOUCH);
+		else if (dice == 3)
+			toAdd.add(FIREBOLT);
+		else if (dice == 4)
+			toAdd.add(POISON_SPRAY);
+		else if (dice == 5)
+			toAdd.add(RAY_OF_FROST);
+		else if (dice == 6)
+			toAdd.add(SHOCKING_GRASP);
+
+		while (toAdd.size() < 4) {
+			toAdd.add(randomSorcererCantrip());
+		}
+
+		return toAdd;
+	}
+
+	public static HashSet<Spells> warlockCantripSetup(Actor actor) {
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+		int dice = Dice.roll(5);
+		if (dice < 5)
+			toAdd.add(ELDRITCH_BLAST);
+
+		while (toAdd.size() < 2) {
+			toAdd.add(randomWarlockCantrip());
+		}
+
+		return toAdd;
+	}
+
+	public static HashSet<Spells> wizardCantripSetup(Actor actor) {
+//		{ ACID_SPLASH, BLADE_WARD, CHILL_TOUCH, DANCING_LIGHTS, FIREBOLT, FRIENDS, LIGHT, MAGE_HAND, MENDING,
+//			MESSAGE, MINOR_ILLUSION, POISON_SPRAY, PRESTIDIGITATION, RAY_OF_FROST, SHOCKING_GRASP,
+//			TRUE_STRIKE },
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+		int dice = Dice.roll(6);
+		if (dice == 1)
+			toAdd.add(ACID_SPLASH);
+		else if (dice == 2)
+			toAdd.add(CHILL_TOUCH);
+		else if (dice == 3)
+			toAdd.add(FIREBOLT);
+		else if (dice == 4)
+			toAdd.add(POISON_SPRAY);
+		else if (dice == 5)
+			toAdd.add(RAY_OF_FROST);
+		else if (dice == 6)
+			toAdd.add(SHOCKING_GRASP);
+
+		dice = Dice.roll(3);
+		if (dice == 1)
+			toAdd.add(PRESTIDIGITATION);
+
+		while (toAdd.size() < 3) {
+			toAdd.add(randomWizardCantrip());
+		}
+
+		return toAdd;
 	}
 
 	public static HashSet<Spells> bardSetup(Actor actor) {
@@ -734,9 +833,51 @@ public enum Spells {
 		return spellbook;
 	}
 
+	public static Spells randomBardCantrip() {
+		Spells[] array = BARD_SPELLS[0];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
 	public static Spells randomBardSpell(int level) {
 		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
 		Spells[] array = BARD_SPELLS[level];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
+	public static Spells randomClericCantrip() {
+		Spells[] array = CLERIC_SPELLS[0];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
+	public static Spells randomDruidCantrip() {
+		Spells[] array = DRUID_SPELLS[0];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
+	public static Spells randomSorcererCantrip() {
+		Spells[] array = SORCERER_SPELLS[0];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
+	public static Spells randomWarlockCantrip() {
+		Spells[] array = WARLOCK_SPELLS[0];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
+	public static Spells randomWizardCantrip() {
+		Spells[] array = WIZARD_SPELLS[0];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];

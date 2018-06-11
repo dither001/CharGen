@@ -15,7 +15,6 @@ public class Actor {
 	private Alignment ali;
 	private Class job;
 	private Class.Subclass archetype;
-	private Spellcasting cantrips;
 	private Spellcasting spellcasting;
 
 	private Race race;
@@ -61,7 +60,6 @@ public class Actor {
 		// JOB requires ability array
 		job = Class.selectClass(this);
 		archetype = Class.Subclass.selectSubclass(this);
-		spellcasting = new Spellcasting(this);
 
 		// RACE is chosen specifically after JOB
 		race = Race.selectRace();
@@ -89,6 +87,9 @@ public class Actor {
 
 		// race & class features (requires level)
 		features.addAll(Feature.getClassFeatures(this));
+
+		// spell selection requires race & class features
+		spellcasting = new Spellcasting(this);
 
 		// initialize inventory, equip gear
 		inventory = new Inventory();
@@ -254,8 +255,8 @@ public class Actor {
 		return archetype;
 	}
 
-	public Spellcasting getCantrips() {
-		return cantrips;
+	public HashSet<Spells> getCantrips() {
+		return spellcasting.getCantrips();
 	}
 
 	public Spellcasting getSpellcasting() {

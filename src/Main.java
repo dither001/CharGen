@@ -9,11 +9,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		characterAdvance(Class.BARD);
-
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollCharacter();
-		// }
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			rollCharacter(Class.WARLOCK);
+		}
 
 		// Weapon[] weapons = Weapon.handsDescendingArray();
 		// for (Weapon el : weapons)
@@ -204,6 +202,15 @@ public class Main {
 		rollCharacter(new Actor());
 	}
 
+	public static void rollCharacter(Class job) {
+		Actor test = new Actor();
+		while (test.getJob().equals(job) != true) {
+			test = new Actor();
+		}
+
+		rollCharacter(test);
+	}
+
 	public static void rollCharacter(Actor actor) {
 		int ac = actor.getArmorClass(), hp = actor.getHitPoints();
 		int atk = actor.getAttackBonus(), dmg = actor.getAverageDamage();
@@ -294,6 +301,11 @@ public class Main {
 				System.out.println("");
 				System.out.println("Spells known: " + spellcasting.getSpellsKnown().size());
 				System.out.println(spellcasting.getSpellsKnown().toString());
+			}
+			if (actor.getJob().equals(Class.BARD) || actor.getJob().equals(Class.CLERIC)
+					|| actor.getJob().equals(Class.DRUID) || actor.getJob().equals(Class.SORCERER)
+					|| actor.getJob().equals(Class.WARLOCK) || actor.getJob().equals(Class.WIZARD)) {
+				System.out.println(actor.getCantrips().toString());
 			}
 		}
 
