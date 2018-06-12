@@ -574,7 +574,7 @@ public enum Spells {
 	// static methods
 	public static HashSet<Spells> bardCantripSetup(Actor actor) {
 		HashSet<Spells> toAdd = new HashSet<Spells>();
-		int dice = Dice.roll(2);
+		int dice = Dice.roll(3);
 		if (dice == 1)
 			toAdd.add(VICIOUS_MOCKERY);
 
@@ -637,6 +637,39 @@ public enum Spells {
 		return toAdd;
 	}
 
+	public static HashSet<Spells> fighterCantripSetup(Actor actor) {
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+
+		if (actor.getAbilities().getINT() > 11) {
+			while (toAdd.size() < 3)
+				toAdd.add(randomWizardCantrip());
+		} else {
+			// this is to prevent a "stupid" PC from choosing attack spells
+			while (toAdd.size() < 3)
+				toAdd.add(wizardUtilityCantrip());
+		}
+
+		return toAdd;
+	}
+
+	public static HashSet<Spells> rogueCantripSetup(Actor actor) {
+		HashSet<Spells> toAdd = new HashSet<Spells>();
+
+		// every ARCANE TRICKSTER learns mage hand
+		toAdd.add(MAGE_HAND);
+
+		if (actor.getAbilities().getINT() > 11) {
+			while (toAdd.size() < 3)
+				toAdd.add(randomWizardCantrip());
+		} else {
+			// this is to prevent a "stupid" PC from choosing attack spells
+			while (toAdd.size() < 3)
+				toAdd.add(wizardUtilityCantrip());
+		}
+
+		return toAdd;
+	}
+
 	public static HashSet<Spells> sorcererCantripSetup(Actor actor) {
 		HashSet<Spells> toAdd = new HashSet<Spells>();
 		int dice = Dice.roll(6);
@@ -674,9 +707,6 @@ public enum Spells {
 	}
 
 	public static HashSet<Spells> wizardCantripSetup(Actor actor) {
-//		{ ACID_SPLASH, BLADE_WARD, CHILL_TOUCH, DANCING_LIGHTS, FIREBOLT, FRIENDS, LIGHT, MAGE_HAND, MENDING,
-//			MESSAGE, MINOR_ILLUSION, POISON_SPRAY, PRESTIDIGITATION, RAY_OF_FROST, SHOCKING_GRASP,
-//			TRUE_STRIKE },
 		HashSet<Spells> toAdd = new HashSet<Spells>();
 		int dice = Dice.roll(6);
 		if (dice == 1)
@@ -878,6 +908,13 @@ public enum Spells {
 
 	public static Spells randomWizardCantrip() {
 		Spells[] array = WIZARD_SPELLS[0];
+		int dice = Dice.roll(array.length) - 1;
+
+		return array[dice];
+	}
+
+	public static Spells wizardUtilityCantrip() {
+		Spells[] array = { BLADE_WARD, DANCING_LIGHTS, FRIENDS, LIGHT, MAGE_HAND, MENDING, MESSAGE, MINOR_ILLUSION, PRESTIDIGITATION, TRUE_STRIKE };
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];

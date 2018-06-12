@@ -59,26 +59,51 @@ public class Spellcasting {
 		this.owner = actor;
 		this.job = actor.getJob();
 		this.archetype = actor.getArchetype();
+
 		int level = actor.getLevel();
 		this.spellSlots = getSpellSlots(actor, level);
+		// TODO - need spells known for EACH class
+		this.spellsKnown = new HashSet<Spells>();
 
-		spellsKnown = new HashSet<Spells>();
+		// begin class spell setup
 		if (job.equals(Class.BARD)) {
 			spellsKnown = Spells.bardSetup(owner);
 			bardCantrips = Spells.bardCantripSetup(owner);
-		} else if (job.equals(Class.CLERIC)) {
+		}
+
+		if (job.equals(Class.CLERIC)) {
 			// TODO
 			clericCantrips = Spells.clericCantripSetup(owner);
-		} else if (job.equals(Class.DRUID)) {
+		}
+
+		if (job.equals(Class.DRUID)) {
 			// TODO
 			druidCantrips = Spells.druidCantripSetup(owner);
-		} else if (job.equals(Class.SORCERER)) {
+		}
+
+		if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+			// TODO - no spells or cantrips until 3rd level!
+			fighterCantrips = new HashSet<Spells>();
+			// fighterCantrips = Spells.fighterCantripSetup(owner);
+		}
+
+		if (archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
+			// TODO - no spells or cantrips until 3rd level! 
+			// TODO
+			rogueCantrips = Spells.rogueCantripSetup(owner);
+		}
+
+		if (job.equals(Class.SORCERER)) {
 			// TODO
 			sorcererCantrips = Spells.sorcererCantripSetup(owner);
-		} else if (job.equals(Class.WARLOCK)) {
+		}
+
+		if (job.equals(Class.WARLOCK)) {
 			// TODO
 			warlockCantrips = Spells.warlockCantripSetup(owner);
-		} else if (job.equals(Class.WIZARD)) {
+		}
+
+		if (job.equals(Class.WIZARD)) {
 			// TODO - needs cantrips
 			spellsKnown = Spells.spellbookSetup(owner);
 			wizardCantrips = Spells.wizardCantripSetup(owner);
