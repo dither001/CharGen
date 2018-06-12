@@ -11,7 +11,8 @@ public class Main {
 
 		for (int i = 0; i < PCS_TO_ROLL; ++i) {
 //			rollCharacter(Class.ROGUE);
-			rollArcaneTrickster();
+//			rollArcaneTrickster();
+			rollCharacter();
 		}
 
 		// Weapon[] weapons = Weapon.handsDescendingArray();
@@ -321,11 +322,8 @@ public class Main {
 				System.out.println("Spells known: " + spellcasting.getSpellsKnown().size());
 				System.out.println(spellcasting.getSpellsKnown().toString());
 			}
-			System.out.println(actor.getCantrips().toString());
-//			if (actor.getJob().equals(Class.BARD) || actor.getJob().equals(Class.CLERIC)
-//					|| actor.getJob().equals(Class.DRUID) || actor.getJob().equals(Class.SORCERER)
-//					|| actor.getJob().equals(Class.WARLOCK) || actor.getJob().equals(Class.WIZARD)) {
-//			}
+			if (spellcasting.hasCantrips())
+				System.out.println(actor.getCantrips().toString());
 		}
 
 		System.out.println("");

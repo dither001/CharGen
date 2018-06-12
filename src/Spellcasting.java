@@ -89,8 +89,8 @@ public class Spellcasting {
 
 		if (archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
 			// TODO - no spells or cantrips until 3rd level! 
-			// TODO
-			rogueCantrips = Spells.rogueCantripSetup(owner);
+			rogueCantrips = new HashSet<Spells>();
+//			rogueCantrips = Spells.rogueCantripSetup(owner);
 		}
 
 		if (job.equals(Class.SORCERER)) {
@@ -114,6 +114,36 @@ public class Spellcasting {
 	// methods
 	public boolean hasSpells() {
 		return spellsKnown.size() > 0;
+	}
+
+	public boolean hasCantrips() {
+		boolean hasCantrips = false;
+
+		if (bardCantrips != null && bardCantrips.size() > 0)
+			hasCantrips = true;
+
+		if (clericCantrips != null && clericCantrips.size() > 0)
+			hasCantrips = true;
+
+		if (druidCantrips != null && druidCantrips.size() > 0)
+			hasCantrips = true;
+
+		if (fighterCantrips != null && fighterCantrips.size() > 0)
+			hasCantrips = true;
+
+		if (rogueCantrips != null && rogueCantrips.size() > 0)
+			hasCantrips = true;
+
+		if (sorcererCantrips != null && sorcererCantrips.size() > 0)
+			hasCantrips = true;
+
+		if (warlockCantrips != null && warlockCantrips.size() > 0)
+			hasCantrips = true;
+
+		if (wizardCantrips != null && wizardCantrips.size() > 0)
+			hasCantrips = true;
+
+		return hasCantrips;
 	}
 
 	public void update() {
