@@ -4,6 +4,7 @@ bin/
 .settings/
 .project
 
+src/Crew.java
 src/ReadCSV.java
 src/Tesseract.java
 
