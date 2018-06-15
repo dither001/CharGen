@@ -4,9 +4,7 @@ bin/
 .settings/
 .project
 
-src/Crew.java
 src/ReadCSV.java
-src/Score.java
 src/Tesseract.java
 
 # Compiled class file
