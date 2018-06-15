@@ -21,8 +21,16 @@ public class Score {
 		EXTREME, GREAT, STANDARD, LIMITED, ZERO
 	}
 
-	private enum Act {
+	public enum Act {
 		INCITING, RISING, TURNING, FALLING, RELEASE
+	}
+
+	public enum Result {
+		CRITICAL, SUCCESS, PARTIAL, FAILURE
+	}
+
+	public enum Claim {
+		LAIR, TURF_1, TURF_2, TURF_3, TURF_4, TRAINING_ROOMS, VICE_DEN, FIXER, INFORMANTS, HAGFISH_FARM, VICTIM_TROPHIES, COVER_OPERATION, PROTECTION_RACKET, INFIRMARY, ENVOY, COVER_IDENTITIES_A, CITY_RECORDS, BARRACKS, TERRORIZED_CITIZENS, FIGHTING_PITS, BLUECOAT_INTIMIDATION, STREET_FENCE, WAREHOUSES, BLUECOAT_CONFEDERATES, CLOISTER, OFFERTORY, ANCIENT_OBELISK, ANCIENT_TOWER, SPIRIT_WELL, ANCIENT_GATE, SANCTUARY, SACRED_NEXUS, ANCIENT_ALTAR, PERSONAL_CLOTHIER, LOCAL_GRAFT, LOOKOUTS, LUXURY_VENUE, FOREIGN_MARKET, SURPLUS_CACHES, COVER_IDENTITIES_B, INTERROGATION_CHAMBER, GAMBLING_DEN, LOYAL_FENCE, TAVERN, DRUG_DEN, COVERT_DROPS, SECRET_PATHWAYS, SIDE_BUSINESS, LUXURY_FENCE, SECRET_ROUTES, FLEET
 	}
 
 	// static fields
@@ -66,6 +74,27 @@ public class Score {
 			Effect.LIMITED, Effect.LIMITED };
 	private static final Effect[] FALLING_EFFECTS = { Effect.EXTREME, Effect.GREAT, Effect.GREAT, Effect.STANDARD,
 			Effect.STANDARD };
+
+	static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
+			Claim.VICE_DEN, Claim.FIXER, Claim.INFORMANTS, Claim.HAGFISH_FARM, Claim.VICTIM_TROPHIES,
+			Claim.COVER_OPERATION, Claim.PROTECTION_RACKET, Claim.INFIRMARY, Claim.ENVOY, Claim.COVER_IDENTITIES_A,
+			Claim.CITY_RECORDS };
+	static final Claim[] BRAVO_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.INFORMANTS, Claim.INFIRMARY, Claim.PROTECTION_RACKET, Claim.BARRACKS, Claim.TERRORIZED_CITIZENS,
+			Claim.FIGHTING_PITS, Claim.BLUECOAT_INTIMIDATION, Claim.STREET_FENCE, Claim.WAREHOUSES,
+			Claim.BLUECOAT_CONFEDERATES };
+	static final Claim[] CULT_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.VICE_DEN, Claim.CLOISTER, Claim.OFFERTORY, Claim.ANCIENT_OBELISK, Claim.ANCIENT_TOWER,
+			Claim.SPIRIT_WELL, Claim.ANCIENT_GATE, Claim.SANCTUARY, Claim.SACRED_NEXUS, Claim.ANCIENT_ALTAR };
+	static final Claim[] HAWKER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.INFORMANTS, Claim.VICE_DEN, Claim.COVER_OPERATION, Claim.PERSONAL_CLOTHIER, Claim.LOCAL_GRAFT,
+			Claim.LOOKOUTS, Claim.LUXURY_VENUE, Claim.FOREIGN_MARKET, Claim.SURPLUS_CACHES, Claim.COVER_IDENTITIES_B };
+	static final Claim[] SHADOW_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.GAMBLING_DEN,
+			Claim.INFORMANTS, Claim.LOOKOUTS, Claim.HAGFISH_FARM, Claim.INFIRMARY, Claim.INTERROGATION_CHAMBER,
+			Claim.LOYAL_FENCE, Claim.TAVERN, Claim.DRUG_DEN, Claim.COVERT_DROPS, Claim.SECRET_PATHWAYS };
+	static final Claim[] SMUGGLER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.VICE_DEN, Claim.TAVERN, Claim.ANCIENT_GATE, Claim.INFORMANTS, Claim.COVER_OPERATION, Claim.WAREHOUSES,
+			Claim.SIDE_BUSINESS, Claim.LUXURY_FENCE, Claim.SECRET_ROUTES, Claim.FLEET };
 
 	// fields
 	private Plan plan;
@@ -307,6 +336,9 @@ public class Score {
 		Position position;
 		Effect effect;
 
+		//
+		Result result;
+
 		// constructors
 		public Action() {
 			this(randomAct(), randomApproach(), randomPosition(), randomEffect());
@@ -340,17 +372,17 @@ public class Score {
 
 			if (results[5] > 1) {
 				// TODO - critical
-				System.out.println("Critical success.");
+				result = Result.CRITICAL;
 				this.improveEffect();
 			} else if (results[5] > 0) {
 				// TODO - success
-				System.out.println("Success.");
+				result = Result.SUCCESS;
 			} else if (results[3] > 0 || results[4] > 0) {
 				// partial success
-				System.out.println("Partial success.");
+				result = Result.PARTIAL;
 			} else {
 				// failure
-				System.out.println("Failure.");
+				result = Result.FAILURE;
 			}
 		}
 
@@ -385,7 +417,7 @@ public class Score {
 
 		@Override
 		public String toString() {
-			String string = String.format("Scene %2d: %s check", scene, approach.toString());
+			String string = String.format("Scene %2d: %s check -%s", scene, approach, result);
 			return string;
 		}
 	}

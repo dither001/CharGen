@@ -1,4 +1,5 @@
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ public class Crew {
 
 	//
 	private String lair;
+	private EnumSet<Score.Claim> claims;
 
 	/*
 	 * Hunting grounds provide +1d6 gather information and a free downtime
@@ -46,6 +48,10 @@ public class Crew {
 		//
 		this.rep = new HashSet<Rep>();
 		rep.add(randomReputation());
+
+		//
+		claims = EnumSet.noneOf(Score.Claim.class);
+		claims.add(Score.Claim.LAIR);
 
 		//
 		this.huntingGroundSize = 1;

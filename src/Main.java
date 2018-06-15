@@ -10,7 +10,8 @@ public class Main {
 		// TODO
 
 		rollScore();
-
+		
+		
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// scoresByLength();
 		// System.out.println();
@@ -212,6 +213,7 @@ public class Main {
 	}
 
 	public static void rollScore(Crew crew) {
+		System.out.println(crew.toString());
 		Score score = new Score(crew.getCrewType());
 		System.out.println(score.toString());
 		score.action();
