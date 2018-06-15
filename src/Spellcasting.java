@@ -3,6 +3,7 @@
  * TODO - I realized that I could create a MAP of spells known by class (e.g. HashMap<Class, HashSet<Spells>>) -- I totally need to do this in a future update or refactor because it's just... so much better.
  */
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Spellcasting {
@@ -42,7 +43,8 @@ public class Spellcasting {
 	private Class job;
 	private Class.Subclass archetype;
 	private int[] spellSlots;
-	private HashSet<Spells> spellsKnown;
+	private HashMap<Class, HashSet<Spells>> spellsKnown;
+	private HashSet<Spells> tempKnown;
 
 	// cantrips
 	private HashSet<Spells> bardCantrips = null;
@@ -56,6 +58,7 @@ public class Spellcasting {
 
 	// constructors
 	public Spellcasting(Actor actor) {
+		this.spellsKnown = new HashMap<Class, HashSet<Spells>>();
 		this.owner = actor;
 		this.job = actor.getJob();
 		this.archetype = actor.getArchetype();
@@ -63,11 +66,11 @@ public class Spellcasting {
 		int level = actor.getLevel();
 		this.spellSlots = getSpellSlots(actor, level);
 		// TODO - need spells known for EACH class
-		this.spellsKnown = new HashSet<Spells>();
+		this.tempKnown = new HashSet<Spells>();
 
 		// begin class spell setup
 		if (job.equals(Class.BARD)) {
-			spellsKnown = Spells.bardSetup(owner);
+			tempKnown = Spells.bardSetup(owner);
 			bardCantrips = Spells.bardCantripSetup(owner);
 		}
 
@@ -88,9 +91,9 @@ public class Spellcasting {
 		}
 
 		if (archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
-			// TODO - no spells or cantrips until 3rd level! 
+			// TODO - no spells or cantrips until 3rd level!
 			rogueCantrips = new HashSet<Spells>();
-//			rogueCantrips = Spells.rogueCantripSetup(owner);
+			// rogueCantrips = Spells.rogueCantripSetup(owner);
 		}
 
 		if (job.equals(Class.SORCERER)) {
@@ -105,15 +108,31 @@ public class Spellcasting {
 
 		if (job.equals(Class.WIZARD)) {
 			// TODO - needs cantrips
-			spellsKnown = Spells.spellbookSetup(owner);
+			tempKnown = Spells.spellbookSetup(owner);
 			wizardCantrips = Spells.wizardCantripSetup(owner);
 		}
 
+		/*
+		 * FIXME - REQUIRES "VERIFY SPELL SELECTION" method since I don't
+		 * currently support a HashMap <Class, SpellsKnown> I need to make
+		 * sure that I have a "verify the character has the correct number of
+		 * spells / cantrips" method that creates as little overlap as
+		 * possible between their spell lists
+		 */
+
+		/*
+		 * FIXME - REQUIRES "ADD NEW CANTRIP" methods each class initializes
+		 * new cantrips upon character creation, but has no way to add cantrips
+		 * as they advance in level; this MUST BE CORRECTED by checking against
+		 * the race/class features they've gained and adding new ones; likely
+		 * EVERY time a new spell is added, I will have to run my "verify spell
+		 * selection" method()
+		 */
 	}
 
 	// methods
 	public boolean hasSpells() {
-		return spellsKnown.size() > 0;
+		return tempKnown.size() > 0;
 	}
 
 	public boolean hasCantrips() {
@@ -147,15 +166,19 @@ public class Spellcasting {
 	}
 
 	public void update() {
+		/*
+		 * TODO - if I ever implement multiclassing, this method will need to
+		 * check to make sure WHICH class leveled up before updating spells
+		 */
 		if (job.equals(Class.BARD)) {
-			spellsKnown = Spells.bardUpdate(owner);
+			tempKnown = Spells.bardUpdate(owner);
 		} else if (job.equals(Class.WIZARD)) {
-			spellsKnown = Spells.spellbookUpdate(owner);
+			tempKnown = Spells.spellbookUpdate(owner);
 		}
 	}
 
 	public HashSet<Spells> getSpellsKnown() {
-		return spellsKnown;
+		return tempKnown;
 	}
 
 	public HashSet<Spells> getCantrips() {

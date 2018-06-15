@@ -9,11 +9,12 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-//			rollCharacter(Class.ROGUE);
-//			rollArcaneTrickster();
-			rollCharacter();
-		}
+		rollScore();
+
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// scoresByLength();
+		// System.out.println();
+		// }
 
 		// Weapon[] weapons = Weapon.handsDescendingArray();
 		// for (Weapon el : weapons)
@@ -198,6 +199,62 @@ public class Main {
 		}
 
 		System.out.println();
+	}
+
+	public static void rollCrew() {
+		Crew crew = new Crew();
+		System.out.println(crew.toString());
+	}
+
+	public static void rollScore() {
+		Crew crew = new Crew();
+		rollScore(crew);
+	}
+
+	public static void rollScore(Crew crew) {
+		Score score = new Score(crew.getCrewType());
+		System.out.println(score.toString());
+		score.action();
+	}
+
+	public static void scoresByLength() {
+		double scoresToRoll = 1000;
+		int totalScenes = 0;
+		int[] scores = new int[50];
+
+		for (int i = 0; i < scores.length; ++i) {
+			scores[i] = 0;
+		}
+
+		for (int i = 0; i < scoresToRoll; ++i) {
+			++scores[simulateScore()];
+		}
+
+		String string = "";
+		for (int i = 1; i < scores.length; ++i) {
+			string = String.format("Actions (%2d): %4d (%6.1f%%)", i, scores[i], scores[i] / scoresToRoll * 100);
+			if (scores[i] > 0) {
+				totalScenes += scores[i];
+				System.out.println(string);
+			}
+		}
+
+		System.out.println("Total:        " + totalScenes);
+	}
+
+	public static int simulateScore() {
+		int finalScore;
+		Crew crew = new Crew();
+		System.out.println(crew.toString());
+		System.out.println();
+		Score score = new Score(crew.getCrewType());
+		while (score.unresolved()) {
+			score.advance();
+		}
+		finalScore = score.getScene();
+		// System.out.println("Scene count: " + finalScore);
+
+		return finalScore;
 	}
 
 	public static void rollCharacter() {
