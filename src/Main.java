@@ -1,15 +1,26 @@
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class Main {
 	private static int PCS_TO_ROLL = 50;
 	private static int SPELLBOOK_LEVEL = 17;
 
+	//
+	private static final Scanner INPUT = new Scanner(System.in);
+	private static int proceed = 1;
+
 	public static void main(String[] args) {
 		// TODO
 
-		rollScore();
+		while (proceed == 1) {
+			rollScore();
+			
+			proceed = INPUT.nextInt();
+			if (proceed != 0)
+				proceed = 1;
+		}
 		
 		
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
@@ -214,7 +225,7 @@ public class Main {
 
 	public static void rollScore(Crew crew) {
 		System.out.println(crew.toString());
-		Score score = new Score(crew.getCrewType());
+		Score score = new Score(crew);
 		System.out.println(score.toString());
 		score.action();
 	}
@@ -249,7 +260,7 @@ public class Main {
 		Crew crew = new Crew();
 		System.out.println(crew.toString());
 		System.out.println();
-		Score score = new Score(crew.getCrewType());
+		Score score = new Score(crew);
 		while (score.unresolved()) {
 			score.advance();
 		}

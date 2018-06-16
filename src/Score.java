@@ -34,7 +34,7 @@ public class Score {
 	}
 
 	// static fields
-	private static final int ACTIONS_PER_SCORE = 10;
+	private static final int ACTIONS_PER_SCORE = 20;
 
 	private static final Plan[] ALL_PLANS = { Plan.ASSAULT, Plan.DECEPTION, Plan.STEALTH, Plan.OCCULT, Plan.SOCIAL,
 			Plan.TRANSPORT };
@@ -75,48 +75,88 @@ public class Score {
 	private static final Effect[] FALLING_EFFECTS = { Effect.EXTREME, Effect.GREAT, Effect.GREAT, Effect.STANDARD,
 			Effect.STANDARD };
 
-	static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
+	// claims by crew type
+	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
 			Claim.VICE_DEN, Claim.FIXER, Claim.INFORMANTS, Claim.HAGFISH_FARM, Claim.VICTIM_TROPHIES,
 			Claim.COVER_OPERATION, Claim.PROTECTION_RACKET, Claim.INFIRMARY, Claim.ENVOY, Claim.COVER_IDENTITIES_A,
 			Claim.CITY_RECORDS };
-	static final Claim[] BRAVO_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+	private static final Claim[] BRAVO_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
 			Claim.INFORMANTS, Claim.INFIRMARY, Claim.PROTECTION_RACKET, Claim.BARRACKS, Claim.TERRORIZED_CITIZENS,
 			Claim.FIGHTING_PITS, Claim.BLUECOAT_INTIMIDATION, Claim.STREET_FENCE, Claim.WAREHOUSES,
 			Claim.BLUECOAT_CONFEDERATES };
-	static final Claim[] CULT_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+	private static final Claim[] CULT_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
 			Claim.VICE_DEN, Claim.CLOISTER, Claim.OFFERTORY, Claim.ANCIENT_OBELISK, Claim.ANCIENT_TOWER,
 			Claim.SPIRIT_WELL, Claim.ANCIENT_GATE, Claim.SANCTUARY, Claim.SACRED_NEXUS, Claim.ANCIENT_ALTAR };
-	static final Claim[] HAWKER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+	private static final Claim[] HAWKER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
 			Claim.INFORMANTS, Claim.VICE_DEN, Claim.COVER_OPERATION, Claim.PERSONAL_CLOTHIER, Claim.LOCAL_GRAFT,
 			Claim.LOOKOUTS, Claim.LUXURY_VENUE, Claim.FOREIGN_MARKET, Claim.SURPLUS_CACHES, Claim.COVER_IDENTITIES_B };
-	static final Claim[] SHADOW_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.GAMBLING_DEN,
-			Claim.INFORMANTS, Claim.LOOKOUTS, Claim.HAGFISH_FARM, Claim.INFIRMARY, Claim.INTERROGATION_CHAMBER,
-			Claim.LOYAL_FENCE, Claim.TAVERN, Claim.DRUG_DEN, Claim.COVERT_DROPS, Claim.SECRET_PATHWAYS };
-	static final Claim[] SMUGGLER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+	private static final Claim[] SHADOW_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3,
+			Claim.GAMBLING_DEN, Claim.INFORMANTS, Claim.LOOKOUTS, Claim.HAGFISH_FARM, Claim.INFIRMARY,
+			Claim.INTERROGATION_CHAMBER, Claim.LOYAL_FENCE, Claim.TAVERN, Claim.DRUG_DEN, Claim.COVERT_DROPS,
+			Claim.SECRET_PATHWAYS };
+	private static final Claim[] SMUGGLER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
 			Claim.VICE_DEN, Claim.TAVERN, Claim.ANCIENT_GATE, Claim.INFORMANTS, Claim.COVER_OPERATION, Claim.WAREHOUSES,
 			Claim.SIDE_BUSINESS, Claim.LUXURY_FENCE, Claim.SECRET_ROUTES, Claim.FLEET };
 
+	// approaches by crew type
+	private static final Approach[] ASSASSIN_APPROACH = { Approach.FINESSE, Approach.HUNT, Approach.PROWL,
+			Approach.SKIRMISH, Approach.STUDY, Approach.TINKER };
+	private static final Approach[] BRAVO_APPROACH = { Approach.COMMAND, Approach.CONSORT, Approach.FINESSE,
+			Approach.SKIRMISH, Approach.SURVEY, Approach.WRECK };
+	private static final Approach[] CULT_APPROACH = { Approach.ATTUNE, Approach.COMMAND, Approach.CONSORT,
+			Approach.PROWL, Approach.STUDY, Approach.TINKER };
+	private static final Approach[] HAWKER_APPROACH = { Approach.COMMAND, Approach.CONSORT, Approach.FINESSE,
+			Approach.SURVEY, Approach.SWAY, Approach.WRECK };
+	private static final Approach[] SHADOW_APPROACH = { Approach.COMMAND, Approach.FINESSE, Approach.PROWL,
+			Approach.SURVEY, Approach.TINKER, Approach.WRECK };
+	private static final Approach[] SMUGGLER_APPROACH = { Approach.CONSORT, Approach.FINESSE, Approach.PROWL,
+			Approach.SURVEY, Approach.SWAY, Approach.TINKER };
+
+	// approaches by plan
+	private static final Approach[] ASSAULT_APPROACHES = { Approach.COMMAND, Approach.HUNT, Approach.SKIRMISH,
+			Approach.SURVEY, Approach.WRECK };
+	private static final Approach[] DECEPTION_APPROACHES = { Approach.CONSORT, Approach.FINESSE, Approach.PROWL,
+			Approach.STUDY, Approach.SURVEY, Approach.SWAY };
+	private static final Approach[] OCCULT_APPROACHES = { Approach.ATTUNE, Approach.COMMAND, Approach.CONSORT,
+			Approach.STUDY, Approach.SWAY, Approach.TINKER };
+	private static final Approach[] SOCIAL_APPROACHES = { Approach.COMMAND, Approach.CONSORT, Approach.FINESSE,
+			Approach.STUDY, Approach.SURVEY, Approach.SWAY };
+	private static final Approach[] STEALTH_APPROACHES = { Approach.FINESSE, Approach.HUNT, Approach.PROWL,
+			Approach.STUDY, Approach.TINKER, Approach.WRECK };
+	private static final Approach[] TRANSPORT_APPROACHES = { Approach.COMMAND, Approach.CONSORT, Approach.FINESSE,
+			Approach.HUNT, Approach.PROWL, Approach.SURVEY, Approach.SWAY };
+
+	// approaches by tension level
+	private static final Approach[] HIGH_TENSION_APPROACH = { Approach.COMMAND, Approach.HUNT, Approach.PROWL,
+			Approach.SKIRMISH, Approach.SWAY, Approach.WRECK };
+	private static final Approach[] LOW_TENSION_APPROACH = { Approach.ATTUNE, Approach.CONSORT, Approach.FINESSE,
+			Approach.STUDY, Approach.SURVEY, Approach.TINKER };
+
 	// fields
+	private Crew crew;
 	private Plan plan;
 	private Activity activity;
 
 	private Act act;
 	private int scene;
+	private int tension;
+	private Approach[][] beats;
 
 	private ArrayList<Action> actions;
 
 	// constructors
-	public Score() {
-		this(Crew.randomCrewType());
-	}
-
-	public Score(Crew.Type crew) {
+	public Score(Crew crew) {
+		this.crew = crew;
 		this.plan = randomPlan();
-		this.activity = randomActivity(crew);
+		this.activity = randomActivity(crew.getCrewType());
 
 		//
 		this.act = Act.INCITING;
 		this.scene = 1;
+		this.tension = 0;
+		this.beats = randomBeats();
+
+		//
 		this.actions = new ArrayList<Action>();
 	}
 
@@ -126,9 +166,9 @@ public class Score {
 			if (scene == 1) {
 				// every mission begins with engagement roll
 				Position start = engagementRoll();
-				actions.add(new Action(act, start));
+				actions.add(new Action(start));
 			} else {
-				actions.add(new Action(act, randomPosition()));
+				actions.add(new Action(randomPosition()));
 			}
 
 			// while mission not resolved, advance()
@@ -140,7 +180,7 @@ public class Score {
 		boolean advance = false;
 
 		if (act.equals(Act.RELEASE) != true) {
-			int[] results = Dice.fortune(++scene - ACTIONS_PER_SCORE);
+			int[] results = Dice.fortune(++scene - ACTIONS_PER_SCORE + tension);
 			// System.out.println(String.format("Scene: %2d", scene));
 
 			if (results[3] > 0 || results[4] > 0 || results[5] > 0) {
@@ -229,6 +269,16 @@ public class Score {
 		return string;
 	}
 
+	public static Approach[][] randomBeats() {
+		Approach[][] beats = new Approach[4][];
+
+		for (int i = 0; i < beats.length; ++i) {
+			beats[i] = (Dice.roll(2) == 1) ? HIGH_TENSION_APPROACH : LOW_TENSION_APPROACH;
+		}
+
+		return beats;
+	}
+
 	public static Activity randomActivity() {
 		Activity[] array = ALL_ACTIVITIES;
 		Activity choice = array[Dice.roll(array.length) - 1];
@@ -255,8 +305,123 @@ public class Score {
 		return choice;
 	}
 
+	public static Approach approachByCrewType(Crew.Type crew) {
+		Approach[] array = APPROACHES;
+		Approach choice = randomApproach();
+
+		if (crew.equals(Crew.Type.ASSASSINS))
+			array = ASSASSIN_APPROACH;
+		else if (crew.equals(Crew.Type.BRAVOS))
+			array = BRAVO_APPROACH;
+		else if (crew.equals(Crew.Type.CULT))
+			array = CULT_APPROACH;
+		else if (crew.equals(Crew.Type.HAWKERS))
+			array = HAWKER_APPROACH;
+		else if (crew.equals(Crew.Type.SHADOWS))
+			array = SHADOW_APPROACH;
+		else if (crew.equals(Crew.Type.SMUGGLERS))
+			array = SMUGGLER_APPROACH;
+
+		choice = array[Dice.roll(array.length) - 1];
+		return choice;
+	}
+
+	public static Approach approachByPlan(Plan plan) {
+		Approach choice = randomApproach();
+
+		if (plan.equals(Plan.ASSAULT))
+			choice = assaultApproach();
+		else if (plan.equals(Plan.DECEPTION))
+			choice = deceptionApproach();
+		else if (plan.equals(Plan.OCCULT))
+			choice = occultApproach();
+		else if (plan.equals(Plan.SOCIAL))
+			choice = socialApproach();
+		else if (plan.equals(Plan.STEALTH))
+			choice = stealthApproach();
+		else if (plan.equals(Plan.TRANSPORT))
+			choice = transportApproach();
+
+		return choice;
+	}
+
 	public static Approach randomApproach() {
 		Approach[] array = APPROACHES;
+		Approach choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Approach pseudoRandomApproach(Act act, Plan plan, Crew crew, Approach[][] beats) {
+		Crew.Type type = crew.getCrewType();
+		Approach choice;
+		int dice = Dice.roll(100);
+		if (dice < 21) {
+			// System.out.println(" " + " " + " What are we doing?");
+			choice = approachByCrewType(crew.getCrewType());
+		} else if (dice < 61) {
+			// System.out.println(" " + " " + " Stick to the plan.");
+			choice = approachByPlan(plan);
+		} else if (dice < 81) {
+			// System.out.println(" " + " " + " We don't have time.");
+			Approach[] array = APPROACHES;
+
+			if (act.equals(Act.INCITING))
+				array = beats[0];
+			else if (act.equals(Act.RISING))
+				array = beats[1];
+			else if (act.equals(Act.TURNING))
+				array = beats[2];
+			else if (act.equals(Act.FALLING))
+				array = beats[3];
+
+			choice = array[Dice.roll(array.length) - 1];
+		} else {
+			// System.out.println(" " + " " + " Ninjas attack.");
+			Approach[] array = APPROACHES;
+			choice = array[Dice.roll(array.length) - 1];
+		}
+
+		return choice;
+	}
+
+	public static Approach assaultApproach() {
+		Approach[] array = ASSAULT_APPROACHES;
+		Approach choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Approach deceptionApproach() {
+		Approach[] array = DECEPTION_APPROACHES;
+		Approach choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Approach occultApproach() {
+		Approach[] array = OCCULT_APPROACHES;
+		Approach choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Approach socialApproach() {
+		Approach[] array = SOCIAL_APPROACHES;
+		Approach choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Approach stealthApproach() {
+		Approach[] array = STEALTH_APPROACHES;
+		Approach choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Approach transportApproach() {
+		Approach[] array = TRANSPORT_APPROACHES;
 		Approach choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
@@ -329,9 +494,8 @@ public class Score {
 	/*
 	 * INNER CLASS
 	 */
-	public class Action {
+	private class Action {
 		// fields
-		Act act;
 		Approach approach;
 		Position position;
 		Effect effect;
@@ -341,19 +505,14 @@ public class Score {
 
 		// constructors
 		public Action() {
-			this(randomAct(), randomApproach(), randomPosition(), randomEffect());
+			this(randomApproach(), randomPosition(), randomEffect());
 		}
 
 		public Action(Position position) {
-			this(randomAct(), randomApproach(), position, randomEffect());
+			this(pseudoRandomApproach(act, plan, crew, beats), position, effectsByAct(act));
 		}
 
-		public Action(Act act, Position position) {
-			this(act, randomApproach(), position, effectsByAct(act));
-		}
-
-		public Action(Act act, Approach approach, Position position, Effect effect) {
-			this.act = act;
+		public Action(Approach approach, Position position, Effect effect) {
 			this.approach = approach;
 			this.position = position;
 			this.effect = effect;
@@ -374,28 +533,20 @@ public class Score {
 				// TODO - critical
 				result = Result.CRITICAL;
 				this.improveEffect();
+				tension -= 2;
 			} else if (results[5] > 0) {
 				// TODO - success
 				result = Result.SUCCESS;
+				tension -= 1;
 			} else if (results[3] > 0 || results[4] > 0) {
 				// partial success
 				result = Result.PARTIAL;
+				tension += 1;
 			} else {
 				// failure
 				result = Result.FAILURE;
+				tension += 2;
 			}
-		}
-
-		public Approach getApproach() {
-			return approach;
-		}
-
-		public Position getPosition() {
-			return position;
-		}
-
-		public Effect getEffect() {
-			return effect;
 		}
 
 		public void improveEffect() {
@@ -417,7 +568,19 @@ public class Score {
 
 		@Override
 		public String toString() {
-			String string = String.format("Scene %2d: %s check -%s", scene, approach, result);
+			String string = String.format("Scene %2d", scene);
+
+			// minimal
+			string = String.format("Scene %2d: %s check (%2d)", scene, approach, tension);
+
+			// standard
+			// string = String.format("Scene %2d: %s check -%s (%2d)", scene, approach,
+			// result, tension);
+
+			// verbose
+			// string = String.format("Scene %2d: %s %s check -%s (%2d)", scene, position,
+			// approach, result, tension);
+
 			return string;
 		}
 	}
