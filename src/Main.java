@@ -14,10 +14,12 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		Crew crew = new Crew();
 		while (proceed == 1) {
-			rollScore();
+			rollScore(crew);
 			
-			proceed = INPUT.nextInt();
+			
+			proceed = Integer.parseInt(INPUT.nextLine());
 			if (proceed != 0)
 				proceed = 1;
 		}
