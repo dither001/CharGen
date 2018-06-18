@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -14,17 +15,18 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		Crew crew = new Crew();
-		while (proceed == 1) {
-			rollScore(crew);
-			
-			
-			proceed = Integer.parseInt(INPUT.nextLine());
-			if (proceed != 0)
-				proceed = 1;
-		}
-		
-		
+		printFactionStuff();
+
+		// Crew crew = new Crew();
+		// while (proceed == 1) {
+		// rollScore(crew);
+		//
+		//
+		// proceed = Integer.parseInt(INPUT.nextLine());
+		// if (proceed != 0)
+		// proceed = 1;
+		// }
+
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// scoresByLength();
 		// System.out.println();
@@ -44,6 +46,13 @@ public class Main {
 		// rollOneSpellbook(7);
 		// }
 
+	}
+
+	public static void printFactionStuff() {
+		List<Crew> list = Crew.getFactions();
+		for (Iterator<Crew> it = list.iterator(); it.hasNext();) {
+			System.out.println(it.next().getAllies().toString());
+		}
 	}
 
 	public static void characterAdvance(Class job) {
