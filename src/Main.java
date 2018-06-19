@@ -15,7 +15,11 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		printFactionStuff();
+		
+		for (int i = 0; i < PCS_TO_ROLL; ++i)
+			rollCrew();
+
+		
 
 		// Crew crew = new Crew();
 		// while (proceed == 1) {

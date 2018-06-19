@@ -1,7 +1,9 @@
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Crew {
@@ -48,6 +50,7 @@ public class Crew {
 			Faction.SPIRIT_WARDENS, Faction.ULF_IRONBORN, Faction.UNSEEN, Faction.WEEPING_LADY, Faction.WHITECROWN,
 			Faction.WRAITHS, Faction.VULTURES };
 
+	//
 	private static ArrayList<Crew> factions;
 
 	// initialization
@@ -178,6 +181,7 @@ public class Crew {
 		factions.add(new Crew(Faction.WRAITHS, 2, false, new Crew.Faction[] { Faction.CABBIES },
 				new Crew.Faction[] { Faction.BLUECOATS, Faction.INSPECTORS, Faction.HIVE }));
 		factions.add(new Crew(Faction.VULTURES, 1, false));
+
 	}
 
 	// fields
@@ -196,13 +200,14 @@ public class Crew {
 	private EnumSet<Score.Claim> claims;
 	private int turf;
 	//
-	private EnumSet<Crew.Faction> allies;
-	private EnumSet<Crew.Faction> enemies;
+	private EnumSet<Faction> allies;
+	private EnumSet<Faction> enemies;
 
 	//
 	private int heat;
 	private int wantedLevel;
 	private boolean atWar;
+	private HashMap<Crew.Faction, Integer> ships;
 
 	/*
 	 * Hunting grounds provide +1d6 gather information and a free downtime activity
@@ -210,6 +215,8 @@ public class Crew {
 	 * you expand the size and/or type of your hunting grounds
 	 */
 	private String huntingGrounds;
+	//
+	private HashSet<Faction> huntingGroundsBoss;
 	private int huntingGroundSize;
 	private String operation;
 	private HashSet<Score.Activity> favoredOps;
@@ -220,6 +227,8 @@ public class Crew {
 		this.type = randomCrewType();
 		this.tier = 0;
 		this.holdStrong = true;
+		this.coin = 2;
+		this.exp = 0;
 
 		//
 		this.rep = new HashSet<Rep>();
@@ -242,6 +251,50 @@ public class Crew {
 		this.huntingGroundSize = 1;
 		this.favoredOps = new HashSet<Score.Activity>();
 		favoredOps.add(Score.randomActivity(type));
+
+		// setup ships
+		ships = new HashMap<Faction, Integer>();
+		for (int i = 0; i < ALL_FACTIONS.length; ++i) {
+			ships.put(ALL_FACTIONS[i], 0);
+		}
+
+		this.huntingGroundsBoss = new HashSet<Faction>();
+		ArrayList<Faction> shipSetup = new ArrayList<Faction>();
+		while (shipSetup.size() < 3) {
+			shipSetup.add(randomFaction());
+		}
+		Faction f = shipSetup.get(0);
+		huntingGroundsBoss.add(f);
+		
+		int dice = Dice.roll(3);
+		// hunting grounds
+		if (dice == 1) {
+			coin -= 1;
+		} else if (dice == 2) {
+			coin -= 2;
+			increaseShip(f);
+		} else {
+			decreaseShip(f);
+		}
+
+		// upgrade one
+		dice = Dice.roll(2);
+		f = shipSetup.get(1);
+		increaseShip(f);
+		if (dice == 1 && coin > 0) {
+			coin -= 1;
+			increaseShip(f);
+		}
+
+		// upgrade two
+		dice = Dice.roll(2);
+		f = shipSetup.get(2);
+		decreaseShip(f);
+		if (dice == 1 || coin < 1) {
+			decreaseShip(f);
+		} else if (coin > 0) {
+			coin -= 1;
+		}
 	}
 
 	public Crew(Crew.Faction name, int tier, boolean hold) {
@@ -277,7 +330,7 @@ public class Crew {
 	public void advance() {
 		boolean canAdvance = true;
 
-		if (holdStrong != true)
+		if (holdStrong() != true)
 			canAdvance = false;
 
 		if (exp < 12 - turf)
@@ -294,6 +347,36 @@ public class Crew {
 		}
 	}
 
+	public boolean increaseShip(Faction faction) {
+		boolean increased = false;
+		int v = ships.get(faction);
+
+		if (v < 3) {
+			ships.put(faction, v + 1);
+			increased = true;
+		}
+
+		checkAtWar();
+		return increased;
+	}
+
+	public boolean decreaseShip(Faction faction) {
+		boolean decreased = false;
+		int v = ships.get(faction);
+
+		if (v > -3) {
+			ships.put(faction, v - 1);
+			decreased = true;
+		}
+
+		checkAtWar();
+		return decreased;
+	}
+
+	private void checkAtWar() {
+		atWar = (ships.values().contains(-3)) ? true : false;
+	}
+
 	public Type getCrewType() {
 		return type;
 	}
@@ -302,20 +385,20 @@ public class Crew {
 		return rep;
 	}
 
-	public boolean readyForAdvance() {
-		boolean ready = false;
-
-		ready = true;
-
-		return ready;
-	}
-
 	public boolean holdStrong() {
-		return holdStrong;
+		boolean isHoldStrong = holdStrong;
+		if (atWar)
+			isHoldStrong = false;
+
+		return isHoldStrong;
 	}
 
 	public boolean holdWeak() {
-		return (holdStrong != true);
+		boolean isHoldWeak = (holdStrong != true);
+		if (atWar)
+			isHoldWeak = true;
+
+		return isHoldWeak;
 	}
 
 	public boolean atWar() {
@@ -326,17 +409,47 @@ public class Crew {
 		return (atWar != true);
 	}
 
-	public Set<Crew.Faction> getAllies() {
+	public Set<Faction> getNonZeroShips() {
+		HashSet<Faction> nonZeroShips = new HashSet<Faction>();
+
+		Faction f;
+		int v;
+		for (Iterator<Faction> it = ships.keySet().iterator(); it.hasNext();) {
+			f = it.next();
+			v = ships.get(f);
+			if (v != 0)
+				nonZeroShips.add(f);
+		}
+
+		return nonZeroShips;
+	}
+
+	public Set<Faction> getAllies() {
 		return allies;
 	}
 
-	public Set<Crew.Faction> getEnemies() {
+	public Set<Faction> getEnemies() {
 		return enemies;
 	}
 
 	@Override
 	public String toString() {
-		String string = String.format("name %s %s", rep.toString(), type.toString());
+		Set<Crew.Faction> set = getNonZeroShips();
+		String s = "";
+		
+		Iterator<Crew.Faction> it = set.iterator();
+		Crew.Faction faction;
+		int status;
+		String name;
+		for (int i = 0; i < set.size(); ++i) {
+			faction = it.next();
+			name = faction.toString();
+			status = ships.get(faction);
+			name = String.format("%2d %s", status, name);
+			s += (i + 1 < set.size()) ? name + "\n" : name;
+		}
+		
+		String string = String.format("name %s %s coin: %2d %n%s", rep.toString(), type.toString(), coin, s);
 
 		return string;
 	}
@@ -344,6 +457,13 @@ public class Crew {
 	// static methods
 	public static ArrayList<Crew> getFactions() {
 		return factions;
+	}
+
+	public static Faction randomFaction() {
+		Faction[] array = ALL_FACTIONS;
+		Faction choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
 	}
 
 	public static Type randomCrewType() {
