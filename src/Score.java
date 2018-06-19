@@ -143,6 +143,12 @@ public class Score {
 	private Plan plan;
 	private Activity activity;
 
+	//
+	private Clock coldOpen;
+	private Clock primaryObjective;
+	private Clock getaway;
+
+	//
 	private Act act;
 	private int scene;
 	private int tension;
@@ -160,6 +166,11 @@ public class Score {
 		this.goal = goal;
 		this.plan = randomPlan();
 		this.activity = randomActivity(crew.getCrewType());
+
+		//
+		this.coldOpen = new Clock();
+		this.primaryObjective = new Clock();
+		this.getaway = new Clock();
 
 		//
 		this.act = Act.INCITING;
@@ -205,16 +216,30 @@ public class Score {
 	}
 
 	public Position engagementRoll() {
-		// TODO - work out advantages and disadvantages
-		Position position = Position.RISKY;
+		/*
+		 * TODO - work out advantages and disadvantages and "actual" dice
+		 */
+		Position position;
+		int[] results = Dice.fortune(Dice.roll(3));
 
-		int dice = Dice.roll(6);
-		if (dice == 6)
+		if (results[5] > 1) {
+			// critical result clears the opening
 			position = Position.CONTROLLED;
-		else if (dice == 4 || dice == 5)
+			coldOpen.clear();
+
+		} else if (results[5] > 0) {
+			// success results in controlled situation
+			position = Position.CONTROLLED;
+
+		} else if (results[3] > 0 || results[4] > 0) {
+			// partial results in risky position
 			position = Position.RISKY;
-		else if (dice == 1 || dice == 2 || dice == 3)
+
+		} else {
+			// failure results in desperate situation
 			position = Position.DESPERATE;
+
+		}
 
 		return position;
 	}
