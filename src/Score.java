@@ -73,12 +73,10 @@ public class Score {
 	private static final Activity[] SMUGGLER_FLAVORS = { Activity.CARGO_ARMS, Activity.CARGO_CONTRABAND,
 			Activity.CARGO_PEOPLE, Activity.CARGO_WEIRD };
 
-	private static final Effect[] INCITING_EFFECTS = { Effect.STANDARD, Effect.LIMITED, Effect.LIMITED, Effect.ZERO };
-	private static final Effect[] RISING_EFFECTS = { Effect.LIMITED, Effect.LIMITED, Effect.ZERO };
-	private static final Effect[] TURNING_EFFECTS = { Effect.EXTREME, Effect.GREAT, Effect.STANDARD, Effect.STANDARD,
-			Effect.LIMITED, Effect.LIMITED };
-	private static final Effect[] FALLING_EFFECTS = { Effect.EXTREME, Effect.GREAT, Effect.GREAT, Effect.STANDARD,
-			Effect.STANDARD };
+	private static final Effect[] INCITING_EFFECTS = { Effect.STANDARD, Effect.LIMITED };
+	private static final Effect[] RISING_EFFECTS = { Effect.STANDARD, Effect.LIMITED };
+	private static final Effect[] TURNING_EFFECTS = { Effect.GREAT, Effect.STANDARD, Effect.LIMITED };
+	private static final Effect[] FALLING_EFFECTS = { Effect.GREAT, Effect.STANDARD };
 
 	// claims by crew type
 	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
@@ -144,9 +142,9 @@ public class Score {
 	private Activity activity;
 
 	//
-	private Clock coldOpen;
+	private Clock openingMove;
 	private Clock primaryObjective;
-	private Clock getaway;
+	private Clock getawayMove;
 
 	//
 	private Act act;
@@ -168,9 +166,9 @@ public class Score {
 		this.activity = randomActivity(crew.getCrewType());
 
 		//
-		this.coldOpen = new Clock();
+		this.openingMove = new Clock();
 		this.primaryObjective = new Clock();
-		this.getaway = new Clock();
+		this.getawayMove = new Clock();
 
 		//
 		this.act = Act.INCITING;
@@ -188,9 +186,32 @@ public class Score {
 			if (scene == 1) {
 				// every mission begins with engagement roll
 				Position start = engagementRoll();
-				actions.add(new Action(start));
+				if (openingMove.expired()) {
+					actions.add(new Action(primaryObjective, start));
+
+				} else {
+					actions.add(new Action(openingMove, start));
+
+				}
 			} else {
-				actions.add(new Action(randomPosition()));
+				objectiveCheck();
+				if (getawayMove.expired()) {
+					/*
+					 * FIXME - currently here for debug only; replace with "end score"
+					 */
+					// actions.add(new Action(getawayMove, randomPosition()));
+					System.out.println("No more actions to play out.");
+
+				} else if (primaryObjective.expired()) {
+					actions.add(new Action(getawayMove, randomPosition()));
+
+				} else if (openingMove.expired()) {
+					actions.add(new Action(primaryObjective, randomPosition()));
+
+				} else {
+					actions.add(new Action(openingMove, randomPosition()));
+
+				}
 			}
 
 			// while mission not resolved, advance()
@@ -221,11 +242,12 @@ public class Score {
 		 */
 		Position position;
 		int[] results = Dice.fortune(Dice.roll(3));
+		System.out.println("Engagement roll.");
 
 		if (results[5] > 1) {
 			// critical result clears the opening
 			position = Position.CONTROLLED;
-			coldOpen.clear();
+			openingMove.clear();
 
 		} else if (results[5] > 0) {
 			// success results in controlled situation
@@ -241,6 +263,7 @@ public class Score {
 
 		}
 
+		System.out.println(position);
 		return position;
 	}
 
@@ -269,6 +292,22 @@ public class Score {
 
 	public boolean unresolved() {
 		return (act.equals(Act.RELEASE) != true);
+	}
+
+	public void objectiveCheck() {
+		if (getawayMove.expired()) {
+			System.out.println(" " + " " + " We're clear.");
+
+		} else if (primaryObjective.expired()) {
+			System.out.println(" " + " " + " Primary objective complete.");
+
+		} else if (openingMove.expired()) {
+			System.out.println(" " + " " + " We're in.");
+
+		} else {
+			System.out.println(" " + " " + " Approaching objective.");
+
+		}
 	}
 
 	@Override
@@ -532,6 +571,7 @@ public class Score {
 	 */
 	private class Action {
 		// fields
+		Clock clock;
 		Approach approach;
 		Position position;
 		Effect effect;
@@ -540,15 +580,16 @@ public class Score {
 		Result result;
 
 		// constructors
-		public Action() {
-			this(randomApproach(), randomPosition(), randomEffect());
+		public Action(Clock clock) {
+			this(clock, randomApproach(), randomPosition(), randomEffect());
 		}
 
-		public Action(Position position) {
-			this(pseudoRandomApproach(act, plan, crew, beats), position, effectsByAct(act));
+		public Action(Clock clock, Position position) {
+			this(clock, pseudoRandomApproach(act, plan, crew, beats), position, effectsByAct(act));
 		}
 
-		public Action(Approach approach, Position position, Effect effect) {
+		public Action(Clock clock, Approach approach, Position position, Effect effect) {
+			this.clock = clock;
 			this.approach = approach;
 			this.position = position;
 			this.effect = effect;
@@ -565,6 +606,7 @@ public class Score {
 				++results[Dice.roll(6) - 1];
 			}
 
+			// PART ONE
 			if (results[5] > 1) {
 				// TODO - critical
 				result = Result.CRITICAL;
@@ -583,6 +625,25 @@ public class Score {
 				result = Result.FAILURE;
 				tension += 2;
 			}
+
+			// PART TWO
+			if (effect.equals(Effect.EXTREME)) {
+				clock.countDown(4);
+			} else if (effect.equals(Effect.GREAT)) {
+				clock.countDown(3);
+
+			} else if (effect.equals(Effect.STANDARD)) {
+				clock.countDown(2);
+
+			} else if (effect.equals(Effect.LIMITED)) {
+				clock.countDown(1);
+
+			} else if (effect.equals(Effect.ZERO)) {
+				// FIXME - FOR DEBUG ONLY: NO EFFECT
+
+			}
+			System.out.println(" " + " " + " Remaining: " + clock.remaining());
+
 		}
 
 		public void improveEffect() {

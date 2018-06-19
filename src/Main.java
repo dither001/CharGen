@@ -15,21 +15,15 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		
-		for (int i = 0; i < PCS_TO_ROLL; ++i)
-			rollCrew();
-
-		
-
-		// Crew crew = new Crew();
-		// while (proceed == 1) {
-		// rollScore(crew);
-		//
-		//
-		// proceed = Integer.parseInt(INPUT.nextLine());
-		// if (proceed != 0)
-		// proceed = 1;
-		// }
+		Crew crew = new Crew();
+		rollScore(crew);
+//		while (proceed == 1) {
+//			rollScore(crew);
+//
+//			proceed = Integer.parseInt(INPUT.nextLine());
+//			if (proceed != 0)
+//				proceed = 1;
+//		}
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// scoresByLength();
