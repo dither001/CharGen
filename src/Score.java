@@ -142,6 +142,7 @@ public class Score {
 	private Activity activity;
 
 	//
+	private Clock window;
 	private Clock openingMove;
 	private Clock primaryObjective;
 	private Clock getawayMove;
@@ -166,7 +167,8 @@ public class Score {
 		this.activity = randomActivity(crew.getCrewType());
 
 		//
-		this.openingMove = new Clock();
+		this.window = new Clock(Clock.Length.FOUR);
+		this.openingMove = new Clock(Clock.Length.FOUR);
 		this.primaryObjective = new Clock();
 		this.getawayMove = new Clock();
 
@@ -201,6 +203,7 @@ public class Score {
 					 */
 					// actions.add(new Action(getawayMove, randomPosition()));
 					System.out.println("No more actions to play out.");
+					break;
 
 				} else if (primaryObjective.expired()) {
 					actions.add(new Action(getawayMove, randomPosition()));
@@ -217,21 +220,34 @@ public class Score {
 			// while mission not resolved, advance()
 			advance();
 		}
+
+		if (window.expired())
+			System.out.println(" " + " " + " Window closed.");
 	}
 
 	public boolean advance() {
 		boolean advance = false;
 
-		if (act.equals(Act.RELEASE) != true) {
+		if (window.expired() != true) {
 			int[] results = Dice.fortune(++scene - ACTIONS_PER_SCORE + tension);
-			// System.out.println(String.format("Scene: %2d", scene));
-
 			if (results[3] > 0 || results[4] > 0 || results[5] > 0) {
-				act = nextAct();
+				window.countDown();
 				advance = true;
-				System.out.println(act.toString());
+				// while I still use the act structure...
+				act = nextAct();
 			}
 		}
+
+		// if (act.equals(Act.RELEASE) != true) {
+		// int[] results = Dice.fortune(++scene - ACTIONS_PER_SCORE + tension);
+		// // System.out.println(String.format("Scene: %2d", scene));
+		//
+		// if (results[3] > 0 || results[4] > 0 || results[5] > 0) {
+		// act = nextAct();
+		// advance = true;
+		// System.out.println(act.toString());
+		// }
+		// }
 
 		return advance;
 	}
@@ -242,7 +258,7 @@ public class Score {
 		 */
 		Position position;
 		int[] results = Dice.fortune(Dice.roll(3));
-		System.out.println("Engagement roll.");
+		// System.out.println("Engagement roll.");
 
 		if (results[5] > 1) {
 			// critical result clears the opening
@@ -263,7 +279,7 @@ public class Score {
 
 		}
 
-		System.out.println(position);
+		// System.out.println(position);
 		return position;
 	}
 
@@ -291,7 +307,8 @@ public class Score {
 	}
 
 	public boolean unresolved() {
-		return (act.equals(Act.RELEASE) != true);
+		// return (act.equals(Act.RELEASE) != true);
+		return (window.expired() != true);
 	}
 
 	public void objectiveCheck() {
@@ -567,7 +584,7 @@ public class Score {
 	}
 
 	/*
-	 * INNER CLASS
+	 * ACTION - INNER CLASS
 	 */
 	private class Action {
 		// fields
@@ -642,7 +659,7 @@ public class Score {
 				// FIXME - FOR DEBUG ONLY: NO EFFECT
 
 			}
-			System.out.println(" " + " " + " Remaining: " + clock.remaining());
+			//			System.out.println(" " + " " + " Remaining: " + clock.remaining());
 
 		}
 
@@ -680,5 +697,12 @@ public class Score {
 
 			return string;
 		}
+	}
+	
+	/*
+	 * DOWNTIME - INNER CLASS
+	 */
+	private class Downtime {
+		
 	}
 }
