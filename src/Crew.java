@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -261,11 +262,11 @@ public class Crew {
 		this.huntingGroundsBoss = new HashSet<Faction>();
 		ArrayList<Faction> shipSetup = new ArrayList<Faction>();
 		while (shipSetup.size() < 3) {
-			shipSetup.add(randomFaction());
+			shipSetup.add(randomFactionEnum());
 		}
 		Faction f = shipSetup.get(0);
 		huntingGroundsBoss.add(f);
-		
+
 		int dice = Dice.roll(3);
 		// hunting grounds
 		if (dice == 1) {
@@ -385,6 +386,19 @@ public class Crew {
 		return rep;
 	}
 
+	public int getTier() {
+		return tier;
+	}
+
+	public void addEXP(int gains) {
+		exp = (exp + gains > 12) ? 12 : exp + gains;
+	}
+
+	public void addCoin(int gains) {
+		// TODO - do I need to do something else with this?
+		coin += gains;
+	}
+
 	public boolean holdStrong() {
 		boolean isHoldStrong = holdStrong;
 		if (atWar)
@@ -435,8 +449,8 @@ public class Crew {
 	@Override
 	public String toString() {
 		Set<Crew.Faction> set = getNonZeroShips();
-		String s = "";
-		
+		String list = "";
+
 		Iterator<Crew.Faction> it = set.iterator();
 		Crew.Faction faction;
 		int status;
@@ -446,10 +460,17 @@ public class Crew {
 			name = faction.toString();
 			status = ships.get(faction);
 			name = String.format("%2d %s", status, name);
-			s += (i + 1 < set.size()) ? name + "\n" : name;
+			list += (i + 1 < set.size()) ? name + "\n" : name;
 		}
-		
-		String string = String.format("name %s %s coin: %2d %n%s", rep.toString(), type.toString(), coin, s);
+
+		String string;
+		string = String.format("name %s %s coin: %2d %n%s", rep.toString(), type.toString(), coin, list);
+
+		return string;
+	}
+
+	public String simplifiedToString() {
+		String string = String.format("%s (tier %d)", name, tier);
 
 		return string;
 	}
@@ -459,7 +480,18 @@ public class Crew {
 		return factions;
 	}
 
-	public static Faction randomFaction() {
+	public static Crew randomFaction() {
+		int length = factions.size();
+		Crew[] array = new Crew[length];
+		for (int i = 0; i < length; ++i) {
+			array[i] = factions.get(i);
+		}
+
+		Crew choice = array[Dice.roll(array.length) - 1];
+		return choice;
+	}
+
+	public static Faction randomFactionEnum() {
 		Faction[] array = ALL_FACTIONS;
 		Faction choice = array[Dice.roll(array.length) - 1];
 
@@ -486,4 +518,15 @@ public class Crew {
 
 		return choice;
 	}
+
+	/*
+	 * COMPARATOR - INNER CLASSES
+	 */
+	class TiersDescending implements Comparator<Crew> {
+		@Override
+		public int compare(Crew crew1, Crew crew2) {
+			return crew1.tier - crew2.tier;
+		}
+	}
+
 }

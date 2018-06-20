@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Score {
 	public enum Goal {
@@ -137,6 +140,7 @@ public class Score {
 
 	// fields
 	private Crew crew;
+	private Crew target;
 	private Goal goal;
 	private Plan plan;
 	private Activity activity;
@@ -156,12 +160,13 @@ public class Score {
 	private ArrayList<Action> actions;
 
 	// constructors
-	public Score(Crew crew) {
-		this(crew, Goal.CLIMB);
+	public Score(Crew crew, Crew target) {
+		this(crew, target, Goal.CLIMB);
 	}
 
-	public Score(Crew crew, Goal goal) {
+	public Score(Crew crew, Crew target, Goal goal) {
 		this.crew = crew;
+		this.target = target;
 		this.goal = goal;
 		this.plan = randomPlan();
 		this.activity = randomActivity(crew.getCrewType());
@@ -223,6 +228,10 @@ public class Score {
 
 		if (window.expired())
 			System.out.println(" " + " " + " Window closed.");
+
+		// TODO
+		System.out.println();
+		new Downtime(this);
 	}
 
 	public boolean advance() {
@@ -330,6 +339,7 @@ public class Score {
 	@Override
 	public String toString() {
 		String string = String.format("name %s [%s] %s", plan.toString(), detail(plan), activity.toString());
+		string += "\nTarget: " + target.simplifiedToString();
 
 		return string;
 	}
@@ -659,7 +669,7 @@ public class Score {
 				// FIXME - FOR DEBUG ONLY: NO EFFECT
 
 			}
-			//			System.out.println(" " + " " + " Remaining: " + clock.remaining());
+			// System.out.println(" " + " " + " Remaining: " + clock.remaining());
 
 		}
 
@@ -698,11 +708,67 @@ public class Score {
 			return string;
 		}
 	}
-	
+
 	/*
 	 * DOWNTIME - INNER CLASS
 	 */
 	private class Downtime {
-		
+		public Downtime(Score score) {
+			Crew crew = score.crew;
+			Crew target = score.target;
+
+			// rep boost
+			int crewTier = crew.getTier();
+			int targetTier = target.getTier();
+			int exp = (targetTier - crewTier + 2 < 1) ? 0 : targetTier - crewTier + 2;
+			crew.addEXP(exp);
+			System.out.println("Rep gained: " + exp);
+
+			// payoff
+			if (score.primaryObjective.expired()) {
+				// TODO - perform payoff
+				int payoff = Dice.roll(2, 6);
+				System.out.println("Coin gained: " + payoff);
+				crew.addCoin(payoff);
+
+			}
+
+			/*
+			 * FIXME - this ArrayList is to keep track of EACH faction status that changes;
+			 * eventually when I rewrite the system, there will be no such thing as a
+			 * "zero reputation," because "everyone knows everybody." All that changes is
+			 * which SIDE of the friend/enemy spectrum characters fall on at present
+			 */
+			ArrayList<Crew.Faction> changes = new ArrayList<Crew.Faction>();
+
+			// reputation changes
+			Set<Crew.Faction> allies = target.getAllies();
+			Set<Crew.Faction> enemies = target.getEnemies();
+
+			Crew.Faction subject;
+			for (Iterator<Crew.Faction> it = allies.iterator(); it.hasNext();) {
+				subject = it.next();
+				if (Dice.roll(2) == 1) {
+					// allies of the target like you less
+					changes.add(subject);
+					crew.decreaseShip(subject);
+					System.out.println(subject + " status decreased");
+
+				}
+			}
+
+			for (Iterator<Crew.Faction> it = enemies.iterator(); it.hasNext();) {
+				subject = it.next();
+				if (Dice.roll(2) == 1) {
+					// enemies of the target like you more
+					changes.add(subject);
+					crew.increaseShip(subject);
+					System.out.println(subject + " status increased");
+
+				}
+			}
+
+		}
+
 	}
 }
