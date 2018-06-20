@@ -15,15 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		Crew crew = new Crew();
-
-		while (proceed == 1) {
-			rollScore(crew);
-
-			proceed = Integer.parseInt(INPUT.nextLine());
-			if (proceed != 0)
-				proceed = 1;
-		}
+		oneCrewScoreLoop();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// scoresByLength();
@@ -225,6 +217,32 @@ public class Main {
 	public static void rollCrew() {
 		Crew crew = new Crew();
 		System.out.println(crew.toString());
+	}
+
+	public static void oneCrewScoreLoop() {
+		Crew crew = new Crew();
+
+		while (proceed == 1) {
+			System.out.println("---");
+			rollScore(crew);
+
+			proceed = Integer.parseInt(INPUT.nextLine());
+			if (proceed != 0) {
+				if (proceed == 2) {
+					List<Crew.Faction>[] array = crew.nonNeutralStatus();
+					System.out.println();
+					System.out.println("Allies: " + array[5].toString());
+					System.out.println("Friendlies: " + array[4].toString());
+					System.out.println("Indifferent: " + array[3].toString());
+					System.out.println("Indifferent: " + array[2].toString());
+					System.out.println("Hostiles: " + array[1].toString());
+					System.out.println("Enemies: " + array[0].toString());
+					System.out.println();
+				}
+
+				proceed = 1;
+			}
+		}
 	}
 
 	public static void rollScore() {

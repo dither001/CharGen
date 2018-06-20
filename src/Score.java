@@ -201,7 +201,8 @@ public class Score {
 
 				}
 			} else {
-				objectiveCheck();
+				// TODO - DEBUG
+//				objectiveCheck();
 				if (getawayMove.expired()) {
 					/*
 					 * FIXME - currently here for debug only; replace with "end score"
@@ -714,6 +715,14 @@ public class Score {
 	 */
 	private class Downtime {
 		public Downtime(Score score) {
+			/*
+			 * FIXME - this ArrayList is to keep track of EACH faction status that changes;
+			 * eventually when I rewrite the system, there will be no such thing as a
+			 * "zero reputation," because "everyone knows everybody." All that changes is
+			 * which SIDE of the friend/enemy spectrum characters fall on at present
+			 */
+			ArrayList<Crew.Faction> changes = new ArrayList<Crew.Faction>();
+
 			Crew crew = score.crew;
 			Crew target = score.target;
 
@@ -721,8 +730,19 @@ public class Score {
 			int crewTier = crew.getTier();
 			int targetTier = target.getTier();
 			int exp = (targetTier - crewTier + 2 < 1) ? 0 : targetTier - crewTier + 2;
-			crew.addEXP(exp);
-			System.out.println("Rep gained: " + exp);
+			if (exp > 0) {
+				// workaround searches for Faction by name
+				Crew.Faction targetFaction = Crew.getFactionNameByString(target.getName());
+				if (targetFaction != null) {
+					changes.add(targetFaction);
+					crew.decreaseShip(targetFaction);
+					System.out.println(targetFaction + " status decreased");
+				}
+
+				crew.addEXP(exp);
+				System.out.println("Rep gained: " + exp);
+				
+			}
 
 			// payoff
 			if (score.primaryObjective.expired()) {
@@ -733,15 +753,7 @@ public class Score {
 
 			}
 
-			/*
-			 * FIXME - this ArrayList is to keep track of EACH faction status that changes;
-			 * eventually when I rewrite the system, there will be no such thing as a
-			 * "zero reputation," because "everyone knows everybody." All that changes is
-			 * which SIDE of the friend/enemy spectrum characters fall on at present
-			 */
-			ArrayList<Crew.Faction> changes = new ArrayList<Crew.Faction>();
-
-			// reputation changes
+			// additional reputation changes
 			Set<Crew.Faction> allies = target.getAllies();
 			Set<Crew.Faction> enemies = target.getEnemies();
 
