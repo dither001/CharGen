@@ -29,6 +29,73 @@ public class Crew {
 		BARROWCLEFT, BILLHOOKS, BLUECOATS, BRIGADE, BRIGHTSTONE, CABBIES, CHARHOLLOW, CHARTERHALL, CHURCH_OF_ECSTASY, CIRCLE_OF_FLAME, CITY_COUNCIL, COALRIDGE, CROWS, CROWS_FOOT, CYPHERS, DAGGER_ISLES_CONSULATE, DEATHLANDS_SCAVENGERS, DIMMER_SISTERS, DOCKERS, DOCKS, DUNSLOUGH, FOG_HOUNDS, FORGOTTEN_GODS, FOUNDATION, GONDOLIERS, GRAY_CLOAKS, GRINDERS, HIVE, HORDE, IMPERIAL_MILITARY, INK_RAKES, INSPECTORS, IRONHOOK_PRISON, IRUVIAN_CONSULATE, LABORERS, LAMPBLACKS, LEVIATHAN_HUNTERS, LORD_SCURLOCK, LOST, MINISTRY_OF_PRESERVATION, NIGHTMARKET, PATH_OF_ECHOES, RAIL_JACKS, RECONCILED, RED_SASHES, SAILORS, SERVANTS, SEVEROSI_CONSULATE, SILKSHORE, SILVER_NAILS, SIX_TOWERS, SKOVLAN_CONSULATE, SKOVLANDER_REFUGEES, SPARKWRIGHTS, SPIRIT_WARDENS, ULF_IRONBORN, UNSEEN, WEEPING_LADY, WHITECROWN, WRAITHS, VULTURES
 	}
 
+	public enum Claim {
+		LAIR, TURF_1, TURF_2, TURF_3, TURF_4, TURF_5, TURF_6, TRAINING_ROOMS, VICE_DEN, FIXER, INFORMANTS, HAGFISH_FARM, VICTIM_TROPHIES, COVER_OPERATION, PROTECTION_RACKET, INFIRMARY, ENVOY, COVER_IDENTITIES_A, CITY_RECORDS, BARRACKS, TERRORIZED_CITIZENS, FIGHTING_PITS, BLUECOAT_INTIMIDATION, STREET_FENCE, WAREHOUSES, BLUECOAT_CONFEDERATES, CLOISTER, OFFERTORY, ANCIENT_OBELISK, ANCIENT_TOWER, SPIRIT_WELL, ANCIENT_GATE, SANCTUARY, SACRED_NEXUS, ANCIENT_ALTAR, PERSONAL_CLOTHIER, LOCAL_GRAFT, LOOKOUTS, LUXURY_VENUE, FOREIGN_MARKET, SURPLUS_CACHES, COVER_IDENTITIES_B, INTERROGATION_CHAMBER, GAMBLING_DEN, LOYAL_FENCE, TAVERN, DRUG_DEN, COVERT_DROPS, SECRET_PATHWAYS, SIDE_BUSINESS, LUXURY_FENCE, SECRET_ROUTES, FLEET
+	}
+
+	public enum Upgrade {
+		C2_COHORT_1, C2_COHORT_2, C2_COHORT_3, C2_COHORT_4, 
+		
+		BOAT_HOUSE_1, BOAT_HOUSE_2, CARRIAGE_HOUSE_1, CARRIAGE_HOUSE_2, HIDDEN_LAIR, LIVING_QUARTERS, SECURE_LAIR_1, SECURE_LAIR_2, TRAINING_INSIGHT, TRAINING_PROWESS, TRAINING_RESOLVE, TRAINING_PERSONAL, STORAGE_VAULT_1, STORAGE_VAULT_2, WORKSHOP, C4_MASTERY, QUALITY_DOCUMENTS, QUALITY_GEAR, QUALITY_IMPLEMENTS, QUALITY_SUPPLIES, QUALITY_TOOLS, QUALITY_WEAPONS, ELITE_SKULKS, ELITE_THUGS, ELITE_ROVERS, ELITE_ADEPTS, ELITE_ROOKS, ASSASSIN_RIGGING, BRAVOS_RIGGING, CULT_RIGGING, HAWKERS_RIGGING, THIEF_RIGGING, SMUGGLER_RIGGING, IRONHOOK_CONTACTS, C3_HARDENED, C3_COMPOSED, RITUAL_SANCTUM, MAPS_AND_KEYS, CAMOUFLAGE, BARGE
+	}
+
+	public enum CohortType {
+		ADEPT, ROOK, ROVER, SKULK, THUG, EXPERT
+	}
+
+	public enum CohortEdge {
+		FEARSOME, INDEPENDENT, LOYAL, TENACIOUS
+	}
+
+	public enum CohortFlaw {
+		PRINCIPLED, SAVAGE, UNRELIABLE, WILD
+	}
+
+	// claims by crew type
+	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
+			Claim.VICE_DEN, Claim.FIXER, Claim.INFORMANTS, Claim.HAGFISH_FARM, Claim.VICTIM_TROPHIES,
+			Claim.COVER_OPERATION, Claim.PROTECTION_RACKET, Claim.INFIRMARY, Claim.ENVOY, Claim.COVER_IDENTITIES_A,
+			Claim.CITY_RECORDS };
+	private static final Claim[] BRAVO_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.INFORMANTS, Claim.INFIRMARY, Claim.PROTECTION_RACKET, Claim.BARRACKS, Claim.TERRORIZED_CITIZENS,
+			Claim.FIGHTING_PITS, Claim.BLUECOAT_INTIMIDATION, Claim.STREET_FENCE, Claim.WAREHOUSES,
+			Claim.BLUECOAT_CONFEDERATES };
+	private static final Claim[] CULT_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.VICE_DEN, Claim.CLOISTER, Claim.OFFERTORY, Claim.ANCIENT_OBELISK, Claim.ANCIENT_TOWER,
+			Claim.SPIRIT_WELL, Claim.ANCIENT_GATE, Claim.SANCTUARY, Claim.SACRED_NEXUS, Claim.ANCIENT_ALTAR };
+	private static final Claim[] HAWKER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.INFORMANTS, Claim.VICE_DEN, Claim.COVER_OPERATION, Claim.PERSONAL_CLOTHIER, Claim.LOCAL_GRAFT,
+			Claim.LOOKOUTS, Claim.LUXURY_VENUE, Claim.FOREIGN_MARKET, Claim.SURPLUS_CACHES, Claim.COVER_IDENTITIES_B };
+	private static final Claim[] SHADOW_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3,
+			Claim.GAMBLING_DEN, Claim.INFORMANTS, Claim.LOOKOUTS, Claim.HAGFISH_FARM, Claim.INFIRMARY,
+			Claim.INTERROGATION_CHAMBER, Claim.LOYAL_FENCE, Claim.TAVERN, Claim.DRUG_DEN, Claim.COVERT_DROPS,
+			Claim.SECRET_PATHWAYS };
+	private static final Claim[] SMUGGLER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
+			Claim.VICE_DEN, Claim.TAVERN, Claim.ANCIENT_GATE, Claim.INFORMANTS, Claim.COVER_OPERATION, Claim.WAREHOUSES,
+			Claim.SIDE_BUSINESS, Claim.LUXURY_FENCE, Claim.SECRET_ROUTES, Claim.FLEET };
+
+	// upgrades
+	private static final Upgrade[] GENERIC_UPGRADES = { Upgrade.BOAT_HOUSE_1, Upgrade.BOAT_HOUSE_2,
+			Upgrade.CARRIAGE_HOUSE_1, Upgrade.CARRIAGE_HOUSE_2, Upgrade.HIDDEN_LAIR, Upgrade.LIVING_QUARTERS,
+			Upgrade.SECURE_LAIR_1, Upgrade.SECURE_LAIR_2, Upgrade.TRAINING_INSIGHT, Upgrade.TRAINING_PROWESS,
+			Upgrade.TRAINING_RESOLVE, Upgrade.TRAINING_PERSONAL, Upgrade.STORAGE_VAULT_1, Upgrade.STORAGE_VAULT_2,
+			Upgrade.WORKSHOP, Upgrade.C4_MASTERY, Upgrade.QUALITY_DOCUMENTS, Upgrade.QUALITY_GEAR,
+			Upgrade.QUALITY_IMPLEMENTS, Upgrade.QUALITY_SUPPLIES, Upgrade.QUALITY_TOOLS, Upgrade.QUALITY_WEAPONS };
+
+	// upgrades by crew type
+	private static final Upgrade[] ASSASSIN_UPGRADES = { Upgrade.ASSASSIN_RIGGING, Upgrade.IRONHOOK_CONTACTS,
+			Upgrade.ELITE_SKULKS, Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED, };
+	private static final Upgrade[] BRAVOS_UPGRADES = { Upgrade.BRAVOS_RIGGING, Upgrade.IRONHOOK_CONTACTS,
+			Upgrade.ELITE_ROVERS, Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED, };
+	private static final Upgrade[] CULT_UPGRADES = { Upgrade.CULT_RIGGING, Upgrade.RITUAL_SANCTUM, Upgrade.ELITE_ADEPTS,
+			Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED, };
+	private static final Upgrade[] HAWKERS_UPGRADES = { Upgrade.HAWKERS_RIGGING, Upgrade.IRONHOOK_CONTACTS,
+			Upgrade.ELITE_ROOKS, Upgrade.ELITE_THUGS, Upgrade.C3_COMPOSED, };
+	private static final Upgrade[] SHADOWS_UPGRADES = { Upgrade.THIEF_RIGGING, Upgrade.MAPS_AND_KEYS,
+			Upgrade.ELITE_ROOKS, Upgrade.ELITE_SKULKS, Upgrade.C3_COMPOSED, };
+	private static final Upgrade[] SMUGGLERS_UPGRADES = { Upgrade.SMUGGLER_RIGGING, Upgrade.CAMOUFLAGE,
+			Upgrade.ELITE_ROVERS, Upgrade.BARGE, Upgrade.C3_COMPOSED };
+
 	// static fields
 	private static final Type[] ALL_TYPES = { Type.ASSASSINS, Type.BRAVOS, Type.CULT, Type.HAWKERS, Type.SHADOWS,
 			Type.SMUGGLERS };
@@ -218,7 +285,8 @@ public class Crew {
 
 	//
 	private String lair;
-	private EnumSet<Score.Claim> claims;
+	private EnumSet<Claim> claims;
+	private HashMap<Upgrade, Faction> upgrades;
 	private int turf;
 	//
 	private EnumSet<Faction> npcAllies;
@@ -228,7 +296,7 @@ public class Crew {
 	private int heat;
 	private int wantedLevel;
 	private boolean atWar;
-	private HashMap<Crew.Faction, Integer> ships;
+	private HashMap<Faction, Integer> ships;
 
 	/*
 	 * Hunting grounds provide +1d6 gather information and a free downtime activity
@@ -256,8 +324,9 @@ public class Crew {
 		rep.add(randomReputation());
 
 		//
-		this.claims = EnumSet.noneOf(Score.Claim.class);
-		claims.add(Score.Claim.LAIR);
+		this.claims = EnumSet.noneOf(Claim.class);
+		claims.add(Claim.LAIR);
+		upgrades = new HashMap<Upgrade, Faction>();
 		this.turf = 0;
 		//
 		this.npcAllies = EnumSet.noneOf(Crew.Faction.class);
@@ -331,8 +400,8 @@ public class Crew {
 		this.tier = tier;
 		this.holdStrong = hold;
 		//
-		this.claims = EnumSet.noneOf(Score.Claim.class);
-		claims.add(Score.Claim.LAIR);
+		this.claims = EnumSet.noneOf(Claim.class);
+		claims.add(Claim.LAIR);
 		//
 		this.npcAllies = EnumSet.noneOf(Crew.Faction.class);
 		if (listAllies.length > 0) {
@@ -754,6 +823,75 @@ public class Crew {
 		return choice;
 	}
 
+	public static Upgrade randomUpgrade() {
+		Upgrade[] array = GENERIC_UPGRADES;
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Upgrade randomAssassinUpgrade() {
+		Upgrade[] array = ASSASSIN_UPGRADES;
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Upgrade randomBravosUpgrade() {
+		Upgrade[] array = BRAVOS_UPGRADES;
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Upgrade randomCultUpgrade() {
+		Upgrade[] array = CULT_UPGRADES;
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Upgrade randomHawkerUpgrade() {
+		Upgrade[] array = HAWKERS_UPGRADES;
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Upgrade randomShadowUpgrade() {
+		Upgrade[] array = SHADOWS_UPGRADES;
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Upgrade randomSmugglerUpgrade() {
+		Upgrade[] array = SMUGGLERS_UPGRADES;
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	/*
+	 * COHORTS - INNER CLASS
+	 */
+
+	private class Cohort {
+		CohortType type;
+
+		Cohort(CohortType type) {
+			this.type = type;
+		}
+
+		boolean isExpert() {
+			return (type.equals(CohortType.EXPERT));
+		}
+
+		boolean isGang() {
+			return (type.equals(CohortType.EXPERT) != true);
+		}
+	}
+
 	/*
 	 * COMPARATOR - INNER CLASSES
 	 */
@@ -763,5 +901,4 @@ public class Crew {
 			return crew1.tier - crew2.tier;
 		}
 	}
-
 }
