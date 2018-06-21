@@ -53,6 +53,25 @@ public class Crew {
 			Faction.WRAITHS, Faction.VULTURES };
 
 	//
+	private static final Faction[] CITIZENRY = { Faction.BARROWCLEFT, Faction.BRIGHTSTONE, Faction.CHARHOLLOW,
+			Faction.CHARTERHALL, Faction.COALRIDGE, Faction.CROWS_FOOT, Faction.DOCKS, Faction.DUNSLOUGH,
+			Faction.NIGHTMARKET, Faction.SILKSHORE, Faction.SIX_TOWERS, Faction.WHITECROWN };
+	private static final Faction[] INSTITUTIONS = { Faction.BLUECOATS, Faction.BRIGADE, Faction.CITY_COUNCIL,
+			Faction.DAGGER_ISLES_CONSULATE, Faction.IMPERIAL_MILITARY, Faction.INSPECTORS, Faction.IRONHOOK_PRISON,
+			Faction.IRUVIAN_CONSULATE, Faction.LEVIATHAN_HUNTERS, Faction.MINISTRY_OF_PRESERVATION,
+			Faction.SEVEROSI_CONSULATE, Faction.SKOVLAN_CONSULATE, Faction.SPARKWRIGHTS, Faction.SPIRIT_WARDENS };
+	private static final Faction[] LABOR_TRADE = { Faction.CABBIES, Faction.CYPHERS, Faction.DOCKERS,
+			Faction.FOUNDATION, Faction.GONDOLIERS, Faction.INK_RAKES, Faction.LABORERS, Faction.RAIL_JACKS,
+			Faction.SAILORS, Faction.SERVANTS };
+	private static final Faction[] THE_FRINGE = { Faction.CHURCH_OF_ECSTASY, Faction.DEATHLANDS_SCAVENGERS,
+			Faction.FORGOTTEN_GODS, Faction.HORDE, Faction.PATH_OF_ECHOES, Faction.RECONCILED,
+			Faction.SKOVLANDER_REFUGEES, Faction.WEEPING_LADY };
+	private static final Faction[] UNDERWORLD = { Faction.BILLHOOKS, Faction.CIRCLE_OF_FLAME, Faction.CROWS,
+			Faction.DIMMER_SISTERS, Faction.FOG_HOUNDS, Faction.GRAY_CLOAKS, Faction.GRINDERS, Faction.HIVE,
+			Faction.LAMPBLACKS, Faction.LORD_SCURLOCK, Faction.LOST, Faction.RED_SASHES, Faction.SILVER_NAILS,
+			Faction.ULF_IRONBORN, Faction.UNSEEN, Faction.WRAITHS, Faction.VULTURES };
+
+	//
 	private static ArrayList<Crew> factions;
 
 	// initialization
@@ -349,6 +368,75 @@ public class Crew {
 		}
 	}
 
+	public Faction preferredTarget() {
+		// ASSASSINS, BRAVOS, CULT, HAWKERS, SHADOWS, SMUGGLERS
+		// CITIZENRY, INSTITUTION, LABOR_TRADE, THE_FRINGE, UNDERWORLD
+		int[] targets = { 20, 20, 20, 20, 20 };
+
+		/*
+		 * ASSASSINS institutions & underworld CULT citizens & fringe HAWKERS citizens &
+		 * labor SHADOWS institutions & underworld SMUGGLERS labor & fringe
+		 */
+		if (type.equals(Type.ASSASSINS)) {
+			targets[0] = 10; // citizens
+			targets[1] = 35; // institution
+			targets[2] = 10; // labor & trade
+			targets[3] = 10; // the fringe
+			targets[4] = 35; // underworld
+		} else if (type.equals(Type.BRAVOS)) {
+			targets[0] = 20; // citizens
+			targets[1] = 20; // institution
+			targets[2] = 20; // labor & trade
+			targets[3] = 20; // the fringe
+			targets[4] = 20; // underworld
+		} else if (type.equals(Type.CULT)) {
+			targets[0] = 35; // citizens
+			targets[1] = 10; // institution
+			targets[2] = 10; // labor & trade
+			targets[3] = 35; // the fringe
+			targets[4] = 10; // underworld
+		} else if (type.equals(Type.HAWKERS)) {
+			targets[0] = 35; // citizens
+			targets[1] = 10; // institution
+			targets[2] = 35; // labor & trade
+			targets[3] = 10; // the fringe
+			targets[4] = 10; // underworld
+		} else if (type.equals(Type.SHADOWS)) {
+			targets[0] = 10; // citizens
+			targets[1] = 35; // institution
+			targets[2] = 10; // labor & trade
+			targets[3] = 10; // the fringe
+			targets[4] = 35; // underworld
+		} else if (type.equals(Type.SMUGGLERS)) {
+			targets[0] = 10; // citizens
+			targets[1] = 10; // institution
+			targets[2] = 35; // labor & trade
+			targets[3] = 35; // the fringe
+			targets[4] = 10; // underworld
+		}
+
+		int dice = Dice.roll(100);
+		Faction faction;
+		if (dice < 1 + targets[0]) {
+			System.out.println(1 + targets[0] + " / " + dice);
+			faction = randomCitizenryEnum();
+		} else if (dice < 1 + targets[0] + targets[1]) {
+			System.out.println(1 + targets[0] + targets[1] + " / " + dice);
+			faction = randomInstitutionEnum();
+		} else if (dice < 1 + targets[0] + targets[1] + targets[2]) {
+			System.out.println(1 + targets[0] + targets[1] + targets[2] + " / " + dice);
+			faction = randomLaborTradeEnum();
+		} else if (dice < 1 + targets[0] + targets[1] + targets[2] + targets[3]) {
+			System.out.println(1 + targets[0] + targets[1] + targets[2] + targets[3] + " / " + dice);
+			faction = randomFringeEnum();
+		} else {
+			System.out.println(100 + " / " + dice);
+			faction = randomUnderworldEnum();
+		}
+
+		return faction;
+	}
+
 	public boolean increaseShip(Faction faction) {
 		boolean increased = false;
 		int v = ships.get(faction);
@@ -471,7 +559,8 @@ public class Crew {
 		String string;
 		// string = String.format("name %s %s coin: %2d %n%s", rep.toString(),
 		// type.toString(), coin, list);
-		string = String.format("name %s %s coin: %2d", rep.toString(), type.toString(), coin);
+		string = String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d", rep.toString(), type.toString(), tier,
+				exp, coin);
 
 		return string;
 	}
@@ -562,6 +651,22 @@ public class Crew {
 		return factions;
 	}
 
+	public static Crew getCrewByFaction(Faction faction) {
+		int length = factions.size();
+
+		String name;
+		Crew crew = null;
+		for (int i = 0; i < length; ++i) {
+			crew = factions.get(i);
+			name = crew.name.toString();
+			if (name.endsWith(faction.toString())) {
+				break;
+			}
+		}
+
+		return crew;
+	}
+
 	public static Faction getFactionNameByString(String string) {
 		Faction[] array = ALL_FACTIONS;
 		Faction faction = null;
@@ -588,6 +693,41 @@ public class Crew {
 
 	public static Faction randomFactionEnum() {
 		Faction[] array = ALL_FACTIONS;
+		Faction choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Faction randomCitizenryEnum() {
+		Faction[] array = CITIZENRY;
+		Faction choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Faction randomInstitutionEnum() {
+		Faction[] array = INSTITUTIONS;
+		Faction choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Faction randomLaborTradeEnum() {
+		Faction[] array = LABOR_TRADE;
+		Faction choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Faction randomFringeEnum() {
+		Faction[] array = THE_FRINGE;
+		Faction choice = array[Dice.roll(array.length) - 1];
+
+		return choice;
+	}
+
+	public static Faction randomUnderworldEnum() {
+		Faction[] array = UNDERWORLD;
 		Faction choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
