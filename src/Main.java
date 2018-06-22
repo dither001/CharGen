@@ -15,8 +15,14 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		System.out.println(Crew.ASASSIN_SPECIALS.length);
+		System.out.println(Crew.BRAVOS_SPECIALS.length);
+		System.out.println(Crew.CULT_SPECIALS.length);
+		System.out.println(Crew.HAWKERS_SPECIALS.length);
+		System.out.println(Crew.SHADOWS_SPECIALS.length);
+		System.out.println(Crew.SMUGGLERS_SPECIALS.length);
 		
-		oneCrewScoreLoop();
+//		oneCrewScoreLoop();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// scoresByLength();

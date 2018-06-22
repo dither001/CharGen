@@ -34,8 +34,7 @@ public class Crew {
 	}
 
 	public enum Upgrade {
-		C2_COHORT_1, C2_COHORT_2, C2_COHORT_3, C2_COHORT_4, 
-		
+		C2_COHORT_1, C2_COHORT_2, C2_COHORT_3, C2_COHORT_4, //
 		BOAT_HOUSE_1, BOAT_HOUSE_2, CARRIAGE_HOUSE_1, CARRIAGE_HOUSE_2, HIDDEN_LAIR, LIVING_QUARTERS, SECURE_LAIR_1, SECURE_LAIR_2, TRAINING_INSIGHT, TRAINING_PROWESS, TRAINING_RESOLVE, TRAINING_PERSONAL, STORAGE_VAULT_1, STORAGE_VAULT_2, WORKSHOP, C4_MASTERY, QUALITY_DOCUMENTS, QUALITY_GEAR, QUALITY_IMPLEMENTS, QUALITY_SUPPLIES, QUALITY_TOOLS, QUALITY_WEAPONS, ELITE_SKULKS, ELITE_THUGS, ELITE_ROVERS, ELITE_ADEPTS, ELITE_ROOKS, ASSASSIN_RIGGING, BRAVOS_RIGGING, CULT_RIGGING, HAWKERS_RIGGING, THIEF_RIGGING, SMUGGLER_RIGGING, IRONHOOK_CONTACTS, C3_HARDENED, C3_COMPOSED, RITUAL_SANCTUM, MAPS_AND_KEYS, CAMOUFLAGE, BARGE
 	}
 
@@ -50,6 +49,34 @@ public class Crew {
 	public enum CohortFlaw {
 		PRINCIPLED, SAVAGE, UNRELIABLE, WILD
 	}
+
+	public enum Special {
+		PATRON, VETERAN_1, VETERAN_2, VETERAN_3, //
+		DEADLY, CROWS_VEIL, EMBERDEATH, NO_TRACES, PREDATORS, VIPERS, DANGEROUS, BLOOD_BROTHERS, DOOR_KICKERS, FIENDS, FORGED_IN_THE_FIRE, WAR_DOGS, CHOSEN, ANNOINTED, BOUND_IN_DARKNESS, CONVICTION, GLORY_INCARNATE, SEALED_IN_BLOOD, ZEALOTRY, SILVER_TONGUES, ACCORD, THE_GOOD_STUFF, GHOST_MARKET, HIGH_SOCIETY, HOOKED, EVERYONE_STEALS, GHOST_ECHOES, PACK_RATS, SECOND_STORY, SLIPPERY, SYNCHRONIZED, LIKE_PART_OF_THE_FAMILY, ALL_HANDS, GHOST_PASSAGE, JUST_PASSING_THROUGH, LEVERAGE, REAVERS, RENEGADES
+	}
+
+	static final Special[] ASASSIN_SPECIALS = { Special.DEADLY, Special.CROWS_VEIL, Special.EMBERDEATH,
+			Special.NO_TRACES, Special.PREDATORS, Special.VIPERS, Special.PATRON, Special.VETERAN_1,
+			Special.VETERAN_2 };
+
+	static final Special[] BRAVOS_SPECIALS = { Special.DANGEROUS, Special.BLOOD_BROTHERS, Special.DOOR_KICKERS,
+			Special.FIENDS, Special.FORGED_IN_THE_FIRE, Special.WAR_DOGS, Special.PATRON, Special.VETERAN_1,
+			Special.VETERAN_2 };
+
+	static final Special[] CULT_SPECIALS = { Special.CHOSEN, Special.ANNOINTED, Special.BOUND_IN_DARKNESS,
+			Special.CONVICTION, Special.GLORY_INCARNATE, Special.SEALED_IN_BLOOD, Special.ZEALOTRY, Special.VETERAN_1,
+			Special.VETERAN_2 };
+
+	static final Special[] HAWKERS_SPECIALS = { Special.SILVER_TONGUES, Special.ACCORD, Special.THE_GOOD_STUFF,
+			Special.GHOST_MARKET, Special.HIGH_SOCIETY, Special.HOOKED, Special.PATRON, Special.VETERAN_1,
+			Special.VETERAN_2 };
+
+	static final Special[] SHADOWS_SPECIALS = { Special.EVERYONE_STEALS, Special.GHOST_ECHOES, Special.PACK_RATS,
+			Special.SECOND_STORY, Special.SLIPPERY, Special.SYNCHRONIZED, Special.VETERAN_1, Special.VETERAN_2 };
+
+	static final Special[] SMUGGLERS_SPECIALS = { Special.LIKE_PART_OF_THE_FAMILY, Special.ALL_HANDS,
+			Special.GHOST_PASSAGE, Special.JUST_PASSING_THROUGH, Special.LEVERAGE, Special.REAVERS, Special.RENEGADES,
+			Special.VETERAN_1, Special.VETERAN_2 };
 
 	// claims by crew type
 	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
@@ -81,18 +108,37 @@ public class Crew {
 			Upgrade.TRAINING_RESOLVE, Upgrade.TRAINING_PERSONAL, Upgrade.STORAGE_VAULT_1, Upgrade.STORAGE_VAULT_2,
 			Upgrade.WORKSHOP, Upgrade.C4_MASTERY, Upgrade.QUALITY_DOCUMENTS, Upgrade.QUALITY_GEAR,
 			Upgrade.QUALITY_IMPLEMENTS, Upgrade.QUALITY_SUPPLIES, Upgrade.QUALITY_TOOLS, Upgrade.QUALITY_WEAPONS };
+	private static final Upgrade[] COST_ONE_UPGRADES = { Upgrade.BOAT_HOUSE_1, Upgrade.BOAT_HOUSE_2,
+			Upgrade.CARRIAGE_HOUSE_1, Upgrade.CARRIAGE_HOUSE_2, Upgrade.HIDDEN_LAIR, Upgrade.LIVING_QUARTERS,
+			Upgrade.SECURE_LAIR_1, Upgrade.SECURE_LAIR_2, Upgrade.TRAINING_INSIGHT, Upgrade.TRAINING_PROWESS,
+			Upgrade.TRAINING_RESOLVE, Upgrade.TRAINING_PERSONAL, Upgrade.STORAGE_VAULT_1, Upgrade.STORAGE_VAULT_2,
+			Upgrade.WORKSHOP, Upgrade.QUALITY_DOCUMENTS, Upgrade.QUALITY_GEAR, Upgrade.QUALITY_IMPLEMENTS,
+			Upgrade.QUALITY_SUPPLIES, Upgrade.QUALITY_TOOLS, Upgrade.QUALITY_WEAPONS };
 
 	// upgrades by crew type
+	private static final Upgrade[] COST_ONE_ASSASSIN_UPGRADES = { Upgrade.ASSASSIN_RIGGING, Upgrade.IRONHOOK_CONTACTS,
+			Upgrade.ELITE_SKULKS, Upgrade.ELITE_THUGS };
+	private static final Upgrade[] COST_ONE_BRAVOS_UPGRADES = { Upgrade.BRAVOS_RIGGING, Upgrade.IRONHOOK_CONTACTS,
+			Upgrade.ELITE_ROVERS, Upgrade.ELITE_THUGS };
+	private static final Upgrade[] COST_ONE_CULT_UPGRADES = { Upgrade.CULT_RIGGING, Upgrade.RITUAL_SANCTUM,
+			Upgrade.ELITE_ADEPTS, Upgrade.ELITE_THUGS };
+	private static final Upgrade[] COST_ONE_HAWKERS_UPGRADES = { Upgrade.HAWKERS_RIGGING, Upgrade.IRONHOOK_CONTACTS,
+			Upgrade.ELITE_ROOKS, Upgrade.ELITE_THUGS };
+	private static final Upgrade[] COST_ONE_SHADOWS_UPGRADES = { Upgrade.THIEF_RIGGING, Upgrade.MAPS_AND_KEYS,
+			Upgrade.ELITE_ROOKS, Upgrade.ELITE_SKULKS };
+	private static final Upgrade[] COST_ONE_SMUGGLERS_UPGRADES = { Upgrade.SMUGGLER_RIGGING, Upgrade.CAMOUFLAGE,
+			Upgrade.ELITE_ROVERS, Upgrade.BARGE };
+
 	private static final Upgrade[] ASSASSIN_UPGRADES = { Upgrade.ASSASSIN_RIGGING, Upgrade.IRONHOOK_CONTACTS,
-			Upgrade.ELITE_SKULKS, Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED, };
+			Upgrade.ELITE_SKULKS, Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED };
 	private static final Upgrade[] BRAVOS_UPGRADES = { Upgrade.BRAVOS_RIGGING, Upgrade.IRONHOOK_CONTACTS,
-			Upgrade.ELITE_ROVERS, Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED, };
+			Upgrade.ELITE_ROVERS, Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED };
 	private static final Upgrade[] CULT_UPGRADES = { Upgrade.CULT_RIGGING, Upgrade.RITUAL_SANCTUM, Upgrade.ELITE_ADEPTS,
-			Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED, };
+			Upgrade.ELITE_THUGS, Upgrade.C3_HARDENED };
 	private static final Upgrade[] HAWKERS_UPGRADES = { Upgrade.HAWKERS_RIGGING, Upgrade.IRONHOOK_CONTACTS,
-			Upgrade.ELITE_ROOKS, Upgrade.ELITE_THUGS, Upgrade.C3_COMPOSED, };
+			Upgrade.ELITE_ROOKS, Upgrade.ELITE_THUGS, Upgrade.C3_COMPOSED };
 	private static final Upgrade[] SHADOWS_UPGRADES = { Upgrade.THIEF_RIGGING, Upgrade.MAPS_AND_KEYS,
-			Upgrade.ELITE_ROOKS, Upgrade.ELITE_SKULKS, Upgrade.C3_COMPOSED, };
+			Upgrade.ELITE_ROOKS, Upgrade.ELITE_SKULKS, Upgrade.C3_COMPOSED };
 	private static final Upgrade[] SMUGGLERS_UPGRADES = { Upgrade.SMUGGLER_RIGGING, Upgrade.CAMOUFLAGE,
 			Upgrade.ELITE_ROVERS, Upgrade.BARGE, Upgrade.C3_COMPOSED };
 
@@ -354,7 +400,30 @@ public class Crew {
 			shipSetup.add(randomFactionEnum());
 		}
 		Faction f = shipSetup.get(0);
+
+		//
 		huntingGroundsBoss.add(f);
+		if (type.equals(Type.ASSASSINS)) {
+			upgrades.put(Upgrade.TRAINING_INSIGHT, f);
+			upgrades.put(Upgrade.TRAINING_PROWESS, f);
+		} else if (type.equals(Type.BRAVOS)) {
+			// TODO - additional cohort details
+			upgrades.put(Upgrade.C2_COHORT_1, f);
+			upgrades.put(Upgrade.TRAINING_PROWESS, f);
+		} else if (type.equals(Type.CULT)) {
+			// TODO - additional cohort details
+			upgrades.put(Upgrade.C2_COHORT_1, f);
+			upgrades.put(Upgrade.TRAINING_RESOLVE, f);
+		} else if (type.equals(Type.HAWKERS)) {
+			upgrades.put(Upgrade.SECURE_LAIR_1, f);
+			upgrades.put(Upgrade.TRAINING_RESOLVE, f);
+		} else if (type.equals(Type.SHADOWS)) {
+			upgrades.put(Upgrade.HIDDEN_LAIR, f);
+			upgrades.put(Upgrade.TRAINING_PROWESS, f);
+		} else if (type.equals(Type.SMUGGLERS)) {
+			upgrades.put(Upgrade.BOAT_HOUSE_1, f);
+			upgrades.put(Upgrade.TRAINING_PROWESS, f);
+		}
 
 		int dice = Dice.roll(3);
 		// hunting grounds
@@ -368,17 +437,28 @@ public class Crew {
 		}
 
 		// upgrade one
-		dice = Dice.roll(2);
 		f = shipSetup.get(1);
+		Upgrade upgrade = randomUpgradeByCrewType(type);
+		while (upgrades.containsKey(upgrade)) {
+			upgrade = randomUpgradeByCrewType(type);
+		}
+
+		dice = Dice.roll(2);
 		increaseShip(f);
+		upgrades.put(upgrade, f);
 		if (dice == 1 && coin > 0) {
 			coin -= 1;
 			increaseShip(f);
 		}
 
 		// upgrade two
-		dice = Dice.roll(2);
 		f = shipSetup.get(2);
+		while (upgrades.containsKey(upgrade)) {
+			upgrade = randomUpgradeByCrewType(type);
+		}
+
+		upgrades.put(upgrade, f);
+		dice = Dice.roll(2);
 		decreaseShip(f);
 		if (dice == 1 || coin < 1) {
 			decreaseShip(f);
@@ -611,10 +691,10 @@ public class Crew {
 	@Override
 	public String toString() {
 		Set<Crew.Faction> set = getNonZeroShips();
-		String list = "";
 
-		Iterator<Crew.Faction> it = set.iterator();
-		Crew.Faction faction;
+		String shipList = "";
+		Iterator<Faction> it = set.iterator();
+		Faction faction;
 		int status;
 		String name;
 		for (int i = 0; i < set.size(); ++i) {
@@ -622,14 +702,16 @@ public class Crew {
 			name = faction.toString();
 			status = ships.get(faction);
 			name = String.format("%2d %s", status, name);
-			list += (i + 1 < set.size()) ? name + "\n" : name;
+			shipList += (i + 1 < set.size()) ? name + "\n" : name;
 		}
+
+		String upgradeList = upgrades.toString();
 
 		String string;
 		// string = String.format("name %s %s coin: %2d %n%s", rep.toString(),
-		// type.toString(), coin, list);
-		string = String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d", rep.toString(), type.toString(), tier,
-				exp, coin);
+		// type.toString(), coin, shipList);
+		string = String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d %n%s", rep.toString(), type.toString(),
+				tier, exp, coin, upgradeList);
 
 		return string;
 	}
@@ -823,50 +905,69 @@ public class Crew {
 		return choice;
 	}
 
-	public static Upgrade randomUpgrade() {
+	public static Upgrade randomUpgradeByCrewType(Type type) {
 		Upgrade[] array = GENERIC_UPGRADES;
+		if (type.equals(Type.ASSASSINS))
+			array = ASSASSIN_UPGRADES;
+		else if (type.equals(Type.BRAVOS))
+			array = BRAVOS_UPGRADES;
+		else if (type.equals(Type.CULT))
+			array = CULT_UPGRADES;
+		else if (type.equals(Type.HAWKERS))
+			array = HAWKERS_UPGRADES;
+		else if (type.equals(Type.SHADOWS))
+			array = SHADOWS_UPGRADES;
+		else if (type.equals(Type.SMUGGLERS))
+			array = SMUGGLERS_UPGRADES;
+
+		Upgrade choice = array[Dice.roll(array.length) - 1];
+		return choice;
+	}
+
+	public static Upgrade randomUpgrade() {
+		Upgrade[] array = COST_ONE_UPGRADES;
 		Upgrade choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
 	}
 
 	public static Upgrade randomAssassinUpgrade() {
-		Upgrade[] array = ASSASSIN_UPGRADES;
+		Upgrade[] array = COST_ONE_ASSASSIN_UPGRADES;
 		Upgrade choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
 	}
 
 	public static Upgrade randomBravosUpgrade() {
-		Upgrade[] array = BRAVOS_UPGRADES;
+		Upgrade[] array = COST_ONE_BRAVOS_UPGRADES;
 		Upgrade choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
 	}
 
 	public static Upgrade randomCultUpgrade() {
-		Upgrade[] array = CULT_UPGRADES;
+		Upgrade[] array = COST_ONE_CULT_UPGRADES;
 		Upgrade choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
 	}
 
 	public static Upgrade randomHawkerUpgrade() {
-		Upgrade[] array = HAWKERS_UPGRADES;
+		Upgrade[] array = COST_ONE_HAWKERS_UPGRADES;
 		Upgrade choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
 	}
 
 	public static Upgrade randomShadowUpgrade() {
-		Upgrade[] array = SHADOWS_UPGRADES;
+		Upgrade[] array = COST_ONE_SHADOWS_UPGRADES;
 		Upgrade choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
 	}
 
 	public static Upgrade randomSmugglerUpgrade() {
-		Upgrade[] array = SMUGGLERS_UPGRADES;
+		Upgrade[] array = COST_ONE_SMUGGLERS_UPGRADES;
 		Upgrade choice = array[Dice.roll(array.length) - 1];
 
 		return choice;

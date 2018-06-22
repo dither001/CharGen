@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -670,7 +669,7 @@ public class Score {
 			String string = String.format("Scene %2d", scene);
 
 			// minimal
-			string = String.format("Scene %2d: %s check (%2d)", scene, approach, tension);
+			string = String.format("Scene %2d: %s check -%s", scene, approach, result);
 
 			// standard
 			// string = String.format("Scene %2d: %s check -%s (%2d)", scene, approach,
