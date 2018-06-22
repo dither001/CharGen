@@ -51,32 +51,26 @@ public class Crew {
 	}
 
 	public enum Special {
-		PATRON, VETERAN_1, VETERAN_2, VETERAN_3, //
-		DEADLY, CROWS_VEIL, EMBERDEATH, NO_TRACES, PREDATORS, VIPERS, DANGEROUS, BLOOD_BROTHERS, DOOR_KICKERS, FIENDS, FORGED_IN_THE_FIRE, WAR_DOGS, CHOSEN, ANNOINTED, BOUND_IN_DARKNESS, CONVICTION, GLORY_INCARNATE, SEALED_IN_BLOOD, ZEALOTRY, SILVER_TONGUES, ACCORD, THE_GOOD_STUFF, GHOST_MARKET, HIGH_SOCIETY, HOOKED, EVERYONE_STEALS, GHOST_ECHOES, PACK_RATS, SECOND_STORY, SLIPPERY, SYNCHRONIZED, LIKE_PART_OF_THE_FAMILY, ALL_HANDS, GHOST_PASSAGE, JUST_PASSING_THROUGH, LEVERAGE, REAVERS, RENEGADES
+		PATRON, VETERAN_1, VETERAN_2, VETERAN_3, DEADLY, CROWS_VEIL, EMBERDEATH, NO_TRACES, PREDATORS, VIPERS, DANGEROUS, BLOOD_BROTHERS, DOOR_KICKERS, FIENDS, FORGED_IN_THE_FIRE, WAR_DOGS, CHOSEN, ANNOINTED, BOUND_IN_DARKNESS, CONVICTION, GLORY_INCARNATE, SEALED_IN_BLOOD, ZEALOTRY, SILVER_TONGUES, ACCORD, THE_GOOD_STUFF, GHOST_MARKET, HIGH_SOCIETY, HOOKED, EVERYONE_STEALS, GHOST_ECHOES, PACK_RATS, SECOND_STORY, SLIPPERY, SYNCHRONIZED, LIKE_PART_OF_THE_FAMILY, ALL_HANDS, GHOST_PASSAGE, JUST_PASSING_THROUGH, LEVERAGE, REAVERS, RENEGADES
 	}
 
-	static final Special[] ASASSIN_SPECIALS = { Special.DEADLY, Special.CROWS_VEIL, Special.EMBERDEATH,
-			Special.NO_TRACES, Special.PREDATORS, Special.VIPERS, Special.PATRON, Special.VETERAN_1,
-			Special.VETERAN_2 };
+	private static final Special[] ASSASSIN_SPECIALS = { Special.DEADLY, Special.CROWS_VEIL, Special.EMBERDEATH,
+			Special.NO_TRACES, Special.PREDATORS, Special.VIPERS, Special.PATRON };
 
-	static final Special[] BRAVOS_SPECIALS = { Special.DANGEROUS, Special.BLOOD_BROTHERS, Special.DOOR_KICKERS,
-			Special.FIENDS, Special.FORGED_IN_THE_FIRE, Special.WAR_DOGS, Special.PATRON, Special.VETERAN_1,
-			Special.VETERAN_2 };
+	private static final Special[] BRAVOS_SPECIALS = { Special.DANGEROUS, Special.BLOOD_BROTHERS, Special.DOOR_KICKERS,
+			Special.FIENDS, Special.FORGED_IN_THE_FIRE, Special.WAR_DOGS, Special.PATRON };
 
-	static final Special[] CULT_SPECIALS = { Special.CHOSEN, Special.ANNOINTED, Special.BOUND_IN_DARKNESS,
-			Special.CONVICTION, Special.GLORY_INCARNATE, Special.SEALED_IN_BLOOD, Special.ZEALOTRY, Special.VETERAN_1,
-			Special.VETERAN_2 };
+	private static final Special[] CULT_SPECIALS = { Special.CHOSEN, Special.ANNOINTED, Special.BOUND_IN_DARKNESS,
+			Special.CONVICTION, Special.GLORY_INCARNATE, Special.SEALED_IN_BLOOD, Special.ZEALOTRY };
 
-	static final Special[] HAWKERS_SPECIALS = { Special.SILVER_TONGUES, Special.ACCORD, Special.THE_GOOD_STUFF,
-			Special.GHOST_MARKET, Special.HIGH_SOCIETY, Special.HOOKED, Special.PATRON, Special.VETERAN_1,
-			Special.VETERAN_2 };
+	private static final Special[] HAWKERS_SPECIALS = { Special.SILVER_TONGUES, Special.ACCORD, Special.THE_GOOD_STUFF,
+			Special.GHOST_MARKET, Special.HIGH_SOCIETY, Special.HOOKED, Special.PATRON };
 
-	static final Special[] SHADOWS_SPECIALS = { Special.EVERYONE_STEALS, Special.GHOST_ECHOES, Special.PACK_RATS,
-			Special.SECOND_STORY, Special.SLIPPERY, Special.SYNCHRONIZED, Special.VETERAN_1, Special.VETERAN_2 };
+	private static final Special[] SHADOWS_SPECIALS = { Special.EVERYONE_STEALS, Special.GHOST_ECHOES, Special.PACK_RATS,
+			Special.SECOND_STORY, Special.SLIPPERY, Special.SYNCHRONIZED, Special.PATRON };
 
-	static final Special[] SMUGGLERS_SPECIALS = { Special.LIKE_PART_OF_THE_FAMILY, Special.ALL_HANDS,
-			Special.GHOST_PASSAGE, Special.JUST_PASSING_THROUGH, Special.LEVERAGE, Special.REAVERS, Special.RENEGADES,
-			Special.VETERAN_1, Special.VETERAN_2 };
+	private static final Special[] SMUGGLERS_SPECIALS = { Special.LIKE_PART_OF_THE_FAMILY, Special.ALL_HANDS,
+			Special.GHOST_PASSAGE, Special.JUST_PASSING_THROUGH, Special.LEVERAGE, Special.REAVERS, Special.RENEGADES };
 
 	// claims by crew type
 	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
@@ -332,6 +326,7 @@ public class Crew {
 	//
 	private String lair;
 	private EnumSet<Claim> claims;
+	private EnumSet<Special> specials;
 	private HashMap<Upgrade, Faction> upgrades;
 	private int turf;
 	//
@@ -372,7 +367,8 @@ public class Crew {
 		//
 		this.claims = EnumSet.noneOf(Claim.class);
 		claims.add(Claim.LAIR);
-		upgrades = new HashMap<Upgrade, Faction>();
+		this.specials = EnumSet.noneOf(Special.class);
+		this.upgrades = new HashMap<Upgrade, Faction>();
 		this.turf = 0;
 		//
 		this.npcAllies = EnumSet.noneOf(Crew.Faction.class);
@@ -404,23 +400,29 @@ public class Crew {
 		//
 		huntingGroundsBoss.add(f);
 		if (type.equals(Type.ASSASSINS)) {
+			specials.add(Dice.randomFromArray(ASSASSIN_SPECIALS));
 			upgrades.put(Upgrade.TRAINING_INSIGHT, f);
 			upgrades.put(Upgrade.TRAINING_PROWESS, f);
 		} else if (type.equals(Type.BRAVOS)) {
 			// TODO - additional cohort details
+			specials.add(Dice.randomFromArray(BRAVOS_SPECIALS));
 			upgrades.put(Upgrade.C2_COHORT_1, f);
 			upgrades.put(Upgrade.TRAINING_PROWESS, f);
 		} else if (type.equals(Type.CULT)) {
 			// TODO - additional cohort details
+			specials.add(Dice.randomFromArray(CULT_SPECIALS));
 			upgrades.put(Upgrade.C2_COHORT_1, f);
 			upgrades.put(Upgrade.TRAINING_RESOLVE, f);
 		} else if (type.equals(Type.HAWKERS)) {
+			specials.add(Dice.randomFromArray(HAWKERS_SPECIALS));
 			upgrades.put(Upgrade.SECURE_LAIR_1, f);
 			upgrades.put(Upgrade.TRAINING_RESOLVE, f);
 		} else if (type.equals(Type.SHADOWS)) {
+			specials.add(Dice.randomFromArray(SHADOWS_SPECIALS));
 			upgrades.put(Upgrade.HIDDEN_LAIR, f);
 			upgrades.put(Upgrade.TRAINING_PROWESS, f);
 		} else if (type.equals(Type.SMUGGLERS)) {
+			specials.add(Dice.randomFromArray(SMUGGLERS_SPECIALS));
 			upgrades.put(Upgrade.BOAT_HOUSE_1, f);
 			upgrades.put(Upgrade.TRAINING_PROWESS, f);
 		}
@@ -710,8 +712,8 @@ public class Crew {
 		String string;
 		// string = String.format("name %s %s coin: %2d %n%s", rep.toString(),
 		// type.toString(), coin, shipList);
-		string = String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d %n%s", rep.toString(), type.toString(),
-				tier, exp, coin, upgradeList);
+		string = String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d %n%s %n%s", rep.toString(), type.toString(),
+				tier, exp, coin, specials.toString(), upgradeList);
 
 		return string;
 	}
