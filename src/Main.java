@@ -226,6 +226,7 @@ public class Main {
 		while (proceed == 1) {
 			System.out.println(" - - - - - - - - score: " + ++score);
 			rollScore(crew);
+			crew.advance();
 
 			proceed = Integer.parseInt(INPUT.nextLine());
 			if (proceed != 0) {

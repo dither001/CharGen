@@ -502,16 +502,19 @@ public class Crew {
 	public void advance() {
 		boolean canAdvance = true;
 
-		if (holdStrong() != true)
-			canAdvance = false;
-
 		if (exp < 12 - turf)
 			canAdvance = false;
 
 		if (coin < (tier + 1) * 8)
 			canAdvance = false;
 
-		if (canAdvance) {
+		if (canAdvance && holdWeak() && atPeace()) {
+			System.out.println("Improved hold.");
+			holdStrong = true;
+			coin -= (tier + 1) * 8;
+			exp -= 12 - turf;
+		} else if (canAdvance && holdStrong()) {
+			System.out.println("Advanced tier.");
 			++tier;
 			holdStrong = false;
 			coin -= (tier + 1) * 8;
