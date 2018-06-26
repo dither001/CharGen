@@ -41,7 +41,7 @@ public class Main {
 	public static void printFactionStuff() {
 		List<Crew> list = Crew.getFactions();
 		for (Iterator<Crew> it = list.iterator(); it.hasNext();) {
-			System.out.println(it.next().getAllies().toString());
+			System.out.println(it.next().npcAllyGet().toString());
 		}
 	}
 
@@ -256,12 +256,8 @@ public class Main {
 		System.out.println(crew.toString());
 		System.out.println();
 
-		Crew target = Crew.getCrewByFaction(crew.preferredTarget());
-		Score score = new Score(crew, target);
-		System.out.println(score.toString());
+		crew.findWork();
 		System.out.println();
-
-		score.action();
 	}
 
 	public static void scoresByLength() {

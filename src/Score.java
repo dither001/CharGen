@@ -76,7 +76,6 @@ public class Score {
 	private static final Effect[] TURNING_EFFECTS = { Effect.GREAT, Effect.STANDARD, Effect.LIMITED };
 	private static final Effect[] FALLING_EFFECTS = { Effect.GREAT, Effect.STANDARD };
 
-
 	// approaches by crew type
 	private static final Approach[] ASSASSIN_APPROACH = { Approach.FINESSE, Approach.HUNT, Approach.PROWL,
 			Approach.SKIRMISH, Approach.STUDY, Approach.TINKER };
@@ -113,6 +112,7 @@ public class Score {
 
 	// fields
 	private Crew crew;
+	private Crew client;
 	private Crew target;
 	private Goal goal;
 	private Plan plan;
@@ -133,13 +133,28 @@ public class Score {
 	private ArrayList<Action> actions;
 
 	// constructors
-	public Score(Crew crew, Crew target) {
-		this(crew, target, Goal.CLIMB);
+	public Score(Crew crew, Crew client) {
+		this(crew, client, Goal.CLIMB);
 	}
 
-	public Score(Crew crew, Crew target, Goal goal) {
+//	public Score(Crew crew, Crew client, Crew target) {
+//		this(crew, client, target, Goal.CLIMB);
+//	}
+
+	public Score(Crew crew, Crew client, Goal goal) {
+		/*
+		 * TODO - I need to figure out (at some point) how to differentiate between a
+		 * job given by another crew and a job given by a single patron
+		 */
 		this.crew = crew;
-		this.target = target;
+		this.client = client;
+		if (patronage()) {
+			System.out.println("Job for " + client.simplifiedToString());
+			this.target = client.npcRandomEnemyGet();
+		} else {
+			System.out.println("Crew job");
+			this.target = Crew.getCrewByFaction(crew.preferredTarget());
+		}
 		this.goal = goal;
 		this.plan = randomPlan();
 		this.activity = randomActivity(crew.getCrewType());
@@ -200,6 +215,15 @@ public class Score {
 			advance();
 		}
 
+		Crew.Faction faction;
+		if (patronage() && window.expired()) {
+			faction = Crew.getFactionNameByString(client.getName());
+			crew.decreaseShip(faction);
+		} else if (patronage() && primaryObjective.expired()) {
+			faction = Crew.getFactionNameByString(client.getName());
+			crew.increaseShip(faction);
+		}
+		
 		if (window.expired())
 			System.out.println(" " + " " + " Window closed.");
 
@@ -287,6 +311,10 @@ public class Score {
 			nextAct = Act.RELEASE;
 
 		return nextAct;
+	}
+
+	public boolean patronage() {
+		return (crew.equals(client) != true);
 	}
 
 	public boolean unresolved() {
@@ -727,8 +755,8 @@ public class Score {
 			}
 
 			// additional reputation changes
-			Set<Crew.Faction> allies = target.getAllies();
-			Set<Crew.Faction> enemies = target.getEnemies();
+			Set<Crew.Faction> allies = target.npcAllyGet();
+			Set<Crew.Faction> enemies = target.npcEnemyGet();
 
 			Crew.Faction subject;
 			for (Iterator<Crew.Faction> it = allies.iterator(); it.hasNext();) {
