@@ -1,4 +1,6 @@
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class Dice {
 	// static fields
@@ -61,6 +63,24 @@ public class Dice {
 	public static <T> T randomFromArray(T[] array) {
 		T choice = array[Dice.roll(array.length) - 1];
 
+		return choice;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T randomFromList(List<T> list) {
+		T[] array = (T[]) new Object[list.size()];
+		list.toArray(array);
+		T choice = array[Dice.roll(array.length) - 1];
+		
+		return choice;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T randomFromSet(Set<T> set) {
+		T[] array = (T[]) new Object[set.size()];
+		set.toArray(array);
+		T choice = array[Dice.roll(array.length) - 1];
+		
 		return choice;
 	}
 }
