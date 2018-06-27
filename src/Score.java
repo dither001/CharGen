@@ -722,6 +722,14 @@ public class Score {
 				System.out.println("Client (" + client.toString() + ") disappointed");
 			}
 
+			if (patronage() && window.expired()) {
+				// TODO - testing (appears to work)
+				boolean incite = Ship.shipSet().add(new Ship(client, target, true));
+				if (incite) {
+					System.out.println(target + " declared war on " + client);
+				}
+			}
+
 			// additional reputation changes
 			Set<Crew> enemies = target.npcEnemyGet();
 			Crew targetEnemy;

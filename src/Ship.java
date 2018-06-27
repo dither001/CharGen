@@ -181,6 +181,12 @@ class Ship {
 	private boolean allies;
 
 	// constructors
+	public Ship(Crew crew1, Crew crew2, boolean allies) {
+		this.crew1 = crew1;
+		this.crew2 = crew2;
+		this.allies = allies;
+	}
+
 	public Ship(Crew.Faction faction1, Crew.Faction faction2, boolean allies) {
 		Crew crew1 = Crew.getCrewByFaction(faction1);
 		Crew crew2 = Crew.getCrewByFaction(faction2);
