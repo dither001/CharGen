@@ -9,6 +9,171 @@ class Ship {
 
 	static {
 		ships = new ShipSet();
+		ships.add(new Ship(Crew.Faction.BLUECOATS, Crew.Faction.CITY_COUNCIL, true));
+		ships.add(new Ship(Crew.Faction.BLUECOATS, Crew.Faction.BILLHOOKS, true));
+		ships.add(new Ship(Crew.Faction.BLUECOATS, Crew.Faction.CROWS, true));
+		ships.add(new Ship(Crew.Faction.BLUECOATS, Crew.Faction.IRONHOOK_PRISON, true));
+		ships.add(new Ship(Crew.Faction.BLUECOATS, Crew.Faction.LORD_SCURLOCK, true));
+		ships.add(new Ship(Crew.Faction.BLUECOATS, Crew.Faction.UNSEEN, true));
+		ships.add(new Ship(Crew.Faction.BLUECOATS, Crew.Faction.IMPERIAL_MILITARY, false));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.BLUECOATS, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.CHURCH_OF_ECSTASY, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.CIRCLE_OF_FLAME, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.LORD_SCURLOCK, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.BRIGADE, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.CABBIES, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.SPARKWRIGHTS, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.FOUNDATION, true));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.IMPERIAL_MILITARY, false));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.INSPECTORS, false));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.MINISTRY_OF_PRESERVATION, false));
+		ships.add(new Ship(Crew.Faction.CITY_COUNCIL, Crew.Faction.RECONCILED, false));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.CITY_COUNCIL, true));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.CHURCH_OF_ECSTASY, true));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.SAILORS, true));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.DOCKERS, true));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.SPARKWRIGHTS, true));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.GRINDERS, false));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.MINISTRY_OF_PRESERVATION, false));
+		ships.add(new Ship(Crew.Faction.LEVIATHAN_HUNTERS, Crew.Faction.PATH_OF_ECHOES, false));
+		ships.add(new Ship(Crew.Faction.MINISTRY_OF_PRESERVATION, Crew.Faction.BILLHOOKS, true));
+		ships.add(new Ship(Crew.Faction.MINISTRY_OF_PRESERVATION, Crew.Faction.IMPERIAL_MILITARY, true));
+		ships.add(new Ship(Crew.Faction.MINISTRY_OF_PRESERVATION, Crew.Faction.RAIL_JACKS, true));
+		ships.add(new Ship(Crew.Faction.MINISTRY_OF_PRESERVATION, Crew.Faction.SPARKWRIGHTS, true));
+		ships.add(new Ship(Crew.Faction.MINISTRY_OF_PRESERVATION, Crew.Faction.LEVIATHAN_HUNTERS, false));
+		ships.add(new Ship(Crew.Faction.SPARKWRIGHTS, Crew.Faction.CITY_COUNCIL, true));
+		ships.add(new Ship(Crew.Faction.SPARKWRIGHTS, Crew.Faction.LEVIATHAN_HUNTERS, true));
+		ships.add(new Ship(Crew.Faction.SPARKWRIGHTS, Crew.Faction.MINISTRY_OF_PRESERVATION, true));
+		ships.add(new Ship(Crew.Faction.SPARKWRIGHTS, Crew.Faction.PATH_OF_ECHOES, false));
+		ships.add(new Ship(Crew.Faction.SPARKWRIGHTS, Crew.Faction.RECONCILED, false));
+		ships.add(new Ship(Crew.Faction.SPARKWRIGHTS, Crew.Faction.FOUNDATION, false));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.CHURCH_OF_ECSTASY, true));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.DEATHLANDS_SCAVENGERS, true));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.DIMMER_SISTERS, false));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.GONDOLIERS, false));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.LORD_SCURLOCK, false));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.SILVER_NAILS, false));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.UNSEEN, false));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.PATH_OF_ECHOES, false));
+		ships.add(new Ship(Crew.Faction.SPIRIT_WARDENS, Crew.Faction.RECONCILED, false));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.LAMPBLACKS, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.BARROWCLEFT, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.BRIGHTSTONE, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.CHARHOLLOW, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.CHARTERHALL, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.COALRIDGE, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.CROWS_FOOT, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.DOCKS, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.DUNSLOUGH, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.NIGHTMARKET, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.SILKSHORE, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.SIX_TOWERS, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.WHITECROWN, true));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.RED_SASHES, false));
+		ships.add(new Ship(Crew.Faction.GONDOLIERS, Crew.Faction.SPIRIT_WARDENS, false));
+		ships.add(new Ship(Crew.Faction.CHURCH_OF_ECSTASY, Crew.Faction.CITY_COUNCIL, true));
+		ships.add(new Ship(Crew.Faction.CHURCH_OF_ECSTASY, Crew.Faction.LEVIATHAN_HUNTERS, true));
+		ships.add(new Ship(Crew.Faction.CHURCH_OF_ECSTASY, Crew.Faction.SPIRIT_WARDENS, true));
+		ships.add(new Ship(Crew.Faction.CHURCH_OF_ECSTASY, Crew.Faction.PATH_OF_ECHOES, false));
+		ships.add(new Ship(Crew.Faction.CHURCH_OF_ECSTASY, Crew.Faction.RECONCILED, false));
+		ships.add(new Ship(Crew.Faction.DEATHLANDS_SCAVENGERS, Crew.Faction.FORGOTTEN_GODS, true));
+		ships.add(new Ship(Crew.Faction.DEATHLANDS_SCAVENGERS, Crew.Faction.GONDOLIERS, true));
+		ships.add(new Ship(Crew.Faction.DEATHLANDS_SCAVENGERS, Crew.Faction.SPIRIT_WARDENS, true));
+		ships.add(new Ship(Crew.Faction.DEATHLANDS_SCAVENGERS, Crew.Faction.IRONHOOK_PRISON, false));
+		ships.add(new Ship(Crew.Faction.RECONCILED, Crew.Faction.CITY_COUNCIL, true));
+		ships.add(new Ship(Crew.Faction.RECONCILED, Crew.Faction.GONDOLIERS, true));
+		ships.add(new Ship(Crew.Faction.RECONCILED, Crew.Faction.CHURCH_OF_ECSTASY, false));
+		ships.add(new Ship(Crew.Faction.RECONCILED, Crew.Faction.SPIRIT_WARDENS, false));
+		ships.add(new Ship(Crew.Faction.RECONCILED, Crew.Faction.SPARKWRIGHTS, false));
+		ships.add(new Ship(Crew.Faction.BILLHOOKS, Crew.Faction.BLUECOATS, true));
+		ships.add(new Ship(Crew.Faction.BILLHOOKS, Crew.Faction.MINISTRY_OF_PRESERVATION, true));
+		ships.add(new Ship(Crew.Faction.BILLHOOKS, Crew.Faction.ULF_IRONBORN, false));
+		ships.add(new Ship(Crew.Faction.BILLHOOKS, Crew.Faction.CROWS_FOOT, false));
+		ships.add(new Ship(Crew.Faction.BILLHOOKS, Crew.Faction.DOCKS, false));
+		ships.add(new Ship(Crew.Faction.CIRCLE_OF_FLAME, Crew.Faction.FORGOTTEN_GODS, true));
+		ships.add(new Ship(Crew.Faction.CIRCLE_OF_FLAME, Crew.Faction.PATH_OF_ECHOES, true));
+		ships.add(new Ship(Crew.Faction.CIRCLE_OF_FLAME, Crew.Faction.CITY_COUNCIL, true));
+		ships.add(new Ship(Crew.Faction.CIRCLE_OF_FLAME, Crew.Faction.FOUNDATION, true));
+		ships.add(new Ship(Crew.Faction.CIRCLE_OF_FLAME, Crew.Faction.HIVE, false));
+		ships.add(new Ship(Crew.Faction.CIRCLE_OF_FLAME, Crew.Faction.SILVER_NAILS, false));
+		ships.add(new Ship(Crew.Faction.CROWS, Crew.Faction.BLUECOATS, true));
+		ships.add(new Ship(Crew.Faction.CROWS, Crew.Faction.SAILORS, true));
+		ships.add(new Ship(Crew.Faction.CROWS, Crew.Faction.LOST, true));
+		ships.add(new Ship(Crew.Faction.CROWS, Crew.Faction.CROWS_FOOT, true));
+		ships.add(new Ship(Crew.Faction.CROWS, Crew.Faction.HIVE, false));
+		ships.add(new Ship(Crew.Faction.CROWS, Crew.Faction.INSPECTORS, false));
+		ships.add(new Ship(Crew.Faction.CROWS, Crew.Faction.DOCKERS, false));
+		ships.add(new Ship(Crew.Faction.DIMMER_SISTERS, Crew.Faction.FORGOTTEN_GODS, true));
+		ships.add(new Ship(Crew.Faction.DIMMER_SISTERS, Crew.Faction.FOUNDATION, true));
+		ships.add(new Ship(Crew.Faction.DIMMER_SISTERS, Crew.Faction.SPIRIT_WARDENS, false));
+		ships.add(new Ship(Crew.Faction.DIMMER_SISTERS, Crew.Faction.RECONCILED, false));
+		ships.add(new Ship(Crew.Faction.FOG_HOUNDS, Crew.Faction.DOCKERS, true));
+		ships.add(new Ship(Crew.Faction.FOG_HOUNDS, Crew.Faction.LAMPBLACKS, true));
+		ships.add(new Ship(Crew.Faction.FOG_HOUNDS, Crew.Faction.BLUECOATS, false));
+		ships.add(new Ship(Crew.Faction.FOG_HOUNDS, Crew.Faction.VULTURES, false));
+		ships.add(new Ship(Crew.Faction.GRAY_CLOAKS, Crew.Faction.INSPECTORS, true));
+		ships.add(new Ship(Crew.Faction.GRAY_CLOAKS, Crew.Faction.BLUECOATS, false));
+		ships.add(new Ship(Crew.Faction.GRAY_CLOAKS, Crew.Faction.LEVIATHAN_HUNTERS, false));
+		ships.add(new Ship(Crew.Faction.GRINDERS, Crew.Faction.ULF_IRONBORN, true));
+		ships.add(new Ship(Crew.Faction.GRINDERS, Crew.Faction.DOCKERS, true));
+		ships.add(new Ship(Crew.Faction.GRINDERS, Crew.Faction.BLUECOATS, false));
+		ships.add(new Ship(Crew.Faction.GRINDERS, Crew.Faction.IMPERIAL_MILITARY, false));
+		ships.add(new Ship(Crew.Faction.GRINDERS, Crew.Faction.LEVIATHAN_HUNTERS, false));
+		ships.add(new Ship(Crew.Faction.GRINDERS, Crew.Faction.SAILORS, false));
+		ships.add(new Ship(Crew.Faction.GRINDERS, Crew.Faction.SILVER_NAILS, false));
+		ships.add(new Ship(Crew.Faction.HIVE, Crew.Faction.MINISTRY_OF_PRESERVATION, true));
+		ships.add(new Ship(Crew.Faction.HIVE, Crew.Faction.DAGGER_ISLES_CONSULATE, true));
+		ships.add(new Ship(Crew.Faction.HIVE, Crew.Faction.CIRCLE_OF_FLAME, false));
+		ships.add(new Ship(Crew.Faction.HIVE, Crew.Faction.UNSEEN, false));
+		ships.add(new Ship(Crew.Faction.HIVE, Crew.Faction.CROWS, false));
+		ships.add(new Ship(Crew.Faction.HIVE, Crew.Faction.WRAITHS, false));
+		ships.add(new Ship(Crew.Faction.LAMPBLACKS, Crew.Faction.FOG_HOUNDS, true));
+		ships.add(new Ship(Crew.Faction.LAMPBLACKS, Crew.Faction.GONDOLIERS, true));
+		ships.add(new Ship(Crew.Faction.LAMPBLACKS, Crew.Faction.IRONHOOK_PRISON, true));
+		ships.add(new Ship(Crew.Faction.LAMPBLACKS, Crew.Faction.RED_SASHES, false));
+		ships.add(new Ship(Crew.Faction.LAMPBLACKS, Crew.Faction.BLUECOATS, false));
+		ships.add(new Ship(Crew.Faction.LAMPBLACKS, Crew.Faction.CABBIES, false));
+		ships.add(new Ship(Crew.Faction.LORD_SCURLOCK, Crew.Faction.CITY_COUNCIL, true));
+		ships.add(new Ship(Crew.Faction.LORD_SCURLOCK, Crew.Faction.BLUECOATS, true));
+		ships.add(new Ship(Crew.Faction.LORD_SCURLOCK, Crew.Faction.INSPECTORS, true));
+		ships.add(new Ship(Crew.Faction.LORD_SCURLOCK, Crew.Faction.FORGOTTEN_GODS, true));
+		ships.add(new Ship(Crew.Faction.LORD_SCURLOCK, Crew.Faction.SPIRIT_WARDENS, false));
+		ships.add(new Ship(Crew.Faction.LOST, Crew.Faction.LABORERS, true));
+		ships.add(new Ship(Crew.Faction.LOST, Crew.Faction.COALRIDGE, true));
+		ships.add(new Ship(Crew.Faction.LOST, Crew.Faction.DUNSLOUGH, true));
+		ships.add(new Ship(Crew.Faction.LOST, Crew.Faction.CROWS, true));
+		ships.add(new Ship(Crew.Faction.LOST, Crew.Faction.BLUECOATS, false));
+		ships.add(new Ship(Crew.Faction.LOST, Crew.Faction.BILLHOOKS, false));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.IRUVIAN_CONSULATE, true));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.PATH_OF_ECHOES, true));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.DOCKERS, true));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.CABBIES, true));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.INSPECTORS, true));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.LAMPBLACKS, false));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.BLUECOATS, false));
+		ships.add(new Ship(Crew.Faction.RED_SASHES, Crew.Faction.GONDOLIERS, false));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.IMPERIAL_MILITARY, true));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.SAILORS, true));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.SEVEROSI_CONSULATE, true));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.CIRCLE_OF_FLAME, false));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.GRINDERS, false));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.SKOVLAN_CONSULATE, false));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.SKOVLANDER_REFUGEES, false));
+		ships.add(new Ship(Crew.Faction.SILVER_NAILS, Crew.Faction.SPIRIT_WARDENS, false));
+		ships.add(new Ship(Crew.Faction.ULF_IRONBORN, Crew.Faction.GRINDERS, true));
+		ships.add(new Ship(Crew.Faction.ULF_IRONBORN, Crew.Faction.COALRIDGE, false));
+		ships.add(new Ship(Crew.Faction.ULF_IRONBORN, Crew.Faction.BILLHOOKS, false));
+		ships.add(new Ship(Crew.Faction.UNSEEN, Crew.Faction.BLUECOATS, true));
+		ships.add(new Ship(Crew.Faction.UNSEEN, Crew.Faction.IRONHOOK_PRISON, true));
+		ships.add(new Ship(Crew.Faction.UNSEEN, Crew.Faction.FORGOTTEN_GODS, true));
+		ships.add(new Ship(Crew.Faction.UNSEEN, Crew.Faction.CYPHERS, true));
+		ships.add(new Ship(Crew.Faction.UNSEEN, Crew.Faction.INK_RAKES, false));
+		ships.add(new Ship(Crew.Faction.UNSEEN, Crew.Faction.SPIRIT_WARDENS, false));
+		ships.add(new Ship(Crew.Faction.WRAITHS, Crew.Faction.CABBIES, true));
+		ships.add(new Ship(Crew.Faction.WRAITHS, Crew.Faction.BLUECOATS, false));
+		ships.add(new Ship(Crew.Faction.WRAITHS, Crew.Faction.INSPECTORS, false));
+		ships.add(new Ship(Crew.Faction.WRAITHS, Crew.Faction.HIVE, false));
+
 	}
 
 	// instance fields
@@ -45,6 +210,16 @@ class Ship {
 		return (allies != true);
 	}
 
+	@Override
+	public String toString() {
+		return String.format("[%s, %s]", crew1, crew2);
+	}
+
+	// static methods
+	public static Set<Ship> shipSet() {
+		return ShipSet.set;
+	}
+
 	/*
 	 * SHIP SET - INNER CLASS
 	 */
@@ -56,15 +231,26 @@ class Ship {
 		}
 
 		public boolean add(Ship e) {
-			// TODO Auto-generated method stub
-			return false;
+			boolean add = false;
+			if (contains(e) != true) {
+				set.add(e);
+			} else {
+				System.out.println("Already contains " + e);
+			}
+
+			return add;
 		}
 
 		public boolean contains(Ship e) {
-			// TODO Auto-generated method stub
 			boolean contains = false;
+
+			Ship ship;
 			for (Iterator<Ship> it = set.iterator(); it.hasNext();) {
-				
+				ship = it.next();
+				if (ship.equals(e)) {
+					contains = true;
+					break;
+				}
 			}
 
 			return contains;

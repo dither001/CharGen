@@ -209,12 +209,12 @@ public class Main {
 			System.out.println(crew.toStringDetailed());
 			System.out.println();
 
-//			Crew target = Crew.getCrewByFaction(crew.preferredTarget());
-//			Score score = new Score(crew, target);
-//			System.out.println(score.toString());
-//
-//			System.out.println();
-//			score.action();
+			// Crew target = Crew.getCrewByFaction(crew.preferredTarget());
+			// Score score = new Score(crew, target);
+			// System.out.println(score.toString());
+			//
+			// System.out.println();
+			// score.action();
 
 			crew.findWork();
 			crew.advance();
