@@ -190,6 +190,19 @@ class Ship {
 		this.allies = allies;
 	}
 
+	public Crew getOtherCrew(Crew crew) {
+		Crew other = (crew1.equals(crew)) ? crew2 : crew1;
+		return other;
+	}
+
+	public boolean contains(Crew other) {
+		boolean contains = false;
+		if (crew1.equals(other) || crew2.equals(other))
+			contains = true;
+
+		return contains;
+	}
+
 	public boolean equals(Ship other) {
 		boolean equals = true;
 
@@ -212,10 +225,53 @@ class Ship {
 
 	@Override
 	public String toString() {
-		return String.format("[%s, %s]", crew1, crew2);
+		String status = (allies()) ? "Allies" : "Enemies";
+		return String.format("%s [%s, %s]", status, crew1, crew2);
 	}
 
 	// static methods
+	public static Set<Crew> crewShipSet(Crew crew) {
+		// TODO - testing
+		HashSet<Crew> subset = new HashSet<Crew>();
+
+		Ship ship;
+		for (Iterator<Ship> it = ships.iterator(); it.hasNext();) {
+			ship = it.next();
+			if (ship.contains(crew))
+				subset.add(ship.getOtherCrew(crew));
+		}
+
+		return subset;
+	}
+
+	public static Set<Crew> crewAllySet(Crew crew) {
+		// TODO - testing
+		HashSet<Crew> subset = new HashSet<Crew>();
+
+		Ship ship;
+		for (Iterator<Ship> it = ships.iterator(); it.hasNext();) {
+			ship = it.next();
+			if (ship.contains(crew) && ship.allies())
+				subset.add(ship.getOtherCrew(crew));
+		}
+
+		return subset;
+	}
+
+	public static Set<Crew> crewEnemySet(Crew crew) {
+		// TODO - testing
+		HashSet<Crew> subset = new HashSet<Crew>();
+
+		Ship ship;
+		for (Iterator<Ship> it = ships.iterator(); it.hasNext();) {
+			ship = it.next();
+			if (ship.contains(crew) && ship.enemies())
+				subset.add(ship.getOtherCrew(crew));
+		}
+
+		return subset;
+	}
+
 	public static Set<Ship> shipSet() {
 		return ShipSet.set;
 	}
@@ -234,9 +290,10 @@ class Ship {
 			boolean add = false;
 			if (contains(e) != true) {
 				set.add(e);
-			} else {
-				System.out.println("Already contains " + e);
 			}
+			// else {
+			// System.out.println("Already contains " + e);
+			// }
 
 			return add;
 		}
@@ -257,8 +314,7 @@ class Ship {
 		}
 
 		public Iterator<Ship> iterator() {
-			// TODO Auto-generated method stub
-			return null;
+			return set.iterator();
 		}
 
 		public boolean remove(Object o) {

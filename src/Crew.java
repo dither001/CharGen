@@ -266,8 +266,8 @@ public class Crew {
 	private HashMap<Upgrade, Crew> upgrades;
 	private int turf;
 	//
-	private HashSet<Crew> npcAllies;
-	private HashSet<Crew> npcEnemies;
+//	private HashSet<Crew> npcAllies;
+//	private HashSet<Crew> npcEnemies;
 
 	//
 	private int heat;
@@ -309,8 +309,8 @@ public class Crew {
 		this.upgrades = new HashMap<Upgrade, Crew>();
 		this.turf = 0;
 		//
-		this.npcAllies = new HashSet<Crew>();
-		this.npcEnemies = new HashSet<Crew>();
+//		this.npcAllies = new HashSet<Crew>();
+//		this.npcEnemies = new HashSet<Crew>();
 
 		//
 		this.heat = 0;
@@ -408,12 +408,12 @@ public class Crew {
 		}
 	}
 
-	public Crew(Faction name, int tier, boolean hold) {
-		// creates two empty arrays if they don't have enemies/allies
-		this(name, tier, hold, new Faction[0], new Faction[0]);
-	}
+	// public Crew(Faction name, int tier, boolean hold) {
+	// // creates two empty arrays if they don't have enemies/allies
+	// this(name, tier, hold, new Faction[0], new Faction[0]);
+	// }
 
-	public Crew(Faction name, int tier, boolean hold, Faction[] listAllies, Faction[] listEnemies) {
+	public Crew(Faction name, int tier, boolean hold) {
 		/*
 		 * FIXME - I need to add more to faction initialization, but this works
 		 */
@@ -425,19 +425,19 @@ public class Crew {
 		this.claims = EnumSet.noneOf(Claim.class);
 		claims.add(Claim.LAIR);
 		//
-		this.npcAllies = new HashSet<Crew>();
-		if (listAllies.length > 0) {
-			for (int i = 0; i < listAllies.length; ++i) {
-				npcAllies.add(Crew.getCrewByFaction(listAllies[i]));
-			}
-		}
-
-		this.npcEnemies = new HashSet<Crew>();
-		if (listEnemies.length > 0) {
-			for (int i = 0; i < listEnemies.length; ++i) {
-				npcEnemies.add(Crew.getCrewByFaction(listEnemies[i]));
-			}
-		}
+		// this.npcAllies = new HashSet<Crew>();
+		// if (listAllies.length > 0) {
+		// for (int i = 0; i < listAllies.length; ++i) {
+		// npcAllies.add(Crew.getCrewByFaction(listAllies[i]));
+		// }
+		// }
+		//
+		// this.npcEnemies = new HashSet<Crew>();
+		// if (listEnemies.length > 0) {
+		// for (int i = 0; i < listEnemies.length; ++i) {
+		// npcEnemies.add(Crew.getCrewByFaction(listEnemies[i]));
+		// }
+		// }
 	}
 
 	// methods
@@ -743,11 +743,11 @@ public class Crew {
 	}
 
 	public Set<Crew> npcAllyGet() {
-		return npcAllies;
+		return Ship.crewAllySet(this);
 	}
 
 	public Set<Crew> npcEnemyGet() {
-		return npcEnemies;
+		return Ship.crewEnemySet(this);
 	}
 
 	public Crew npcRandomEnemyGet() {
