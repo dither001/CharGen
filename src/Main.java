@@ -15,26 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		oneCrewScoreLoop();
-
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// scoresByLength();
-		// System.out.println();
-		// }
-
-		// Weapon[] weapons = Weapon.handsDescendingArray();
-		// for (Weapon el : weapons)
-		// System.out.println(el.toString());
-
-		// levelUpTest();
-
-		// setupActorLadder();
-
-		// encounterSpread();
-
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// rollOneSpellbook(7);
-		// }
+		workLoop();
 
 	}
 
@@ -219,6 +200,44 @@ public class Main {
 		System.out.println(crew.toString());
 	}
 
+	public static void workLoop() {
+		int score = 0;
+		Crew crew = new Crew();
+
+		while (proceed == 1) {
+			System.out.println(" - - - - - - - - score: " + ++score);
+			System.out.println(crew.toStringDetailed());
+			System.out.println();
+
+//			Crew target = Crew.getCrewByFaction(crew.preferredTarget());
+//			Score score = new Score(crew, target);
+//			System.out.println(score.toString());
+//
+//			System.out.println();
+//			score.action();
+
+			crew.findWork();
+			crew.advance();
+
+			proceed = Integer.parseInt(INPUT.nextLine());
+			if (proceed != 0) {
+				if (proceed == 2) {
+					List<Crew>[] array = crew.nonNeutralStatus();
+					System.out.println();
+					System.out.println("Allies: " + array[5].toString());
+					System.out.println("Friendlies: " + array[4].toString());
+					System.out.println("Helpful: " + array[3].toString());
+					System.out.println("Indifferent: " + array[2].toString());
+					System.out.println("Hostiles: " + array[1].toString());
+					System.out.println("Enemies: " + array[0].toString());
+					System.out.println();
+				}
+
+				proceed = 1;
+			}
+		}
+	}
+
 	public static void oneCrewScoreLoop() {
 		int score = 0;
 		Crew crew = new Crew();
@@ -231,7 +250,7 @@ public class Main {
 			proceed = Integer.parseInt(INPUT.nextLine());
 			if (proceed != 0) {
 				if (proceed == 2) {
-					List<Crew.Faction>[] array = crew.nonNeutralStatus();
+					List<Crew>[] array = crew.nonNeutralStatus();
 					System.out.println();
 					System.out.println("Allies: " + array[5].toString());
 					System.out.println("Friendlies: " + array[4].toString());
@@ -256,48 +275,18 @@ public class Main {
 		System.out.println(crew.toString());
 		System.out.println();
 
-		crew.findWork();
+		Crew client = crew.clientFriendOrSelf();
+		Crew target;
+		if (crew.equals(client))
+			target = crew.preferredTarget();
+		else
+			target = client.npcRandomEnemyGet();
+
+		Score score = new Score(crew, client, target);
+		System.out.println(score.toString());
+
 		System.out.println();
-	}
-
-	public static void scoresByLength() {
-		double scoresToRoll = 1000;
-		int totalScenes = 0;
-		int[] scores = new int[50];
-
-		for (int i = 0; i < scores.length; ++i) {
-			scores[i] = 0;
-		}
-
-		for (int i = 0; i < scoresToRoll; ++i) {
-			++scores[simulateScore()];
-		}
-
-		String string = "";
-		for (int i = 1; i < scores.length; ++i) {
-			string = String.format("Actions (%2d): %4d (%6.1f%%)", i, scores[i], scores[i] / scoresToRoll * 100);
-			if (scores[i] > 0) {
-				totalScenes += scores[i];
-				System.out.println(string);
-			}
-		}
-
-		System.out.println("Total:        " + totalScenes);
-	}
-
-	public static int simulateScore() {
-		int finalScore;
-		Crew crew = new Crew();
-		System.out.println(crew.toString());
-		System.out.println();
-		Score score = new Score(crew, Crew.randomFaction());
-		while (score.unresolved()) {
-			score.advance();
-		}
-		finalScore = score.getScene();
-		// System.out.println("Scene count: " + finalScore);
-
-		return finalScore;
+		score.action();
 	}
 
 	public static void rollCharacter() {

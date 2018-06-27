@@ -133,28 +133,18 @@ public class Score {
 	private ArrayList<Action> actions;
 
 	// constructors
-	public Score(Crew crew, Crew client) {
-		this(crew, client, Goal.CLIMB);
+	public Score(Crew crew, Crew client, Crew target) {
+		this(crew, client, target, Goal.CLIMB);
 	}
 
-//	public Score(Crew crew, Crew client, Crew target) {
-//		this(crew, client, target, Goal.CLIMB);
-//	}
-
-	public Score(Crew crew, Crew client, Goal goal) {
+	public Score(Crew crew, Crew client, Crew target, Goal goal) {
 		/*
 		 * TODO - I need to figure out (at some point) how to differentiate between a
 		 * job given by another crew and a job given by a single patron
 		 */
 		this.crew = crew;
 		this.client = client;
-		if (patronage()) {
-			System.out.println("Job for " + client.simplifiedToString());
-			this.target = client.npcRandomEnemyGet();
-		} else {
-			System.out.println("Crew job");
-			this.target = Crew.getCrewByFaction(crew.preferredTarget());
-		}
+		this.target = target;
 		this.goal = goal;
 		this.plan = randomPlan();
 		this.activity = randomActivity(crew.getCrewType());
@@ -196,7 +186,7 @@ public class Score {
 					 * FIXME - currently here for debug only; replace with "end score"
 					 */
 					// actions.add(new Action(getawayMove, randomPosition()));
-					System.out.println("No more actions to play out.");
+					System.out.println("Clean getaway.");
 					break;
 
 				} else if (primaryObjective.expired()) {
@@ -215,15 +205,6 @@ public class Score {
 			advance();
 		}
 
-		Crew.Faction faction;
-		if (patronage() && window.expired()) {
-			faction = Crew.getFactionNameByString(client.getName());
-			crew.decreaseShip(faction);
-		} else if (patronage() && primaryObjective.expired()) {
-			faction = Crew.getFactionNameByString(client.getName());
-			crew.increaseShip(faction);
-		}
-		
 		if (window.expired())
 			System.out.println(" " + " " + " Window closed.");
 
@@ -384,10 +365,10 @@ public class Score {
 	}
 
 	public static Activity randomActivity() {
-		Activity[] array = ALL_ACTIVITIES;
-		Activity choice = array[Dice.roll(array.length) - 1];
+		// Activity[] array = ALL_ACTIVITIES;
+		// Activity choice = array[Dice.roll(array.length) - 1];
 
-		return choice;
+		return Dice.randomFromArray(ALL_ACTIVITIES);
 	}
 
 	public static Activity randomActivity(Crew.Type crew) {
@@ -722,27 +703,63 @@ public class Score {
 			 * "zero reputation," because "everyone knows everybody." All that changes is
 			 * which SIDE of the friend/enemy spectrum characters fall on at present
 			 */
-			ArrayList<Crew.Faction> changes = new ArrayList<Crew.Faction>();
+			ArrayList<Crew> changes = new ArrayList<Crew>();
 
 			Crew crew = score.crew;
+			Crew client = score.client;
 			Crew target = score.target;
+
+			// resolve client status
+			if (patronage() && primaryObjective.expired()) {
+				changes.add(client);
+				crew.increaseShip(client);
+				// TODO - testing
+				System.out.println("Client (" + client.toString() + ") satisfied");
+			} else if (patronage() && window.expired()) {
+				changes.add(client);
+				crew.decreaseShip(client);
+				// TODO - testing
+				System.out.println("Client (" + client.toString() + ") disappointed");
+			}
+
+			// additional reputation changes
+			Set<Crew> allies = target.npcAllyGet();
+			Set<Crew> enemies = target.npcEnemyGet();
+
+			Crew targetAlly;
+			for (Iterator<Crew> it = allies.iterator(); it.hasNext();) {
+				targetAlly = it.next();
+				if (Dice.roll(2) == 1) {
+					// allies of the target like you less
+					changes.add(targetAlly);
+					crew.decreaseShip(targetAlly);
+					System.out.println(targetAlly + " status decreased");
+				}
+			}
+
+			Crew targetEnemy;
+			for (Iterator<Crew> it = enemies.iterator(); it.hasNext();) {
+				targetEnemy = it.next();
+				if (Dice.roll(2) == 1) {
+					// enemies of the target like you more
+					changes.add(targetEnemy);
+					crew.increaseShip(targetEnemy);
+					System.out.println(targetEnemy + " status increased");
+				}
+			}
 
 			// rep boost
 			int crewTier = crew.getTier();
 			int targetTier = target.getTier();
 			int exp = (targetTier - crewTier + 2 < 1) ? 0 : targetTier - crewTier + 2;
 			if (exp > 0) {
-				// workaround searches for Faction by name
-				Crew.Faction targetFaction = Crew.getFactionNameByString(target.getName());
-				if (targetFaction != null) {
-					changes.add(targetFaction);
-					crew.decreaseShip(targetFaction);
-					System.out.println(targetFaction + " status decreased");
-				}
+				changes.add(target);
+				crew.decreaseShip(target);
+				System.out.println(target.nameOnly() + " status decreased");
 
+				//
 				crew.addEXP(exp);
 				System.out.println("Rep gained: " + exp);
-
 			}
 
 			// payoff
@@ -751,37 +768,8 @@ public class Score {
 				int payoff = Dice.roll(2, 6);
 				System.out.println("Coin gained: " + payoff);
 				crew.addCoin(payoff);
-
-			}
-
-			// additional reputation changes
-			Set<Crew.Faction> allies = target.npcAllyGet();
-			Set<Crew.Faction> enemies = target.npcEnemyGet();
-
-			Crew.Faction subject;
-			for (Iterator<Crew.Faction> it = allies.iterator(); it.hasNext();) {
-				subject = it.next();
-				if (Dice.roll(2) == 1) {
-					// allies of the target like you less
-					changes.add(subject);
-					crew.decreaseShip(subject);
-					System.out.println(subject + " status decreased");
-
-				}
-			}
-
-			for (Iterator<Crew.Faction> it = enemies.iterator(); it.hasNext();) {
-				subject = it.next();
-				if (Dice.roll(2) == 1) {
-					// enemies of the target like you more
-					changes.add(subject);
-					crew.increaseShip(subject);
-					System.out.println(subject + " status increased");
-
-				}
 			}
 
 		}
-
 	}
 }

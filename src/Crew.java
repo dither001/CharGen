@@ -327,17 +327,17 @@ public class Crew {
 	private String lair;
 	private EnumSet<Claim> claims;
 	private EnumSet<Special> specials;
-	private HashMap<Upgrade, Faction> upgrades;
+	private HashMap<Upgrade, Crew> upgrades;
 	private int turf;
 	//
-	private EnumSet<Faction> npcAllies;
-	private EnumSet<Faction> npcEnemies;
+	private HashSet<Crew> npcAllies;
+	private HashSet<Crew> npcEnemies;
 
 	//
 	private int heat;
 	private int wantedLevel;
 	private boolean atWar;
-	private HashMap<Faction, Integer> shipMap;
+	private HashMap<Crew, Integer> shipMap;
 	private int[] shipArray;
 
 	/*
@@ -347,7 +347,7 @@ public class Crew {
 	 */
 	private String huntingGrounds;
 	//
-	private HashSet<Faction> huntingGroundsBoss;
+	private HashSet<Crew> huntingGroundsBoss;
 	private int huntingGroundSize;
 	private String operation;
 	private HashSet<Score.Activity> favoredOps;
@@ -355,6 +355,7 @@ public class Crew {
 	// constructors
 	public Crew() {
 		// TODO - create additional constructors
+		this.name = "Default";
 		this.type = randomCrewType();
 		this.tier = 0;
 		this.holdStrong = true;
@@ -369,11 +370,11 @@ public class Crew {
 		this.claims = EnumSet.noneOf(Claim.class);
 		claims.add(Claim.LAIR);
 		this.specials = EnumSet.noneOf(Special.class);
-		this.upgrades = new HashMap<Upgrade, Faction>();
+		this.upgrades = new HashMap<Upgrade, Crew>();
 		this.turf = 0;
 		//
-		this.npcAllies = EnumSet.noneOf(Crew.Faction.class);
-		this.npcEnemies = EnumSet.noneOf(Crew.Faction.class);
+		this.npcAllies = new HashSet<Crew>();
+		this.npcEnemies = new HashSet<Crew>();
 
 		//
 		this.heat = 0;
@@ -386,18 +387,18 @@ public class Crew {
 		favoredOps.add(Score.randomActivity(type));
 
 		// setup ships
-		shipMap = new HashMap<Faction, Integer>();
+		shipMap = new HashMap<Crew, Integer>();
 		shipArray = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		for (int i = 0; i < ALL_FACTIONS.length; ++i) {
-			shipMap.put(ALL_FACTIONS[i], 0);
+			shipMap.put(Crew.getCrewByFaction(ALL_FACTIONS[i]), 0);
 		}
 
-		this.huntingGroundsBoss = new HashSet<Faction>();
-		ArrayList<Faction> shipSetup = new ArrayList<Faction>();
+		this.huntingGroundsBoss = new HashSet<Crew>();
+		ArrayList<Crew> shipSetup = new ArrayList<Crew>();
 		while (shipSetup.size() < 3) {
-			shipSetup.add(randomFactionEnum());
+			shipSetup.add(Dice.randomFromList(factions));
 		}
-		Faction f = shipSetup.get(0);
+		Crew f = shipSetup.get(0);
 
 		//
 		huntingGroundsBoss.add(f);
@@ -487,16 +488,16 @@ public class Crew {
 		this.claims = EnumSet.noneOf(Claim.class);
 		claims.add(Claim.LAIR);
 		//
-		this.npcAllies = EnumSet.noneOf(Crew.Faction.class);
+		this.npcAllies = new HashSet<Crew>();
 		if (listAllies.length > 0) {
 			for (Crew.Faction el : listAllies)
-				npcAllies.add(el);
+				npcAllies.add(Crew.getCrewByFaction(el));
 		}
 
-		this.npcEnemies = EnumSet.noneOf(Crew.Faction.class);
+		this.npcEnemies = new HashSet<Crew>();
 		if (listEnemies.length > 0) {
 			for (Crew.Faction el : listEnemies)
-				npcEnemies.add(el);
+				npcEnemies.add(Crew.getCrewByFaction(el));
 		}
 	}
 
@@ -513,7 +514,7 @@ public class Crew {
 		if (canAdvance && holdWeak() && atPeace()) {
 			// TODO - testing
 			System.out.println("\n - - - - - -");
-			System.out.println(toString());
+			System.out.println(toStringBasic());
 			System.out.println("IMPROVED CREW HOLD.");
 			holdStrong = true;
 			coin -= (tier + 1) * 8;
@@ -521,7 +522,7 @@ public class Crew {
 		} else if (canAdvance && holdStrong()) {
 			// TODO - testing
 			System.out.println("\n - - - - - -");
-			System.out.println(toString());
+			System.out.println(toStringBasic());
 			System.out.println("ADVANCED CREW TIER.");
 			holdStrong = false;
 			coin -= (tier + 1) * 8;
@@ -531,15 +532,50 @@ public class Crew {
 	}
 
 	public void findWork() {
-		// TODO
-		List<Faction>[] array = updateShipArray();
-		for (List<Faction> el : array) {
-			System.out.println(el.toString());
+		/*
+		 * TODO
+		 */
+		List<Crew>[] array = updateShipArray();
+		Crew client = clientFriendOrSelf(array), target;
+
+		if (client.equals(this)) {
+			// working for self
+			target = preferredTarget();
+		} else {
+			/*
+			 * TODO - I should figure out how much of the score a patron can dictate;
+			 * whether it's the PLAN, just the ACTIVITY, whether they're going to the
+			 * specific crew because of their inherent talents or reputation... what I
+			 * should probably come up with a "referral system"
+			 */
+			// Score.Plan plan = Score.randomPlan();
+			// Score.Activity activity = Score.randomActivity();
+			target = client.npcRandomEnemyGet();
 		}
 
+		// TODO - testing
+		// for (int i = array.length - 1; i >= 0; --i) {
+		// System.out.println(array[i].toString());
+		// }
+
+		if (array[6].contains(target) || rep.contains(Rep.HONORABLE)) {
+			// TODO - refuse to pull job on a friendly
+		}
+
+		Score score = new Score(this, client, target);
+		// TODO - testing
+		if (client.equals(this)) {
+			System.out.println("Crew job.");
+		} else {
+			System.out.println("Job for " + client.toString());
+		}
+		System.out.println(score.toString());
+		System.out.println();
+
+		score.action();
 	}
 
-	public Faction preferredTarget() {
+	public Crew preferredTarget() {
 		// ASSASSINS, BRAVOS, CULT, HAWKERS, SHADOWS, SMUGGLERS
 		// CITIZENRY, INSTITUTION, LABOR_TRADE, THE_FRINGE, UNDERWORLD
 		int[] targets = { 20, 20, 20, 20, 20 };
@@ -605,11 +641,15 @@ public class Crew {
 			faction = randomUnderworldEnum();
 		}
 
-		return faction;
+		return getCrewByFaction(faction);
 	}
 
 	public Crew clientFriendOrSelf() {
-		List<Faction>[] array = updateShipArray();
+		List<Crew>[] array = updateShipArray();
+		return clientFriendOrSelf(array);
+	}
+
+	public Crew clientFriendOrSelf(List<Crew>[] array) {
 		Crew client;
 		int[] obligations = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 
@@ -639,12 +679,12 @@ public class Crew {
 			obligations[3] = 75 - totalObs;
 
 		// TODO - for testing
-		for (int el : obligations) {
-			System.out.println("Ship# " + el);
-		}
+		// for (int el : obligations) {
+		// System.out.println("Ship# " + el);
+		// }
 
 		int dice = Dice.roll(100);
-		Faction faction;
+		Crew faction;
 		if (dice < obligations[0]) {
 			faction = Dice.randomFromList(array[6]);
 		} else if (dice < obligations[0] + obligations[1]) {
@@ -665,16 +705,16 @@ public class Crew {
 			return this;
 		}
 
-		client = Crew.getCrewByFaction(faction);
-		return client;
+		// client = Crew.getCrewByFaction(faction);
+		return faction;
 	}
 
-	public boolean increaseShip(Faction faction) {
+	public boolean increaseShip(Crew crew) {
 		boolean increased = false;
-		int v = shipMap.get(faction);
+		int v = shipMap.get(crew);
 
 		if (v < 3) {
-			shipMap.put(faction, v + 1);
+			shipMap.put(crew, v + 1);
 			increased = true;
 		}
 
@@ -682,12 +722,12 @@ public class Crew {
 		return increased;
 	}
 
-	public boolean decreaseShip(Faction faction) {
+	public boolean decreaseShip(Crew crew) {
 		boolean decreased = false;
-		int v = shipMap.get(faction);
+		int v = shipMap.get(crew);
 
 		if (v > -3) {
-			shipMap.put(faction, v - 1);
+			shipMap.put(crew, v - 1);
 			decreased = true;
 		}
 
@@ -748,12 +788,12 @@ public class Crew {
 		return (atWar != true);
 	}
 
-	public Set<Faction> getNonZeroShips() {
-		HashSet<Faction> nonZeroShips = new HashSet<Faction>();
+	public Set<Crew> getNonZeroShips() {
+		HashSet<Crew> nonZeroShips = new HashSet<Crew>();
 
-		Faction f;
+		Crew f;
 		int v;
-		for (Iterator<Faction> it = shipMap.keySet().iterator(); it.hasNext();) {
+		for (Iterator<Crew> it = shipMap.keySet().iterator(); it.hasNext();) {
 			f = it.next();
 			v = shipMap.get(f);
 			if (v != 0)
@@ -763,38 +803,60 @@ public class Crew {
 		return nonZeroShips;
 	}
 
-	public Set<Faction> npcAllyGet() {
+	public Set<Crew> npcAllyGet() {
 		return npcAllies;
 	}
 
-	public Set<Faction> npcEnemyGet() {
+	public Set<Crew> npcEnemyGet() {
 		return npcEnemies;
 	}
 
 	public Crew npcRandomEnemyGet() {
-		Faction faction;
+		Crew choice;
 		if (npcEnemyGet().size() > 0)
-			faction = Dice.randomFromSet(npcEnemyGet());
-		else
-			faction = randomFactionEnum();
+			choice = Dice.randomFromSet(npcEnemyGet());
+		else {
+			choice = Dice.randomFromList(factions);
+			while (choice.equals(this)) {
+				choice = Dice.randomFromList(factions);
+			}
+		}
 
-		Crew choice = Crew.getCrewByFaction(faction);
 		return choice;
+	}
+
+	public boolean equals(Crew other) {
+		boolean equals = false;
+		if (other.name.compareTo(this.name) == 0)
+			equals = true;
+
+		return equals;
 	}
 
 	@Override
 	public String toString() {
-		Set<Crew.Faction> set = getNonZeroShips();
+		return name;
+	}
+
+	public String toStringBasic() {
+		String string = String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d || Strong hold: %s",
+				rep.toString(), type.toString(), tier, exp, coin, holdStrong());
+
+		return string;
+	}
+
+	public String toStringDetailed() {
+		Set<Crew> set = getNonZeroShips();
 
 		String shipList = "";
-		Iterator<Faction> it = set.iterator();
-		Faction faction;
+		Iterator<Crew> it = set.iterator();
+		Crew crew;
 		int status;
 		String name;
 		for (int i = 0; i < set.size(); ++i) {
-			faction = it.next();
-			name = faction.toString();
-			status = shipMap.get(faction);
+			crew = it.next();
+			name = crew.nameOnly();
+			status = shipMap.get(crew);
 			name = String.format("%2d %s", status, name);
 			shipList += (i + 1 < set.size()) ? name + "\n" : name;
 		}
@@ -804,8 +866,8 @@ public class Crew {
 		String string = (atWar()) ? String.format(" - AT WAR WITH: %s%n", enemiesList().toString()) : "";
 		// string = String.format("name %s %s coin: %2d %n%s", rep.toString(),
 		// type.toString(), coin, shipList);
-		string += String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d %n%s %n%s", rep.toString(),
-				type.toString(), tier, exp, coin, specials.toString(), upgradeList);
+		string += String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d || Strong hold: %s %n%s %n%s",
+				rep.toString(), type.toString(), tier, exp, coin, holdStrong(), specials.toString(), upgradeList);
 
 		return string;
 	}
@@ -816,49 +878,53 @@ public class Crew {
 		return string;
 	}
 
-	public List<Faction>[] allFactionStatus() {
-		List<Faction>[] array = (List<Faction>[]) new ArrayList[7];
+	public String nameOnly() {
+		return name;
+	}
+
+	public List<Crew>[] allFactionStatus() {
+		List<Crew>[] array = (List<Crew>[]) new ArrayList[7];
 		for (int i = 0; i < array.length; ++i) {
-			array[i] = new ArrayList<Faction>();
+			array[i] = new ArrayList<Crew>();
 		}
 
-		Set<Faction> set = new HashSet<Faction>(shipMap.keySet());
-		Faction faction;
-		for (Iterator<Faction> it = set.iterator(); it.hasNext();) {
-			faction = it.next();
-			array[shipMap.get(faction) + 3].add(faction);
+		Set<Crew> set = new HashSet<Crew>(shipMap.keySet());
+		Crew crew;
+		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
+			crew = it.next();
+			array[shipMap.get(crew) + 3].add(crew);
 		}
 
 		return array;
 	}
 
-	public List<Faction>[] nonNeutralStatus() {
-		List<Faction>[] array = (List<Faction>[]) new ArrayList[6];
+	public List<Crew>[] nonNeutralStatus() {
+		List<Crew>[] array = (List<Crew>[]) new ArrayList[6];
 		for (int i = 0; i < array.length; ++i) {
-			array[i] = new ArrayList<Faction>();
+			array[i] = new ArrayList<Crew>();
 		}
 
-		Set<Faction> set = new HashSet<Faction>(shipMap.keySet());
-		Faction faction;
+		Set<Crew> set = new HashSet<Crew>(shipMap.keySet());
+		Crew crew;
 		int status;
-		for (Iterator<Faction> it = set.iterator(); it.hasNext();) {
-			faction = it.next();
-			status = shipMap.get(faction);
+		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
+			crew = it.next();
+			status = shipMap.get(crew);
 
 			if (status + 3 < 3) {
-				array[status + 3].add(faction);
+				array[status + 3].add(crew);
 			} else if (status + 3 > 3) {
-				array[status + 2].add(faction);
+				array[status + 2].add(crew);
 			}
 		}
 
 		return array;
 	}
 
-	public List<Faction>[] updateShipArray() {
+	public List<Crew>[] updateShipArray() {
 		// must update shipArray object in REVERSE order because a faction status equals
 		// "status +3" to offset -3 "at war"
-		List<Faction>[] array = allFactionStatus();
+		List<Crew>[] array = allFactionStatus();
 
 		for (int i = 0; i < shipArray.length; ++i) {
 			shipArray[6 - i] = array[i].size();
@@ -867,53 +933,53 @@ public class Crew {
 		return array;
 	}
 
-	public List<Faction> alliesList() {
-		List<Faction> list = new ArrayList<Faction>();
-		Set<Faction> set = new HashSet<Faction>(shipMap.keySet());
-		Faction faction;
-		for (Iterator<Faction> it = set.iterator(); it.hasNext();) {
-			faction = it.next();
-			if (shipMap.get(faction) > 2)
-				list.add(faction);
+	public List<Crew> alliesList() {
+		List<Crew> list = new ArrayList<Crew>();
+		Set<Crew> set = new HashSet<Crew>(shipMap.keySet());
+		Crew crew;
+		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
+			crew = it.next();
+			if (shipMap.get(crew) > 2)
+				list.add(crew);
 		}
 
 		return list;
 	}
 
-	public List<Faction> friendliesList() {
-		List<Faction> list = new ArrayList<Faction>();
-		Set<Faction> set = new HashSet<Faction>(shipMap.keySet());
-		Faction faction;
-		for (Iterator<Faction> it = set.iterator(); it.hasNext();) {
-			faction = it.next();
-			if (shipMap.get(faction) > 0)
-				list.add(faction);
+	public List<Crew> friendliesList() {
+		List<Crew> list = new ArrayList<Crew>();
+		Set<Crew> set = new HashSet<Crew>(shipMap.keySet());
+		Crew crew;
+		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
+			crew = it.next();
+			if (shipMap.get(crew) > 0)
+				list.add(crew);
 		}
 
 		return list;
 	}
 
-	public List<Faction> hostilesList() {
-		List<Faction> list = new ArrayList<Faction>();
-		Set<Faction> set = new HashSet<Faction>(shipMap.keySet());
-		Faction faction;
-		for (Iterator<Faction> it = set.iterator(); it.hasNext();) {
-			faction = it.next();
-			if (shipMap.get(faction) < 0)
-				list.add(faction);
+	public List<Crew> hostilesList() {
+		List<Crew> list = new ArrayList<Crew>();
+		Set<Crew> set = new HashSet<Crew>(shipMap.keySet());
+		Crew crew;
+		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
+			crew = it.next();
+			if (shipMap.get(crew) < 0)
+				list.add(crew);
 		}
 
 		return list;
 	}
 
-	public List<Faction> enemiesList() {
-		List<Faction> list = new ArrayList<Faction>();
-		Set<Faction> set = new HashSet<Faction>(shipMap.keySet());
-		Faction faction;
-		for (Iterator<Faction> it = set.iterator(); it.hasNext();) {
-			faction = it.next();
-			if (shipMap.get(faction) < -2)
-				list.add(faction);
+	public List<Crew> enemiesList() {
+		List<Crew> list = new ArrayList<Crew>();
+		Set<Crew> set = new HashSet<Crew>(shipMap.keySet());
+		Crew crew;
+		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
+			crew = it.next();
+			if (shipMap.get(crew) < -2)
+				list.add(crew);
 		}
 
 		return list;
