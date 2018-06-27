@@ -277,7 +277,7 @@ public class Main {
 
 		Crew client = crew.clientFriendOrSelf();
 		Crew target;
-		if (crew.equals(client))
+		if (crew.sameAs(client))
 			target = crew.preferredTarget();
 		else
 			target = client.npcRandomEnemyGet();

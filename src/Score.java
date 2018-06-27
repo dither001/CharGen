@@ -295,7 +295,7 @@ public class Score {
 	}
 
 	public boolean patronage() {
-		return (crew.equals(client) != true);
+		return (crew.sameAs(client) != true);
 	}
 
 	public boolean unresolved() {
@@ -606,7 +606,7 @@ public class Score {
 
 			// TODO - need input from actor's attributes
 			resolve(Dice.roll(3));
-			System.out.println(toString());
+			// System.out.println(toString());
 		}
 
 		// methods
@@ -724,28 +724,47 @@ public class Score {
 
 			// additional reputation changes
 			Set<Crew> allies = target.npcAllyGet();
-			Set<Crew> enemies = target.npcEnemyGet();
+			// FIXME - testing
+			for (Crew el : allies) {
+				System.out.println(el);
+			}
 
 			Crew targetAlly;
 			for (Iterator<Crew> it = allies.iterator(); it.hasNext();) {
 				targetAlly = it.next();
-				if (Dice.roll(2) == 1) {
-					// allies of the target like you less
-					changes.add(targetAlly);
-					crew.decreaseShip(targetAlly);
-					System.out.println(targetAlly + " status decreased");
-				}
+				changes.add(targetAlly);
+				crew.decreaseShip(targetAlly);
+				System.out.println(targetAlly + " status decreased");
+
+				// FIXME - testing
+				// if (Dice.roll(2) == 1) {
+				// // allies of the target like you less
+				// changes.add(targetAlly);
+				// crew.decreaseShip(targetAlly);
+				// System.out.println(targetAlly + " status decreased");
+				// }
+			}
+
+			Set<Crew> enemies = target.npcEnemyGet();
+			// FIXME - testing
+			for (Crew el : enemies) {
+				System.out.println(el);
 			}
 
 			Crew targetEnemy;
 			for (Iterator<Crew> it = enemies.iterator(); it.hasNext();) {
+
 				targetEnemy = it.next();
-				if (Dice.roll(2) == 1) {
-					// enemies of the target like you more
-					changes.add(targetEnemy);
-					crew.increaseShip(targetEnemy);
-					System.out.println(targetEnemy + " status increased");
-				}
+				changes.add(targetEnemy);
+				crew.increaseShip(targetEnemy);
+				System.out.println(targetEnemy + " status increased");
+				// FIXME - testing
+				// if (Dice.roll(2) == 1) {
+				// // enemies of the target like you more
+				// changes.add(targetEnemy);
+				// crew.increaseShip(targetEnemy);
+				// System.out.println(targetEnemy + " status increased");
+				// }
 			}
 
 			// rep boost
@@ -755,7 +774,7 @@ public class Score {
 			if (exp > 0) {
 				changes.add(target);
 				crew.decreaseShip(target);
-				System.out.println(target.nameOnly() + " status decreased");
+				System.out.println(target + " status decreased");
 
 				//
 				crew.addEXP(exp);
