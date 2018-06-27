@@ -708,8 +708,18 @@ public class Score {
 			Crew crew = score.crew;
 			Crew client = score.client;
 			Crew target = score.target;
+			Goal goal = score.goal;
 
-			// resolve client status
+			if (primaryObjective.expired() && goal.equals(Goal.SHAKE)) {
+				String hold = (target.holdStrong()) ? "strong" : "weak";
+				String report = String.format("%s (tier %d, hold %s) is shaken.", target, target.getTier(), hold);
+				System.out.println(report);
+				target.weakenHold();
+				hold = (target.holdStrong()) ? "strong" : "weak";
+				System.out.println("New tier/hold: " + target.getTier() + " / " + hold);
+			}
+
+				// resolve client status
 			if (patronage() && primaryObjective.expired()) {
 				changes.add(client);
 				crew.increaseShip(client);
@@ -737,18 +747,12 @@ public class Score {
 				// FIXME - testing
 				targetEnemy = it.next();
 
-				if (targetEnemy.notSameAs(client)) {
+				if (targetEnemy.notSameAs(client) && Dice.roll(2) == 1) {
+					// enemies of the target like you
 					changes.add(targetEnemy);
 					crew.increaseShip(targetEnemy);
 					System.out.println(targetEnemy + " status increased");
 				}
-
-				// if (Dice.roll(2) == 1) {
-				// // enemies of the target like you more
-				// changes.add(targetEnemy);
-				// crew.increaseShip(targetEnemy);
-				// System.out.println(targetEnemy + " status increased");
-				// }
 			}
 
 			Set<Crew> allies = target.npcAllyGet();
@@ -757,18 +761,12 @@ public class Score {
 				// FIXME - testing
 				targetAlly = it.next();
 
-				if (targetAlly.notSameAs(client)) {
+				if (targetAlly.notSameAs(client) && Dice.roll(2) == 1) {
+					// allies of the target don't like you
 					changes.add(targetAlly);
 					crew.decreaseShip(targetAlly);
 					System.out.println(targetAlly + " status decreased");
 				}
-
-				// if (Dice.roll(2) == 1) {
-				// // allies of the target like you less
-				// changes.add(targetAlly);
-				// crew.decreaseShip(targetAlly);
-				// System.out.println(targetAlly + " status decreased");
-				// }
 			}
 
 			// rep boost

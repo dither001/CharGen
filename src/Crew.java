@@ -265,9 +265,6 @@ public class Crew {
 	private EnumSet<Special> specials;
 	private HashMap<Upgrade, Crew> upgrades;
 	private int turf;
-	//
-//	private HashSet<Crew> npcAllies;
-//	private HashSet<Crew> npcEnemies;
 
 	//
 	private int heat;
@@ -308,9 +305,6 @@ public class Crew {
 		this.specials = EnumSet.noneOf(Special.class);
 		this.upgrades = new HashMap<Upgrade, Crew>();
 		this.turf = 0;
-		//
-//		this.npcAllies = new HashSet<Crew>();
-//		this.npcEnemies = new HashSet<Crew>();
 
 		//
 		this.heat = 0;
@@ -408,11 +402,6 @@ public class Crew {
 		}
 	}
 
-	// public Crew(Faction name, int tier, boolean hold) {
-	// // creates two empty arrays if they don't have enemies/allies
-	// this(name, tier, hold, new Faction[0], new Faction[0]);
-	// }
-
 	public Crew(Faction name, int tier, boolean hold) {
 		/*
 		 * FIXME - I need to add more to faction initialization, but this works
@@ -424,20 +413,6 @@ public class Crew {
 		//
 		this.claims = EnumSet.noneOf(Claim.class);
 		claims.add(Claim.LAIR);
-		//
-		// this.npcAllies = new HashSet<Crew>();
-		// if (listAllies.length > 0) {
-		// for (int i = 0; i < listAllies.length; ++i) {
-		// npcAllies.add(Crew.getCrewByFaction(listAllies[i]));
-		// }
-		// }
-		//
-		// this.npcEnemies = new HashSet<Crew>();
-		// if (listEnemies.length > 0) {
-		// for (int i = 0; i < listEnemies.length; ++i) {
-		// npcEnemies.add(Crew.getCrewByFaction(listEnemies[i]));
-		// }
-		// }
 	}
 
 	// methods
@@ -476,10 +451,12 @@ public class Crew {
 		 */
 		List<Crew>[] array = updateShipArray();
 		Crew client = clientFriendOrSelf(array), target;
+		Score.Goal goal;
 
 		if (client.sameAs(this)) {
 			// working for self
 			target = preferredTarget();
+			goal = Score.Goal.CLIMB;
 		} else {
 			/*
 			 * TODO - I should figure out how much of the score a patron can dictate;
@@ -490,6 +467,7 @@ public class Crew {
 			// Score.Plan plan = Score.randomPlan();
 			// Score.Activity activity = Score.randomActivity();
 			target = client.npcRandomEnemyGet();
+			goal = Score.Goal.SHAKE;
 		}
 
 		// TODO - testing
@@ -501,7 +479,7 @@ public class Crew {
 			// TODO - refuse to pull job on a friendly
 		}
 
-		Score score = new Score(this, client, target);
+		Score score = new Score(this, client, target, goal);
 		// TODO - testing
 		if (client.sameAs(this)) {
 			System.out.println("Crew job.");
@@ -691,7 +669,11 @@ public class Crew {
 	}
 
 	public int getTier() {
-		return tier;
+		int crewTier = tier;
+		if (atWar && holdStrong != true)
+			crewTier = tier - 1;
+
+		return crewTier;
 	}
 
 	public void addEXP(int gains) {
@@ -705,18 +687,46 @@ public class Crew {
 
 	public boolean holdStrong() {
 		boolean isHoldStrong = holdStrong;
+
 		if (atWar)
 			isHoldStrong = false;
+		else if (atWar && holdStrong != true)
+			isHoldStrong = true;
 
 		return isHoldStrong;
 	}
 
 	public boolean holdWeak() {
 		boolean isHoldWeak = (holdStrong != true);
-		if (atWar)
+
+		if (holdStrong && atWar)
 			isHoldWeak = true;
+		else if (atWar && holdStrong != true)
+			isHoldWeak = false;
 
 		return isHoldWeak;
+	}
+
+	public void strengthenHold() {
+		// TODO - testing
+		if (holdStrong() && atPeace()) {
+			++tier;
+			holdStrong = false;
+		} else if (atWar && holdStrong) {
+			++tier;
+			holdStrong = false;
+		} else if (atWar && holdStrong != true) {
+			holdStrong = true;
+		}
+	}
+
+	public void weakenHold() {
+		// TODO - testing
+		if (holdStrong) {
+			holdStrong = false;
+		} else if (holdStrong != true) {
+			--tier;
+		}
 	}
 
 	public boolean atWar() {
