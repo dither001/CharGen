@@ -747,7 +747,7 @@ public class Score {
 				// FIXME - testing
 				targetEnemy = it.next();
 
-				if (targetEnemy.notSameAs(client) && Dice.roll(2) == 1) {
+				if (targetEnemy.notSameAs(client) && Dice.roll(3) == 1) {
 					// enemies of the target like you
 					changes.add(targetEnemy);
 					crew.increaseShip(targetEnemy);
@@ -761,7 +761,7 @@ public class Score {
 				// FIXME - testing
 				targetAlly = it.next();
 
-				if (targetAlly.notSameAs(client) && Dice.roll(2) == 1) {
+				if (targetAlly.notSameAs(client) && Dice.roll(3) == 1) {
 					// allies of the target don't like you
 					changes.add(targetAlly);
 					crew.decreaseShip(targetAlly);

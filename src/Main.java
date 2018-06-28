@@ -15,7 +15,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		workLoop();
+		rollRogues();
+		// workLoop();
 
 	}
 
@@ -193,6 +194,18 @@ public class Main {
 		}
 
 		System.out.println();
+	}
+
+	public static void rollRogues() {
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			rollOneRogue();
+			System.out.println();
+		}
+	}
+
+	public static void rollOneRogue() {
+		Rogue rogue = new Rogue();
+		System.out.println(rogue.toStringDetailed());
 	}
 
 	public static void rollCrew() {
