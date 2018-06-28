@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -71,7 +72,7 @@ public class Dice {
 		T[] array = (T[]) new Object[list.size()];
 		list.toArray(array);
 		T choice = array[Dice.roll(array.length) - 1];
-		
+
 		return choice;
 	}
 
@@ -80,7 +81,25 @@ public class Dice {
 		T[] array = (T[]) new Object[set.size()];
 		set.toArray(array);
 		T choice = array[Dice.roll(array.length) - 1];
-		
+
 		return choice;
 	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> sublistFromList(int length, List<T> list) {
+		T[] array = (T[]) new Object[list.size()];
+		list.toArray(array);
+
+		List<T> sublist = new ArrayList<T>();
+		T choice;
+		while (sublist.size() < length) {
+			choice = array[Dice.roll(array.length) - 1];
+
+			if (sublist.contains(choice) != true)
+				sublist.add(choice);
+		}
+
+		return sublist;
+	}
+
 }
