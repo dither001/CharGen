@@ -476,7 +476,7 @@ public class Crew {
 			// Score.Activity activity = Score.randomActivity();
 			target = client.npcRandomEnemyGet();
 
-			if (client.tier < 6 && Dice.roll(3) == 1)
+			if (client.tier < 6 && Dice.roll(2) == 1)
 				goal = Score.Goal.ASSIST;
 			else
 				goal = Score.Goal.SHAKE;
@@ -501,9 +501,9 @@ public class Crew {
 		Score score = new Score(this, team, client, target, goal);
 		// TODO - testing
 		if (client.sameAs(this)) {
-			System.out.println("Crew job.");
+			System.out.println("Crew job. (Goal: " + goal + ")");
 		} else {
-			System.out.println("Job for " + client.toString());
+			System.out.println("Job for " + client.toString() + " (Goal: " + goal + ")");
 		}
 		System.out.println(score.toStringDetailed());
 		System.out.println();

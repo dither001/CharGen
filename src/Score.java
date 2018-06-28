@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -15,10 +16,6 @@ public class Score {
 
 	public enum Activity {
 		ACCIDENT, DISAPPEARANCE, MURDER, RANSOM, BATTLE, EXTORTION, SABOTAGE, SMASH_N_GRAB, ACQUISITION, AUGURY, CONSECRATION, SACRIFICE, SALES, SUPPLY, SHOW_OF_FORCE, SOCIALIZE, BURGLARY, ESPIONAGE, ROBBERY, CARGO_ARMS, CARGO_CONTRABAND, CARGO_PEOPLE, CARGO_WEIRD
-	}
-
-	public enum Approach {
-		ATTUNE, COMMAND, CONSORT, FINESSE, HUNT, PROWL, SKIRMISH, STUDY, SURVEY, SWAY, TINKER, WRECK
 	}
 
 	public enum Position {
@@ -77,42 +74,42 @@ public class Score {
 
 	// approaches
 	private static final Rogue.Rating[] APPROACHES = { Rogue.Rating.ATTUNE, Rogue.Rating.COMMAND, Rogue.Rating.CONSORT,
-			Rogue.Rating.FINESSE, Rogue.Rating.HUNT, Rogue.Rating.PROWL, Rogue.Rating.SKIRMISH, Rogue.Rating.STUDY, Rogue.Rating.SURVEY,
-			Rogue.Rating.SWAY, Rogue.Rating.TINKER, Rogue.Rating.WRECK };
+			Rogue.Rating.FINESSE, Rogue.Rating.HUNT, Rogue.Rating.PROWL, Rogue.Rating.SKIRMISH, Rogue.Rating.STUDY,
+			Rogue.Rating.SURVEY, Rogue.Rating.SWAY, Rogue.Rating.TINKER, Rogue.Rating.WRECK };
 
 	// approaches by crew type
-	private static final Rogue.Rating[] ASSASSIN_APPROACH = { Rogue.Rating.FINESSE, Rogue.Rating.HUNT, Rogue.Rating.PROWL,
-			Rogue.Rating.SKIRMISH, Rogue.Rating.STUDY, Rogue.Rating.TINKER };
-	private static final Rogue.Rating[] BRAVO_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT, Rogue.Rating.FINESSE,
-			Rogue.Rating.SKIRMISH, Rogue.Rating.SURVEY, Rogue.Rating.WRECK };
-	private static final Rogue.Rating[] CULT_APPROACH = { Rogue.Rating.ATTUNE, Rogue.Rating.COMMAND, Rogue.Rating.CONSORT,
-			Rogue.Rating.PROWL, Rogue.Rating.STUDY, Rogue.Rating.TINKER };
-	private static final Rogue.Rating[] HAWKER_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT, Rogue.Rating.FINESSE,
-			Rogue.Rating.SURVEY, Rogue.Rating.SWAY, Rogue.Rating.WRECK };
-	private static final Rogue.Rating[] SHADOW_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.FINESSE, Rogue.Rating.PROWL,
-			Rogue.Rating.SURVEY, Rogue.Rating.TINKER, Rogue.Rating.WRECK };
-	private static final Rogue.Rating[] SMUGGLER_APPROACH = { Rogue.Rating.CONSORT, Rogue.Rating.FINESSE, Rogue.Rating.PROWL,
-			Rogue.Rating.SURVEY, Rogue.Rating.SWAY, Rogue.Rating.TINKER };
+	private static final Rogue.Rating[] ASSASSIN_APPROACH = { Rogue.Rating.FINESSE, Rogue.Rating.HUNT,
+			Rogue.Rating.PROWL, Rogue.Rating.SKIRMISH, Rogue.Rating.STUDY, Rogue.Rating.TINKER };
+	private static final Rogue.Rating[] BRAVO_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT,
+			Rogue.Rating.FINESSE, Rogue.Rating.SKIRMISH, Rogue.Rating.SURVEY, Rogue.Rating.WRECK };
+	private static final Rogue.Rating[] CULT_APPROACH = { Rogue.Rating.ATTUNE, Rogue.Rating.COMMAND,
+			Rogue.Rating.CONSORT, Rogue.Rating.PROWL, Rogue.Rating.STUDY, Rogue.Rating.TINKER };
+	private static final Rogue.Rating[] HAWKER_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT,
+			Rogue.Rating.FINESSE, Rogue.Rating.SURVEY, Rogue.Rating.SWAY, Rogue.Rating.WRECK };
+	private static final Rogue.Rating[] SHADOW_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.FINESSE,
+			Rogue.Rating.PROWL, Rogue.Rating.SURVEY, Rogue.Rating.TINKER, Rogue.Rating.WRECK };
+	private static final Rogue.Rating[] SMUGGLER_APPROACH = { Rogue.Rating.CONSORT, Rogue.Rating.FINESSE,
+			Rogue.Rating.PROWL, Rogue.Rating.SURVEY, Rogue.Rating.SWAY, Rogue.Rating.TINKER };
 
 	// approaches by plan
-	private static final Rogue.Rating[] ASSAULT_APPROACHES = { Rogue.Rating.COMMAND, Rogue.Rating.HUNT, Rogue.Rating.SKIRMISH,
-			Rogue.Rating.SURVEY, Rogue.Rating.WRECK };
-	private static final Rogue.Rating[] DECEPTION_APPROACHES = { Rogue.Rating.CONSORT, Rogue.Rating.FINESSE, Rogue.Rating.PROWL,
-			Rogue.Rating.STUDY, Rogue.Rating.SURVEY, Rogue.Rating.SWAY };
-	private static final Rogue.Rating[] OCCULT_APPROACHES = { Rogue.Rating.ATTUNE, Rogue.Rating.COMMAND, Rogue.Rating.CONSORT,
-			Rogue.Rating.STUDY, Rogue.Rating.SWAY, Rogue.Rating.TINKER };
-	private static final Rogue.Rating[] SOCIAL_APPROACHES = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT, Rogue.Rating.FINESSE,
-			Rogue.Rating.STUDY, Rogue.Rating.SURVEY, Rogue.Rating.SWAY };
-	private static final Rogue.Rating[] STEALTH_APPROACHES = { Rogue.Rating.FINESSE, Rogue.Rating.HUNT, Rogue.Rating.PROWL,
-			Rogue.Rating.STUDY, Rogue.Rating.TINKER, Rogue.Rating.WRECK };
-	private static final Rogue.Rating[] TRANSPORT_APPROACHES = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT, Rogue.Rating.FINESSE,
-			Rogue.Rating.HUNT, Rogue.Rating.PROWL, Rogue.Rating.SURVEY, Rogue.Rating.SWAY };
+	private static final Rogue.Rating[] ASSAULT_APPROACHES = { Rogue.Rating.COMMAND, Rogue.Rating.HUNT,
+			Rogue.Rating.SKIRMISH, Rogue.Rating.SURVEY, Rogue.Rating.WRECK };
+	private static final Rogue.Rating[] DECEPTION_APPROACHES = { Rogue.Rating.CONSORT, Rogue.Rating.FINESSE,
+			Rogue.Rating.PROWL, Rogue.Rating.STUDY, Rogue.Rating.SURVEY, Rogue.Rating.SWAY };
+	private static final Rogue.Rating[] OCCULT_APPROACHES = { Rogue.Rating.ATTUNE, Rogue.Rating.COMMAND,
+			Rogue.Rating.CONSORT, Rogue.Rating.STUDY, Rogue.Rating.SWAY, Rogue.Rating.TINKER };
+	private static final Rogue.Rating[] SOCIAL_APPROACHES = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT,
+			Rogue.Rating.FINESSE, Rogue.Rating.STUDY, Rogue.Rating.SURVEY, Rogue.Rating.SWAY };
+	private static final Rogue.Rating[] STEALTH_APPROACHES = { Rogue.Rating.FINESSE, Rogue.Rating.HUNT,
+			Rogue.Rating.PROWL, Rogue.Rating.STUDY, Rogue.Rating.TINKER, Rogue.Rating.WRECK };
+	private static final Rogue.Rating[] TRANSPORT_APPROACHES = { Rogue.Rating.COMMAND, Rogue.Rating.CONSORT,
+			Rogue.Rating.FINESSE, Rogue.Rating.HUNT, Rogue.Rating.PROWL, Rogue.Rating.SURVEY, Rogue.Rating.SWAY };
 
 	// approaches by tension level
-	private static final Rogue.Rating[] HIGH_TENSION_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.HUNT, Rogue.Rating.PROWL,
-			Rogue.Rating.SKIRMISH, Rogue.Rating.SWAY, Rogue.Rating.WRECK };
-	private static final Rogue.Rating[] LOW_TENSION_APPROACH = { Rogue.Rating.ATTUNE, Rogue.Rating.CONSORT, Rogue.Rating.FINESSE,
-			Rogue.Rating.STUDY, Rogue.Rating.SURVEY, Rogue.Rating.TINKER };
+	private static final Rogue.Rating[] HIGH_TENSION_APPROACH = { Rogue.Rating.COMMAND, Rogue.Rating.HUNT,
+			Rogue.Rating.PROWL, Rogue.Rating.SKIRMISH, Rogue.Rating.SWAY, Rogue.Rating.WRECK };
+	private static final Rogue.Rating[] LOW_TENSION_APPROACH = { Rogue.Rating.ATTUNE, Rogue.Rating.CONSORT,
+			Rogue.Rating.FINESSE, Rogue.Rating.STUDY, Rogue.Rating.SURVEY, Rogue.Rating.TINKER };
 
 	// fields
 	private Crew crew;
@@ -251,8 +248,9 @@ public class Score {
 	public Position engagementRoll(int dice) {
 		Position position;
 		int[] results = Dice.fortune(Dice.roll(dice));
-		// System.out.println("Engagement roll.");
 
+		// TODO - testing
+		System.out.println("Engagement roll.");
 		if (results[5] > 1) {
 			// critical result clears the opening
 			position = Position.CONTROLLED;
@@ -448,12 +446,15 @@ public class Score {
 		Rogue.Rating choice;
 		int dice = Dice.roll(100);
 		if (dice < 21) {
+			// TODO - testing
 			// System.out.println(" " + " " + " What are we doing?");
 			choice = approachByCrewType(crew.getCrewType());
 		} else if (dice < 61) {
+			// TODO - testing
 			// System.out.println(" " + " " + " Stick to the plan.");
 			choice = approachByPlan(plan);
 		} else if (dice < 81) {
+			// TODO - testing
 			// System.out.println(" " + " " + " We don't have time.");
 			Rogue.Rating[] array = APPROACHES;
 
@@ -468,6 +469,7 @@ public class Score {
 
 			choice = array[Dice.roll(array.length) - 1];
 		} else {
+			// TODO - testing
 			// System.out.println(" " + " " + " Ninjas attack.");
 			choice = randomApproach();
 		}
@@ -542,11 +544,18 @@ public class Score {
 		return Dice.randomFromArray(ACTS);
 	}
 
+	public static Rogue randomTeamMember(List<Rogue> list) {
+		return Dice.randomFromList(list);
+	}
+
 	/*
 	 * ACTION - INNER CLASS
+	 * 
 	 */
 	private class Action {
 		// fields
+		Rogue rogue;
+		int dice;
 		Clock clock;
 		Rogue.Rating approach;
 		Position position;
@@ -556,27 +565,27 @@ public class Score {
 		Result result;
 
 		// constructors
-		public Action(Clock clock) {
-			this(clock, randomApproach(), randomPosition(), randomEffect());
-		}
-
 		public Action(Clock clock, Position position) {
 			this(clock, pseudoRandomApproach(act, plan, crew, beats), position, effectsByAct(act));
 		}
 
 		public Action(Clock clock, Rogue.Rating approach, Position position, Effect effect) {
+			this.rogue = Rogue.bestRogueForAction(approach, team);
+			Collections.rotate(team, 1);
+
 			this.clock = clock;
 			this.approach = approach;
 			this.position = position;
 			this.effect = effect;
 
-			// TODO - need input from actor's attributes
-			resolve(Dice.roll(3));
-			// System.out.println(toString());
+			// TODO - testing
+			this.dice = rogue.getRating(approach);
+			resolve();
+			System.out.println(toStringDetailed());
 		}
 
 		// methods
-		public void resolve(int dice) {
+		public void resolve() {
 			int[] results = { 0, 0, 0, 0, 0, 0 };
 			for (int i = 0; i < dice; ++i) {
 				++results[Dice.roll(6) - 1];
@@ -641,18 +650,19 @@ public class Score {
 
 		@Override
 		public String toString() {
+			return String.format("Scene %2d: %s check -%s", scene, approach, result);
+		}
+
+		public String toStringDetailed() {
 			String string = String.format("Scene %2d", scene);
 
-			// minimal
-			string = String.format("Scene %2d: %s check -%s", scene, approach, result);
-
 			// standard
-			// string = String.format("Scene %2d: %s check -%s (%2d)", scene, approach,
-			// result, tension);
+			String checkResult = (result.equals(Result.FAILURE)) ? result + " with (consequences)"
+					: (result.equals(Result.SUCCESS)) ? result + " with " + effect + " effect"
+							: result + " success with " + effect + " effect";
 
-			// verbose
-			// string = String.format("Scene %2d: %s %s check -%s (%2d)", scene, position,
-			// approach, result, tension);
+			string = String.format("Scene %2d: %s attempts %s check %n   (%d dice) %s", scene, rogue.toString(),
+					approach, dice, checkResult);
 
 			return string;
 		}
@@ -681,7 +691,7 @@ public class Score {
 
 			if (primaryObjective.expired() && goal.equals(Goal.ASSIST)) {
 				String hold = (client.holdStrong()) ? "strong" : "weak";
-				String report = String.format("%s (tier %d, hold %s) is shaken.", client, client.getTier(), hold);
+				String report = String.format("%s (tier %d, hold %s) is stronger.", client, client.getTier(), hold);
 				System.out.println(report);
 				client.strengthenHold();
 
@@ -692,7 +702,7 @@ public class Score {
 
 			if (primaryObjective.expired() && goal.equals(Goal.SHAKE)) {
 				String hold = (target.holdStrong()) ? "strong" : "weak";
-				String report = String.format("%s (tier %d, hold %s) is shaken.", target, target.getTier(), hold);
+				String report = String.format("%s (tier %d, hold %s) is weaker.", target, target.getTier(), hold);
 				System.out.println(report);
 				target.weakenHold();
 
