@@ -15,8 +15,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		rollRogues();
-		// workLoop();
+		// rollRogues();
+		workLoop();
 
 	}
 
@@ -251,56 +251,56 @@ public class Main {
 		}
 	}
 
-	public static void oneCrewScoreLoop() {
-		int score = 0;
-		Crew crew = new Crew();
+	// public static void oneCrewScoreLoop() {
+	// int score = 0;
+	// Crew crew = new Crew();
+	//
+	// while (proceed == 1) {
+	// System.out.println(" - - - - - - - - score: " + ++score);
+	// rollScore(crew);
+	// crew.advance();
+	//
+	// proceed = Integer.parseInt(INPUT.nextLine());
+	// if (proceed != 0) {
+	// if (proceed == 2) {
+	// List<Crew>[] array = crew.nonNeutralStatus();
+	// System.out.println();
+	// System.out.println("Allies: " + array[5].toString());
+	// System.out.println("Friendlies: " + array[4].toString());
+	// System.out.println("Helpful: " + array[3].toString());
+	// System.out.println("Indifferent: " + array[2].toString());
+	// System.out.println("Hostiles: " + array[1].toString());
+	// System.out.println("Enemies: " + array[0].toString());
+	// System.out.println();
+	// }
+	//
+	// proceed = 1;
+	// }
+	// }
+	// }
 
-		while (proceed == 1) {
-			System.out.println(" - - - - - - - - score: " + ++score);
-			rollScore(crew);
-			crew.advance();
+	// public static void rollScore() {
+	// Crew crew = new Crew();
+	// rollScore(crew);
+	// }
 
-			proceed = Integer.parseInt(INPUT.nextLine());
-			if (proceed != 0) {
-				if (proceed == 2) {
-					List<Crew>[] array = crew.nonNeutralStatus();
-					System.out.println();
-					System.out.println("Allies: " + array[5].toString());
-					System.out.println("Friendlies: " + array[4].toString());
-					System.out.println("Helpful: " + array[3].toString());
-					System.out.println("Indifferent: " + array[2].toString());
-					System.out.println("Hostiles: " + array[1].toString());
-					System.out.println("Enemies: " + array[0].toString());
-					System.out.println();
-				}
-
-				proceed = 1;
-			}
-		}
-	}
-
-	public static void rollScore() {
-		Crew crew = new Crew();
-		rollScore(crew);
-	}
-
-	public static void rollScore(Crew crew) {
-		System.out.println(crew.toString());
-		System.out.println();
-
-		Crew client = crew.clientFriendOrSelf();
-		Crew target;
-		if (crew.sameAs(client))
-			target = crew.preferredTarget();
-		else
-			target = client.npcRandomEnemyGet();
-
-		Score score = new Score(crew, client, target);
-		System.out.println(score.toString());
-
-		System.out.println();
-		score.action();
-	}
+	// public static void rollScore(Crew crew) {
+	// System.out.println(crew.toString());
+	// System.out.println();
+	//
+	// Crew client = crew.clientFriendOrSelf();
+	// Crew target;
+	// if (crew.sameAs(client))
+	// target = crew.preferredTarget();
+	// else
+	// target = client.npcRandomEnemyGet();
+	//
+	// Score score = new Score(crew, client, target);
+	// System.out.println(score.toString());
+	//
+	// System.out.println();
+	// score.action();
+	// }
 
 	public static void rollCharacter() {
 		rollCharacter(new Actor());

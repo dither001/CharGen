@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Score {
@@ -112,6 +113,8 @@ public class Score {
 
 	// fields
 	private Crew crew;
+	private ArrayList<Rogue> team;
+
 	private Crew client;
 	private Crew target;
 	private Goal goal;
@@ -133,16 +136,18 @@ public class Score {
 	private ArrayList<Action> actions;
 
 	// constructors
-	public Score(Crew crew, Crew client, Crew target) {
-		this(crew, client, target, Goal.CLIMB);
+	public Score(Crew crew, List<Rogue> team, Crew client, Crew target) {
+		this(crew, team, client, target, Goal.CLIMB);
 	}
 
-	public Score(Crew crew, Crew client, Crew target, Goal goal) {
+	public Score(Crew crew, List<Rogue> team, Crew client, Crew target, Goal goal) {
 		/*
 		 * TODO - I need to figure out (at some point) how to differentiate between a
 		 * job given by another crew and a job given by a single patron
 		 */
 		this.crew = crew;
+		this.team = new ArrayList<Rogue>(team);
+
 		this.client = client;
 		this.target = target;
 		this.goal = goal;
@@ -321,13 +326,23 @@ public class Score {
 
 	@Override
 	public String toString() {
-		String string = String.format("name %s [%s] %s", plan.toString(), detail(plan), activity.toString());
-		string += "\nTarget: " + target.simplifiedToString();
+		String string = String.format("name %s [%s] %s", plan, detail(plan), activity);
+		string += "\nTarget: " + target.toString();
 
 		return string;
 	}
 
-	// static methods
+	public String toStringDetailed() {
+		String string = String.format("name %s [%s] %s || Team size: %d %n%s %nTarget: %s", plan, detail(plan),
+				activity, team.size(), team.toString(), target.toString());
+
+		return string;
+	}
+
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
 	public static Plan randomPlan() {
 		Plan[] array = ALL_PLANS;
 		Plan choice = array[Dice.roll(array.length) - 1];
@@ -706,6 +721,9 @@ public class Score {
 			ArrayList<Crew> changes = new ArrayList<Crew>();
 
 			Crew crew = score.crew;
+			ArrayList<Rogue> team = score.team;
+
+			//
 			Crew client = score.client;
 			Crew target = score.target;
 			Goal goal = score.goal;
@@ -717,9 +735,10 @@ public class Score {
 				target.weakenHold();
 				hold = (target.holdStrong()) ? "strong" : "weak";
 				System.out.println("New tier/hold: " + target.getTier() + " / " + hold);
+				System.out.println();
 			}
 
-				// resolve client status
+			// resolve client status
 			if (patronage() && primaryObjective.expired()) {
 				changes.add(client);
 				crew.increaseShip(client);
@@ -785,10 +804,51 @@ public class Score {
 
 			// payoff
 			if (score.primaryObjective.expired()) {
+				// TODO - testing
+				System.out.println();
+				int payoff = Dice.roll(2, 6), personalCoin, personalStash, bonus;
+
 				// TODO - perform payoff
-				int payoff = Dice.roll(2, 6);
 				System.out.println("Coin gained: " + payoff);
-				crew.addCoin(payoff);
+				if (payoff >= team.size() * 3)
+					bonus = 3;
+				else if (payoff >= team.size() * 2)
+					bonus = 2;
+				else if (payoff >= team.size())
+					bonus = 1;
+				else
+					bonus = 0;
+
+				if (bonus > 0) {
+					// distribute score among team members
+					Rogue rogue;
+					for (Iterator<Rogue> it = team.iterator(); it.hasNext();) {
+						rogue = it.next();
+
+						personalCoin = rogue.getCoin();
+						personalStash = rogue.getStash();
+						if (personalCoin + bonus <= 4) {
+							rogue.setCoin(personalCoin + bonus);
+							payoff -= bonus;
+
+						} else {
+							rogue.setStash(personalStash + bonus);
+							payoff -= bonus;
+
+						}
+
+						System.out.println(rogue + " received " + bonus);
+					}
+					// any remainder goes to the crew
+					crew.addCoin(payoff);
+					System.out.println(bonus + " went to the crew.");
+
+				} else {
+					// not enough coin to distribute; all of it goes to the crew
+					crew.addCoin(payoff);
+
+				}
+
 			}
 
 		}
