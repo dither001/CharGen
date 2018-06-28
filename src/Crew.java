@@ -249,6 +249,8 @@ public class Crew {
 	}
 
 	// fields
+	private ArrayList<Rogue> roster;
+
 	private String name;
 	private Estate estate;
 	private Type type;
@@ -288,6 +290,12 @@ public class Crew {
 	// constructors
 	public Crew() {
 		// TODO - create additional constructors
+		this.roster = new ArrayList<Rogue>();
+		for (int i = Dice.roll(3, 3); i > 0; --i) {
+			// starting roster is "3d3" or 3-9 rogues
+			roster.add(new Rogue());
+		}
+
 		this.name = "Default";
 		this.type = randomCrewType();
 		this.tier = 0;
@@ -479,14 +487,20 @@ public class Crew {
 			// TODO - refuse to pull job on a friendly
 		}
 
-		Score score = new Score(this, client, target, goal);
+		// TODO - testing
+		int teamSize = Dice.roll(3) + 2;
+		if (teamSize > roster.size())
+			teamSize = roster.size();
+
+		List<Rogue> team = Dice.sublistFromList(teamSize, roster);
+		Score score = new Score(this, team, client, target, goal);
 		// TODO - testing
 		if (client.sameAs(this)) {
 			System.out.println("Crew job.");
 		} else {
 			System.out.println("Job for " + client.toString());
 		}
-		System.out.println(score.toString());
+		System.out.println(score.toStringDetailed());
 		System.out.println();
 
 		score.action();
@@ -823,8 +837,10 @@ public class Crew {
 		String string = (atWar()) ? String.format(" - AT WAR WITH: %s%n", enemiesList().toString()) : "";
 		// string = String.format("name %s %s coin: %2d %n%s", rep.toString(),
 		// type.toString(), coin, shipList);
-		string += String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d || Strong hold: %s %n%s %n%s",
-				rep.toString(), type.toString(), tier, exp, coin, holdStrong(), specials.toString(), upgradeList);
+		string += String.format(
+				"name %s %s || Crew size: %d %n%s %ntier: %2d || rep: %2d || coin: %3d || Strong hold: %s %n%s %n%s",
+				rep.toString(), type.toString(), roster.size(), roster.toString(), tier, exp, coin, holdStrong(),
+				specials.toString(), upgradeList);
 
 		return string;
 	}
