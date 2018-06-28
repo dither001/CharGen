@@ -475,7 +475,12 @@ public class Crew {
 			// Score.Plan plan = Score.randomPlan();
 			// Score.Activity activity = Score.randomActivity();
 			target = client.npcRandomEnemyGet();
-			goal = Score.Goal.SHAKE;
+
+			if (client.tier < 6 && Dice.roll(3) == 1)
+				goal = Score.Goal.ASSIST;
+			else
+				goal = Score.Goal.SHAKE;
+
 		}
 
 		// TODO - testing
@@ -503,7 +508,9 @@ public class Crew {
 		System.out.println(score.toStringDetailed());
 		System.out.println();
 
-		score.action();
+		// TODO - determine engagement dice
+		int dice = Dice.roll(3);
+		score.action(dice);
 	}
 
 	public Crew preferredTarget() {
