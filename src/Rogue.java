@@ -1,7 +1,6 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 public class Rogue {
 	public enum Playbook {
@@ -17,7 +16,14 @@ public class Rogue {
 	}
 
 	// static fields
-	private static final String[] NAMES = { "Adric", "Aldo", "Amosen", "Andrel", "Arden", "Arlyn", "Arquo", "Arvus", "Ashlyn", "Branon", "Brace", "Brance", "Brena", "Bricks", "Candra", "Carissa", "Carro", "Casslyn", "Cavelle", "Clave", "Corille", "Cross", "Crowl", "Cyrene", "Daphnia", "Drav", "Edlun", "Emeline", "Grine", "Helles", "Hix", "Holtz", "Kamelin", "Kelyr", "Kobb", "Kristov", "Laudius", "Lauria", "Lenia", "Lizete", "Lorette", "Lucella", "Lynthia", "Mara", "Milos", "Morlan", "Myre", "Narcus", "Naria", "Noggs", "Odrienne", "Orlan", "Phin", "Polonia", "Quess", "Remira", "Ring", "Roethe", "Sesereth", "Sethla", "Skannon", "Stavrul", "Stev", "Syra", "Talitha", "Tesslyn", "Thena", "Timoth", "Tocker", "Una", "Vaurin", "Veleris", "Veretta", "Vestine", "Vey", "Volette", "Vond", "Weaver", "Wester", "Zamira" };
+	private static final String[] NAMES = { "Adric", "Aldo", "Amosen", "Andrel", "Arden", "Arlyn", "Arquo", "Arvus",
+			"Ashlyn", "Branon", "Brace", "Brance", "Brena", "Bricks", "Candra", "Carissa", "Carro", "Casslyn",
+			"Cavelle", "Clave", "Corille", "Cross", "Crowl", "Cyrene", "Daphnia", "Drav", "Edlun", "Emeline", "Grine",
+			"Helles", "Hix", "Holtz", "Kamelin", "Kelyr", "Kobb", "Kristov", "Laudius", "Lauria", "Lenia", "Lizete",
+			"Lorette", "Lucella", "Lynthia", "Mara", "Milos", "Morlan", "Myre", "Narcus", "Naria", "Noggs", "Odrienne",
+			"Orlan", "Phin", "Polonia", "Quess", "Remira", "Ring", "Roethe", "Sesereth", "Sethla", "Skannon", "Stavrul",
+			"Stev", "Syra", "Talitha", "Tesslyn", "Thena", "Timoth", "Tocker", "Una", "Vaurin", "Veleris", "Veretta",
+			"Vestine", "Vey", "Volette", "Vond", "Weaver", "Wester", "Zamira" };
 
 	private static final Playbook[] PLAYBOOKS = { Playbook.CUTTER, Playbook.HOUND, Playbook.LEECH, Playbook.LURK,
 			Playbook.SLIDE, Playbook.SPIDER, Playbook.WHISPER };
@@ -68,7 +74,7 @@ public class Rogue {
 
 	public int getRating(Rating rating) {
 		int score;
-		if (attributes.containsKey(rating)) 
+		if (attributes.containsKey(rating))
 			score = attributes.get(rating);
 		else
 			score = 0;
@@ -141,8 +147,8 @@ public class Rogue {
 				ratings += ", ";
 		}
 
-		String string = String.format("%s the %s (Vice: %s) %nInsight: %d || Prowess: %d || Resolve: %d %n%s", name, playbook,
-				vice, getInsight(), getProwess(), getResolve(), ratings);
+		String string = String.format("%s the %s (Vice: %s) %nInsight: %d || Prowess: %d || Resolve: %d %n%s", name,
+				playbook, vice, getInsight(), getProwess(), getResolve(), ratings);
 
 		return string;
 	}
@@ -194,6 +200,28 @@ public class Rogue {
 		}
 
 		return init;
+	}
+
+	public static Rogue bestRogueForAction(Rating rating, List<Rogue> team) {
+		/*
+		 * TODO - create additional criteria for choosing the best rogue
+		 * 
+		 */
+		Rogue candidate, choice = null;
+		int number;
+
+		for (Iterator<Rogue> it = team.iterator(); it.hasNext();) {
+			candidate = it.next();
+			number = candidate.getRating(rating);
+
+			if (choice == null) {
+				choice = candidate;
+			} else if (number > choice.getRating(rating)) {
+				choice = candidate;
+			}
+		}
+
+		return choice;
 	}
 
 	public static String randomName() {
