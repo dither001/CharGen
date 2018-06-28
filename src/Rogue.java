@@ -17,6 +17,8 @@ public class Rogue {
 	}
 
 	// static fields
+	private static final String[] NAMES = { "Adric", "Aldo", "Amosen", "Andrel", "Arden", "Arlyn", "Arquo", "Arvus", "Ashlyn", "Branon", "Brace", "Brance", "Brena", "Bricks", "Candra", "Carissa", "Carro", "Casslyn", "Cavelle", "Clave", "Corille", "Cross", "Crowl", "Cyrene", "Daphnia", "Drav", "Edlun", "Emeline", "Grine", "Helles", "Hix", "Holtz", "Kamelin", "Kelyr", "Kobb", "Kristov", "Laudius", "Lauria", "Lenia", "Lizete", "Lorette", "Lucella", "Lynthia", "Mara", "Milos", "Morlan", "Myre", "Narcus", "Naria", "Noggs", "Odrienne", "Orlan", "Phin", "Polonia", "Quess", "Remira", "Ring", "Roethe", "Sesereth", "Sethla", "Skannon", "Stavrul", "Stev", "Syra", "Talitha", "Tesslyn", "Thena", "Timoth", "Tocker", "Una", "Vaurin", "Veleris", "Veretta", "Vestine", "Vey", "Volette", "Vond", "Weaver", "Wester", "Zamira" };
+
 	private static final Playbook[] PLAYBOOKS = { Playbook.CUTTER, Playbook.HOUND, Playbook.LEECH, Playbook.LURK,
 			Playbook.SLIDE, Playbook.SPIDER, Playbook.WHISPER };
 
@@ -43,11 +45,13 @@ public class Rogue {
 	private int insightXP;
 	private int prowessXP;
 	private int resolveXP;
+	private int coin;
+	private int stash;
 
 	// constructors
 	public Rogue() {
 		// TODO
-		this.name = "Default";
+		this.name = randomName();
 		this.playbook = randomPlaybook();
 
 		// requires playbook
@@ -56,8 +60,20 @@ public class Rogue {
 		this.insightXP = 0;
 		this.prowessXP = 0;
 		this.resolveXP = 0;
+		this.coin = 0;
+		this.stash = 0;
 
 		this.vice = randomVice();
+	}
+
+	public int getRating(Rating rating) {
+		int score;
+		if (attributes.containsKey(rating)) 
+			score = attributes.get(rating);
+		else
+			score = 0;
+
+		return score;
 	}
 
 	public int getInsight() {
@@ -93,6 +109,27 @@ public class Rogue {
 		return total;
 	}
 
+	public int getCoin() {
+		return coin;
+	}
+
+	public void setCoin(int coin) {
+		this.coin = coin;
+	}
+
+	public int getStash() {
+		return stash;
+	}
+
+	public void setStash(int stash) {
+		this.stash = stash;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s the %s", name, playbook);
+	}
+
 	public String toStringDetailed() {
 		String ratings = "";
 
@@ -104,7 +141,7 @@ public class Rogue {
 				ratings += ", ";
 		}
 
-		String string = String.format("%s %s (%s) %nInsight: %d || Prowess: %d || Resolve: %d %n%s", name, playbook,
+		String string = String.format("%s the %s (Vice: %s) %nInsight: %d || Prowess: %d || Resolve: %d %n%s", name, playbook,
 				vice, getInsight(), getProwess(), getResolve(), ratings);
 
 		return string;
@@ -157,6 +194,10 @@ public class Rogue {
 		}
 
 		return init;
+	}
+
+	public static String randomName() {
+		return Dice.randomFromArray(NAMES);
 	}
 
 	public static Playbook randomPlaybook() {
