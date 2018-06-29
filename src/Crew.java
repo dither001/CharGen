@@ -513,7 +513,11 @@ public class Crew {
 		if (client.sameAs(this)) {
 			// working for self
 			target = preferredTarget();
-			goal = Score.Goal.CLIMB;
+
+			if (tier < 6 && Dice.roll(2) == 1)
+				goal = Score.Goal.CLIMB;
+			else
+				goal = Score.Goal.CLAIM;
 		} else {
 			/*
 			 * TODO - I should figure out how much of the score a patron can dictate;
@@ -864,6 +868,10 @@ public class Crew {
 		return choice;
 	}
 
+	public EnumSet<Claim> getClaims() {
+		return claims;
+	}
+
 	public boolean sameAs(Crew other) {
 		boolean equals = false;
 		if (other.name.compareTo(this.name) == 0)
@@ -1081,72 +1089,39 @@ public class Crew {
 	}
 
 	public static Faction randomFactionEnum() {
-		Faction choice = Dice.randomFromArray(ALL_FACTIONS);
-		// Faction[] array = ALL_FACTIONS;
-		// Faction choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(ALL_FACTIONS);
 	}
 
 	public static Faction randomCitizenryEnum() {
-		Faction choice = Dice.randomFromArray(CITIZENRY);
-		// Faction[] array = CITIZENRY;
-		// Faction choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(CITIZENRY);
 	}
 
 	public static Faction randomInstitutionEnum() {
-		Faction choice = Dice.randomFromArray(INSTITUTIONS);
-		// Faction[] array = INSTITUTIONS;
-		// Faction choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(INSTITUTIONS);
 	}
 
 	public static Faction randomLaborTradeEnum() {
-		Faction choice = Dice.randomFromArray(LABOR_TRADE);
-		// Faction[] array = LABOR_TRADE;
-		// Faction choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(LABOR_TRADE);
 	}
 
 	public static Faction randomFringeEnum() {
-		Faction choice = Dice.randomFromArray(THE_FRINGE);
-		// Faction[] array = THE_FRINGE;
-		// Faction choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(THE_FRINGE);
 	}
 
 	public static Faction randomUnderworldEnum() {
-		Faction choice = Dice.randomFromArray(UNDERWORLD);
-		// Faction[] array = UNDERWORLD;
-		// Faction choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(UNDERWORLD);
 	}
 
 	public static Type randomCrewType() {
-		Type[] array = ALL_TYPES;
-		Type choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(ALL_TYPES);
 	}
 
 	public static District randomDistrict() {
-		District[] array = ALL_DISTRICTS;
-		District choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(ALL_DISTRICTS);
 	}
 
 	public static Rep randomReputation() {
-		Rep[] array = ALL_REPS;
-		Rep choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(ALL_REPS);
 	}
 
 	public static Upgrade randomUpgradeByCrewType(Type type) {
@@ -1164,57 +1139,97 @@ public class Crew {
 		else if (type.equals(Type.SMUGGLERS))
 			array = SMUGGLERS_UPGRADES;
 
-		Upgrade choice = array[Dice.roll(array.length) - 1];
-		return choice;
+		return Dice.randomFromArray(array);
 	}
 
 	public static Upgrade randomUpgrade() {
-		Upgrade[] array = COST_ONE_UPGRADES;
-		Upgrade choice = array[Dice.roll(array.length) - 1];
+		return Dice.randomFromArray(COST_ONE_UPGRADES);
+	}
 
-		return choice;
+	public static Upgrade randomUpgradeByCrew(Type type) {
+		Upgrade upgrade = null;
+
+		if (type.equals(Type.ASSASSINS))
+			upgrade = randomAssassinUpgrade();
+		else if (type.equals(Type.BRAVOS))
+			upgrade = randomBravosUpgrade();
+		else if (type.equals(Type.CULT))
+			upgrade = randomCultUpgrade();
+		else if (type.equals(Type.HAWKERS))
+			upgrade = randomHawkerUpgrade();
+		else if (type.equals(Type.SHADOWS))
+			upgrade = randomShadowUpgrade();
+		else if (type.equals(Type.SMUGGLERS))
+			upgrade = randomSmugglerUpgrade();
+
+		return upgrade;
 	}
 
 	public static Upgrade randomAssassinUpgrade() {
-		Upgrade[] array = COST_ONE_ASSASSIN_UPGRADES;
-		Upgrade choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(COST_ONE_ASSASSIN_UPGRADES);
 	}
 
 	public static Upgrade randomBravosUpgrade() {
-		Upgrade[] array = COST_ONE_BRAVOS_UPGRADES;
-		Upgrade choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(COST_ONE_BRAVOS_UPGRADES);
 	}
 
 	public static Upgrade randomCultUpgrade() {
-		Upgrade[] array = COST_ONE_CULT_UPGRADES;
-		Upgrade choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(COST_ONE_CULT_UPGRADES);
 	}
 
 	public static Upgrade randomHawkerUpgrade() {
-		Upgrade[] array = COST_ONE_HAWKERS_UPGRADES;
-		Upgrade choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(COST_ONE_HAWKERS_UPGRADES);
 	}
 
 	public static Upgrade randomShadowUpgrade() {
-		Upgrade[] array = COST_ONE_SHADOWS_UPGRADES;
-		Upgrade choice = array[Dice.roll(array.length) - 1];
-
-		return choice;
+		return Dice.randomFromArray(COST_ONE_SHADOWS_UPGRADES);
 	}
 
 	public static Upgrade randomSmugglerUpgrade() {
-		Upgrade[] array = COST_ONE_SMUGGLERS_UPGRADES;
-		Upgrade choice = array[Dice.roll(array.length) - 1];
+		return Dice.randomFromArray(COST_ONE_SMUGGLERS_UPGRADES);
+	}
 
-		return choice;
+	public static Claim randomClaimByCrew(Type type) {
+		Claim claim = null;
+
+		if (type.equals(Type.ASSASSINS))
+			claim = randomAssassinClaim();
+		else if (type.equals(Type.BRAVOS))
+			claim = randomBravoClaim();
+		else if (type.equals(Type.CULT))
+			claim = randomCultClaim();
+		else if (type.equals(Type.HAWKERS))
+			claim = randomHawkerClaim();
+		else if (type.equals(Type.SHADOWS))
+			claim = randomShadowClaim();
+		else if (type.equals(Type.SMUGGLERS))
+			claim = randomSmugglerClaim();
+
+		return claim;
+	}
+
+	public static Claim randomAssassinClaim() {
+		return Dice.randomFromArray(ASSASSIN_CLAIMS);
+	}
+
+	public static Claim randomBravoClaim() {
+		return Dice.randomFromArray(BRAVO_CLAIMS);
+	}
+
+	public static Claim randomCultClaim() {
+		return Dice.randomFromArray(CULT_CLAIMS);
+	}
+
+	public static Claim randomHawkerClaim() {
+		return Dice.randomFromArray(HAWKER_CLAIMS);
+	}
+
+	public static Claim randomShadowClaim() {
+		return Dice.randomFromArray(SHADOW_CLAIMS);
+	}
+
+	public static Claim randomSmugglerClaim() {
+		return Dice.randomFromArray(SMUGGLER_CLAIMS);
 	}
 
 	/*
