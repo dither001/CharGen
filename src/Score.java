@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -560,6 +561,51 @@ public class Score {
 		return Dice.randomFromList(list);
 	}
 
+	public static EnumSet<Consequence> randomMinorConsequenceSet() {
+		int maximum = MINOR_CONSEQUENCE.length;
+		EnumSet<Consequence> set = EnumSet.noneOf(Score.Consequence.class);
+		set.add(randomMinorConsequence());
+		while (Dice.roll(6) == 6 && set.size() < maximum) {
+			set.add(randomMinorConsequence());
+		}
+
+		return set;
+	}
+
+	public static EnumSet<Consequence> randomMajorConsequenceSet() {
+		int maximum = MAJOR_CONSEQUENCE.length;
+		EnumSet<Consequence> set = EnumSet.noneOf(Score.Consequence.class);
+		set.add(randomMajorConsequence());
+		while (Dice.roll(6) == 6 && set.size() < maximum) {
+			set.add(randomMajorConsequence());
+		}
+
+		return set;
+	}
+
+	public static EnumSet<Consequence> randomSevereConsequenceSet() {
+		int maximum = SEVERE_CONSEQUENCE.length;
+		EnumSet<Consequence> set = EnumSet.noneOf(Score.Consequence.class);
+		set.add(randomSevereConsequence());
+		while (Dice.roll(6) == 6 && set.size() < maximum) {
+			set.add(randomSevereConsequence());
+		}
+
+		return set;
+	}
+
+	public static Consequence randomMinorConsequence() {
+		return Dice.randomFromArray(MINOR_CONSEQUENCE);
+	}
+
+	public static Consequence randomMajorConsequence() {
+		return Dice.randomFromArray(MAJOR_CONSEQUENCE);
+	}
+
+	public static Consequence randomSevereConsequence() {
+		return Dice.randomFromArray(SEVERE_CONSEQUENCE);
+	}
+
 	/*
 	 * ACTION - INNER CLASS
 	 * 
@@ -572,6 +618,7 @@ public class Score {
 		Rogue.Rating approach;
 		Position position;
 		Effect effect;
+		EnumSet<Consequence> consequences;
 
 		//
 		Result result;
@@ -589,6 +636,7 @@ public class Score {
 			this.approach = approach;
 			this.position = position;
 			this.effect = effect;
+			this.consequences = EnumSet.noneOf(Score.Consequence.class);
 
 			// TODO - testing
 			this.dice = rogue.getRating(approach);
@@ -607,7 +655,7 @@ public class Score {
 			if (results[5] > 1) {
 				// A critical is the same regardless of position
 				result = Result.CRITICAL;
-				this.improveEffect();
+				this.increaseEffect();
 				tension -= 2;
 			} else if (results[5] > 0) {
 				// Success is the same regardless of position
@@ -616,28 +664,37 @@ public class Score {
 			} else if (position.equals(Position.CONTROLLED) && (results[3] > 0 || results[4] > 0)) {
 				// partial success - CONTROLLED
 				result = Result.PARTIAL;
+				consequences = randomMinorConsequenceSet();
 				tension += 1;
 			} else if (position.equals(Position.RISKY) && (results[3] > 0 || results[4] > 0)) {
 				// partial success - RISKY
 				result = Result.PARTIAL;
+				consequences = randomMajorConsequenceSet();
 				tension += 1;
 			} else if (position.equals(Position.DESPERATE) && (results[3] > 0 || results[4] > 0)) {
 				// partial success - DESPERATE
 				result = Result.PARTIAL;
+				consequences = randomSevereConsequenceSet();
 				tension += 1;
 			} else if (position.equals(Position.CONTROLLED)) {
 				// failure - CONTROLLED
 				result = Result.FAILURE;
+				consequences = randomMinorConsequenceSet();
 				tension += 2;
 			} else if (position.equals(Position.RISKY)) {
 				// failure - RISKY
 				result = Result.FAILURE;
+				consequences = randomMajorConsequenceSet();
 				tension += 2;
 			} else if (position.equals(Position.DESPERATE)) {
 				// failure - DESPERATE
 				result = Result.FAILURE;
+				consequences = randomSevereConsequenceSet();
 				tension += 2;
 			}
+
+			if (consequences.contains(Consequence.REDUCED_EFFECT))
+				decreaseEffect();
 
 			// PART TWO
 			if (effect.equals(Effect.EXTREME)) {
@@ -659,11 +716,7 @@ public class Score {
 
 		}
 
-		public void improveEffect() {
-			// boolean improved = false;
-			// if (effect.equals(Effect.EXTREME) != true)
-			// improved = true;
-
+		public void increaseEffect() {
 			if (effect.equals(Effect.GREAT))
 				effect = Effect.EXTREME;
 			else if (effect.equals(Effect.STANDARD))
@@ -672,8 +725,17 @@ public class Score {
 				effect = Effect.STANDARD;
 			else if (effect.equals(Effect.ZERO))
 				effect = Effect.LIMITED;
+		}
 
-			// return improved;
+		public void decreaseEffect() {
+			if (effect.equals(Effect.EXTREME))
+				effect = Effect.GREAT;
+			else if (effect.equals(Effect.GREAT))
+				effect = Effect.STANDARD;
+			else if (effect.equals(Effect.STANDARD))
+				effect = Effect.LIMITED;
+			else if (effect.equals(Effect.LIMITED))
+				effect = Effect.ZERO;
 		}
 
 		@Override
@@ -685,12 +747,12 @@ public class Score {
 			String string = String.format("Scene %2d", scene);
 
 			// standard
-			String checkResult = (result.equals(Result.FAILURE)) ? result + " with (consequences)"
+			String checkResult = (result.equals(Result.FAILURE)) ? result + " with " + consequences.toString()
 					: (result.equals(Result.SUCCESS)) ? result + " with " + effect + " effect"
 							: result + " success with " + effect + " effect";
 
-			string = String.format("Scene %2d: %s attempts %s check %n   (%d dice) %s", scene, rogue.toString(),
-					approach, dice, checkResult);
+			string = String.format("Scene %2d: %s attempts %s %s check %n   (%d dice) achieves %s", scene,
+					rogue.toString(), position, approach, dice, checkResult);
 
 			return string;
 		}
