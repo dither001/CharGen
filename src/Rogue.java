@@ -1,10 +1,16 @@
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class Rogue {
 	public enum Playbook {
 		CUTTER, HOUND, LEECH, LURK, SLIDE, SPIDER, WHISPER
+	}
+
+	public enum Attribute {
+		INSIGHT, PROWESS, RESOLVE
 	}
 
 	public enum Rating {
@@ -70,6 +76,24 @@ public class Rogue {
 		this.stash = 0;
 
 		this.vice = randomVice();
+	}
+
+	public int getAttribute(Attribute attribute) {
+		int value = 0;
+		if (attribute.equals(Attribute.INSIGHT))
+			value = getInsight();
+		else if (attribute.equals(Attribute.PROWESS))
+			value = getProwess();
+		else if (attribute.equals(Attribute.RESOLVE))
+			value = getResolve();
+
+		return value;
+	}
+
+	public Rating getRandomRogueRating() {
+		Set<Rating> set = attributes.keySet();
+
+		return Dice.randomFromSet(set);
 	}
 
 	public int getRating(Rating rating) {
@@ -232,6 +256,11 @@ public class Rogue {
 		return Dice.randomFromArray(PLAYBOOKS);
 	}
 
+	public static Attribute randomAttribute() {
+		Attribute[] array = new Attribute[] { Attribute.INSIGHT, Attribute.PROWESS, Attribute.RESOLVE };
+		return Dice.randomFromArray(array);
+	}
+
 	public static Rating randomRating() {
 		return Dice.randomFromArray(RATINGS);
 	}
@@ -252,4 +281,21 @@ public class Rogue {
 		return Dice.randomFromArray(VICES);
 	}
 
+	/*
+	 * COMPARATORS
+	 * 
+	 */
+	public static class CoinAscending implements Comparator<Rogue> {
+		@Override
+		public int compare(Rogue rogue1, Rogue rogue2) {
+			return rogue1.coin - rogue2.coin;
+		}
+	}
+
+	public static class CoinDescending implements Comparator<Rogue> {
+		@Override
+		public int compare(Rogue rogue1, Rogue rogue2) {
+			return rogue2.coin - rogue1.coin;
+		}
+	}
 }
