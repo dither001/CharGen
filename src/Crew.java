@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -426,11 +427,22 @@ public class Crew {
 	// methods
 	public void advance() {
 		boolean canAdvance = true;
+		int costToAdvance = (tier + 1) * 8;
 
 		if (exp < 12 - turf)
 			canAdvance = false;
 
-		if (coin < (tier + 1) * 8)
+		ArrayList<Rogue> contributors = new ArrayList<Rogue>(getRoguesWithCoin());
+		Rogue.CoinDescending coinSort = new Rogue.CoinDescending();
+		Collections.sort(contributors, coinSort);
+		int availableCoin = coin;
+		for (Iterator<Rogue> it = contributors.iterator(); it.hasNext();) {
+			availableCoin += it.next().getCoin();
+		}
+
+		// TODO - testing
+		System.out.println("Available coin: " + availableCoin);
+		if (availableCoin < costToAdvance)
 			canAdvance = false;
 
 		if (canAdvance && holdWeak() && atPeace()) {
@@ -438,19 +450,56 @@ public class Crew {
 			System.out.println("\n - - - - - -");
 			System.out.println(toStringBasic());
 			System.out.println("IMPROVED CREW HOLD.");
+
+			// advanceHelper
+			advanceHelper(costToAdvance, contributors);
 			holdStrong = true;
-			coin -= (tier + 1) * 8;
 			exp -= 12 - turf;
 		} else if (canAdvance && holdStrong()) {
 			// TODO - testing
 			System.out.println("\n - - - - - -");
 			System.out.println(toStringBasic());
 			System.out.println("ADVANCED CREW TIER.");
+
+			// advanceHelper
+			advanceHelper(costToAdvance, contributors);
 			holdStrong = false;
-			coin -= (tier + 1) * 8;
 			exp -= 12 - turf;
 			++tier;
 		}
+	}
+
+	private void advanceHelper(int costToAdvance, List<Rogue> contributors) {
+		while (costToAdvance > 0) {
+			costToAdvance -= everyoneContribute(costToAdvance, contributors);
+
+			if (costToAdvance > 0 && costToAdvance <= coin) {
+				int difference = costToAdvance;
+				costToAdvance -= difference;
+				coin -= difference;
+
+				// TODO - testing
+				System.out.println("Paid " + difference + " out of crew funds.");
+			}
+		}
+	}
+
+	private int everyoneContribute(int cost, List<Rogue> list) {
+		int amountPaid = 0, currentCoin;
+		Rogue rogue;
+		for (Iterator<Rogue> it = list.iterator(); amountPaid < cost && it.hasNext();) {
+			rogue = it.next();
+			currentCoin = rogue.getCoin();
+
+			if (currentCoin > 0) {
+				rogue.setCoin(currentCoin - 1);
+				++amountPaid;
+				// TODO - testing
+				System.out.println(rogue + " paid toward crew advance.");
+			}
+		}
+
+		return amountPaid;
 	}
 
 	public void findWork() {
@@ -647,6 +696,18 @@ public class Crew {
 		return faction;
 	}
 
+	public List<Rogue> getRoguesWithCoin() {
+		ArrayList<Rogue> list = new ArrayList<Rogue>();
+		Rogue rogue;
+		for (Iterator<Rogue> it = roster.iterator(); it.hasNext();) {
+			rogue = it.next();
+			if (rogue.getCoin() > 0)
+				list.add(rogue);
+		}
+
+		return list;
+	}
+
 	public boolean increaseShip(Crew crew) {
 		boolean increased = false;
 		int v = shipMap.get(crew);
@@ -699,6 +760,14 @@ public class Crew {
 
 	public void addEXP(int gains) {
 		exp = (exp + gains > 12) ? 12 : exp + gains;
+	}
+
+	public int getCoin() {
+		return coin;
+	}
+
+	public void setCoin(int coin) {
+		this.coin = coin;
 	}
 
 	public void addCoin(int gains) {
