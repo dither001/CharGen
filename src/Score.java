@@ -135,6 +135,9 @@ public class Score {
 	private Activity activity;
 
 	//
+	Crew.Claim claim;
+
+	//
 	private Clock window;
 	private Clock openingMove;
 	private Clock primaryObjective;
@@ -166,6 +169,14 @@ public class Score {
 		this.goal = goal;
 		this.plan = randomPlan();
 		this.activity = randomActivity(crew.getCrewType());
+
+		if (goal.equals(Goal.CLAIM)) {
+			Crew.Claim candidate = Crew.randomClaimByCrew(crew.getCrewType());
+			while (crew.getClaims().contains(candidate)) {
+				candidate = Crew.randomClaimByCrew(crew.getCrewType());
+			}
+			this.claim = candidate;
+		}
 
 		//
 		this.window = new Clock(Clock.Length.FOUR);
@@ -223,8 +234,11 @@ public class Score {
 			advance();
 		}
 
-		if (window.expired())
+		if (window.expired()) {
 			System.out.println(" " + " " + " Window closed.");
+			if (primaryObjective.expired() != true)
+				System.out.println(" " + " " + " Primary objective failed.");
+		}
 
 		// TODO
 		System.out.println();
@@ -787,6 +801,17 @@ public class Score {
 
 				hold = (client.holdStrong()) ? "strong" : "weak";
 				System.out.println("New tier/hold: " + client.getTier() + " / " + hold);
+				System.out.println();
+			}
+
+			if (primaryObjective.expired() && goal.equals(Goal.CLAIM)) {
+				String report = String.format("Seized %s from %s", claim, target);
+				System.out.println(report);
+				crew.getClaims().add(claim);
+
+				changes.add(target);
+				crew.decreaseShip(target);
+				System.out.println(target + " status decreased");
 				System.out.println();
 			}
 
