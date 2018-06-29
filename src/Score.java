@@ -18,6 +18,10 @@ public class Score {
 		ACCIDENT, DISAPPEARANCE, MURDER, RANSOM, BATTLE, EXTORTION, SABOTAGE, SMASH_N_GRAB, ACQUISITION, AUGURY, CONSECRATION, SACRIFICE, SALES, SUPPLY, SHOW_OF_FORCE, SOCIALIZE, BURGLARY, ESPIONAGE, ROBBERY, CARGO_ARMS, CARGO_CONTRABAND, CARGO_PEOPLE, CARGO_WEIRD
 	}
 
+	public enum Consequence {
+		MINOR_COMPLICATION, MAJOR_COMPLICATION, SEVERE_COMPLICATION, HARM_1, HARM_2, HARM_3, REDUCED_EFFECT, ESCALATE_RISKY, ESCALATE_DESPERATE, WITHDRAW, LOST_OPPORTUNITY
+	}
+
 	public enum Position {
 		CONTROLLED, RISKY, DESPERATE
 	}
@@ -110,6 +114,14 @@ public class Score {
 			Rogue.Rating.PROWL, Rogue.Rating.SKIRMISH, Rogue.Rating.SWAY, Rogue.Rating.WRECK };
 	private static final Rogue.Rating[] LOW_TENSION_APPROACH = { Rogue.Rating.ATTUNE, Rogue.Rating.CONSORT,
 			Rogue.Rating.FINESSE, Rogue.Rating.STUDY, Rogue.Rating.SURVEY, Rogue.Rating.TINKER };
+
+	// consequences
+	private static final Consequence[] MINOR_CONSEQUENCE = { Consequence.HARM_1, Consequence.MINOR_COMPLICATION,
+			Consequence.REDUCED_EFFECT, Consequence.ESCALATE_RISKY };
+	private static final Consequence[] MAJOR_CONSEQUENCE = { Consequence.HARM_2, Consequence.MAJOR_COMPLICATION,
+			Consequence.REDUCED_EFFECT, Consequence.ESCALATE_DESPERATE, Consequence.LOST_OPPORTUNITY };
+	private static final Consequence[] SEVERE_CONSEQUENCE = { Consequence.HARM_3, Consequence.SEVERE_COMPLICATION,
+			Consequence.REDUCED_EFFECT, Consequence.LOST_OPPORTUNITY };
 
 	// fields
 	private Crew crew;
@@ -593,20 +605,36 @@ public class Score {
 
 			// PART ONE
 			if (results[5] > 1) {
-				// TODO - critical
+				// A critical is the same regardless of position
 				result = Result.CRITICAL;
 				this.improveEffect();
 				tension -= 2;
 			} else if (results[5] > 0) {
-				// TODO - success
+				// Success is the same regardless of position
 				result = Result.SUCCESS;
 				tension -= 1;
-			} else if (results[3] > 0 || results[4] > 0) {
-				// partial success
+			} else if (position.equals(Position.CONTROLLED) && (results[3] > 0 || results[4] > 0)) {
+				// partial success - CONTROLLED
 				result = Result.PARTIAL;
 				tension += 1;
-			} else {
-				// failure
+			} else if (position.equals(Position.RISKY) && (results[3] > 0 || results[4] > 0)) {
+				// partial success - RISKY
+				result = Result.PARTIAL;
+				tension += 1;
+			} else if (position.equals(Position.DESPERATE) && (results[3] > 0 || results[4] > 0)) {
+				// partial success - DESPERATE
+				result = Result.PARTIAL;
+				tension += 1;
+			} else if (position.equals(Position.CONTROLLED)) {
+				// failure - CONTROLLED
+				result = Result.FAILURE;
+				tension += 2;
+			} else if (position.equals(Position.RISKY)) {
+				// failure - RISKY
+				result = Result.FAILURE;
+				tension += 2;
+			} else if (position.equals(Position.DESPERATE)) {
+				// failure - DESPERATE
 				result = Result.FAILURE;
 				tension += 2;
 			}
@@ -778,6 +806,7 @@ public class Score {
 			// payoff
 			if (score.primaryObjective.expired()) {
 				int personalCoin, personalStash, bonus;
+				int crewCoin = crew.getCoin(), teamSize = team.size();
 				int payoff = (patronage()) ? Dice.roll(2, 4) + 2 : Dice.roll(2, 6);
 
 				// TODO - testing
@@ -785,11 +814,11 @@ public class Score {
 				System.out.println("Coin gained: " + payoff);
 
 				// determine individual pay (or none)
-				if (payoff >= team.size() * 3)
+				if (payoff >= teamSize * 3)
 					bonus = 3;
-				else if (payoff >= team.size() * 2)
+				else if (payoff >= teamSize * 2)
 					bonus = 2;
-				else if (payoff >= team.size())
+				else if (payoff >= teamSize)
 					bonus = 1;
 				else
 					bonus = 0;
@@ -816,8 +845,31 @@ public class Score {
 					}
 					// any remainder goes to the crew
 					crew.addCoin(payoff);
-					System.out.println(bonus + " went to the crew.");
+					System.out.println(payoff + " went to the crew.");
 
+				} else if (crewCoin + payoff >= teamSize) {
+					int difference = teamSize - payoff;
+					crew.setCoin(crewCoin - difference);
+					bonus = 1;
+
+					Rogue rogue;
+					for (Iterator<Rogue> it = team.iterator(); it.hasNext();) {
+						rogue = it.next();
+
+						personalCoin = rogue.getCoin();
+						personalStash = rogue.getStash();
+						if (personalCoin + bonus <= 4) {
+							rogue.setCoin(personalCoin + bonus);
+							payoff -= bonus;
+
+						} else {
+							rogue.setStash(personalStash + bonus);
+							payoff -= bonus;
+
+						}
+
+						System.out.println(rogue + " received " + bonus);
+					}
 				} else {
 					// not enough coin to distribute; all of it goes to the crew
 					crew.addCoin(payoff);
