@@ -74,27 +74,24 @@ public class Crew {
 			Special.GHOST_PASSAGE, Special.JUST_PASSING_THROUGH, Special.LEVERAGE, Special.REAVERS, Special.RENEGADES };
 
 	// claims by crew type
-	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TRAINING_ROOMS,
-			Claim.VICE_DEN, Claim.FIXER, Claim.INFORMANTS, Claim.HAGFISH_FARM, Claim.VICTIM_TROPHIES,
-			Claim.COVER_OPERATION, Claim.PROTECTION_RACKET, Claim.INFIRMARY, Claim.ENVOY, Claim.COVER_IDENTITIES_A,
-			Claim.CITY_RECORDS };
-	private static final Claim[] BRAVO_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
-			Claim.INFORMANTS, Claim.INFIRMARY, Claim.PROTECTION_RACKET, Claim.BARRACKS, Claim.TERRORIZED_CITIZENS,
-			Claim.FIGHTING_PITS, Claim.BLUECOAT_INTIMIDATION, Claim.STREET_FENCE, Claim.WAREHOUSES,
-			Claim.BLUECOAT_CONFEDERATES };
-	private static final Claim[] CULT_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
-			Claim.VICE_DEN, Claim.CLOISTER, Claim.OFFERTORY, Claim.ANCIENT_OBELISK, Claim.ANCIENT_TOWER,
-			Claim.SPIRIT_WELL, Claim.ANCIENT_GATE, Claim.SANCTUARY, Claim.SACRED_NEXUS, Claim.ANCIENT_ALTAR };
-	private static final Claim[] HAWKER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
-			Claim.INFORMANTS, Claim.VICE_DEN, Claim.COVER_OPERATION, Claim.PERSONAL_CLOTHIER, Claim.LOCAL_GRAFT,
-			Claim.LOOKOUTS, Claim.LUXURY_VENUE, Claim.FOREIGN_MARKET, Claim.SURPLUS_CACHES, Claim.COVER_IDENTITIES_B };
-	private static final Claim[] SHADOW_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3,
-			Claim.GAMBLING_DEN, Claim.INFORMANTS, Claim.LOOKOUTS, Claim.HAGFISH_FARM, Claim.INFIRMARY,
-			Claim.INTERROGATION_CHAMBER, Claim.LOYAL_FENCE, Claim.TAVERN, Claim.DRUG_DEN, Claim.COVERT_DROPS,
-			Claim.SECRET_PATHWAYS };
-	private static final Claim[] SMUGGLER_CLAIMS = { Claim.LAIR, Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4,
-			Claim.VICE_DEN, Claim.TAVERN, Claim.ANCIENT_GATE, Claim.INFORMANTS, Claim.COVER_OPERATION, Claim.WAREHOUSES,
-			Claim.SIDE_BUSINESS, Claim.LUXURY_FENCE, Claim.SECRET_ROUTES, Claim.FLEET };
+	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TRAINING_ROOMS, Claim.VICE_DEN, Claim.FIXER,
+			Claim.INFORMANTS, Claim.HAGFISH_FARM, Claim.VICTIM_TROPHIES, Claim.COVER_OPERATION, Claim.PROTECTION_RACKET,
+			Claim.INFIRMARY, Claim.ENVOY, Claim.COVER_IDENTITIES_A, Claim.CITY_RECORDS };
+	private static final Claim[] BRAVO_CLAIMS = { Claim.LAIR, Claim.INFORMANTS, Claim.INFIRMARY,
+			Claim.PROTECTION_RACKET, Claim.BARRACKS, Claim.TERRORIZED_CITIZENS, Claim.FIGHTING_PITS,
+			Claim.BLUECOAT_INTIMIDATION, Claim.STREET_FENCE, Claim.WAREHOUSES, Claim.BLUECOAT_CONFEDERATES };
+	private static final Claim[] CULT_CLAIMS = { Claim.LAIR, Claim.VICE_DEN, Claim.CLOISTER, Claim.OFFERTORY,
+			Claim.ANCIENT_OBELISK, Claim.ANCIENT_TOWER, Claim.SPIRIT_WELL, Claim.ANCIENT_GATE, Claim.SANCTUARY,
+			Claim.SACRED_NEXUS, Claim.ANCIENT_ALTAR };
+	private static final Claim[] HAWKER_CLAIMS = { Claim.LAIR, Claim.INFORMANTS, Claim.VICE_DEN, Claim.COVER_OPERATION,
+			Claim.PERSONAL_CLOTHIER, Claim.LOCAL_GRAFT, Claim.LOOKOUTS, Claim.LUXURY_VENUE, Claim.FOREIGN_MARKET,
+			Claim.SURPLUS_CACHES, Claim.COVER_IDENTITIES_B };
+	private static final Claim[] SHADOW_CLAIMS = { Claim.LAIR, Claim.GAMBLING_DEN, Claim.INFORMANTS, Claim.LOOKOUTS,
+			Claim.HAGFISH_FARM, Claim.INFIRMARY, Claim.INTERROGATION_CHAMBER, Claim.LOYAL_FENCE, Claim.TAVERN,
+			Claim.DRUG_DEN, Claim.COVERT_DROPS, Claim.SECRET_PATHWAYS };
+	private static final Claim[] SMUGGLER_CLAIMS = { Claim.LAIR, Claim.VICE_DEN, Claim.TAVERN, Claim.ANCIENT_GATE,
+			Claim.INFORMANTS, Claim.COVER_OPERATION, Claim.WAREHOUSES, Claim.SIDE_BUSINESS, Claim.LUXURY_FENCE,
+			Claim.SECRET_ROUTES, Claim.FLEET };
 
 	// upgrades
 	private static final Upgrade[] GENERIC_UPGRADES = { Upgrade.BOAT_HOUSE_1, Upgrade.BOAT_HOUSE_2,
@@ -250,6 +247,7 @@ public class Crew {
 	}
 
 	// fields
+	private boolean active;
 	private ArrayList<Rogue> roster;
 
 	private String name;
@@ -264,7 +262,7 @@ public class Crew {
 
 	//
 	private String lair;
-	private EnumSet<Claim> claims;
+	private HashMap<Claim, Crew> claims;
 	private EnumSet<Special> specials;
 	private HashMap<Upgrade, Crew> upgrades;
 	private int turf;
@@ -291,6 +289,7 @@ public class Crew {
 	// constructors
 	public Crew() {
 		// TODO - create additional constructors
+		this.active = true;
 		this.roster = new ArrayList<Rogue>();
 		for (int i = Dice.roll(3, 3); i > 0; --i) {
 			// starting roster is "3d3" or 3-9 rogues
@@ -309,8 +308,8 @@ public class Crew {
 		rep.add(randomReputation());
 
 		//
-		this.claims = EnumSet.noneOf(Claim.class);
-		claims.add(Claim.LAIR);
+		this.claims = new HashMap<Claim, Crew>();
+		claims.put(Claim.LAIR, this);
 		this.specials = EnumSet.noneOf(Special.class);
 		this.upgrades = new HashMap<Upgrade, Crew>();
 		this.turf = 0;
@@ -415,19 +414,24 @@ public class Crew {
 		/*
 		 * FIXME - I need to add more to faction initialization, but this works
 		 */
+		this.active = true;
 		this.name = name.toString();
 		// this.estate = estate;
 		this.tier = tier;
 		this.holdStrong = hold;
 		//
-		this.claims = EnumSet.noneOf(Claim.class);
-		claims.add(Claim.LAIR);
+		this.claims = new HashMap<Claim, Crew>();
+		claims.put(Claim.LAIR, this);
 	}
 
-	// methods
+	/*
+	 * INSTANCE METHODS
+	 * 
+	 */
 	public void advance() {
 		boolean canAdvance = true;
 		int costToAdvance = (tier + 1) * 8;
+		updateTurf();
 
 		if (exp < 12 - turf)
 			canAdvance = false;
@@ -467,6 +471,18 @@ public class Crew {
 			exp -= 12 - turf;
 			++tier;
 		}
+	}
+
+	private void updateTurf() {
+		Claim[] array = new Claim[] { Claim.TURF_1, Claim.TURF_2, Claim.TURF_3, Claim.TURF_4, Claim.TURF_5,
+				Claim.TURF_6 };
+		int counter = 0;
+		for (Claim el : array) {
+			if (claims.containsKey(el))
+				++counter;
+		}
+
+		turf = counter;
 	}
 
 	private void advanceHelper(int costToAdvance, List<Rogue> contributors) {
@@ -514,10 +530,23 @@ public class Crew {
 			// working for self
 			target = preferredTarget();
 
-			if (tier < 6 && Dice.roll(2) == 1)
-				goal = Score.Goal.CLIMB;
-			else
+			if (atWar()) {
+				// TODO - testing
+				goal = Score.Goal.SHAKE;
+				target = Dice.randomFromList(this.enemiesList());
+			} else {
 				goal = Score.Goal.CLAIM;
+				
+			}
+
+
+			// if (tier < 6 && Dice.roll(2) == 1) {
+			// goal = Score.Goal.CLIMB;
+			//
+			// } else {
+			// goal = Score.Goal.CLAIM;
+			//
+			// }
 		} else {
 			/*
 			 * TODO - I should figure out how much of the score a patron can dictate;
@@ -811,6 +840,8 @@ public class Crew {
 			holdStrong = false;
 		} else if (atWar && holdStrong != true) {
 			holdStrong = true;
+		} else if (holdStrong != true) {
+			holdStrong = true;
 		}
 	}
 
@@ -818,9 +849,21 @@ public class Crew {
 		// TODO - testing
 		if (holdStrong) {
 			holdStrong = false;
+		} else if (tier == 0 && holdStrong != true) {
+			// TODO - testing
+			System.out.println("The faction " + this.name + " has been destroyed.");
+			active = false;
 		} else if (holdStrong != true) {
 			--tier;
 		}
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public boolean isInactive() {
+		return (active != true);
 	}
 
 	public boolean atWar() {
@@ -839,7 +882,7 @@ public class Crew {
 		for (Iterator<Crew> it = shipMap.keySet().iterator(); it.hasNext();) {
 			f = it.next();
 			v = shipMap.get(f);
-			if (v != 0)
+			if (f.active && v != 0)
 				nonZeroShips.add(f);
 		}
 
@@ -859,16 +902,16 @@ public class Crew {
 		if (npcEnemyGet().size() > 0)
 			choice = Dice.randomFromSet(npcEnemyGet());
 		else {
-			choice = Dice.randomFromList(factions);
+			choice = Dice.randomFromList(getActiveFactions());
 			while (choice.sameAs(this)) {
-				choice = Dice.randomFromList(factions);
+				choice = Dice.randomFromList(getActiveFactions());
 			}
 		}
 
 		return choice;
 	}
 
-	public EnumSet<Claim> getClaims() {
+	public HashMap<Claim, Crew> getClaims() {
 		return claims;
 	}
 
@@ -894,8 +937,8 @@ public class Crew {
 	}
 
 	public String toStringBasic() {
-		String string = String.format("name %s %s %ntier: %2d || rep: %2d || coin: %3d || Strong hold: %s",
-				rep.toString(), type.toString(), tier, exp, coin, holdStrong());
+		String string = String.format("name %s %s %ntier: %2d || rep: %2d (turf: %d) || coin: %3d || Strong hold: %s",
+				rep.toString(), type.toString(), tier, exp, turf, coin, holdStrong());
 
 		return string;
 	}
@@ -922,8 +965,8 @@ public class Crew {
 		// string = String.format("name %s %s coin: %2d %n%s", rep.toString(),
 		// type.toString(), coin, shipList);
 		string += String.format(
-				"name %s %s || Crew size: %d %n%s %ntier: %2d || rep: %2d || coin: %3d || Strong hold: %s %n%s %n%s",
-				rep.toString(), type.toString(), roster.size(), roster.toString(), tier, exp, coin, holdStrong(),
+				"name %s %s || Crew size: %d %n%s %ntier: %2d || rep: %2d (turf: %d) || coin: %3d || Strong hold: %s %n%s %n%s",
+				rep.toString(), type.toString(), roster.size(), roster.toString(), tier, exp, turf, coin, holdStrong(),
 				specials.toString(), upgradeList);
 
 		return string;
@@ -949,7 +992,8 @@ public class Crew {
 		Crew crew;
 		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
 			crew = it.next();
-			array[shipMap.get(crew) + 3].add(crew);
+			if (crew.active)
+				array[shipMap.get(crew) + 3].add(crew);
 		}
 
 		return array;
@@ -968,9 +1012,9 @@ public class Crew {
 			crew = it.next();
 			status = shipMap.get(crew);
 
-			if (status + 3 < 3) {
+			if (crew.active && status + 3 < 3) {
 				array[status + 3].add(crew);
-			} else if (status + 3 > 3) {
+			} else if (crew.active && status + 3 > 3) {
 				array[status + 2].add(crew);
 			}
 		}
@@ -996,7 +1040,7 @@ public class Crew {
 		Crew crew;
 		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
 			crew = it.next();
-			if (shipMap.get(crew) > 2)
+			if (crew.active && shipMap.get(crew) > 2)
 				list.add(crew);
 		}
 
@@ -1009,7 +1053,7 @@ public class Crew {
 		Crew crew;
 		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
 			crew = it.next();
-			if (shipMap.get(crew) > 0)
+			if (crew.active && shipMap.get(crew) > 0)
 				list.add(crew);
 		}
 
@@ -1022,7 +1066,7 @@ public class Crew {
 		Crew crew;
 		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
 			crew = it.next();
-			if (shipMap.get(crew) < 0)
+			if (crew.active && shipMap.get(crew) < 0)
 				list.add(crew);
 		}
 
@@ -1035,7 +1079,7 @@ public class Crew {
 		Crew crew;
 		for (Iterator<Crew> it = set.iterator(); it.hasNext();) {
 			crew = it.next();
-			if (shipMap.get(crew) < -2)
+			if (crew.active && shipMap.get(crew) < -2)
 				list.add(crew);
 		}
 
@@ -1043,8 +1087,20 @@ public class Crew {
 	}
 
 	// static methods
-	public static ArrayList<Crew> getFactions() {
+	public static List<Crew> getFactions() {
 		return factions;
+	}
+
+	public static List<Crew> getActiveFactions() {
+		List<Crew> activeFactions = new ArrayList<Crew>();
+		Crew candidate;
+		for (Iterator<Crew> it = factions.iterator(); it.hasNext();) {
+			candidate = it.next();
+			if (candidate.active)
+				activeFactions.add(candidate);
+		}
+
+		return activeFactions;
 	}
 
 	public static Crew getCrewByFaction(Faction faction) {
@@ -1206,6 +1262,26 @@ public class Crew {
 			claim = randomSmugglerClaim();
 
 		return claim;
+	}
+
+	public static Claim turfClaim(Crew crew) {
+		HashMap<Claim, Crew> claims = crew.getClaims();
+		Claim turf = Claim.TURF_1;
+
+		if (claims.containsKey(Claim.TURF_5))
+			turf = Claim.TURF_6;
+		else if (claims.containsKey(Claim.TURF_4))
+			turf = Claim.TURF_5;
+		else if (claims.containsKey(Claim.TURF_3))
+			turf = Claim.TURF_4;
+		else if (claims.containsKey(Claim.TURF_2))
+			turf = Claim.TURF_3;
+		else if (claims.containsKey(Claim.TURF_1))
+			turf = Claim.TURF_2;
+		else
+			turf = Claim.TURF_1;
+
+		return turf;
 	}
 
 	public static Claim randomAssassinClaim() {
