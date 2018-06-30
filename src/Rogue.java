@@ -282,9 +282,9 @@ public class Rogue {
 			candidate = it.next();
 			number = candidate.getRating(rating);
 
-			if (choice == null) {
+			if (choice == null && candidate.goodToGo()) {
 				choice = candidate;
-			} else if (number > choice.getRating(rating)) {
+			} else if (choice != null && number > choice.getRating(rating) && candidate.goodToGo()) {
 				choice = candidate;
 			}
 		}

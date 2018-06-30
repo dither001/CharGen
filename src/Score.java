@@ -238,6 +238,7 @@ public class Score {
 			}
 
 			// while mission not resolved, advance()
+			moraleCheck();
 			advance();
 		}
 
@@ -354,6 +355,26 @@ public class Score {
 			System.out.println(" " + " " + " Approaching objective.");
 
 		}
+	}
+
+	public void moraleCheck() {
+		int moraleCheck = 0, penalty = 0;
+		int tpk = 0;
+		Rogue rogue;
+		for (Iterator<Rogue> it = team.iterator(); it.hasNext();) {
+			rogue = it.next();
+			if (rogue.stressedOut()) {
+				penalty += 4;
+				++tpk;
+			}
+		}
+
+		// base chance to abort mission is 5%
+		moraleCheck = Dice.roll(20) + penalty;
+		System.out.println("Morale check: " + moraleCheck + " (" + penalty + ")");
+		boolean abort = (tpk == team.size()) ? true : (moraleCheck > 20) ? true : false;
+		if (primaryObjective.expired() != true && abort)
+			window.clear();
 	}
 
 	@Override
@@ -661,11 +682,14 @@ public class Score {
 			this.consequences = EnumSet.noneOf(Score.Consequence.class);
 
 			// TODO - testing
+			System.out.println("Size of team: " + team.size());
 			this.dice = rogue.getRating(approach);
 			int stress = rogue.getStress();
-			if (dice < 1 && stress < rogue.getThreshold()) {
+
+			int pushCheck = dice + stress + rogue.getThreshold();
+			if (pushCheck < 20) {
 				// TODO - testing
-				System.out.println(rogue + " takes 2 stress.");
+				System.out.println(rogue + " takes 2 stress. (rolled " + pushCheck + ")");
 
 				++dice;
 				rogue.setStress(stress + 2);
@@ -675,7 +699,7 @@ public class Score {
 			}
 
 			resolve();
-			// System.out.println(toStringDetailed());
+			System.out.println(toStringDetailed());
 		}
 
 		// methods
@@ -771,6 +795,9 @@ public class Score {
 			}
 			// System.out.println(" " + " " + " Remaining: " + clock.remaining());
 
+			if (rogue.stressedOut()) {
+				System.out.println(rogue + " left for dead.");
+			}
 		}
 
 		public void increaseEffect() {
@@ -973,11 +1000,11 @@ public class Score {
 
 						}
 
-						// System.out.println(rogue + " received " + bonus);
+						System.out.println(rogue + " received " + bonus);
 					}
 					// any remainder goes to the crew
 					crew.addCoin(payoff);
-					// System.out.println(payoff + " went to the crew.");
+					System.out.println(payoff + " went to the crew.");
 
 				} else if (crewCoin + payoff >= teamSize) {
 					int difference = teamSize - payoff;
