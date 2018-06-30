@@ -118,11 +118,11 @@ public class Score {
 
 	// consequences
 	private static final Consequence[] MINOR_CONSEQUENCE = { Consequence.HARM_1, Consequence.MINOR_COMPLICATION,
-			Consequence.REDUCED_EFFECT, Consequence.ESCALATE_RISKY };
+			Consequence.ESCALATE_RISKY };
 	private static final Consequence[] MAJOR_CONSEQUENCE = { Consequence.HARM_2, Consequence.MAJOR_COMPLICATION,
-			Consequence.REDUCED_EFFECT, Consequence.ESCALATE_DESPERATE, Consequence.LOST_OPPORTUNITY };
+			Consequence.ESCALATE_DESPERATE, Consequence.LOST_OPPORTUNITY };
 	private static final Consequence[] SEVERE_CONSEQUENCE = { Consequence.HARM_3, Consequence.SEVERE_COMPLICATION,
-			Consequence.REDUCED_EFFECT, Consequence.LOST_OPPORTUNITY };
+			Consequence.LOST_OPPORTUNITY };
 
 	// fields
 	private Crew crew;
@@ -639,6 +639,7 @@ public class Score {
 		Rogue.Rating approach;
 		Position position;
 		Effect effect;
+		boolean pushed;
 		EnumSet<Consequence> consequences;
 
 		//
@@ -661,6 +662,18 @@ public class Score {
 
 			// TODO - testing
 			this.dice = rogue.getRating(approach);
+			int stress = rogue.getStress();
+			if (dice < 1 && stress < rogue.getThreshold()) {
+				// TODO - testing
+				System.out.println(rogue + " takes 2 stress.");
+
+				++dice;
+				rogue.setStress(stress + 2);
+				pushed = true;
+			} else {
+				pushed = false;
+			}
+
 			resolve();
 			// System.out.println(toStringDetailed());
 		}
@@ -678,42 +691,65 @@ public class Score {
 				result = Result.CRITICAL;
 				this.increaseEffect();
 				tension -= 2;
+
 			} else if (results[5] > 0) {
 				// Success is the same regardless of position
 				result = Result.SUCCESS;
 				tension -= 1;
+
 			} else if (position.equals(Position.CONTROLLED) && (results[3] > 0 || results[4] > 0)) {
 				// partial success - CONTROLLED
 				result = Result.PARTIAL;
-				consequences = randomMinorConsequenceSet();
 				tension += 1;
+
+				consequences = randomMinorConsequenceSet();
+				if (Dice.roll(2) == 1) {
+					consequences.add(Consequence.REDUCED_EFFECT);
+				}
+
 			} else if (position.equals(Position.RISKY) && (results[3] > 0 || results[4] > 0)) {
 				// partial success - RISKY
 				result = Result.PARTIAL;
-				consequences = randomMajorConsequenceSet();
 				tension += 1;
+
+				consequences = randomMajorConsequenceSet();
+				if (Dice.roll(2) == 1)
+					consequences.add(Consequence.REDUCED_EFFECT);
 			} else if (position.equals(Position.DESPERATE) && (results[3] > 0 || results[4] > 0)) {
 				// partial success - DESPERATE
 				result = Result.PARTIAL;
-				consequences = randomSevereConsequenceSet();
 				tension += 1;
+
+				consequences = randomSevereConsequenceSet();
+				if (Dice.roll(2) == 1)
+					consequences.add(Consequence.REDUCED_EFFECT);
 			} else if (position.equals(Position.CONTROLLED)) {
 				// failure - CONTROLLED
 				result = Result.FAILURE;
-				consequences = randomMinorConsequenceSet();
 				tension += 2;
+
+				consequences = randomMinorConsequenceSet();
+				if (Dice.roll(6) > 1)
+					effect = Effect.ZERO;
 			} else if (position.equals(Position.RISKY)) {
 				// failure - RISKY
 				result = Result.FAILURE;
-				consequences = randomMajorConsequenceSet();
 				tension += 2;
+
+				consequences = randomMajorConsequenceSet();
+				if (Dice.roll(6) > 1)
+					effect = Effect.ZERO;
 			} else if (position.equals(Position.DESPERATE)) {
 				// failure - DESPERATE
 				result = Result.FAILURE;
-				consequences = randomSevereConsequenceSet();
 				tension += 2;
+
+				consequences = randomSevereConsequenceSet();
+				if (Dice.roll(6) > 1)
+					effect = Effect.ZERO;
 			}
 
+			// REDUCED EFFECT
 			if (consequences.contains(Consequence.REDUCED_EFFECT))
 				decreaseEffect();
 
@@ -937,11 +973,11 @@ public class Score {
 
 						}
 
-						System.out.println(rogue + " received " + bonus);
+						// System.out.println(rogue + " received " + bonus);
 					}
 					// any remainder goes to the crew
 					crew.addCoin(payoff);
-					System.out.println(payoff + " went to the crew.");
+					// System.out.println(payoff + " went to the crew.");
 
 				} else if (crewCoin + payoff >= teamSize) {
 					int difference = teamSize - payoff;
@@ -964,7 +1000,7 @@ public class Score {
 
 						}
 
-						System.out.println(rogue + " received " + bonus);
+						// System.out.println(rogue + " received " + bonus);
 					}
 				} else {
 					// not enough coin to distribute; all of it goes to the crew
