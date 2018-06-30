@@ -249,6 +249,7 @@ public class Crew {
 	// fields
 	private boolean active;
 	private ArrayList<Rogue> roster;
+	private ArrayList<Rogue> retired;
 
 	private String name;
 	private Estate estate;
@@ -290,12 +291,6 @@ public class Crew {
 	public Crew() {
 		// TODO - create additional constructors
 		this.active = true;
-		this.roster = new ArrayList<Rogue>();
-		for (int i = Dice.roll(3, 3); i > 0; --i) {
-			// starting roster is "3d3" or 3-9 rogues
-			roster.add(new Rogue());
-		}
-
 		this.name = "Default";
 		this.type = randomCrewType();
 		this.tier = 0;
@@ -407,6 +402,13 @@ public class Crew {
 			decreaseShip(c);
 		} else if (coin > 0) {
 			coin -= 1;
+		}
+
+		this.roster = new ArrayList<Rogue>();
+		this.retired = new ArrayList<Rogue>();
+		for (int i = Dice.roll(3, 3); i > 0; --i) {
+			// starting roster is "3d3" or 3-9 rogues
+			roster.add(new Rogue());
 		}
 	}
 
@@ -598,6 +600,18 @@ public class Crew {
 		// TODO - determine engagement dice
 		int dice = Dice.roll(3);
 		score.action(dice);
+
+		Rogue rogue;
+		for (Iterator<Rogue> it = team.iterator(); it.hasNext();) {
+			rogue = it.next();
+			if (rogue.getTrauma().size() > 3) {
+				retired.add(rogue);
+				roster.remove(rogue);
+
+				// TODO - testing
+				System.out.println(rogue + " has retired from the game.");
+			}
+		}
 	}
 
 	public Crew preferredTarget() {

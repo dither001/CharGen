@@ -215,6 +215,10 @@ public class Rogue {
 		}
 	}
 
+	public EnumSet<Trauma> getTrauma() {
+		return trauma;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s the %s (%d)", name, playbook, stress);
