@@ -171,8 +171,15 @@ public class Score {
 		this.activity = randomActivity(crew.getCrewType());
 
 		if (goal.equals(Goal.CLAIM)) {
-			Crew.Claim candidate = Crew.randomClaimByCrew(crew.getCrewType());
-			while (crew.getClaims().contains(candidate)) {
+			Crew.Claim candidate;
+
+			if (Dice.roll(3) == 1) {
+				candidate = Crew.turfClaim(crew);
+			} else {
+				candidate = Crew.randomClaimByCrew(crew.getCrewType());
+			}
+
+			while (crew.getClaims().containsKey(candidate)) {
 				candidate = Crew.randomClaimByCrew(crew.getCrewType());
 			}
 			this.claim = candidate;
@@ -655,7 +662,7 @@ public class Score {
 			// TODO - testing
 			this.dice = rogue.getRating(approach);
 			resolve();
-			System.out.println(toStringDetailed());
+			// System.out.println(toStringDetailed());
 		}
 
 		// methods
@@ -807,12 +814,14 @@ public class Score {
 			if (primaryObjective.expired() && goal.equals(Goal.CLAIM)) {
 				String report = String.format("Seized %s from %s", claim, target);
 				System.out.println(report);
-				crew.getClaims().add(claim);
+				crew.getClaims().put(claim, target);
 
 				changes.add(target);
 				crew.decreaseShip(target);
 				System.out.println(target + " status decreased");
 				System.out.println();
+			} else if (goal.equals(Goal.CLAIM)) {
+				target.getClaims().put(claim, target);
 			}
 
 			if (primaryObjective.expired() && goal.equals(Goal.SHAKE)) {

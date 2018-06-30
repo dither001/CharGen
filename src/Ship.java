@@ -257,8 +257,12 @@ class Ship {
 		Ship ship;
 		for (Iterator<Ship> it = ships.iterator(); it.hasNext();) {
 			ship = it.next();
-			if (ship.contains(crew) && ship.allies())
-				subset.add(ship.getOtherCrew(crew));
+			Crew other;
+			if (ship.contains(crew) && ship.allies()) {
+				other = ship.getOtherCrew(crew);
+				if (other.isActive())
+					subset.add(other);
+			}
 		}
 
 		return subset;
@@ -271,8 +275,13 @@ class Ship {
 		Ship ship;
 		for (Iterator<Ship> it = ships.iterator(); it.hasNext();) {
 			ship = it.next();
-			if (ship.contains(crew) && ship.enemies())
-				subset.add(ship.getOtherCrew(crew));
+			Crew other;
+			if (ship.contains(crew) && ship.enemies()) {
+				other = ship.getOtherCrew(crew);
+				if (other.isActive())
+					subset.add(other);
+				
+			}
 		}
 
 		return subset;

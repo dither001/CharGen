@@ -15,8 +15,11 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		// rollRogues();
 		workLoop();
+		// rollRogues();
+		// setupActorLadder();
+		// characterAdvance(Class.BARBARIAN);
+		// rollCharacter();
 
 	}
 
@@ -217,6 +220,7 @@ public class Main {
 		int score = 0;
 		Crew crew = new Crew();
 
+		String line;
 		while (proceed == 1) {
 			System.out.println(" - - - - - - - - score: " + ++score);
 			System.out.println(crew.toStringDetailed());
@@ -232,7 +236,13 @@ public class Main {
 			crew.findWork();
 			crew.advance();
 
-			proceed = Integer.parseInt(INPUT.nextLine());
+			line = INPUT.nextLine();
+			try {
+				proceed = Integer.parseInt(line);
+			} catch (NumberFormatException e) {
+				proceed = 1;
+			}
+
 			if (proceed != 0) {
 				if (proceed == 2) {
 					List<Crew>[] array = crew.nonNeutralStatus();
