@@ -1,4 +1,5 @@
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,13 @@ public class Rogue {
 		FAITH, GAMBLING, LUXURY, OBLIGATION, PLEASURE, STUPOR, WEIRD
 	}
 
+	public enum Trauma {
+		COLD, HAUNTED, OBSESSED, PARANOID, RECKLESS, SOFT, UNSTABLE, VICIOUS
+	}
+
 	// static fields
+	private static final int MAX_STRESS = 9;
+
 	private static final String[] NAMES = { "Adric", "Aldo", "Amosen", "Andrel", "Arden", "Arlyn", "Arquo", "Arvus",
 			"Ashlyn", "Branon", "Brace", "Brance", "Brena", "Bricks", "Candra", "Carissa", "Carro", "Casslyn",
 			"Cavelle", "Clave", "Corille", "Cross", "Crowl", "Cyrene", "Daphnia", "Drav", "Edlun", "Emeline", "Grine",
@@ -44,6 +51,9 @@ public class Rogue {
 	private static final Vice[] VICES = { Vice.FAITH, Vice.GAMBLING, Vice.LUXURY, Vice.OBLIGATION, Vice.PLEASURE,
 			Vice.STUPOR, Vice.WEIRD };
 
+	private static final Trauma[] TRAUMA_CONDITIONS = { Trauma.COLD, Trauma.HAUNTED, Trauma.OBSESSED, Trauma.PARANOID,
+			Trauma.RECKLESS, Trauma.SOFT, Trauma.UNSTABLE, Trauma.VICIOUS };
+
 	// instance fields
 	private String name;
 	private Playbook playbook;
@@ -59,6 +69,12 @@ public class Rogue {
 	private int resolveXP;
 	private int coin;
 	private int stash;
+
+	//
+	private int stress;
+	private int threshold;
+	private boolean stressedOut;
+	private EnumSet<Trauma> trauma;
 
 	// constructors
 	public Rogue() {
@@ -76,6 +92,10 @@ public class Rogue {
 		this.stash = 0;
 
 		this.vice = randomVice();
+		this.stress = 0;
+		this.threshold = Dice.roll(4) + 5;
+		this.stressedOut = false;
+		this.trauma = EnumSet.noneOf(Trauma.class);
 	}
 
 	public int getAttribute(Attribute attribute) {
@@ -155,9 +175,33 @@ public class Rogue {
 		this.stash = stash;
 	}
 
+	public int getStress() {
+		return stress;
+	}
+
+	public void setStress(int stress) {
+		this.stress = stress;
+
+		// TODO
+		if (stress >= MAX_STRESS)
+			stressedOut = true;
+	}
+
+	public int getThreshold() {
+		return threshold;
+	}
+
+	public boolean stressedOut() {
+		return stressedOut;
+	}
+
+	public boolean goodToGo() {
+		return (stressedOut != true);
+	}
+
 	@Override
 	public String toString() {
-		return String.format("%s the %s", name, playbook);
+		return String.format("%s the %s (%d)", name, playbook, stress);
 	}
 
 	public String toStringDetailed() {
@@ -281,6 +325,10 @@ public class Rogue {
 		return Dice.randomFromArray(VICES);
 	}
 
+	public static Trauma randomTrauma() {
+		return Dice.randomFromArray(TRAUMA_CONDITIONS);
+	}
+
 	/*
 	 * COMPARATORS
 	 * 
@@ -296,6 +344,20 @@ public class Rogue {
 		@Override
 		public int compare(Rogue rogue1, Rogue rogue2) {
 			return rogue2.coin - rogue1.coin;
+		}
+	}
+
+	public static class StressAscending implements Comparator<Rogue> {
+		@Override
+		public int compare(Rogue rogue1, Rogue rogue2) {
+			return rogue1.stress - rogue2.stress;
+		}
+	}
+
+	public static class StressDescending implements Comparator<Rogue> {
+		@Override
+		public int compare(Rogue rogue1, Rogue rogue2) {
+			return rogue2.stress - rogue1.stress;
 		}
 	}
 }

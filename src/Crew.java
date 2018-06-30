@@ -495,7 +495,7 @@ public class Crew {
 				coin -= difference;
 
 				// TODO - testing
-				System.out.println("Paid " + difference + " out of crew funds.");
+				// System.out.println("Paid " + difference + " out of crew funds.");
 			}
 		}
 	}
@@ -511,7 +511,7 @@ public class Crew {
 				rogue.setCoin(currentCoin - 1);
 				++amountPaid;
 				// TODO - testing
-				System.out.println(rogue + " paid toward crew advance.");
+				// System.out.println(rogue + " paid toward crew advance.");
 			}
 		}
 
@@ -536,9 +536,8 @@ public class Crew {
 				target = Dice.randomFromList(this.enemiesList());
 			} else {
 				goal = Score.Goal.CLAIM;
-				
-			}
 
+			}
 
 			// if (tier < 6 && Dice.roll(2) == 1) {
 			// goal = Score.Goal.CLIMB;
@@ -579,7 +578,13 @@ public class Crew {
 		if (teamSize > roster.size())
 			teamSize = roster.size();
 
-		List<Rogue> team = Dice.sublistFromList(teamSize, roster);
+		ArrayList<Rogue> team = new ArrayList<Rogue>();
+		Rogue.StressAscending leastStressed = new Rogue.StressAscending();
+		Collections.sort(roster, leastStressed);
+		for (Iterator<Rogue> it = roster.iterator(); it.hasNext() && team.size() < teamSize;) {
+			team.add(it.next());
+		}
+
 		Score score = new Score(this, team, client, target, goal);
 		// TODO - testing
 		if (client.sameAs(this)) {
