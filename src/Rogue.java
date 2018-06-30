@@ -199,6 +199,22 @@ public class Rogue {
 		return (stressedOut != true);
 	}
 
+	public void resolveStress() {
+		if (stress > MAX_STRESS) {
+			stress = 0;
+			stressedOut = false;
+
+			Trauma candidate = randomTrauma();
+			while (trauma.contains(candidate)) {
+				candidate = randomTrauma();
+			}
+
+			// TODO - testing
+			System.out.println(this + " gained the " + candidate + " trauma condition.");
+			trauma.add(candidate);
+		}
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s the %s (%d)", name, playbook, stress);

@@ -203,7 +203,7 @@ public class Score {
 
 	// methods
 	public void action(int dice) {
-		while (unresolved()) {
+		while (unresolved() && teamRemaining() > 0) {
 			if (scene == 1) {
 				// every mission begins with engagement roll
 				Position start = engagementRoll(dice);
@@ -239,7 +239,14 @@ public class Score {
 
 			// while mission not resolved, advance()
 			moraleCheck();
-			advance();
+			if (window.expired() != true) {
+				int[] results = Dice.fortune(++scene - ACTIONS_PER_SCORE + tension);
+				if (results[3] > 0 || results[4] > 0 || results[5] > 0) {
+					window.countDown();
+					// while I still use the act structure...
+					act = nextAct();
+				}
+			}
 		}
 
 		if (window.expired()) {
@@ -357,7 +364,8 @@ public class Score {
 		}
 	}
 
-	public void moraleCheck() {
+	public boolean moraleCheck() {
+		boolean morale = false;
 		int moraleCheck = 0, penalty = 0;
 		int tpk = 0;
 		Rogue rogue;
@@ -375,6 +383,17 @@ public class Score {
 		boolean abort = (tpk == team.size()) ? true : (moraleCheck > 20) ? true : false;
 		if (primaryObjective.expired() != true && abort)
 			window.clear();
+
+		return morale;
+	}
+
+	public int teamRemaining() {
+		int remaining = 0;
+		for (Iterator<Rogue> it = team.iterator(); it.hasNext();) {
+			remaining += (it.next().goodToGo()) ? 1 : 0;
+		}
+
+		return remaining;
 	}
 
 	@Override
@@ -672,6 +691,10 @@ public class Score {
 		}
 
 		public Action(Clock clock, Rogue.Rating approach, Position position, Effect effect) {
+			/*
+			 * FIXME - there is a bug which causes a crash here once a TPK has occurred
+			 * 
+			 */
 			this.rogue = Rogue.bestRogueForAction(approach, team);
 			Collections.rotate(team, 1);
 
@@ -681,13 +704,11 @@ public class Score {
 			this.effect = effect;
 			this.consequences = EnumSet.noneOf(Score.Consequence.class);
 
-			// TODO - testing
-			System.out.println("Size of team: " + team.size());
 			this.dice = rogue.getRating(approach);
 			int stress = rogue.getStress();
 
 			int pushCheck = dice + stress + rogue.getThreshold();
-			if (pushCheck < 20) {
+			if (pushCheck < 18) {
 				// TODO - testing
 				System.out.println(rogue + " takes 2 stress. (rolled " + pushCheck + ")");
 
@@ -1034,9 +1055,17 @@ public class Score {
 					crew.addCoin(payoff);
 
 				}
-
 			}
 
+			// post-payoff score resolution
+			if (team.size() > 0) {
+				Rogue rogue;
+				for (Iterator<Rogue> it = team.iterator(); it.hasNext();) {
+					rogue = it.next();
+					rogue.resolveStress();
+				}
+
+			}
 		}
 	}
 }
