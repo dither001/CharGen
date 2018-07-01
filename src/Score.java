@@ -43,6 +43,10 @@ public class Score {
 		ARREST, COOPERATION, DEMONIC_NOTICE, FLIPPED, GANG_TROUBLE, INTERROGATION, QUESTIONING, REPRISALS, RIVALS, SHOW_OF_FORCE, UNQUIET_DEAD, USUAL_SUSPECTS
 	}
 
+	public enum Diversion {
+		ACQUIRE_ASSET, LONG_TERM_PROJECT, RECOVER, REDUCE_HEAT, INDULGE_VICE
+	}
+
 	// static fields
 	private static final int ACTIONS_PER_SCORE = 20;
 
@@ -671,6 +675,92 @@ public class Score {
 		return Dice.randomFromArray(SEVERE_CONSEQUENCE);
 	}
 
+	public static void entanglement(int heat, int wantedLevel) {
+		int[] entangle = Dice.fortune(wantedLevel);
+		Entanglement encounter;
+		if (heat < 4 && entangle[5] > 0) {
+			// heat 0-3 && roll 6
+			encounter = Entanglement.COOPERATION;
+
+		} else if (heat < 4 && (entangle[3] > 0 || entangle[4] > 0)) {
+			// heat 0-3 && roll 4-5
+			encounter = (Dice.roll(2) == 1) ? Entanglement.RIVALS : Entanglement.UNQUIET_DEAD;
+
+		} else if (heat < 4) {
+			// heat 0-3 && roll 1-3
+			encounter = (Dice.roll(2) == 1) ? Entanglement.GANG_TROUBLE : Entanglement.USUAL_SUSPECTS;
+
+		} else if (heat < 6 && entangle[5] > 0) {
+			// heat 4-5 && roll 6
+			encounter = Entanglement.SHOW_OF_FORCE;
+
+		} else if (heat < 6 && (entangle[3] > 0 || entangle[4] > 0)) {
+			// heat 4-5 && roll 4-5
+			encounter = (Dice.roll(2) == 1) ? Entanglement.REPRISALS : Entanglement.UNQUIET_DEAD;
+
+		} else if (heat < 6) {
+			// heat 4-5 && roll 1-3
+			encounter = (Dice.roll(2) == 1) ? Entanglement.GANG_TROUBLE : Entanglement.QUESTIONING;
+
+		} else if (entangle[5] > 0) {
+			// heat 6+ && roll 6
+			encounter = Entanglement.ARREST;
+
+		} else if (entangle[3] > 0 || entangle[4] > 0) {
+			// heat 6+ && roll 4-5
+			encounter = (Dice.roll(2) == 1) ? Entanglement.DEMONIC_NOTICE : Entanglement.SHOW_OF_FORCE;
+
+		} else {
+			// heat 6+ && roll 1-3
+			encounter = (Dice.roll(2) == 1) ? Entanglement.FLIPPED : Entanglement.INTERROGATION;
+
+		}
+
+		// TODO - testing
+		System.out.println();
+		System.out.println(encounter + " entanglement");
+
+		switch (encounter) {
+		case ARREST:
+			System.out.println("Bluecoats arrive to arrest you.");
+			break;
+		case COOPERATION:
+			System.out.println("A close ally asks you for a favor.");
+			break;
+		case DEMONIC_NOTICE:
+			System.out.println("A demon approaches you with a dark offer.");
+			break;
+		case FLIPPED:
+			System.out.println("A rival has flipped one of your assets.");
+			break;
+		case GANG_TROUBLE:
+			System.out.println("One of your gangs has caused trouble.");
+			break;
+		case INTERROGATION:
+			System.out.println("The Bluecoats question one of the PCs.");
+			break;
+		case QUESTIONING:
+			System.out.println("The Bluecoats round up one of your cohorts.");
+			break;
+		case REPRISALS:
+			System.out.println("An enemy moves against your crew.");
+			break;
+		case RIVALS:
+			System.out.println("A rival throws their weight around.");
+			break;
+		case SHOW_OF_FORCE:
+			System.out.println("An enemy faction makes a play against you.");
+			break;
+		case UNQUIET_DEAD:
+			System.out.println("A rogue spirit haunts your crew.");
+			break;
+		case USUAL_SUSPECTS:
+			System.out.println("The Bluecoats grab a friend of a PC");
+			break;
+		}
+
+	}
+
 	/*
 	 * ACTION - INNER CLASS
 	 * 
@@ -874,8 +964,9 @@ public class Score {
 		ArrayList<Crew> changes;
 		int heat;
 
+		Crew crew;
 		public Downtime(Score score) {
-			Crew crew = score.crew;
+			this.crew = score.crew;
 			ArrayList<Rogue> team = score.team;
 
 			//
@@ -1083,86 +1174,10 @@ public class Score {
 
 			// entanglements
 			int heat = crew.getHeat();
-			int[] entangle = Dice.fortune(crew.getWantedLevel());
-			Entanglement encounter;
-			if (heat < 4 && entangle[5] > 0) {
-				// heat 0-3 && roll 6
-				encounter = Entanglement.COOPERATION;
+			int wantedLevel = crew.getWantedLevel();
+			entanglement(heat, wantedLevel);
 
-			} else if (heat < 4 && (entangle[3] > 0 || entangle[4] > 0)) {
-				// heat 0-3 && roll 4-5
-				encounter = (Dice.roll(2) == 1) ? Entanglement.RIVALS : Entanglement.UNQUIET_DEAD;
-
-			} else if (heat < 4) {
-				// heat 0-3 && roll 1-3
-				encounter = (Dice.roll(2) == 1) ? Entanglement.GANG_TROUBLE : Entanglement.USUAL_SUSPECTS;
-
-			} else if (heat < 6 && entangle[5] > 0) {
-				// heat 4-5 && roll 6
-				encounter = Entanglement.SHOW_OF_FORCE;
-
-			} else if (heat < 6 && (entangle[3] > 0 || entangle[4] > 0)) {
-				// heat 4-5 && roll 4-5
-				encounter = (Dice.roll(2) == 1) ? Entanglement.REPRISALS : Entanglement.UNQUIET_DEAD;
-
-			} else if (heat < 6) {
-				// heat 4-5 && roll 1-3
-				encounter = (Dice.roll(2) == 1) ? Entanglement.GANG_TROUBLE : Entanglement.QUESTIONING;
-
-			} else if (entangle[5] > 0) {
-				// heat 6+ && roll 6
-				encounter = Entanglement.ARREST;
-
-			} else if (entangle[3] > 0 || entangle[4] > 0) {
-				// heat 6+ && roll 4-5
-				encounter = (Dice.roll(2) == 1) ? Entanglement.DEMONIC_NOTICE : Entanglement.SHOW_OF_FORCE;
-
-			} else {
-				// heat 6+ && roll 1-3
-				encounter = (Dice.roll(2) == 1) ? Entanglement.FLIPPED : Entanglement.INTERROGATION;
-
-			}
-
-			// TODO - testing
-			System.out.println(encounter + " entanglement");
-			switch (encounter) {
-			case ARREST:
-				System.out.println("Bluecoats arrive to arrest you.");
-				break;
-			case COOPERATION:
-				System.out.println("A close ally asks you for a favor.");
-				break;
-			case DEMONIC_NOTICE:
-				System.out.println("A demon approaches you with a dark offer.");
-				break;
-			case FLIPPED:
-				System.out.println("A rival has flipped one of your assets.");
-				break;
-			case GANG_TROUBLE:
-				System.out.println("One of your gangs has caused trouble.");
-				break;
-			case INTERROGATION:
-				System.out.println("The Bluecoats question one of the PCs.");
-				break;
-			case QUESTIONING:
-				System.out.println("The Bluecoats round up one of your cohorts.");
-				break;
-			case REPRISALS:
-				System.out.println("An enemy moves against your crew.");
-				break;
-			case RIVALS:
-				System.out.println("A rival throws their weight around.");
-				break;
-			case SHOW_OF_FORCE:
-				System.out.println("An enemy faction makes a play against you.");
-				break;
-			case UNQUIET_DEAD:
-				System.out.println("A rogue spirit haunts your crew.");
-				break;
-			case USUAL_SUSPECTS:
-				System.out.println("The Bluecoats grab a friend of a PC");
-				break;
-			}
 		}
+		
 	}
 }
