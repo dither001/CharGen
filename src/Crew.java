@@ -79,6 +79,9 @@ public class Crew {
 	private static final Special[] SMUGGLERS_SPECIALS = { Special.LIKE_PART_OF_THE_FAMILY, Special.ALL_HANDS,
 			Special.GHOST_PASSAGE, Special.JUST_PASSING_THROUGH, Special.LEVERAGE, Special.REAVERS, Special.RENEGADES };
 
+	private static final Special[] SKILL_SPECIALS = { Special.DEADLY, Special.DANGEROUS, Special.CHOSEN,
+			Special.SILVER_TONGUES, Special.EVERYONE_STEALS, Special.RENEGADES };
+
 	// claims by crew type
 	private static final Claim[] ASSASSIN_CLAIMS = { Claim.LAIR, Claim.TRAINING_ROOMS, Claim.VICE_DEN, Claim.FIXER,
 			Claim.INFORMANTS, Claim.HAGFISH_FARM, Claim.VICTIM_TROPHIES, Claim.COVER_OPERATION, Claim.PROTECTION_RACKET,
@@ -417,7 +420,7 @@ public class Crew {
 		this.retired = new ArrayList<Rogue>();
 		for (int i = Dice.roll(3, 3); i > 0; --i) {
 			// starting roster is "3d3" or 3-9 rogues
-			roster.add(new Rogue());
+			roster.add(new Rogue(this));
 		}
 	}
 
@@ -985,6 +988,26 @@ public class Crew {
 			equals = false;
 
 		return equals;
+	}
+
+	public EnumSet<Special> getSpecials() {
+		return specials;
+	}
+
+	public Set<Upgrade> upgradeSet() {
+		return upgrades.keySet();
+	}
+
+	public EnumSet<Special> containsSkillSpecials() {
+		Special[] array = SKILL_SPECIALS;
+
+		EnumSet<Special> set = EnumSet.noneOf(Special.class);
+		for (int i = 0; i < array.length; ++i) {
+			if (specials.contains(array[i]))
+				set.add(array[i]);
+		}
+
+		return set;
 	}
 
 	@Override

@@ -207,7 +207,8 @@ public class Main {
 	}
 
 	public static void rollOneRogue() {
-		Rogue rogue = new Rogue();
+		Crew crew = new Crew();
+		Rogue rogue = new Rogue(crew);
 		System.out.println(rogue.toStringDetailed());
 	}
 

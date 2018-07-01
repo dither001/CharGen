@@ -22,6 +22,10 @@ public class Rogue {
 		FAITH, GAMBLING, LUXURY, OBLIGATION, PLEASURE, STUPOR, WEIRD
 	}
 
+	public enum Special {
+		VETERAN_1, VETERAN_2, VETERAN_3, BATTLEBORN, BODYGUARD, GHOST_FIGHTER, LEADER, MULE, NOT_TO_BE_TRIFLED_WITH, SAVAGE, VIGOROUS, SHARPSHOOTER, FOCUSED, GHOST_HUNTER_1, GHOST_HUNTER_2, SCOUT, SURVIVOR, TOUGH_AS_NAILS, VENGEFUL, ALCHEMIST, ANALYST, ARTIFICER, FORTITUDE, GHOST_WARD, PHYSICKER, SABOTEUR, VENOMOUS, INFILTRATOR, AMBUSH, DAREDEVIL, THE_DEVILS_FOOTSTEPS, EXPERTISE, GHOST_VEIL, REFLEXES, SHADOW, ROOKS_GAMBIT, CLOAK_DAGGER, GHOST_VOICE, LIKE_LOOKING_INTO_A_MIRROR, SOMETHING_ON_THE_SIDE, MESMERISM, SUBTERFUGE, TRUST_IN_ME, FORESIGHT, CALCULATING, CONNECTED, FUNCTIONING_VICE, GHOST_CONTRACT, JAIL_BIRD, MASTERMIND, WEAVING_THE_WEB, COMPEL, GHOST_MIND, IRON_WILL, OCCULTIST, RITUAL, STRANGE_METHODS, TEMPEST, WARDED
+	}
+
 	public enum Trauma {
 		COLD, HAUNTED, OBSESSED, PARANOID, RECKLESS, SOFT, UNSTABLE, VICIOUS
 	}
@@ -51,16 +55,36 @@ public class Rogue {
 	private static final Vice[] VICES = { Vice.FAITH, Vice.GAMBLING, Vice.LUXURY, Vice.OBLIGATION, Vice.PLEASURE,
 			Vice.STUPOR, Vice.WEIRD };
 
+	private static final Special[] CUTTER_SPECIAL = { Special.BATTLEBORN, Special.BODYGUARD, Special.GHOST_FIGHTER,
+			Special.LEADER, Special.MULE, Special.NOT_TO_BE_TRIFLED_WITH, Special.SAVAGE, Special.VIGOROUS };
+	private static final Special[] HOUND_SPECIAL = { Special.SHARPSHOOTER, Special.FOCUSED, Special.GHOST_HUNTER_1,
+			Special.GHOST_HUNTER_2, Special.SCOUT, Special.SURVIVOR, Special.TOUGH_AS_NAILS, Special.VENGEFUL };
+	private static final Special[] LEECH_SPECIAL = { Special.ALCHEMIST, Special.ANALYST, Special.ARTIFICER,
+			Special.FORTITUDE, Special.GHOST_WARD, Special.PHYSICKER, Special.SABOTEUR, Special.VENOMOUS };
+	private static final Special[] LURK_SPECIAL = { Special.INFILTRATOR, Special.AMBUSH, Special.DAREDEVIL,
+			Special.THE_DEVILS_FOOTSTEPS, Special.EXPERTISE, Special.GHOST_VEIL, Special.REFLEXES, Special.SHADOW };
+	private static final Special[] SLIDE_SPECIAL = { Special.ROOKS_GAMBIT, Special.CLOAK_DAGGER, Special.GHOST_VOICE,
+			Special.LIKE_LOOKING_INTO_A_MIRROR, Special.SOMETHING_ON_THE_SIDE, Special.MESMERISM, Special.SUBTERFUGE,
+			Special.TRUST_IN_ME };
+	private static final Special[] SPIDER_SPECIAL = { Special.FORESIGHT, Special.CALCULATING, Special.CONNECTED,
+			Special.FUNCTIONING_VICE, Special.GHOST_CONTRACT, Special.JAIL_BIRD, Special.MASTERMIND,
+			Special.WEAVING_THE_WEB };
+	private static final Special[] WHISPER_SPECIAL = { Special.COMPEL, Special.GHOST_MIND, Special.IRON_WILL,
+			Special.OCCULTIST, Special.RITUAL, Special.STRANGE_METHODS, Special.TEMPEST, Special.WARDED };
+
 	private static final Trauma[] TRAUMA_CONDITIONS = { Trauma.COLD, Trauma.HAUNTED, Trauma.OBSESSED, Trauma.PARANOID,
 			Trauma.RECKLESS, Trauma.SOFT, Trauma.UNSTABLE, Trauma.VICIOUS };
 
 	// instance fields
+	private Crew crew;
 	private String name;
 	private Playbook playbook;
 	private HashMap<Rating, Integer> attributes;
+	private EnumSet<Special> specials;
 
 	//
 	private Vice vice;
+	private String[] harm;
 
 	//
 	private int playbookXP;
@@ -77,13 +101,18 @@ public class Rogue {
 	private EnumSet<Trauma> trauma;
 
 	// constructors
-	public Rogue() {
+	public Rogue(Crew crew) {
 		// TODO
 		this.name = randomName();
 		this.playbook = randomPlaybook();
 
 		// requires playbook
-		this.attributes = attributesInit(playbook);
+		this.attributes = attributesInit(playbook, crew);
+		crewSpecialSkills(crew, this);
+
+		this.specials = EnumSet.noneOf(Special.class);
+		specials.add(randomSpecial(playbook));
+
 		this.playbookXP = 0;
 		this.insightXP = 0;
 		this.prowessXP = 0;
@@ -92,6 +121,8 @@ public class Rogue {
 		this.stash = 0;
 
 		this.vice = randomVice();
+		this.harm = new String[5];
+
 		this.stress = 0;
 		this.threshold = Dice.roll(4) + 5;
 		this.stressedOut = false;
@@ -219,6 +250,48 @@ public class Rogue {
 		return trauma;
 	}
 
+	public boolean improveAttribute(Rating rating) {
+		boolean improved = false;
+		if (attributes.containsKey(rating) != true) {
+			attributes.put(rating, 1);
+			improved = true;
+			return improved;
+		}
+
+		Set<Crew.Upgrade> crewUpgrades = crew.upgradeSet();
+		int upgrade = attributes.get(rating);
+
+		boolean trainer = false;
+		if (rating.equals(Rating.HUNT) || rating.equals(Rating.STUDY) || rating.equals(Rating.SURVEY)
+				|| rating.equals(Rating.TINKER)) {
+			trainer = crewUpgrades.contains(Crew.Upgrade.TRAINING_INSIGHT);
+		}
+
+		if (rating.equals(Rating.FINESSE) || rating.equals(Rating.PROWL) || rating.equals(Rating.SKIRMISH)
+				|| rating.equals(Rating.WRECK)) {
+			trainer = crewUpgrades.contains(Crew.Upgrade.TRAINING_PROWESS);
+		}
+
+		if (rating.equals(Rating.ATTUNE) || rating.equals(Rating.COMMAND) || rating.equals(Rating.CONSORT)
+				|| rating.equals(Rating.SWAY)) {
+			trainer = crewUpgrades.contains(Crew.Upgrade.TRAINING_RESOLVE);
+		}
+
+		if (upgrade + 1 == 2) {
+			upgrade = 2;
+			improved = true;
+		} else if (upgrade + 1 == 4 && trainer) {
+			upgrade = 4;
+			improved = true;
+		} else if (upgrade + 1 == 3) {
+			upgrade = 3;
+			improved = true;
+		}
+
+		attributes.put(rating, upgrade);
+		return improved;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s the %s (%d)", name, playbook, stress);
@@ -242,7 +315,7 @@ public class Rogue {
 	}
 
 	// static methods
-	private static HashMap<Rating, Integer> attributesInit(Playbook playbook) {
+	private static HashMap<Rating, Integer> attributesInit(Playbook playbook, Crew crew) {
 		HashMap<Rating, Integer> init = new HashMap<Rating, Integer>();
 
 		if (playbook.equals(Playbook.CUTTER)) {
@@ -347,6 +420,132 @@ public class Rogue {
 
 	public static Trauma randomTrauma() {
 		return Dice.randomFromArray(TRAUMA_CONDITIONS);
+	}
+
+	public static Special randomSpecial(Playbook playbook) {
+		Special special = null;
+		if (playbook.equals(Playbook.CUTTER))
+			special = randomCutterSpecial();
+		else if (playbook.equals(Playbook.HOUND))
+			special = randomHoundSpecial();
+		else if (playbook.equals(Playbook.LEECH))
+			special = randomLeechSpecial();
+		else if (playbook.equals(Playbook.LURK))
+			special = randomLurkSpecial();
+		else if (playbook.equals(Playbook.SLIDE))
+			special = randomSlideSpecial();
+		else if (playbook.equals(Playbook.SPIDER))
+			special = randomSpiderSpecial();
+		else if (playbook.equals(Playbook.WHISPER))
+			special = randomWhisperSpecial();
+
+		return special;
+	}
+
+	public static Special randomCutterSpecial() {
+		return Dice.randomFromArray(CUTTER_SPECIAL);
+	}
+
+	public static Special randomHoundSpecial() {
+		return Dice.randomFromArray(HOUND_SPECIAL);
+	}
+
+	public static Special randomLeechSpecial() {
+		return Dice.randomFromArray(LEECH_SPECIAL);
+	}
+
+	public static Special randomLurkSpecial() {
+		return Dice.randomFromArray(LURK_SPECIAL);
+	}
+
+	public static Special randomSlideSpecial() {
+		return Dice.randomFromArray(SLIDE_SPECIAL);
+	}
+
+	public static Special randomSpiderSpecial() {
+		return Dice.randomFromArray(SPIDER_SPECIAL);
+	}
+
+	public static Special randomWhisperSpecial() {
+		return Dice.randomFromArray(WHISPER_SPECIAL);
+	}
+
+	private static void crewSpecialSkills(Crew crew, Rogue rogue) {
+		Set<Crew.Special> crewSpecials = crew.containsSkillSpecials();
+
+		Rating rating;
+		if (crewSpecials.contains(Crew.Special.DEADLY)) {
+			rating = chooseDeadlySkill();
+			while (rogue.improveAttribute(rating) != true) {
+				rating = chooseDeadlySkill();
+			}
+		}
+
+		if (crewSpecials.contains(Crew.Special.DANGEROUS)) {
+			rating = chooseDangerousSkill();
+			while (rogue.improveAttribute(rating) != true) {
+				rating = chooseDangerousSkill();
+			}
+		}
+
+		if (crewSpecials.contains(Crew.Special.CHOSEN)) {
+			rating = chooseChosenSkill();
+			while (rogue.improveAttribute(rating) != true) {
+				rating = chooseChosenSkill();
+			}
+		}
+
+		if (crewSpecials.contains(Crew.Special.SILVER_TONGUES)) {
+			rating = chooseSilverTongueSkill();
+			while (rogue.improveAttribute(rating) != true) {
+				rating = chooseSilverTongueSkill();
+			}
+		}
+
+		if (crewSpecials.contains(Crew.Special.EVERYONE_STEALS)) {
+			rating = chooseEveryoneStealsSkill();
+			while (rogue.improveAttribute(rating) != true) {
+				rating = chooseEveryoneStealsSkill();
+			}
+		}
+
+		if (crewSpecials.contains(Crew.Special.RENEGADES)) {
+			rating = chooseRenegadeSkill();
+			while (rogue.improveAttribute(rating) != true) {
+				rating = chooseRenegadeSkill();
+			}
+		}
+
+	}
+
+	private static Rating chooseDeadlySkill() {
+		Rating[] array = new Rating[] { Rating.HUNT, Rating.PROWL, Rating.SKIRMISH };
+		return Dice.randomFromArray(array);
+	}
+
+	private static Rating chooseDangerousSkill() {
+		Rating[] array = new Rating[] { Rating.HUNT, Rating.SKIRMISH, Rating.WRECK };
+		return Dice.randomFromArray(array);
+	}
+
+	private static Rating chooseChosenSkill() {
+		Rating[] array = new Rating[] { Rating.ATTUNE, Rating.STUDY, Rating.SWAY };
+		return Dice.randomFromArray(array);
+	}
+
+	private static Rating chooseSilverTongueSkill() {
+		Rating[] array = new Rating[] { Rating.COMMAND, Rating.CONSORT, Rating.SWAY };
+		return Dice.randomFromArray(array);
+	}
+
+	private static Rating chooseEveryoneStealsSkill() {
+		Rating[] array = new Rating[] { Rating.FINESSE, Rating.PROWL, Rating.TINKER };
+		return Dice.randomFromArray(array);
+	}
+
+	private static Rating chooseRenegadeSkill() {
+		Rating[] array = new Rating[] { Rating.FINESSE, Rating.PROWL, Rating.SKIRMISH };
+		return Dice.randomFromArray(array);
 	}
 
 	/*
