@@ -566,16 +566,13 @@ public class Crew {
 
 		}
 
-		// TODO - testing
-		// for (int i = array.length - 1; i >= 0; --i) {
-		// System.out.println(array[i].toString());
-		// }
-
 		if (array[6].contains(target) || rep.contains(Rep.HONORABLE)) {
-			// TODO - refuse to pull job on a friendly
+			/*
+			 * TODO - refuse to pull job on a friendly
+			 */
 		}
 
-		// TODO - testing
+		// TODO - teams are chosen for each score
 		int teamSize = Dice.roll(3) + 2;
 		if (teamSize > roster.size())
 			teamSize = roster.size();
@@ -891,6 +888,14 @@ public class Crew {
 
 	public boolean atPeace() {
 		return (atWar != true);
+	}
+
+	public int getHeat() {
+		return heat;
+	}
+
+	public void setHeat(int heat) {
+		this.heat = heat;
 	}
 
 	public Set<Crew> getNonZeroShips() {

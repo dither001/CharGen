@@ -867,15 +867,10 @@ public class Score {
 	 * DOWNTIME - INNER CLASS
 	 */
 	private class Downtime {
-		public Downtime(Score score) {
-			/*
-			 * FIXME - this ArrayList is to keep track of EACH faction status that changes;
-			 * eventually when I rewrite the system, there will be no such thing as a
-			 * "zero reputation," because "everyone knows everybody." All that changes is
-			 * which SIDE of the friend/enemy spectrum characters fall on at present
-			 */
-			ArrayList<Crew> changes = new ArrayList<Crew>();
+		ArrayList<Crew> changes;
+		int heat;
 
+		public Downtime(Score score) {
 			Crew crew = score.crew;
 			ArrayList<Rogue> team = score.team;
 
@@ -883,6 +878,17 @@ public class Score {
 			Crew client = score.client;
 			Crew target = score.target;
 			Goal goal = score.goal;
+
+			/*
+			 * TODO - this ArrayList is to keep track of EACH faction status that changes;
+			 * eventually when I rewrite the system, there will be no such thing as a
+			 * "zero reputation," because "everyone knows everybody." All that changes is
+			 * which SIDE of the friend/enemy spectrum characters fall on at present
+			 */
+			changes = new ArrayList<Crew>();
+
+			// starting heat
+			this.heat = Dice.roll(4) + Dice.roll(target.getTier() / 2) - 1;
 
 			if (primaryObjective.expired() && goal.equals(Goal.ASSIST)) {
 				String hold = (client.holdStrong()) ? "strong" : "weak";
@@ -1064,8 +1070,11 @@ public class Score {
 					rogue = it.next();
 					rogue.resolveStress();
 				}
-
 			}
+
+			// assign heat
+			System.out.println("Received " + heat + " heat from score.");
+			crew.setHeat(crew.getHeat() + heat);
 		}
 	}
 }
