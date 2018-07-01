@@ -55,6 +55,12 @@ public class Crew {
 		PATRON, VETERAN_1, VETERAN_2, VETERAN_3, DEADLY, CROWS_VEIL, EMBERDEATH, NO_TRACES, PREDATORS, VIPERS, DANGEROUS, BLOOD_BROTHERS, DOOR_KICKERS, FIENDS, FORGED_IN_THE_FIRE, WAR_DOGS, CHOSEN, ANNOINTED, BOUND_IN_DARKNESS, CONVICTION, GLORY_INCARNATE, SEALED_IN_BLOOD, ZEALOTRY, SILVER_TONGUES, ACCORD, THE_GOOD_STUFF, GHOST_MARKET, HIGH_SOCIETY, HOOKED, EVERYONE_STEALS, GHOST_ECHOES, PACK_RATS, SECOND_STORY, SLIPPERY, SYNCHRONIZED, LIKE_PART_OF_THE_FAMILY, ALL_HANDS, GHOST_PASSAGE, JUST_PASSING_THROUGH, LEVERAGE, REAVERS, RENEGADES
 	}
 
+	/*
+	 * STATIC FIELDS
+	 * 
+	 */
+	private static final int MAX_HEAT = 9;
+
 	private static final Special[] ASSASSIN_SPECIALS = { Special.DEADLY, Special.CROWS_VEIL, Special.EMBERDEATH,
 			Special.NO_TRACES, Special.PREDATORS, Special.VIPERS, Special.PATRON };
 
@@ -270,7 +276,9 @@ public class Crew {
 
 	//
 	private int heat;
+	private boolean mostWanted;
 	private int wantedLevel;
+
 	private boolean atWar;
 	private HashMap<Crew, Integer> shipMap;
 	private int[] shipArray;
@@ -311,6 +319,7 @@ public class Crew {
 
 		//
 		this.heat = 0;
+		this.mostWanted = false;
 		this.wantedLevel = 0;
 		this.atWar = false;
 
@@ -896,6 +905,29 @@ public class Crew {
 
 	public void setHeat(int heat) {
 		this.heat = heat;
+
+		// TODO
+		if (heat >= MAX_HEAT)
+			mostWanted = true;
+	}
+
+	public int getWantedLevel() {
+		return wantedLevel;
+	}
+
+	public void setWantedLevel(int wantedLevel) {
+		this.wantedLevel = wantedLevel;
+	}
+
+	public void resolveHeat() {
+		if (heat >= MAX_HEAT) {
+			heat -= MAX_HEAT;
+			mostWanted = false;
+
+			++wantedLevel;
+			// TODO - testing
+			System.out.println("Wanted level rose to " + wantedLevel);
+		}
 	}
 
 	public Set<Crew> getNonZeroShips() {

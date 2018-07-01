@@ -200,7 +200,7 @@ public class Rogue {
 	}
 
 	public void resolveStress() {
-		if (stress > MAX_STRESS) {
+		if (stress >= MAX_STRESS) {
 			stress = 0;
 			stressedOut = false;
 

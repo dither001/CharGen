@@ -39,6 +39,10 @@ public class Score {
 		CRITICAL, SUCCESS, PARTIAL, FAILURE
 	}
 
+	public enum Entanglement {
+		ARREST, COOPERATION, DEMONIC_NOTICE, FLIPPED, GANG_TROUBLE, INTERROGATION, QUESTIONING, REPRISALS, RIVALS, SHOW_OF_FORCE, UNQUIET_DEAD, USUAL_SUSPECTS
+	}
+
 	// static fields
 	private static final int ACTIONS_PER_SCORE = 20;
 
@@ -888,7 +892,7 @@ public class Score {
 			changes = new ArrayList<Crew>();
 
 			// starting heat
-			this.heat = Dice.roll(4) + Dice.roll(target.getTier() / 2) - 1;
+			this.heat = Dice.roll(4) + Dice.roll(target.getTier() / 2) - 2;
 
 			if (primaryObjective.expired() && goal.equals(Goal.ASSIST)) {
 				String hold = (client.holdStrong()) ? "strong" : "weak";
@@ -1075,6 +1079,52 @@ public class Score {
 			// assign heat
 			System.out.println("Received " + heat + " heat from score.");
 			crew.setHeat(crew.getHeat() + heat);
+			crew.resolveHeat();
+
+			// entanglements
+			int heat = crew.getHeat();
+			int[] entangle = Dice.fortune(heat);
+			Entanglement encounter;
+			if (heat < 4 && entangle[5] > 0) {
+				// heat 0-3 && roll 6
+				encounter = Entanglement.COOPERATION;
+
+			} else if (heat < 4 && (entangle[3] > 0 || entangle[4] > 0)) {
+				// heat 0-3 && roll 4-5
+				encounter = (Dice.roll(2) == 1) ? Entanglement.RIVALS : Entanglement.UNQUIET_DEAD;
+
+			} else if (heat < 4) {
+				// heat 0-3 && roll 1-3
+				encounter = (Dice.roll(2) == 1) ? Entanglement.GANG_TROUBLE : Entanglement.USUAL_SUSPECTS;
+
+			} else if (heat < 6 && entangle[5] > 0) {
+				// heat 4-5 && roll 6
+				encounter = Entanglement.SHOW_OF_FORCE;
+
+			} else if (heat < 6 && (entangle[3] > 0 || entangle[4] > 0)) {
+				// heat 4-5 && roll 4-5
+				encounter = (Dice.roll(2) == 1) ? Entanglement.REPRISALS : Entanglement.UNQUIET_DEAD;
+
+			} else if (heat < 6) {
+				// heat 4-5 && roll 1-3
+				encounter = (Dice.roll(2) == 1) ? Entanglement.GANG_TROUBLE : Entanglement.QUESTIONING;
+
+			} else if (entangle[5] > 0) {
+				// heat 6+ && roll 6
+				encounter = Entanglement.ARREST;
+
+			} else if (entangle[3] > 0 || entangle[4] > 0) {
+				// heat 6+ && roll 4-5
+				encounter = (Dice.roll(2) == 1) ? Entanglement.DEMONIC_NOTICE : Entanglement.SHOW_OF_FORCE;
+
+			} else {
+				// heat 6+ && roll 1-3
+				encounter = (Dice.roll(2) == 1) ? Entanglement.FLIPPED : Entanglement.INTERROGATION;
+
+			}
+
+			// TODO - testing
+			System.out.println("Entanglement " + encounter);
 		}
 	}
 }
