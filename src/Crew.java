@@ -456,7 +456,7 @@ public class Crew {
 		}
 
 		// TODO - testing
-		System.out.println("Available coin: " + availableCoin);
+		// System.out.println("Available coin: " + availableCoin);
 		if (availableCoin < costToAdvance)
 			canAdvance = false;
 

@@ -712,7 +712,7 @@ public class Score {
 			int stress = rogue.getStress();
 
 			int pushCheck = dice + stress + rogue.getThreshold();
-			if (pushCheck < 18) {
+			if (pushCheck < 15) {
 				// TODO - testing
 				System.out.println(rogue + " takes 2 stress. (rolled " + pushCheck + ")");
 
@@ -724,7 +724,7 @@ public class Score {
 			}
 
 			resolve();
-			System.out.println(toStringDetailed());
+			// System.out.println(toStringDetailed());
 		}
 
 		// methods
@@ -1083,7 +1083,7 @@ public class Score {
 
 			// entanglements
 			int heat = crew.getHeat();
-			int[] entangle = Dice.fortune(heat);
+			int[] entangle = Dice.fortune(crew.getWantedLevel());
 			Entanglement encounter;
 			if (heat < 4 && entangle[5] > 0) {
 				// heat 0-3 && roll 6
@@ -1124,7 +1124,45 @@ public class Score {
 			}
 
 			// TODO - testing
-			System.out.println("Entanglement " + encounter);
+			System.out.println(encounter + " entanglement");
+			switch (encounter) {
+			case ARREST:
+				System.out.println("Bluecoats arrive to arrest you.");
+				break;
+			case COOPERATION:
+				System.out.println("A close ally asks you for a favor.");
+				break;
+			case DEMONIC_NOTICE:
+				System.out.println("A demon approaches you with a dark offer.");
+				break;
+			case FLIPPED:
+				System.out.println("A rival has flipped one of your assets.");
+				break;
+			case GANG_TROUBLE:
+				System.out.println("One of your gangs has caused trouble.");
+				break;
+			case INTERROGATION:
+				System.out.println("The Bluecoats question one of the PCs.");
+				break;
+			case QUESTIONING:
+				System.out.println("The Bluecoats round up one of your cohorts.");
+				break;
+			case REPRISALS:
+				System.out.println("An enemy moves against your crew.");
+				break;
+			case RIVALS:
+				System.out.println("A rival throws their weight around.");
+				break;
+			case SHOW_OF_FORCE:
+				System.out.println("An enemy faction makes a play against you.");
+				break;
+			case UNQUIET_DEAD:
+				System.out.println("A rogue spirit haunts your crew.");
+				break;
+			case USUAL_SUSPECTS:
+				System.out.println("The Bluecoats grab a friend of a PC");
+				break;
+			}
 		}
 	}
 }
