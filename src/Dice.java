@@ -94,6 +94,10 @@ public class Dice {
 		return choice;
 	}
 
+	public static <T> List<T> listFromSet(Set<T> set) {
+		return new ArrayList<T>(set);
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> sublistFromList(int length, List<T> list) {
 		T[] array = (T[]) new Object[list.size()];

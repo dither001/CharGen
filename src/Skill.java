@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.EnumSet;
 
 public enum Skill {
@@ -81,10 +82,15 @@ public enum Skill {
 	}
 
 	public static void setupClassSkills(Actor actor) {
+		EnumSet<Skill> skills;
+		if (actor.getSkills() == null)
+			skills = EnumSet.noneOf(Skill.class);
+		else
+			skills = actor.getSkills();
+
 		Class job = actor.getJob();
 		int addedSkills = 0, skillsToAdd = Class.getNumberOfSkills(job);
 		// TODO
-		EnumSet<Skill> skills = actor.getSkills();
 		Skill[] array;
 
 		if (job.equals(Class.BARBARIAN))
@@ -128,10 +134,15 @@ public enum Skill {
 	}
 
 	public static void setupCareerSkills(Actor actor) {
+		EnumSet<Skill> skills;
+		if (actor.getSkills() == null)
+			skills = EnumSet.noneOf(Skill.class);
+		else
+			skills = actor.getSkills();
+
 		Career job = actor.getCareer();
 		int addedSkills = 0, skillsToAdd = 2;
 		// TODO
-		EnumSet<Skill> skills = actor.getSkills();
 		Skill[] array = null;
 
 		if (job.equals(Career.ACOLYTE))
@@ -186,21 +197,31 @@ public enum Skill {
 	}
 
 	public static void setupRacialSkills(Actor actor) {
+		EnumSet<Skill> skills;
+		if (actor.getSkills() == null)
+			skills = EnumSet.noneOf(Skill.class);
+		else
+			skills = actor.getSkills();
+
 		Race race = actor.getRace();
 		int addedSkills = 0, skillsToAdd = 0;
 		// TODO
-		EnumSet<Skill> skills = actor.getSkills();
 
 		if (race.equals(Race.DARK_ELF) || race.equals(Race.HIGH_ELF) || race.equals(Race.WOOD_ELF)) {
+			// all elves receive Perception (or a random skill)
 			skillsToAdd = 1;
 
 			if (skills.contains(PERCEPTION) != true) {
 				skills.add(PERCEPTION);
 				++addedSkills;
 			}
+
 		} else if (race.equals(Race.HALF_ELF)) {
+			// all half-elves receive two random skills
 			skillsToAdd = 2;
+
 		} else if (race.equals(Race.HALF_ORC)) {
+			// all half-orcs receive Intimidation (or a random skill)
 			skillsToAdd = 2;
 
 			if (skills.contains(INTIMIDATION) != true) {
@@ -223,4 +244,32 @@ public enum Skill {
 		actor.setSkills(skills);
 	}
 
+	/*
+	 * COMPARATOR
+	 * 
+	 */
+	public static class AlphabeticalDescending implements Comparator<Skill> {
+
+		@Override
+		public int compare(Skill skill1, Skill skill2) {
+			int compare = 0;
+			String string1 = skill1.toString(), string2 = skill2.toString();
+			int length1 = string1.length(), length2 = string2.length();
+			int length = (length1 < length2) ? length1 : length2;
+
+			char c1, c2;
+			for (int i = 0; i < length; ++i) {
+				c1 = string1.charAt(i);
+				c2 = string2.charAt(i);
+
+				if (c1 < c2) {
+					compare = c1 - c2;
+					break;
+				}
+			}
+
+			return compare;
+		}
+		
+	}
 }

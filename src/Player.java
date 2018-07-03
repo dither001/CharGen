@@ -1,4 +1,7 @@
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 
 public class Player implements Actor {
 
@@ -36,16 +39,16 @@ public class Player implements Actor {
 	/*
 	 * CONSTRUCTORS
 	 * 
-	*/
+	 */
 	public Player() {
 		// FIXME - random name generator
 		name = "Default";
 
-		//
-		armor = EnumSet.noneOf(Armor.class);
-		weapons = EnumSet.noneOf(Weapon.class);
-		skills = EnumSet.noneOf(Skill.class);
-		features = EnumSet.noneOf(Feature.class);
+		// these have to be initialized before use
+		// armor = EnumSet.noneOf(Armor.class);
+		// weapons = EnumSet.noneOf(Weapon.class);
+		// skills = EnumSet.noneOf(Skill.class);
+		// features = EnumSet.noneOf(Feature.class);
 
 		//
 		abilities = Dice.rollAbilities();
@@ -76,11 +79,24 @@ public class Player implements Actor {
 		return string;
 	}
 
+	public String skillsToString() {
+		List<Skill> skillsList = Dice.listFromSet(skills);
+		Skill.AlphabeticalDescending sort = new Skill.AlphabeticalDescending();
+		
+		Collections.sort(skillsList, sort);
+		String string = String.format("%n%s", skills.toString());
+
+		return string;
+	}
+
+	@Override
 	public String toStringDetailed() {
 		String string = String.format("%s the %s %s (%s) %s", name, race, job, archetype, career);
-		
+
+		// alignment, deity line
+		string += String.format("%n%s follower of %s", alignment, god);
 		// skills line
-		string += String.format("%n%s", skills.toString());
+		string += skillsToString();
 
 		return string;
 	}
@@ -249,5 +265,5 @@ public class Player implements Actor {
 	/*
 	 * INSTANCE METHODS
 	 * 
-	*/
+	 */
 }
