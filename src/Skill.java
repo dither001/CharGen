@@ -52,127 +52,126 @@ public enum Skill {
 		return Dice.randomFromArray(ALL_SKILLS);
 	}
 
-	public static HashSet<Proficiency> getProficiency(Class job) {
-		HashSet<Proficiency> list = new HashSet<Proficiency>();
-
-		int number = job.getNumberOfSkills();
-		Skill[] jobSkills = jobSkills(job);
-		Skill candidate;
-
-		for (int i = 0; i < number;) {
-			candidate = jobSkills[Dice.roll(jobSkills.length) - 1];
-			if (list.contains(candidate) != true) {
-				list.add(candidate);
-				++i;
-			}
-		}
-
-		return list;
-	}
-
-	public static HashSet<Proficiency> filterForSkills(Actor actor) {
-		HashSet<Proficiency> set = new HashSet<Proficiency>(actor.getSkills());
-		set.retainAll(Arrays.asList(ALL_SKILLS));
-
-		return set;
-	}
-
-	public static Skill[] getSkillArray() {
-		return ALL_SKILLS;
-	}
-
-	public static HashSet<Proficiency> getSkillSet() {
-		HashSet<Proficiency> list = new HashSet<Proficiency>();
-		list.addAll(Arrays.asList(ALL_SKILLS));
-		return list;
-	}
-
-	public static EnumSet<Skill> careerSkills(Actor actor) {
-		EnumSet<Skill> careerSkills = new HashSet<Proficiency>();
-
-		EnumSet<Skill> skills = actor.getSkills();
-		Career career = actor.getCareer();
-		Skill[] candidates = careerSkillsHelper(career);
-
-		for (int i = 0; i < candidates.length; ++i) {
-			if (skills.contains(candidates[i]) != true && careerSkills.contains(candidates[i]) != true) {
-				careerSkills.add(candidates[i]);
-			} else {
-				while (skills.contains(candidates[i]) || careerSkills.contains(candidates[i])) {
-					// TODO - should also choose from tool proficiencies and such
-					candidates[i] = ALL_SKILLS[Dice.roll(ALL_SKILLS.length) - 1];
-				}
-
-				careerSkills.add(candidates[i]);
-			}
-		}
-
-		return careerSkills;
-	}
-
-	private static Skill[] careerSkillsHelper(Career career) {
-		Skill[] careerSkills = { ATHLETICS, SURVIVAL };
-
-		if (career.equals(Career.ACOLYTE))
-			careerSkills = ACOLYTE_SKILLS;
-		else if (career.equals(Career.CHARLATAN))
-			careerSkills = CHARLATAN_SKILLS;
-		else if (career.equals(Career.CRIMINAL))
-			careerSkills = CRIMINAL_SKILLS;
-		else if (career.equals(Career.ENTERTAINER))
-			careerSkills = ENTERTAINER_SKILLS;
-		else if (career.equals(Career.FOLK_HERO))
-			careerSkills = FOLK_HERO_SKILLS;
-		else if (career.equals(Career.GUILD_ARTISAN))
-			careerSkills = GUILD_ARTISAN_SKILLS;
-		else if (career.equals(Career.HERMIT))
-			careerSkills = HERMIT_SKILLS;
-		else if (career.equals(Career.NOBLE))
-			careerSkills = NOBLE_SKILLS;
-		else if (career.equals(Career.OUTLANDER))
-			careerSkills = OUTLANDER_SKILLS;
-		else if (career.equals(Career.SAGE))
-			careerSkills = SAGE_SKILLS;
-		else if (career.equals(Career.SAILOR))
-			careerSkills = SAILOR_SKILLS;
-		else if (career.equals(Career.SOLDIER))
-			careerSkills = SOLDIER_SKILLS;
-		else if (career.equals(Career.URCHIN))
-			careerSkills = URCHIN_SKILLS;
-
-		return careerSkills;
-	}
-
-	public static Skill[] jobSkills(Class job) {
-		Skill[] jobSkills;
+	public static Skill randomClassSkill(Class job) {
+		Skill[] array;
 
 		if (job.equals(Class.BARBARIAN))
-			jobSkills = BARBARIAN_SKILLS;
+			array = BARBARIAN_SKILLS;
 		else if (job.equals(Class.BARD))
-			jobSkills = ALL_SKILLS;
+			array = ALL_SKILLS;
 		else if (job.equals(Class.CLERIC))
-			jobSkills = CLERIC_SKILLS;
+			array = CLERIC_SKILLS;
 		else if (job.equals(Class.DRUID))
-			jobSkills = DRUID_SKILLS;
+			array = DRUID_SKILLS;
 		else if (job.equals(Class.FIGHTER))
-			jobSkills = FIGHTER_SKILLS;
+			array = FIGHTER_SKILLS;
 		else if (job.equals(Class.MONK))
-			jobSkills = MONK_SKILLS;
+			array = MONK_SKILLS;
 		else if (job.equals(Class.PALADIN))
-			jobSkills = PALADIN_SKILLS;
+			array = PALADIN_SKILLS;
 		else if (job.equals(Class.RANGER))
-			jobSkills = RANGER_SKILLS;
+			array = RANGER_SKILLS;
 		else if (job.equals(Class.ROGUE))
-			jobSkills = ROGUE_SKILLS;
+			array = ROGUE_SKILLS;
 		else if (job.equals(Class.SORCERER))
-			jobSkills = SORCERER_SKILLS;
+			array = SORCERER_SKILLS;
 		else if (job.equals(Class.WARLOCK))
-			jobSkills = WARLOCK_SKILLS;
+			array = WARLOCK_SKILLS;
 		else if (job.equals(Class.WIZARD))
-			jobSkills = WIZARD_SKILLS;
+			array = WIZARD_SKILLS;
 		else
-			jobSkills = ALL_SKILLS;
+			array = ALL_SKILLS;
 
-		return jobSkills;
+		return Dice.randomFromArray(array);		
 	}
+
+	public static boolean testAddSkill(EnumSet<Skill> set, Skill skill) {
+		boolean add = false;
+		if (set.contains(skill)) {
+			set.add(skill);
+			add = true;
+		}
+
+		return add;
+	}
+
+	public static EnumSet<Skill> setupClassSkills(Actor actor) {
+		Class job = actor.getJob();
+		int skillsToAdd = Class.getNumberOfSkills(job);
+		// TODO
+		EnumSet<Skill> skills = EnumSet.noneOf(Skill.class);
+		Skill[] array;
+
+		if (job.equals(Class.BARBARIAN))
+			array = BARBARIAN_SKILLS;
+		else if (job.equals(Class.BARD))
+			array = ALL_SKILLS;
+		else if (job.equals(Class.CLERIC))
+			array = CLERIC_SKILLS;
+		else if (job.equals(Class.DRUID))
+			array = DRUID_SKILLS;
+		else if (job.equals(Class.FIGHTER))
+			array = FIGHTER_SKILLS;
+		else if (job.equals(Class.MONK))
+			array = MONK_SKILLS;
+		else if (job.equals(Class.PALADIN))
+			array = PALADIN_SKILLS;
+		else if (job.equals(Class.RANGER))
+			array = RANGER_SKILLS;
+		else if (job.equals(Class.ROGUE))
+			array = ROGUE_SKILLS;
+		else if (job.equals(Class.SORCERER))
+			array = SORCERER_SKILLS;
+		else if (job.equals(Class.WARLOCK))
+			array = WARLOCK_SKILLS;
+		else if (job.equals(Class.WIZARD))
+			array = WIZARD_SKILLS;
+		else
+			array = ALL_SKILLS;
+
+		return skills;
+	}
+
+	public static EnumSet<Skill> setupRacialSkills(Actor actor) {
+		// TODO
+		EnumSet<Skill> skills = EnumSet.noneOf(Skill.class);
+
+		return skills;
+	}
+
+	public static EnumSet<Skill> setupCareerSkills(Actor actor) {
+		Career job = actor.getCareer();
+		// TODO
+		EnumSet<Skill> skills = EnumSet.noneOf(Skill.class);
+		Skill[] array = null;
+
+		if (job.equals(Career.ACOLYTE))
+			array = ACOLYTE_SKILLS;
+		else if (job.equals(Career.CHARLATAN))
+			array = CHARLATAN_SKILLS;
+		else if (job.equals(Career.CRIMINAL))
+			array = CRIMINAL_SKILLS;
+		else if (job.equals(Career.ENTERTAINER))
+			array = ENTERTAINER_SKILLS;
+		else if (job.equals(Career.FOLK_HERO))
+			array = FOLK_HERO_SKILLS;
+		else if (job.equals(Career.GUILD_ARTISAN))
+			array = GUILD_ARTISAN_SKILLS;
+		else if (job.equals(Career.HERMIT))
+			array = HERMIT_SKILLS;
+		else if (job.equals(Career.NOBLE))
+			array = NOBLE_SKILLS;
+		else if (job.equals(Career.OUTLANDER))
+			array = OUTLANDER_SKILLS;
+		else if (job.equals(Career.SAGE))
+			array = SAGE_SKILLS;
+		else if (job.equals(Career.SAILOR))
+			array = SAILOR_SKILLS;
+		else if (job.equals(Career.SOLDIER))
+			array = SOLDIER_SKILLS;
+		else if (job.equals(Career.URCHIN))
+			array = URCHIN_SKILLS;
+		return skills;
+	}
+
 }

@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-public enum Spells {
+public enum Spell {
 	ACID_SPLASH(0, School.CONJURATION), 
 	AID(2, School.ABJURATION), 
 	ALARM(1, School.ABJURATION), 
@@ -373,7 +373,7 @@ public enum Spells {
 	}
 
 	// spell lists
-	private static final Spells[][] BARD_SPELLS = {
+	private static final Spell[][] BARD_SPELLS = {
 			{ BLADE_WARD, DANCING_LIGHTS, FRIENDS, LIGHT, MAGE_HAND, MENDING, MESSAGE, MINOR_ILLUSION, PRESTIDIGITATION,
 					TRUE_STRIKE, VICIOUS_MOCKERY },
 			{ ANIMAL_FRIENDSHIP, BANE, CHARM_PERSON, COMPREHEND_LANGUAGES, CURE_WOUNDS, DETECT_MAGIC, DISGUISE_SELF,
@@ -399,7 +399,7 @@ public enum Spells {
 			{ DOMINATE_MONSTER, FEEBLEMIND, GLIBNESS, MIND_BLANK, POWER_WORD_STUN },
 			{ FORESIGHT, POWER_WORD_HEAL, POWER_WORD_KILL, TRUE_POLYMORPH } };
 
-	private static final Spells[][] CLERIC_SPELLS = {
+	private static final Spell[][] CLERIC_SPELLS = {
 			{ GUIDANCE, LIGHT, MENDING, RESISTANCE, SACRED_FLAME, SPARE_THE_DYING, THAUMATURGY },
 			{ BANE, BLESS, COMMAND, CREATE_OR_DESTROY_WATER, CURE_WOUNDS, DETECT_EVIL_AND_GOOD, DETECT_MAGIC,
 					DETECT_POISON_AND_DISEASE, GUIDING_BOLT, HEALING_WORD, INFLICT_WOUNDS,
@@ -421,7 +421,7 @@ public enum Spells {
 			{ ANTIMAGIC_FIELD, CONTROL_WEATHER, EARTHQUAKE, HOLY_AURA },
 			{ ASTRAL_PROJECTION, GATE, MASS_HEAL, TRUE_RESURRECTION } };
 
-	private static final Spells[][] DRUID_SPELLS = {
+	private static final Spell[][] DRUID_SPELLS = {
 			{ DRUIDCRAFT, GUIDANCE, MENDING, POISON_SPRAY, PRODUCE_FLAME, RESISTANCE, SHILLELAGH, THORN_WHIP },
 			{ ANIMAL_FRIENDSHIP, CHARM_PERSON, CREATE_OR_DESTROY_WATER, CURE_WOUNDS, DETECT_MAGIC,
 					DETECT_POISON_AND_DISEASE, ENTANGLE, FAERIE_FIRE, FOG_CLOUD, GOODBERRY, HEALING_WORD, JUMP,
@@ -442,7 +442,7 @@ public enum Spells {
 			{ ANIMAL_SHAPES, ANTIPATHY_SYMPATHY, CONTROL_WEATHER, EARTHQUAKE, FEEBLEMIND, SUNBURST, TSUNAMI },
 			{ FORESIGHT, SHAPECHANGE, STORM_OF_VENGEANCE, TRUE_RESURRECTION } };
 
-	private static Spells[][] PALADIN_SPELLS = { {},
+	private static Spell[][] PALADIN_SPELLS = { {},
 			{ BLESS, COMMAND, COMPELLED_DUEL, CURE_WOUNDS, DETECT_EVIL_AND_GOOD, DETECT_MAGIC,
 					DETECT_POISON_AND_DISEASE, DIVINE_FAVOR, HEROISM, PROTECTION_FROM_EVIL_AND_GOOD,
 					PURIFY_FOOD_AND_DRINK, SEARING_SMITE, SHIELD_OF_FAITH, THUNDEROUS_SMITE, WRATHFUL_SMITE },
@@ -453,7 +453,7 @@ public enum Spells {
 			{ AURA_OF_LIFE, AURA_OF_PURITY, BANISHMENT, DEATH_WARD, LOCATE_CREATURE, STAGGERING_SMITE },
 			{ BANISHING_SMITE, CIRCLE_OF_POWER, DESTRUCTIVE_WAVE, DISPEL_EVIL_AND_GOOD, GEAS, RAISE_DEAD } };
 
-	private static Spells[][] RANGER_SPELLS = { {},
+	private static Spell[][] RANGER_SPELLS = { {},
 			{ ALARM, ANIMAL_FRIENDSHIP, CURE_WOUNDS, DETECT_MAGIC, DETECT_POISON_AND_DISEASE, ENSNARING_STRIKE,
 					FOG_CLOUD, GOODBERRY, HAIL_OF_THORNS, HUNTERS_MARK, JUMP, LONGSTRIDER, SPEAK_WITH_ANIMALS },
 			{ ANIMAL_MESSENGER, BARKSKIN, BEAST_SENSE, CORDON_OF_ARROWS, DARKVISION, FIND_TRAPS, LESSER_RESTORATION,
@@ -464,7 +464,7 @@ public enum Spells {
 			{ CONJURE_WOODLAND_BEINGS, FREEDOM_OF_MOVEMENT, GRASPING_VINE, LOCATE_CREATURE, STONESKIN },
 			{ COMMUNE_WITH_NATURE, CONJURE_VOLLEY, SWIFT_QUIVER, TREE_STRIDE } };
 
-	private static Spells[][] SORCERER_SPELLS = {
+	private static Spell[][] SORCERER_SPELLS = {
 			{ ACID_SPLASH, BLADE_WARD, CHILL_TOUCH, DANCING_LIGHTS, FIREBOLT, FRIENDS, LIGHT, MAGE_HAND, MENDING,
 					MESSAGE, MINOR_ILLUSION, POISON_SPRAY, PRESTIDIGITATION, RAY_OF_FROST, SHOCKING_GRASP,
 					TRUE_STRIKE },
@@ -489,7 +489,7 @@ public enum Spells {
 			{ DOMINATE_MONSTER, EARTHQUAKE, INCENDIARY_CLOUD, POWER_WORD_STUN, SUNBURST },
 			{ GATE, METEOR_SWARM, POWER_WORD_KILL, TIME_STOP, WISH } };
 
-	private static Spells[][] WARLOCK_SPELLS = {
+	private static Spell[][] WARLOCK_SPELLS = {
 			{ BLADE_WARD, CHILL_TOUCH, ELDRITCH_BLAST, FRIENDS, MAGE_HAND, MINOR_ILLUSION, POISON_SPRAY,
 					PRESTIDIGITATION, TRUE_STRIKE },
 			{ CLOUD_OF_DAGGERS, CROWN_OF_MADNESS, DARKNESS, ENTHRALL, HOLD_PERSON, INVISIBILITY, MIRROR_IMAGE,
@@ -504,7 +504,7 @@ public enum Spells {
 			{ DEMIPLANE, DOMINATE_MONSTER, FEEBLEMIND, GLIBNESS, POWER_WORD_STUN },
 			{ ASTRAL_PROJECTION, FORESIGHT, IMPRISONMENT, POWER_WORD_KILL, TRUE_POLYMORPH } };
 
-	private static Spells[][] WIZARD_SPELLS = {
+	private static Spell[][] WIZARD_SPELLS = {
 			{ ACID_SPLASH, BLADE_WARD, CHILL_TOUCH, DANCING_LIGHTS, FIREBOLT, FRIENDS, LIGHT, MAGE_HAND, MENDING,
 					MESSAGE, MINOR_ILLUSION, POISON_SPRAY, PRESTIDIGITATION, RAY_OF_FROST, SHOCKING_GRASP,
 					TRUE_STRIKE },
@@ -557,7 +557,7 @@ public enum Spells {
 	private int level;
 
 	// constructors
-	private Spells(int level, School school) {
+	private Spell(int level, School school) {
 		this.level = level;
 		this.school = school;
 	}
@@ -572,8 +572,8 @@ public enum Spells {
 	}
 
 	// static methods
-	public static HashSet<Spells> bardCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> bardCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 		int dice = Dice.roll(3);
 		if (dice == 1)
 			toAdd.add(VICIOUS_MOCKERY);
@@ -597,8 +597,8 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> clericCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> clericCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 		int dice = Dice.roll(2);
 		if (dice == 1)
 			toAdd.add(SACRED_FLAME);
@@ -614,8 +614,8 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> druidCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> druidCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 		int dice = Dice.roll(5);
 		if (dice == 1)
 			toAdd.add(POISON_SPRAY);
@@ -637,8 +637,8 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> fighterCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> fighterCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 
 		if (actor.getAbilities().getINT() > 11) {
 			while (toAdd.size() < 3)
@@ -652,8 +652,8 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> rogueCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> rogueCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 
 		// every ARCANE TRICKSTER learns mage hand
 		toAdd.add(MAGE_HAND);
@@ -670,8 +670,8 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> sorcererCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> sorcererCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 		int dice = Dice.roll(6);
 		if (dice == 1)
 			toAdd.add(ACID_SPLASH);
@@ -693,8 +693,8 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> warlockCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> warlockCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 		int dice = Dice.roll(5);
 		if (dice < 5)
 			toAdd.add(ELDRITCH_BLAST);
@@ -706,8 +706,8 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> wizardCantripSetup(Actor actor) {
-		HashSet<Spells> toAdd = new HashSet<Spells>();
+	public static HashSet<Spell> wizardCantripSetup(Actor actor) {
+		HashSet<Spell> toAdd = new HashSet<Spell>();
 		int dice = Dice.roll(6);
 		if (dice == 1)
 			toAdd.add(ACID_SPLASH);
@@ -733,9 +733,9 @@ public enum Spells {
 		return toAdd;
 	}
 
-	public static HashSet<Spells> bardSetup(Actor actor) {
+	public static HashSet<Spell> bardSetup(Actor actor) {
 		int level = actor.getLevel();
-		HashSet<Spells> spellsKnown = new HashSet<Spells>();
+		HashSet<Spell> spellsKnown = new HashSet<Spell>();
 
 		int dice = Dice.roll(3);
 		if (dice == 1)
@@ -762,11 +762,11 @@ public enum Spells {
 		return spellsKnown;
 	}
 
-	public static HashSet<Spells> bardUpdate(Actor actor) {
+	public static HashSet<Spell> bardUpdate(Actor actor) {
 		// TODO
 		int level = actor.getLevel();
 		Spellcasting spellcasting = actor.getSpellcasting();
-		HashSet<Spells> spellsKnown = spellcasting.getSpellsKnown();
+		HashSet<Spell> spellsKnown = spellcasting.getSpellsKnown();
 
 		while (spellsKnown.size() < BARD_KNOWN[level - 1]) {
 			spellsKnown.add(randomBardSpell(level));
@@ -775,10 +775,10 @@ public enum Spells {
 		return spellsKnown;
 	}
 
-	public static HashSet<Spells> spellbookSetup(Actor actor) {
+	public static HashSet<Spell> spellbookSetup(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
-		HashSet<Spells> spellbook = new HashSet<Spells>();
-		List<Spells> candidates = new ArrayList<Spells>();
+		HashSet<Spell> spellbook = new HashSet<Spell>();
+		List<Spell> candidates = new ArrayList<Spell>();
 
 		spellbook.add(MAGE_ARMOR);
 		if (Dice.roll(2) == 1)
@@ -815,10 +815,10 @@ public enum Spells {
 		return spellbook;
 	}
 
-	public static HashSet<Spells> spellbookUpdate(Actor actor) {
+	public static HashSet<Spell> spellbookUpdate(Actor actor) {
 		// TODO - requires updates
 		Spellcasting spellcasting = actor.getSpellcasting();
-		HashSet<Spells> spellsKnown = spellcasting.getSpellsKnown();
+		HashSet<Spell> spellsKnown = spellcasting.getSpellsKnown();
 
 		Class.Subclass archetype = actor.getArchetype();
 		int level = actor.getLevel();
@@ -828,8 +828,8 @@ public enum Spells {
 		 * adding to the character's new "spells known." I'm going to have to work out
 		 * exactly how a wizard will replace a lost spellbook (i.e. by the rules)
 		 */
-		HashSet<Spells> spellbook = new HashSet<Spells>(spellsKnown);
-		List<Spells> candidates = new ArrayList<Spells>();
+		HashSet<Spell> spellbook = new HashSet<Spell>(spellsKnown);
+		List<Spell> candidates = new ArrayList<Spell>();
 
 		if (archetype.equals(Class.Subclass.ABJURER))
 			candidates.addAll(filterSpellsBySchool(School.ABJURATION, level));
@@ -863,77 +863,77 @@ public enum Spells {
 		return spellbook;
 	}
 
-	public static Spells randomBardCantrip() {
-		Spells[] array = BARD_SPELLS[0];
+	public static Spell randomBardCantrip() {
+		Spell[] array = BARD_SPELLS[0];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells randomBardSpell(int level) {
+	public static Spell randomBardSpell(int level) {
 		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
-		Spells[] array = BARD_SPELLS[level];
+		Spell[] array = BARD_SPELLS[level];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells randomClericCantrip() {
-		Spells[] array = CLERIC_SPELLS[0];
+	public static Spell randomClericCantrip() {
+		Spell[] array = CLERIC_SPELLS[0];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells randomDruidCantrip() {
-		Spells[] array = DRUID_SPELLS[0];
+	public static Spell randomDruidCantrip() {
+		Spell[] array = DRUID_SPELLS[0];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells randomSorcererCantrip() {
-		Spells[] array = SORCERER_SPELLS[0];
+	public static Spell randomSorcererCantrip() {
+		Spell[] array = SORCERER_SPELLS[0];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells randomWarlockCantrip() {
-		Spells[] array = WARLOCK_SPELLS[0];
+	public static Spell randomWarlockCantrip() {
+		Spell[] array = WARLOCK_SPELLS[0];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells randomWizardCantrip() {
-		Spells[] array = WIZARD_SPELLS[0];
+	public static Spell randomWizardCantrip() {
+		Spell[] array = WIZARD_SPELLS[0];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells wizardUtilityCantrip() {
-		Spells[] array = { BLADE_WARD, DANCING_LIGHTS, FRIENDS, LIGHT, MAGE_HAND, MENDING, MESSAGE, MINOR_ILLUSION, PRESTIDIGITATION, TRUE_STRIKE };
+	public static Spell wizardUtilityCantrip() {
+		Spell[] array = { BLADE_WARD, DANCING_LIGHTS, FRIENDS, LIGHT, MAGE_HAND, MENDING, MESSAGE, MINOR_ILLUSION, PRESTIDIGITATION, TRUE_STRIKE };
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static Spells randomWizardSpell(int level) {
+	public static Spell randomWizardSpell(int level) {
 		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
-		Spells[] array = WIZARD_SPELLS[level];
+		Spell[] array = WIZARD_SPELLS[level];
 		int dice = Dice.roll(array.length) - 1;
 
 		return array[dice];
 	}
 
-	public static List<Spells> filterSpellsBySchool(School school, int level) {
-		List<Spells> list = new ArrayList<Spells>();
+	public static List<Spell> filterSpellsBySchool(School school, int level) {
+		List<Spell> list = new ArrayList<Spell>();
 
 		level = ((level - 1) / 2 + 1 > 9) ? 9 : ((level - 1) / 2 + 1 < 1) ? 1 : (level - 1) / 2 + 1;
-		List<Spells> spells = new ArrayList<Spells>(Arrays.asList(WIZARD_SPELLS[level]));
-		for (Spells el : spells) {
+		List<Spell> spells = new ArrayList<Spell>(Arrays.asList(WIZARD_SPELLS[level]));
+		for (Spell el : spells) {
 			if (el.getSchool().equals(school))
 				list.add(el);
 		}
@@ -941,15 +941,15 @@ public enum Spells {
 		return list;
 	}
 
-	public static HashSet<Spells> randomWizardSpellbook(int bookLevel) {
-		HashSet<Spells> spellbook = new HashSet<Spells>();
-		Spells candidate;
+	public static HashSet<Spell> randomWizardSpellbook(int bookLevel) {
+		HashSet<Spell> spellbook = new HashSet<Spell>();
+		Spell candidate;
 		int spellLevel;
 
 		if (bookLevel > 20)
 			bookLevel = 20;
 
-		Spells[] array;
+		Spell[] array;
 		for (int i = 1; i <= bookLevel; ++i) {
 			spellLevel = ((i - 1) / 2 + 1 > 9) ? 9 : ((i - 1) / 2 + 1 < 1) ? 1 : (i - 1) / 2 + 1;
 			array = WIZARD_SPELLS[spellLevel];

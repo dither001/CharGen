@@ -622,51 +622,6 @@ public enum Career {
 		traits.put("EVENT_47", "Wedding or anniversary.");
 	}
 
-	class Profile {
-		private Actor owner;
-		private Career career;
-
-		private String trait1;
-		private String trait2;
-		private String ideal;
-		private String bond;
-		private String flaw;
-
-		public Profile(Actor owner) {
-			this.owner = owner;
-
-			this.trait1 = randomTrait(career);
-			this.trait2 = randomTrait(career, trait1);
-			this.ideal = randomIdeal(career);
-			this.bond = randomBond(career);
-			this.flaw = randomFlaw(career);
-		}
-
-		public Actor getOwner() {
-			return owner;
-		}
-
-		public String getTrait1() {
-			return trait1;
-		}
-
-		public String getTrait2() {
-			return trait2;
-		}
-
-		public String getIdeal() {
-			return ideal;
-		}
-
-		public String getBond() {
-			return bond;
-		}
-
-		public String getFlaw() {
-			return flaw;
-		}
-	}
-
 	/*
 	 * STATIC METHODS
 	 * 

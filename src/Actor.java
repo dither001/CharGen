@@ -83,6 +83,8 @@ public interface Actor {
 
 	public Race getRace();
 
+	public Career getCareer();
+
 	public int getLevel();
 
 	public void setLevel(int level);

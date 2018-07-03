@@ -43,22 +43,22 @@ public class Spellcasting {
 	private Class job;
 	private Class.Subclass archetype;
 	private int[] spellSlots;
-	private HashMap<Class, HashSet<Spells>> spellsKnown;
-	private HashSet<Spells> tempKnown;
+	private HashMap<Class, HashSet<Spell>> spellsKnown;
+	private HashSet<Spell> tempKnown;
 
 	// cantrips
-	private HashSet<Spells> bardCantrips = null;
-	private HashSet<Spells> clericCantrips = null;
-	private HashSet<Spells> druidCantrips = null;
-	private HashSet<Spells> fighterCantrips = null;
-	private HashSet<Spells> rogueCantrips = null;
-	private HashSet<Spells> sorcererCantrips = null;
-	private HashSet<Spells> warlockCantrips = null;
-	private HashSet<Spells> wizardCantrips = null;
+	private HashSet<Spell> bardCantrips = null;
+	private HashSet<Spell> clericCantrips = null;
+	private HashSet<Spell> druidCantrips = null;
+	private HashSet<Spell> fighterCantrips = null;
+	private HashSet<Spell> rogueCantrips = null;
+	private HashSet<Spell> sorcererCantrips = null;
+	private HashSet<Spell> warlockCantrips = null;
+	private HashSet<Spell> wizardCantrips = null;
 
 	// constructors
 	public Spellcasting(Actor actor) {
-		this.spellsKnown = new HashMap<Class, HashSet<Spells>>();
+		this.spellsKnown = new HashMap<Class, HashSet<Spell>>();
 		this.owner = actor;
 		this.job = actor.getJob();
 		this.archetype = actor.getArchetype();
@@ -66,50 +66,50 @@ public class Spellcasting {
 		int level = actor.getLevel();
 		this.spellSlots = getSpellSlots(actor, level);
 		// TODO - need spells known for EACH class
-		this.tempKnown = new HashSet<Spells>();
+		this.tempKnown = new HashSet<Spell>();
 
 		// begin class spell setup
 		if (job.equals(Class.BARD)) {
-			tempKnown = Spells.bardSetup(owner);
-			bardCantrips = Spells.bardCantripSetup(owner);
+			tempKnown = Spell.bardSetup(owner);
+			bardCantrips = Spell.bardCantripSetup(owner);
 		}
 
 		if (job.equals(Class.CLERIC)) {
 			// TODO
-			clericCantrips = Spells.clericCantripSetup(owner);
+			clericCantrips = Spell.clericCantripSetup(owner);
 		}
 
 		if (job.equals(Class.DRUID)) {
 			// TODO
-			druidCantrips = Spells.druidCantripSetup(owner);
+			druidCantrips = Spell.druidCantripSetup(owner);
 		}
 
 		if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
 			// TODO - no spells or cantrips until 3rd level!
-			fighterCantrips = new HashSet<Spells>();
+			fighterCantrips = new HashSet<Spell>();
 			// fighterCantrips = Spells.fighterCantripSetup(owner);
 		}
 
 		if (archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
 			// TODO - no spells or cantrips until 3rd level!
-			rogueCantrips = new HashSet<Spells>();
+			rogueCantrips = new HashSet<Spell>();
 			// rogueCantrips = Spells.rogueCantripSetup(owner);
 		}
 
 		if (job.equals(Class.SORCERER)) {
 			// TODO
-			sorcererCantrips = Spells.sorcererCantripSetup(owner);
+			sorcererCantrips = Spell.sorcererCantripSetup(owner);
 		}
 
 		if (job.equals(Class.WARLOCK)) {
 			// TODO
-			warlockCantrips = Spells.warlockCantripSetup(owner);
+			warlockCantrips = Spell.warlockCantripSetup(owner);
 		}
 
 		if (job.equals(Class.WIZARD)) {
 			// TODO - needs cantrips
-			tempKnown = Spells.spellbookSetup(owner);
-			wizardCantrips = Spells.wizardCantripSetup(owner);
+			tempKnown = Spell.spellbookSetup(owner);
+			wizardCantrips = Spell.wizardCantripSetup(owner);
 		}
 
 		/*
@@ -171,18 +171,18 @@ public class Spellcasting {
 		 * check to make sure WHICH class leveled up before updating spells
 		 */
 		if (job.equals(Class.BARD)) {
-			tempKnown = Spells.bardUpdate(owner);
+			tempKnown = Spell.bardUpdate(owner);
 		} else if (job.equals(Class.WIZARD)) {
-			tempKnown = Spells.spellbookUpdate(owner);
+			tempKnown = Spell.spellbookUpdate(owner);
 		}
 	}
 
-	public HashSet<Spells> getSpellsKnown() {
+	public HashSet<Spell> getSpellsKnown() {
 		return tempKnown;
 	}
 
-	public HashSet<Spells> getCantrips() {
-		HashSet<Spells> cantrips = new HashSet<Spells>();
+	public HashSet<Spell> getCantrips() {
+		HashSet<Spell> cantrips = new HashSet<Spell>();
 
 		if (bardCantrips != null)
 			cantrips.addAll(bardCantrips);

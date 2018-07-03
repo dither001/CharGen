@@ -1,6 +1,6 @@
 import java.util.EnumSet;
 
-public abstract class Player implements Actor {
+public class Player implements Actor {
 
 	/*
 	 * INSTANCE FIELDS
@@ -15,7 +15,7 @@ public abstract class Player implements Actor {
 
 	private Deity god;
 	private Actor.Alignment alignment;
-	private Career.Profile profile;
+	private Career career;
 
 	private EnumSet<Armor> armor;
 	private EnumSet<Weapon> weapons;
@@ -69,6 +69,163 @@ public abstract class Player implements Actor {
 			string = name;
 
 		return string;
+	}
+
+	@Override
+	public boolean polymorphed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean magicUser() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean weaponUser() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean armorUser() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Size getSize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Creature getCreatureType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Alignment getAlignment() {
+		return alignment;
+	}
+
+	@Override
+	public Deity getDeity() {
+		return god;
+	}
+
+	@Override
+	public byte[] getHitDice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Class getJob() {
+		return job;
+	}
+
+	@Override
+	public Class.Subclass getArchetype() {
+		return archetype;
+	}
+
+	@Override
+	public Race getRace() {
+		return race;
+	}
+
+	@Override
+	public Career getCareer() {
+		return career;
+	}
+
+	@Override
+	public int getLevel() {
+		return level;
+	}
+
+	@Override
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	@Override
+	public int getExp() {
+		return experience;
+	}
+
+	@Override
+	public void setExp(int exp) {
+		this.experience = exp;
+	}
+
+	@Override
+	public EnumSet<Speed> getSpeed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getAbilities() {
+		return abilities;
+	}
+
+	@Override
+	public int getProficiencyBonus() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public byte[] getSavingThrows() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Skill> getSkills() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Energy> getResistance() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Energy> getImmunity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Condition> getConditionImmunity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Condition> getConditions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Sense> getSenses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getChallengeRating() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	/*
