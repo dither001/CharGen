@@ -79,12 +79,12 @@ public class Player implements Actor {
 		return string;
 	}
 
-	public String skillsToString() {
+	private String skillsToString() {
 		List<Skill> skillsList = Dice.listFromSet(skills);
-		Skill.AlphabeticalDescending sort = new Skill.AlphabeticalDescending();
+		Dice.AlphabeticalDescending<Skill> sort = new Dice.AlphabeticalDescending<Skill>();
 		
 		Collections.sort(skillsList, sort);
-		String string = String.format("%n%s", skills.toString());
+		String string = String.format("%s", skills.toString());
 
 		return string;
 	}
@@ -96,7 +96,7 @@ public class Player implements Actor {
 		// alignment, deity line
 		string += String.format("%n%s follower of %s", alignment, god);
 		// skills line
-		string += skillsToString();
+		string += "\n" + skillsToString();
 
 		return string;
 	}

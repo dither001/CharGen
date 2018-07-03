@@ -243,33 +243,4 @@ public enum Skill {
 
 		actor.setSkills(skills);
 	}
-
-	/*
-	 * COMPARATOR
-	 * 
-	 */
-	public static class AlphabeticalDescending implements Comparator<Skill> {
-
-		@Override
-		public int compare(Skill skill1, Skill skill2) {
-			int compare = 0;
-			String string1 = skill1.toString(), string2 = skill2.toString();
-			int length1 = string1.length(), length2 = string2.length();
-			int length = (length1 < length2) ? length1 : length2;
-
-			char c1, c2;
-			for (int i = 0; i < length; ++i) {
-				c1 = string1.charAt(i);
-				c2 = string2.charAt(i);
-
-				if (c1 < c2) {
-					compare = c1 - c2;
-					break;
-				}
-			}
-
-			return compare;
-		}
-		
-	}
 }
