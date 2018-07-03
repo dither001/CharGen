@@ -43,7 +43,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 
-public enum Weapon implements Proficiency {
+public enum Weapon {
 	UNARMED(1, Energy.BLUDGEONING, Hand.LIGHT),
 	CLUB(4, Energy.BLUDGEONING, Hand.LIGHT),
 	DAGGER(4, Energy.PIERCING, Hand.LIGHT, Trait.FINESSE, Trait.THROWN),

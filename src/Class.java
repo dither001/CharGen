@@ -1,17 +1,4 @@
 
-//	BARBARIAN(Ability.STRENGTH, 12, 2),
-//	BARD(Ability.CHARISMA, 8, 3),
-//	CLERIC(Ability.WISDOM, 8, 2),
-//	DRUID(Ability.WISDOM, 8, 2),
-//	FIGHTER(Ability.STRENGTH, 10, 2),
-//	MONK(Ability.WISDOM, 8, 2),
-//	PALADIN(Ability.STRENGTH, 10, 2),
-//	RANGER(Ability.STRENGTH, 10, 3),
-//	ROGUE(Ability.DEXTERITY, 8, 4),
-//	SORCERER(Ability.CHARISMA, 6, 2),
-//	WARLOCK(Ability.CHARISMA, 8, 2),
-//	WIZARD(Ability.INTELLIGENCE, 6, 2);
-
 //	BERSERKER(BARBARIAN), BEAR_TOTEM(BARBARIAN), EAGLE_TOTEM(BARBARIAN), WOLF_TOTEM(BARBARIAN), LORE_COLLEGE(BARD), VALOR_COLLEGE(BARD), 
 //	DEATH(CLERIC), KNOWLEDGE(CLERIC), LIFE(CLERIC), LIGHT(CLERIC), NATURE(CLERIC), TEMPEST(CLERIC), TRICKERY(CLERIC), WAR(CLERIC), 
 //	LAND_CIRCLE(DRUID), MOON_CIRCLE(DRUID), CHAMPION(FIGHTER), BATTLE_MASTER(FIGHTER), ELDRITCH_KNIGHT(FIGHTER), 
@@ -21,18 +8,7 @@
 //	ABJURER(WIZARD), CONJUROR(WIZARD), DIVINER(WIZARD), ENCHANTER(WIZARD), EVOKER(WIZARD), ILLUSIONIST(WIZARD), NECROMANCER(WIZARD), TRANSMUTER(WIZARD);
 
 public enum Class {
-	BARBARIAN(Ability.STRENGTH, 12, 2),
-	BARD(Ability.INTELLIGENCE, 8, 3),
-	CLERIC(Ability.WISDOM, 8, 2),
-	DRUID(Ability.WISDOM, 8, 2),
-	FIGHTER(Ability.STRENGTH, 10, 2),
-	MONK(Ability.WISDOM, 8, 2),
-	PALADIN(Ability.STRENGTH, 10, 2),
-	RANGER(Ability.STRENGTH, 10, 3),
-	ROGUE(Ability.DEXTERITY, 8, 4),
-	SORCERER(Ability.CHARISMA, 6, 2),
-	WARLOCK(Ability.CHARISMA, 8, 2),
-	WIZARD(Ability.INTELLIGENCE, 6, 2);
+	BARBARIAN, BARD, CLERIC, DRUID, FIGHTER, MONK, PALADIN, RANGER, ROGUE, SORCERER, WARLOCK, WIZARD;
 
 	// static fields
 	private static final float BEST_XP = 1.10f;
@@ -40,105 +16,167 @@ public enum Class {
 	private static final float BAD_XP = 0.90f;
 	private static final float WORST_XP = 0.80f;
 
-	// fields
-	private Ability primeRequisite;
-	private int experience;
-	private int level;
-	private float expRate;
-
 	/*
-	 * TODO - prime requisite was added after general implementation of the
-	 * experience rate methods; eventually I want to have prime requisite be based
-	 * more upon the abilities put out in the Ability class than (necessarily) the
-	 * classic six ability scores of Dungeons & Dragons
+	 * STATIC METHODS
+	 * 
 	 */
-	private int hitDie;
-	private int numberOfSkills;
+	public static int getHitDie(Class job) {
+		int hitDie = 8;
 
-	// constructors
-	Class(Ability ability, int hitDie, int numberOfSkills) {
-		this.primeRequisite = ability;
-		this.setHitDie(hitDie);
-		this.numberOfSkills = numberOfSkills;
-	}
+		if (job.equals(BARBARIAN))
+			hitDie = 12;
+		else if (job.equals(BARD))
+			hitDie = 8;
+		else if (job.equals(CLERIC))
+			hitDie = 8;
+		else if (job.equals(DRUID))
+			hitDie = 8;
+		else if (job.equals(FIGHTER))
+			hitDie = 10;
+		else if (job.equals(MONK))
+			hitDie = 8;
+		else if (job.equals(PALADIN))
+			hitDie = 10;
+		else if (job.equals(RANGER))
+			hitDie = 10;
+		else if (job.equals(ROGUE))
+			hitDie = 8;
+		else if (job.equals(SORCERER))
+			hitDie = 6;
+		else if (job.equals(WARLOCK))
+			hitDie = 8;
+		else if (job.equals(WIZARD))
+			hitDie = 6;
 
-	// methods
-	public int getHitDie() {
 		return hitDie;
 	}
 
-	public void setHitDie(int hitDie) {
-		this.hitDie = hitDie;
+	public static int getNumberOfSkills(Class job) {
+		int jobSkills = 2;
+
+		if (job.equals(BARBARIAN))
+			jobSkills = 2;
+		else if (job.equals(BARD))
+			jobSkills = 3;
+		else if (job.equals(CLERIC))
+			jobSkills = 2;
+		else if (job.equals(DRUID))
+			jobSkills = 2;
+		else if (job.equals(FIGHTER))
+			jobSkills = 2;
+		else if (job.equals(MONK))
+			jobSkills = 2;
+		else if (job.equals(PALADIN))
+			jobSkills = 2;
+		else if (job.equals(RANGER))
+			jobSkills = 3;
+		else if (job.equals(ROGUE))
+			jobSkills = 4;
+		else if (job.equals(SORCERER))
+			jobSkills = 2;
+		else if (job.equals(WARLOCK))
+			jobSkills = 2;
+		else if (job.equals(WIZARD))
+			jobSkills = 2;
+
+		return jobSkills;
 	}
 
-	public int getNumberOfSkills() {
-		return numberOfSkills;
+	public static Actor.Ability getPrimaryAbility(Class job) {
+		Actor.Ability ability = Actor.Ability.STRENGTH;
+
+		if (job.equals(BARBARIAN))
+			ability = Actor.Ability.STRENGTH;
+		else if (job.equals(BARD))
+			ability = Actor.Ability.CHARISMA;
+		else if (job.equals(CLERIC))
+			ability = Actor.Ability.WISDOM;
+		else if (job.equals(DRUID))
+			ability = Actor.Ability.WISDOM;
+		else if (job.equals(FIGHTER))
+			ability = Actor.Ability.STRENGTH;
+		else if (job.equals(MONK))
+			ability = Actor.Ability.DEXTERITY;
+		else if (job.equals(PALADIN))
+			ability = Actor.Ability.STRENGTH;
+		else if (job.equals(RANGER))
+			ability = Actor.Ability.DEXTERITY;
+		else if (job.equals(ROGUE))
+			ability = Actor.Ability.DEXTERITY;
+		else if (job.equals(SORCERER))
+			ability = Actor.Ability.CHARISMA;
+		else if (job.equals(WARLOCK))
+			ability = Actor.Ability.CHARISMA;
+		else if (job.equals(WIZARD))
+			ability = Actor.Ability.INTELLIGENCE;
+
+		return ability;
 	}
 
-	// static methods
+
 	public static Class selectClass(Actor actor) {
-		Class archetype;
-		Alignment ali = actor.getAli();
+		Class job;
+		Actor.Alignment ali = actor.getAlignment();
 
-		int DEX, INT, WIS, CHA;
-		DEX = actor.getAbilities().getDEX();
-		INT = actor.getAbilities().getINT();
-		WIS = actor.getAbilities().getWIS();
-		CHA = actor.getAbilities().getCHA();
+		int dexterity, intelligence, wisdom, charisma;
+		dexterity = actor.getDexterity();
+		intelligence = actor.getIntelligence();
+		wisdom = actor.getWisdom();
+		charisma = actor.getCharisma();
 
-		if (CHA > 14) {
-			archetype = SORCERER;
-		} else if (CHA > 12) {
-			archetype = WARLOCK;
-		} else if (WIS > 14) {
-			archetype = DRUID;
-		} else if (WIS > 12) {
-			archetype = CLERIC;
-		} else if (INT > 14) {
-			archetype = WIZARD;
-		} else if (INT > 12) {
-			archetype = BARD;
-		} else if (DEX > 14) {
-			archetype = RANGER;
-		} else if (DEX > 12) {
-			archetype = ROGUE;
-		} else if (ali.equals(Alignment.LAWFUL)) {
-			archetype = MONK;
-		} else if (ali.equals(Alignment.GOOD)) {
-			archetype = PALADIN;
-		} else if (ali.equals(Alignment.CHAOTIC)) {
-			archetype = BARBARIAN;
+		int dice = Dice.roll(3);
+		if (charisma > 13 && dice == 1) {
+			job = BARD;
+		} else if (charisma > 13 && dice == 2) {
+			job = SORCERER;
+		} else if (charisma > 13 && dice == 3) {
+			job = WARLOCK;
+		} else if (wisdom > 13 && dice == 1) {
+			job = CLERIC;
+		} else if (wisdom > 13 && dice == 2) {
+			job = DRUID;
+		} else if (wisdom > 13 && dice == 3) {
+			job = MONK;
+		} else if (intelligence > 13) {
+			job = WIZARD;
+		} else if (dexterity > 13) {
+			job = RANGER;
+		} else if (ali.equals(Actor.Alignment.LAWFUL) || ali.equals(Actor.Alignment.GOOD)) {
+			job = PALADIN;
+		} else if (ali.equals(Actor.Alignment.CHAOTIC) && dice < 3) {
+			job = BARBARIAN;
+		} else if (dice < 3){
+			job = FIGHTER;
 		} else {
-			archetype = FIGHTER;
+			job = ROGUE;
 		}
 
-		return archetype;
+		return job;
 	}
 
 	public static float getPrimeRequisite(Actor actor) {
 		float expRate = 1.00f;
 		int prime;
-		AbilityArray abilities = actor.getAbilities();
 		Class job = actor.getJob();
 
 		if (job.equals(RANGER) || job.equals(ROGUE)) {
-			prime = abilities.getDEX();
+			prime = actor.getDexterity();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
-		} else if (job.equals(BARD) || job.equals(WIZARD)) {
-			prime = abilities.getINT();
+		} else if (job.equals(WIZARD)) {
+			prime = actor.getIntelligence();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
-		} else if (job.equals(CLERIC) || job.equals(DRUID)) {
-			prime = abilities.getWIS();
+		} else if (job.equals(CLERIC) || job.equals(DRUID) || job.equals(MONK)) {
+			prime = actor.getWisdom();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
-		} else if (job.equals(SORCERER) || job.equals(WARLOCK)) {
-			prime = abilities.getCHA();
+		} else if (job.equals(BARD) || job.equals(SORCERER) || job.equals(WARLOCK)) {
+			prime = actor.getCharisma();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
 		} else {
-			prime = abilities.getSTR();
+			prime = actor.getStrength();
 			expRate = (prime > 14) ? BEST_XP : (prime > 12) ? GOOD_XP : expRate;
 			expRate = (prime < 6) ? WORST_XP : (prime < 9) ? BAD_XP : expRate;
 		}

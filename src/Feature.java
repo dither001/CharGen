@@ -259,7 +259,7 @@ public enum Feature {
 	}
 
 	public static HashSet<Feature> chooseTwoExpertise(Actor actor) {
-		HashSet<Proficiency> skills = Skills.filterForSkills(actor);
+		HashSet<Proficiency> skills = Skill.filterForSkills(actor);
 		HashSet<Feature> features = actor.getFeatures();
 
 		ArrayList<Proficiency> list = new ArrayList<Proficiency>(skills);
@@ -291,84 +291,84 @@ public enum Feature {
 
 	private static Feature matchExpertiseToSkill(Proficiency skill) {
 		Feature expertise = EXPERTISE_ACROBATICS;
-		if (skill.equals(Skills.ACROBATICS))
+		if (skill.equals(Skill.ACROBATICS))
 			expertise = EXPERTISE_ACROBATICS;
-		else if (skill.equals(Skills.ANIMAL_HANDLING))
+		else if (skill.equals(Skill.ANIMAL_HANDLING))
 			expertise = EXPERTISE_ANIMAL_HANDLING;
-		else if (skill.equals(Skills.ARCANA))
+		else if (skill.equals(Skill.ARCANA))
 			expertise = EXPERTISE_ARCANA;
-		else if (skill.equals(Skills.ATHLETICS))
+		else if (skill.equals(Skill.ATHLETICS))
 			expertise = EXPERTISE_ATHLETICS;
-		else if (skill.equals(Skills.DECEPTION))
+		else if (skill.equals(Skill.DECEPTION))
 			expertise = EXPERTISE_DECEPTION;
-		else if (skill.equals(Skills.HISTORY))
+		else if (skill.equals(Skill.HISTORY))
 			expertise = EXPERTISE_HISTORY;
-		else if (skill.equals(Skills.INSIGHT))
+		else if (skill.equals(Skill.INSIGHT))
 			expertise = EXPERTISE_INSIGHT;
-		else if (skill.equals(Skills.INTIMIDATION))
+		else if (skill.equals(Skill.INTIMIDATION))
 			expertise = EXPERTISE_INTIMIDATION;
-		else if (skill.equals(Skills.INVESTIGATION))
+		else if (skill.equals(Skill.INVESTIGATION))
 			expertise = EXPERTISE_INVESTIGATION;
-		else if (skill.equals(Skills.MEDICINE))
+		else if (skill.equals(Skill.MEDICINE))
 			expertise = EXPERTISE_MEDICINE;
-		else if (skill.equals(Skills.NATURE))
+		else if (skill.equals(Skill.NATURE))
 			expertise = EXPERTISE_NATURE;
-		else if (skill.equals(Skills.PERCEPTION))
+		else if (skill.equals(Skill.PERCEPTION))
 			expertise = EXPERTISE_PERCEPTION;
-		else if (skill.equals(Skills.PERFORMANCE))
+		else if (skill.equals(Skill.PERFORMANCE))
 			expertise = EXPERTISE_PERFORMANCE;
-		else if (skill.equals(Skills.PERSUASION))
+		else if (skill.equals(Skill.PERSUASION))
 			expertise = EXPERTISE_PERSUASION;
-		else if (skill.equals(Skills.RELIGION))
+		else if (skill.equals(Skill.RELIGION))
 			expertise = EXPERTISE_RELIGION;
-		else if (skill.equals(Skills.SLEIGHT_OF_HAND))
+		else if (skill.equals(Skill.SLEIGHT_OF_HAND))
 			expertise = EXPERTISE_SLEIGHT_OF_HAND;
-		else if (skill.equals(Skills.STEALTH))
+		else if (skill.equals(Skill.STEALTH))
 			expertise = EXPERTISE_STEALTH;
-		else if (skill.equals(Skills.SURVIVAL))
+		else if (skill.equals(Skill.SURVIVAL))
 			expertise = EXPERTISE_SURVIVAL;
 
 		return expertise;
 	}
 
 	private static Proficiency matchSkillToExpertise(Feature feature) {
-		Proficiency skill = Skills.ACROBATICS;
+		Proficiency skill = Skill.ACROBATICS;
 		if (feature.equals(EXPERTISE_ACROBATICS))
-			skill = Skills.ACROBATICS;
+			skill = Skill.ACROBATICS;
 		else if (feature.equals(EXPERTISE_ANIMAL_HANDLING))
-			skill = Skills.ANIMAL_HANDLING;
+			skill = Skill.ANIMAL_HANDLING;
 		else if (feature.equals(EXPERTISE_ARCANA))
-			skill = Skills.ARCANA;
+			skill = Skill.ARCANA;
 		else if (feature.equals(EXPERTISE_ATHLETICS))
-			skill = Skills.ATHLETICS;
+			skill = Skill.ATHLETICS;
 		else if (feature.equals(EXPERTISE_DECEPTION))
-			skill = Skills.DECEPTION;
+			skill = Skill.DECEPTION;
 		else if (feature.equals(EXPERTISE_HISTORY))
-			skill = Skills.HISTORY;
+			skill = Skill.HISTORY;
 		else if (feature.equals(EXPERTISE_INSIGHT))
-			skill = Skills.INSIGHT;
+			skill = Skill.INSIGHT;
 		else if (feature.equals(EXPERTISE_INTIMIDATION))
-			skill = Skills.INTIMIDATION;
+			skill = Skill.INTIMIDATION;
 		else if (feature.equals(EXPERTISE_INVESTIGATION))
-			skill = Skills.INVESTIGATION;
+			skill = Skill.INVESTIGATION;
 		else if (feature.equals(EXPERTISE_MEDICINE))
-			skill = Skills.MEDICINE;
+			skill = Skill.MEDICINE;
 		else if (feature.equals(EXPERTISE_NATURE))
-			skill = Skills.NATURE;
+			skill = Skill.NATURE;
 		else if (feature.equals(EXPERTISE_PERCEPTION))
-			skill = Skills.PERCEPTION;
+			skill = Skill.PERCEPTION;
 		else if (feature.equals(EXPERTISE_PERFORMANCE))
-			skill = Skills.PERFORMANCE;
+			skill = Skill.PERFORMANCE;
 		else if (feature.equals(EXPERTISE_PERSUASION))
-			skill = Skills.PERSUASION;
+			skill = Skill.PERSUASION;
 		else if (feature.equals(EXPERTISE_RELIGION))
-			skill = Skills.RELIGION;
+			skill = Skill.RELIGION;
 		else if (feature.equals(EXPERTISE_SLEIGHT_OF_HAND))
-			skill = Skills.SLEIGHT_OF_HAND;
+			skill = Skill.SLEIGHT_OF_HAND;
 		else if (feature.equals(EXPERTISE_STEALTH))
-			skill = Skills.STEALTH;
+			skill = Skill.STEALTH;
 		else if (feature.equals(EXPERTISE_SURVIVAL))
-			skill = Skills.SURVIVAL;
+			skill = Skill.SURVIVAL;
 
 		return skill;
 	}
@@ -494,9 +494,9 @@ public enum Feature {
 			// BARD COLLEGE
 			list.addAll(chooseTwoExpertise(actor));
 			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
-				skills.add(Skills.randomSkill(actor));
-				skills.add(Skills.randomSkill(actor));
-				skills.add(Skills.randomSkill(actor));
+				skills.add(Skill.randomSkill(actor));
+				skills.add(Skill.randomSkill(actor));
+				skills.add(Skill.randomSkill(actor));
 				list.add(CUTTING_WORDS);
 			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
 				skills.addAll(Armor.mediumArmorSet());

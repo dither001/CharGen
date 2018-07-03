@@ -1,325 +1,238 @@
+import java.util.Collection;
+import java.util.EnumSet;
 
-/*
- * TODO - humans make up a majority (40%) of all characters. Evil is the
- * majority alignment (40%). After sorting for CHA, WIS, INT, and DEX,
- * remaining characters are sorted by alignment: L, G, C, and N/E the
- * majority (40%) being fighters. A significant number of NPCs will most
- * probably be a) evil, b) human, and c) fighters.
- */
-
-import java.util.HashSet;
-
-public class Actor {
-	// objects
-	private AbilityArray abilities;
-	private Alignment ali;
-	private Class job;
-	private Class.Subclass archetype;
-	private Spellcasting spellcasting;
-
-	private Race race;
-	private Deity god;
-	private HashSet<Proficiency> skills;
-	private Career career;
-	private HashSet<Feature> features;
-
-	// gear
-	private Inventory inventory;
-	private Combat combat;
-
-	// fields
-	private String name;
-	private int experience;
-	private byte level;
-	private float expRate;
-
-	private byte hitDie;
-	private byte[] hitDice;
-
-	private int armorClass;
-	private int hitPoints;
-	private int attackBonus;
-	private int averageDamage;
-
-	private String trait1;
-	private String trait2;
-	private String ideal;
-	private String bond;
-	private String flaw;
-
-	// constructors
-	public Actor() {
-		// FIXME
-		// armor = null; mainHand = null; offHand = null;
-
-		abilities = new AbilityArray(this);
-		skills = new HashSet<Proficiency>();
-		features = new HashSet<Feature>();
-
-		ali = Alignment.selectALI();
-		// JOB requires ability array
-		job = Class.selectClass(this);
-		archetype = Class.Subclass.selectSubclass(this);
-
-		// RACE is chosen specifically after JOB
-		race = Race.selectRace();
-		// GOD requires ALI, JOB, and RACE
-		god = Deity.selectDeity(this);
-
-		// skills, proficiency
-		skills.addAll(Armor.getProficiency(job));
-		skills.addAll(Weapon.getProficiency(job));
-		skills.addAll(Skills.getProficiency(job));
-
-		// choose background "career"
-		career = Career.randomCareer(this);
-		skills.addAll(Skills.careerSkills(this));
-
-		// derived statistics
-		experience = 0;
-		level = 1;
-		expRate = Class.getPrimeRequisite(this);
-
-		hitDie = (byte) job.getHitDie();
-		hitDice = new byte[20];
-		for (int i = 0; i < hitDice.length; ++i)
-			hitDice[i] = (byte) Dice.roll(hitDie);
-
-		// race & class features (requires level)
-		features.addAll(Feature.getClassFeatures(this));
-
-		// spell selection requires race & class features
-		spellcasting = new Spellcasting(this);
-
-		// initialize inventory, equip gear
-		inventory = new Inventory();
-		inventory.startingGear(this);
-		inventory.optimizeArmor();
-		inventory.optimizeWeapon();
-
-		// combat block
-		combat = new Combat(this);
-
-		// traits, ideals, bonds, flaws
-		trait1 = Career.randomTrait(career);
-		trait2 = Career.randomTrait(career, trait1);
-		ideal = Career.randomIdeal(career);
-		bond = Career.randomBond(career);
-		flaw = Career.randomFlaw(career);
+public interface Actor {
+	public enum Ability {
+		STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA
 	}
 
-	// methods
-	@Override
-	public String toString() {
-		String toString = String.format("%s %s %s", ali.toString(), race.toString(), job.toString());
-
-		return toString;
+	public enum Size {
+		TINY, SMALL, MEDIUM, LARGE, HUGE, GARGANTUAN
 	}
 
-	public void advance() {
-		boolean advanced = checkNextLevel(this);
+	public enum Creature {
+		ABERRATION, BEAST, CELESTIAL, CONSTRUCT, DRAGON, ELEMENTAL, FAERIE, FIEND, GIANT, HUMAN, MONSTER, OOZE, PLANT, UNDEAD
+	}
 
-		if (advanced) {
-			features.addAll(Feature.getClassFeatures(this));
-			spellcasting.update();
-			abilities.updateScores();
+	public enum Alignment {
+		LAWFUL, GOOD, NEUTRAL, CHAOTIC, EVIL;
 
-			combat.update();
+		public static Alignment random() {
+			Alignment choice;
+
+			int dice = Dice.roll(100);
+			if (dice < 16) {
+				// law represents (15%)
+				choice = LAWFUL;
+			} else if (dice < 31) {
+				// good represents (15%)
+				choice = GOOD;
+			} else if (dice < 46) {
+				// neutral represents (15%)
+				choice = NEUTRAL;
+			} else if (dice < 86) {
+				// evil represents majority (40%)
+				choice = EVIL;
+			} else {
+				// chaos represents (15%)
+				choice = CHAOTIC;
+			}
+
+			return choice;
 		}
+
+	}
+
+	public enum Speed {
+		WALK, BURROW, CLIMB, FLY, SWIM
+	}
+
+	public enum Condition {
+		BLINDED, CHARMED, DEAFENED, FRIGHTENED, GRAPPLED, INCAPACITATED, INVISIBLE, PARALYZED, PETRIFIED, POISONED, PRONE, RESTRAINED, STUNNED, UNCONSCIOUS
+	}
+
+	public enum Sense {
+		SIGHT, HEARING, SCENT, TOUCH, TASTE, BLINDSIGHT, DARKVISION, TREMORSENSE, TRUESIGHT
 	}
 
 	/*
-	 * GETTERS AND SETTERS
+	 * INSTANCE METHODS
+	 * 
 	 */
-	public String getName() {
-		return name;
-	}
+	public boolean polymorphed();
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	public boolean magicUser();
 
-	public int getArmorClass() {
-		return combat.getArmorClass();
-	}
+	public boolean weaponUser();
 
-	public int getHitPoints() {
-		return combat.getHitPoints();
-	}
+	public boolean armorUser();
 
-	public byte[] getHitDice() {
-		return hitDice;
-	}
+	public Size getSize();
 
-	public int getAttackBonus() {
-		return combat.getAttackBonus();
-	}
+	public Creature getCreatureType();
 
-	public int getAverageDamage() {
-		return combat.getAverageDamage();
-	}
+	public Alignment getAlignment();
 
-	public int getEXP() {
-		return experience;
-	}
+	public Deity getDeity();
 
-	public void setEXP(int exp) {
-		this.experience = exp;
-	}
+	public byte[] getHitDice();
 
-	public void gainEXP(int exp) {
-		this.experience = (int) (exp * expRate);
-	}
+	public Class getJob();
 
-	public int getLevel() {
-		return level;
-	}
+	public Class.Subclass getArchetype();
 
-	public int proficiencyBonus() {
-		int proficiencyBonus;
+	public Race getRace();
 
-		if (level > 16)
-			proficiencyBonus = 6;
-		else if (level > 12)
-			proficiencyBonus = 5;
-		else if (level > 8)
-			proficiencyBonus = 4;
-		else if (level > 4)
-			proficiencyBonus = 3;
-		else
-			proficiencyBonus = 2;
+	public int getLevel();
 
-		return proficiencyBonus;
-	}
+	public void setLevel(int level);
 
-	public AbilityArray getAbilities() {
-		return abilities.current();
-	}
+	public int getExp();
 
-	public AbilityArray getBasicAbilities() {
-		return abilities;
-	}
+	public void setExp(int exp);
+
+	public EnumSet<Speed> getSpeed();
+
+	public byte[] getAbilities();
+
+	public int getProficiencyBonus();
+
+	public byte[] getSavingThrows();
+
+	public EnumSet<Skill> getSkills();
+
+	public EnumSet<Energy> getResistance();
+
+	public EnumSet<Energy> getImmunity();
+
+	public EnumSet<Condition> getConditionImmunity();
+
+	public EnumSet<Condition> getConditions();
+
+	public EnumSet<Sense> getSenses();
+
+//	public EnumSet<Language> getLanguages();
+
+	public int getChallengeRating();
 
 	/*
-	 * GETTER FOR SKILLS AND SOME QUICK CHECKS
+	 * DEFAULT METHODS
+	 * 
 	 */
-	public HashSet<Proficiency> getSkills() {
-		return skills;
+	public default boolean hasCondition(Condition condition) {
+		return getConditions().contains(condition);
 	}
 
-	public boolean canUseHeavyArmor() {
-		return skills.contains(Armor.PLATE);
+	public default boolean hasAllConditions(Collection<Condition> c) {
+		return getConditions().containsAll(c);
 	}
 
-	public boolean canUseMediumArmor() {
-		return skills.contains(Armor.HALF_PLATE);
+	public default int getStrength() {
+		return getAbilities()[0];
 	}
 
-	public boolean canUseLightArmor() {
-		return skills.contains(Armor.STUDDED);
+	public default int getDexterity() {
+		return getAbilities()[1];
 	}
 
-	public boolean canUseShield() {
-		return skills.contains(Weapon.SHIELD);
+	public default int getConstitution() {
+		return getAbilities()[2];
 	}
 
-	public boolean canUseMartialMelee() {
-		return skills.contains(Weapon.LONGSWORD);
+	public default int getIntelligence() {
+		return getAbilities()[3];
 	}
 
-	public boolean canUseMartialRanged() {
-		return skills.contains(Weapon.LONGBOW);
+	public default int getWisdom() {
+		return getAbilities()[4];
 	}
 
-	public boolean canUseSimpleMelee() {
-		return skills.contains(Weapon.LIGHT_HAMMER);
+	public default int getCharisma() {
+		return getAbilities()[5];
 	}
 
-	public boolean canUseSimpleRanged() {
-		return skills.contains(Weapon.SHORTBOW);
+	public default void setStrength(int bonus) {
+		int ability = getAbilities()[0];
+		getAbilities()[0] = (byte) (ability + bonus);
 	}
 
-	public HashSet<Feature> getFeatures() {
-		return features;
+	public default void setDexterity(int bonus) {
+		int ability = getAbilities()[1];
+		getAbilities()[1] = (byte) (ability + bonus);
 	}
 
-	public Alignment getAli() {
-		return ali;
+	public default void setConstitution(int bonus) {
+		int ability = getAbilities()[2];
+		getAbilities()[2] = (byte) (ability + bonus);
 	}
 
-	public Class getJob() {
-		return job;
+	public default void setIntelligence(int bonus) {
+		int ability = getAbilities()[3];
+		getAbilities()[3] = (byte) (ability + bonus);
 	}
 
-	public Class.Subclass getArchetype() {
-		return archetype;
+	public default void setWisdom(int bonus) {
+		int ability = getAbilities()[4];
+		getAbilities()[4] = (byte) (ability + bonus);
 	}
 
-	public HashSet<Spells> getCantrips() {
-		return spellcasting.getCantrips();
+	public default void setCharisma(int bonus) {
+		int ability = getAbilities()[5];
+		getAbilities()[5] = (byte) (ability + bonus);
 	}
 
-	public Spellcasting getSpellcasting() {
-		return spellcasting;
+	public default int getStrMod() {
+		int ability = getAbilities()[0];
+		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
 	}
 
-	public Race getRace() {
-		return race;
+	public default int getDexMod() {
+		int ability = getAbilities()[1];
+		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
 	}
 
-	public Deity getDeity() {
-		return god;
+	public default int getConMod() {
+		int ability = getAbilities()[2];
+		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
 	}
 
-	public Career getCareer() {
-		return career;
+	public default int getIntMod() {
+		int ability = getAbilities()[3];
+		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
 	}
 
-	public float getEXPRate() {
-		return expRate;
+	public default int getWisMod() {
+		int ability = getAbilities()[4];
+		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
 	}
 
-	public Inventory getInventory() {
-		return inventory;
+	public default int getChaMod() {
+		int ability = getAbilities()[5];
+		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
 	}
 
-	public String getTraitOne() {
-		return trait1;
+	public default int getStrSave() {
+		return getSavingThrows()[0];
 	}
 
-	public String getTraitTwo() {
-		return trait2;
+	public default int getDexSave() {
+		return getSavingThrows()[1];
 	}
 
-	public String getIdeal() {
-		return ideal;
+	public default int getConSave() {
+		return getSavingThrows()[2];
 	}
 
-	public String getBond() {
-		return bond;
+	public default int getIntSave() {
+		return getSavingThrows()[3];
 	}
 
-	public String getFlaw() {
-		return flaw;
+	public default int getWisSave() {
+		return getSavingThrows()[4];
 	}
 
-	// static methods
-	public static boolean checkNextLevel(Actor actor) {
-		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,
-				165000, 195000, 225000, 265000, 305000, 355000 };
-		int totalXP = actor.getEXP();
-		int level = actor.getLevel();
-		boolean advanced = false;
-
-		if (level < 20 && totalXP >= requires[level]) {
-			actor.level += 1;
-			advanced = true;
-
-			if (level < 19 && totalXP >= requires[level + 1])
-				actor.experience = requires[level + 1] - 1;
-		}
-
-		return advanced;
+	public default int getChaSave() {
+		return getSavingThrows()[5];
 	}
 
 }

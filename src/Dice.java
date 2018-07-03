@@ -25,6 +25,15 @@ public class Dice {
 		return result;
 	}
 
+	public static byte[] rollAbilities() {
+		byte[] array = new byte[] { 0, 0, 0, 0, 0, 0 };
+		for (int i = 0; i < array.length; ++i) {
+			array[i] += roll(3, 6);
+		}
+
+		return array;
+	}
+
 	public static int advantage(int faces) {
 		int firstRoll = roll(1, faces);
 		int secondRoll = roll(1, faces);

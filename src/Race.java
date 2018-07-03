@@ -34,49 +34,47 @@ public enum Race {
 		return race;
 	}
 	
-	public static AbilityArray applyRacialBonus(AbilityArray abilities, Race race) {
+	public static void applyRacialBonus(Actor actor, Race race) {
 		if (race.equals(HUMAN)) {
-			abilities.setSTR(abilities.getSTR() + 1);
-			abilities.setDEX(abilities.getDEX() + 1);
-			abilities.setCON(abilities.getCON() + 1);
-			abilities.setINT(abilities.getINT() + 1);
-			abilities.setWIS(abilities.getWIS() + 1);
-			abilities.setCHA(abilities.getCHA() + 1);
+			actor.setStrength(actor.getStrength() + 1);
+			actor.setDexterity(actor.getDexterity() + 1);
+			actor.setConstitution(actor.getConstitution() + 1);
+			actor.setIntelligence(actor.getIntelligence() + 1);
+			actor.setWisdom(actor.getWisdom() + 1);
+			actor.setCharisma(actor.getCharisma() + 1);
 		} else if (race.equals(DRAGONBORN)) {
-			abilities.setSTR(abilities.getSTR() + 2);
-			abilities.setCHA(abilities.getCHA() + 2);
+			actor.setStrength(actor.getStrength() + 2);
+			actor.setCharisma(actor.getCharisma() + 2);
 		} else if (race.equals(DWARF)) {
-			abilities.setCON(abilities.getCON() + 2);
-			abilities.setSTR(abilities.getSTR() + 1);
-			abilities.setWIS(abilities.getWIS() + 1);
+			actor.setConstitution(actor.getConstitution() + 2);
+			actor.setStrength(actor.getStrength() + 1);
+			actor.setWisdom(actor.getWisdom() + 1);
 		} else if (race.equals(HIGH_ELF)) {
-			abilities.setDEX(abilities.getDEX() + 2);
-			abilities.setINT(abilities.getINT() + 1);
+			actor.setDexterity(actor.getDexterity() + 2);
+			actor.setIntelligence(actor.getIntelligence() + 1);
 		} else if (race.equals(WOOD_ELF)) {
-			abilities.setDEX(abilities.getDEX() + 2);
-			abilities.setWIS(abilities.getWIS() + 1);
+			actor.setDexterity(actor.getDexterity() + 2);
+			actor.setWisdom(actor.getWisdom() + 1);
 		} else if (race.equals(DARK_ELF)) {
-			abilities.setDEX(abilities.getDEX() + 2);
-			abilities.setCHA(abilities.getCHA() + 1);
+			actor.setDexterity(actor.getDexterity() + 2);
+			actor.setCharisma(actor.getCharisma() + 1);
 		} else if (race.equals(HALFLING)) {
-			abilities.setDEX(abilities.getDEX() + 2);
-			abilities.setWIS(abilities.getWIS() + 1);
-			abilities.setCHA(abilities.getCHA() + 1);
+			actor.setDexterity(actor.getDexterity() + 2);
+			actor.setWisdom(actor.getWisdom() + 1);
+			actor.setCharisma(actor.getCharisma() + 1);
 		} else if (race.equals(GNOME)) {
-			abilities.setDEX(abilities.getDEX() + 2);
-			abilities.setCON(abilities.getCON() + 1);
-			abilities.setINT(abilities.getINT() + 1);
+			actor.setDexterity(actor.getDexterity() + 2);
+			actor.setConstitution(actor.getConstitution() + 1);
+			actor.setIntelligence(actor.getIntelligence() + 1);
 		} else if (race.equals(HALF_ELF)) {
-			abilities.setDEX(abilities.getDEX() + 2);
-			abilities.setCHA(abilities.getCHA() + 2);
+			actor.setDexterity(actor.getDexterity() + 2);
+			actor.setCharisma(actor.getCharisma() + 2);
 		} else if (race.equals(HALF_ORC)) {
-			abilities.setSTR(abilities.getSTR() + 2);
-			abilities.setCON(abilities.getCON() + 2);
+			actor.setStrength(actor.getStrength() + 2);
+			actor.setConstitution(actor.getConstitution() + 2);
 		} else if (race.equals(TIEFLING)) {
-			abilities.setINT(abilities.getINT() + 2);
-			abilities.setCHA(abilities.getCHA() + 2);
+			actor.setIntelligence(actor.getIntelligence() + 2);
+			actor.setCharisma(actor.getCharisma() + 2);
 		}
-		
-		return abilities;
 	}
 }

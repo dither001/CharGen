@@ -15,19 +15,11 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		workLoop();
 		// rollRogues();
 		// setupActorLadder();
 		// characterAdvance(Class.BARBARIAN);
 		// rollCharacter();
 
-	}
-
-	public static void printFactionStuff() {
-		List<Crew> list = Crew.getFactions();
-		for (Iterator<Crew> it = list.iterator(); it.hasNext();) {
-			System.out.println(it.next().npcAllyGet().toString());
-		}
 	}
 
 	public static void characterAdvance(Class job) {
@@ -198,120 +190,6 @@ public class Main {
 
 		System.out.println();
 	}
-
-	public static void rollRogues() {
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			rollOneRogue();
-			System.out.println();
-		}
-	}
-
-	public static void rollOneRogue() {
-		Crew crew = new Crew();
-		Rogue rogue = new Rogue(crew);
-		System.out.println(rogue.toStringDetailed());
-	}
-
-	public static void rollCrew() {
-		Crew crew = new Crew();
-		System.out.println(crew.toString());
-	}
-
-	public static void workLoop() {
-		int score = 0;
-		Crew crew = new Crew();
-
-		String line;
-		while (proceed == 1) {
-			System.out.println(" - - - - - - - - score: " + ++score);
-			System.out.println(crew.toStringDetailed());
-			System.out.println();
-
-			// Crew target = Crew.getCrewByFaction(crew.preferredTarget());
-			// Score score = new Score(crew, target);
-			// System.out.println(score.toString());
-			//
-			// System.out.println();
-			// score.action();
-
-			crew.findWork();
-			crew.advance();
-
-			line = INPUT.nextLine();
-			try {
-				proceed = Integer.parseInt(line);
-			} catch (NumberFormatException e) {
-				proceed = 1;
-			}
-
-			if (proceed != 0) {
-				if (proceed == 2) {
-					List<Crew>[] array = crew.nonNeutralStatus();
-					System.out.println();
-					System.out.println("Allies: " + array[5].toString());
-					System.out.println("Friendlies: " + array[4].toString());
-					System.out.println("Helpful: " + array[3].toString());
-					System.out.println("Indifferent: " + array[2].toString());
-					System.out.println("Hostiles: " + array[1].toString());
-					System.out.println("Enemies: " + array[0].toString());
-					System.out.println();
-				}
-
-				proceed = 1;
-			}
-		}
-	}
-
-	// public static void oneCrewScoreLoop() {
-	// int score = 0;
-	// Crew crew = new Crew();
-	//
-	// while (proceed == 1) {
-	// System.out.println(" - - - - - - - - score: " + ++score);
-	// rollScore(crew);
-	// crew.advance();
-	//
-	// proceed = Integer.parseInt(INPUT.nextLine());
-	// if (proceed != 0) {
-	// if (proceed == 2) {
-	// List<Crew>[] array = crew.nonNeutralStatus();
-	// System.out.println();
-	// System.out.println("Allies: " + array[5].toString());
-	// System.out.println("Friendlies: " + array[4].toString());
-	// System.out.println("Helpful: " + array[3].toString());
-	// System.out.println("Indifferent: " + array[2].toString());
-	// System.out.println("Hostiles: " + array[1].toString());
-	// System.out.println("Enemies: " + array[0].toString());
-	// System.out.println();
-	// }
-	//
-	// proceed = 1;
-	// }
-	// }
-	// }
-
-	// public static void rollScore() {
-	// Crew crew = new Crew();
-	// rollScore(crew);
-	// }
-
-	// public static void rollScore(Crew crew) {
-	// System.out.println(crew.toString());
-	// System.out.println();
-	//
-	// Crew client = crew.clientFriendOrSelf();
-	// Crew target;
-	// if (crew.sameAs(client))
-	// target = crew.preferredTarget();
-	// else
-	// target = client.npcRandomEnemyGet();
-	//
-	// Score score = new Score(crew, client, target);
-	// System.out.println(score.toString());
-	//
-	// System.out.println();
-	// score.action();
-	// }
 
 	public static void rollCharacter() {
 		rollCharacter(new Actor());
