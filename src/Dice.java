@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -115,4 +116,31 @@ public class Dice {
 		return sublist;
 	}
 
+	/*
+	 * STATIC CLASS
+	 * 
+	 */
+	public static class AlphabeticalDescending<T> implements Comparator<T> {
+
+		@Override
+		public int compare(T object1, T object2) {
+			int compare = 0;
+			String string1 = object1.toString(), string2 = object2.toString();
+			int length1 = string1.length(), length2 = string2.length();
+			int length = (length1 < length2) ? length1 : length2;
+
+			char c1, c2;
+			for (int i = 0; i < length; ++i) {
+				c1 = string1.charAt(i);
+				c2 = string2.charAt(i);
+
+				if (c1 < c2) {
+					compare = c1 - c2;
+					break;
+				}
+			}
+
+			return compare;
+		}
+	}
 }
