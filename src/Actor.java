@@ -55,6 +55,23 @@ public interface Actor {
 		SIGHT, HEARING, SCENT, TOUCH, TASTE, BLINDSIGHT, DARKVISION, TREMORSENSE, TRUESIGHT
 	}
 
+	public enum Language {
+		COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING, ORCISH, ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL, PRIMORDIAL, SYLVAN, UNDERCOMMON, SUPERNAL, DRUIDIC, THIEVES_CANT;
+
+		private static final Language[] COMMON_LANGUAGES = { COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING,
+				ORCISH };
+		private static final Language[] EXOTIC_LANGUAGES = { ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL,
+				PRIMORDIAL, SYLVAN, UNDERCOMMON };
+
+		public static Language randomCommonLanguage() {
+			return Dice.randomFromArray(COMMON_LANGUAGES);
+		}
+
+		public static Language randomExoticLanguage() {
+			return Dice.randomFromArray(EXOTIC_LANGUAGES);
+		}
+	}
+
 	/*
 	 * INSTANCE METHODS
 	 * 
@@ -117,7 +134,7 @@ public interface Actor {
 
 	public EnumSet<Sense> getSenses();
 
-//	public EnumSet<Language> getLanguages();
+	public EnumSet<Language> getLanguages();
 
 	public int getChallengeRating();
 
