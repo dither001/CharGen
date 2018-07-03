@@ -59,6 +59,8 @@ public interface Actor {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public String toStringDetailed();
+
 	public boolean polymorphed();
 
 	public boolean magicUser();
@@ -102,6 +104,8 @@ public interface Actor {
 	public byte[] getSavingThrows();
 
 	public EnumSet<Skill> getSkills();
+
+	public void setSkills(EnumSet<Skill> skills);
 
 	public EnumSet<Energy> getResistance();
 

@@ -11,9 +11,14 @@ import java.util.HashMap;
 public enum Career {
 	ACOLYTE, CHARLATAN, CRIMINAL, ENTERTAINER, FOLK_HERO, GUILD_ARTISAN, HERMIT, NOBLE, OUTLANDER, SAGE, SAILOR, SOLDIER, URCHIN;
 
-	// fields
+	/*
+	 * STATIC FIELDS
+	 * 
+	 */
 	private static HashMap<String, String> traits = new HashMap<String, String>();
-	private static Career[] allCareers = { ACOLYTE, CHARLATAN, CRIMINAL, ENTERTAINER, FOLK_HERO, GUILD_ARTISAN, HERMIT,
+
+	//
+	private static final Career[] ALL_CAREERS = { ACOLYTE, CHARLATAN, CRIMINAL, ENTERTAINER, FOLK_HERO, GUILD_ARTISAN, HERMIT,
 			NOBLE, OUTLANDER, SAGE, SAILOR, SOLDIER, URCHIN };
 
 	private static final String[] ACOLYTE_TRAITS = { "ACOLYTE_TRAIT_1", "ACOLYTE_TRAIT_2", "ACOLYTE_TRAIT_3", "ACOLYTE_TRAIT_4", "ACOLYTE_TRAIT_5", "ACOLYTE_TRAIT_6", "ACOLYTE_TRAIT_7", "ACOLYTE_TRAIT_8" };
@@ -626,10 +631,14 @@ public enum Career {
 	 * STATIC METHODS
 	 * 
 	 */
-	public static Career randomCareer(Actor actor) {
+	public static Career randomCareer() {
+		return Dice.randomFromArray(ALL_CAREERS);
+	}
+
+	public static Career selectCareer(Actor actor) {
 		// TODO - additional selection methods
 		Career candidate;
-		candidate = allCareers[Dice.roll(allCareers.length) - 1];
+		candidate = ALL_CAREERS[Dice.roll(ALL_CAREERS.length) - 1];
 
 		return candidate;
 	}

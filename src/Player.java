@@ -17,6 +17,7 @@ public class Player implements Actor {
 	private Actor.Alignment alignment;
 	private Career career;
 
+	// proficiency
 	private EnumSet<Armor> armor;
 	private EnumSet<Weapon> weapons;
 	private EnumSet<Skill> skills;
@@ -55,9 +56,13 @@ public class Player implements Actor {
 		archetype = Class.Subclass.selectSubclass(this);
 		race = Race.selectRace();
 		god = Deity.selectDeity(this);
+		career = Career.randomCareer();
 
 		//
-		
+		Skill.setupClassSkills(this);
+		Skill.setupCareerSkills(this);
+		Skill.setupRacialSkills(this);
+
 	}
 
 	@Override
@@ -67,6 +72,15 @@ public class Player implements Actor {
 			string = String.format("%s the %s", name, job);
 		else
 			string = name;
+
+		return string;
+	}
+
+	public String toStringDetailed() {
+		String string = String.format("%s the %s %s (%s) %s", name, race, job, archetype, career);
+		
+		// skills line
+		string += String.format("%n%s", skills.toString());
 
 		return string;
 	}
@@ -188,8 +202,12 @@ public class Player implements Actor {
 
 	@Override
 	public EnumSet<Skill> getSkills() {
-		// TODO Auto-generated method stub
-		return null;
+		return skills;
+	}
+
+	@Override
+	public void setSkills(EnumSet<Skill> skills) {
+		this.skills = skills;
 	}
 
 	@Override

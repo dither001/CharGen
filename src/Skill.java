@@ -1,9 +1,4 @@
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashSet;
 
 public enum Skill {
 	ACROBATICS, ANIMAL_HANDLING, ARCANA, ATHLETICS, DECEPTION, HISTORY, INSIGHT, INTIMIDATION, INVESTIGATION, MEDICINE, NATURE, PERCEPTION, PERFORMANCE, PERSUASION, RELIGION, SLEIGHT_OF_HAND, STEALTH, SURVIVAL;
@@ -82,24 +77,14 @@ public enum Skill {
 		else
 			array = ALL_SKILLS;
 
-		return Dice.randomFromArray(array);		
+		return Dice.randomFromArray(array);
 	}
 
-	public static boolean testAddSkill(EnumSet<Skill> set, Skill skill) {
-		boolean add = false;
-		if (set.contains(skill)) {
-			set.add(skill);
-			add = true;
-		}
-
-		return add;
-	}
-
-	public static EnumSet<Skill> setupClassSkills(Actor actor) {
+	public static void setupClassSkills(Actor actor) {
 		Class job = actor.getJob();
-		int skillsToAdd = Class.getNumberOfSkills(job);
+		int addedSkills = 0, skillsToAdd = Class.getNumberOfSkills(job);
 		// TODO
-		EnumSet<Skill> skills = EnumSet.noneOf(Skill.class);
+		EnumSet<Skill> skills = actor.getSkills();
 		Skill[] array;
 
 		if (job.equals(Class.BARBARIAN))
@@ -129,20 +114,24 @@ public enum Skill {
 		else
 			array = ALL_SKILLS;
 
-		return skills;
+		Skill candidate;
+		while (addedSkills < skillsToAdd) {
+			candidate = Dice.randomFromArray(array);
+
+			if (skills.contains(candidate) != true) {
+				skills.add(candidate);
+				++addedSkills;
+			}
+		}
+
+		actor.setSkills(skills);
 	}
 
-	public static EnumSet<Skill> setupRacialSkills(Actor actor) {
-		// TODO
-		EnumSet<Skill> skills = EnumSet.noneOf(Skill.class);
-
-		return skills;
-	}
-
-	public static EnumSet<Skill> setupCareerSkills(Actor actor) {
+	public static void setupCareerSkills(Actor actor) {
 		Career job = actor.getCareer();
+		int addedSkills = 0, skillsToAdd = 2;
 		// TODO
-		EnumSet<Skill> skills = EnumSet.noneOf(Skill.class);
+		EnumSet<Skill> skills = actor.getSkills();
 		Skill[] array = null;
 
 		if (job.equals(Career.ACOLYTE))
@@ -171,7 +160,67 @@ public enum Skill {
 			array = SOLDIER_SKILLS;
 		else if (job.equals(Career.URCHIN))
 			array = URCHIN_SKILLS;
-		return skills;
+
+		if (skills.contains(array[0]) != true) {
+			skills.add(array[0]);
+			++addedSkills;
+		}
+
+		if (skills.contains(array[1]) != true) {
+			skills.add(array[1]);
+			++addedSkills;
+		}
+
+		Skill candidate;
+		while (addedSkills < skillsToAdd) {
+			candidate = randomSkill();
+
+			if (skills.contains(candidate) != true) {
+				skills.add(candidate);
+				++addedSkills;
+			}
+
+		}
+
+		actor.setSkills(skills);
+	}
+
+	public static void setupRacialSkills(Actor actor) {
+		Race race = actor.getRace();
+		int addedSkills = 0, skillsToAdd = 0;
+		// TODO
+		EnumSet<Skill> skills = actor.getSkills();
+
+		if (race.equals(Race.DARK_ELF) || race.equals(Race.HIGH_ELF) || race.equals(Race.WOOD_ELF)) {
+			skillsToAdd = 1;
+
+			if (skills.contains(PERCEPTION) != true) {
+				skills.add(PERCEPTION);
+				++addedSkills;
+			}
+		} else if (race.equals(Race.HALF_ELF)) {
+			skillsToAdd = 2;
+		} else if (race.equals(Race.HALF_ORC)) {
+			skillsToAdd = 2;
+
+			if (skills.contains(INTIMIDATION) != true) {
+				skills.add(INTIMIDATION);
+				++addedSkills;
+			}
+		}
+
+		Skill candidate;
+		while (addedSkills < skillsToAdd) {
+			candidate = randomSkill();
+
+			if (skills.contains(candidate) != true) {
+				skills.add(candidate);
+				++addedSkills;
+			}
+
+		}
+
+		actor.setSkills(skills);
 	}
 
 }
