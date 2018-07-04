@@ -1,4 +1,3 @@
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -25,6 +24,7 @@ public class Player implements Actor {
 	private EnumSet<Weapon> weapons;
 	private EnumSet<Skill> skills;
 	private EnumSet<Feature> features;
+	private EnumSet<Language> languages;
 
 	// gear
 	private Inventory inventory;
@@ -44,12 +44,6 @@ public class Player implements Actor {
 		// FIXME - random name generator
 		name = "Default";
 
-		// these have to be initialized before use
-		// armor = EnumSet.noneOf(Armor.class);
-		// weapons = EnumSet.noneOf(Weapon.class);
-		// skills = EnumSet.noneOf(Skill.class);
-		// features = EnumSet.noneOf(Feature.class);
-
 		//
 		abilities = Dice.rollAbilities();
 		alignment = Actor.Alignment.random();
@@ -65,6 +59,8 @@ public class Player implements Actor {
 		Skill.setupClassSkills(this);
 		Skill.setupCareerSkills(this);
 		Skill.setupRacialSkills(this);
+		Actor.Language.setupLanguages(this);
+		Armor.setupArmorProficiency(this);
 
 	}
 
@@ -79,10 +75,17 @@ public class Player implements Actor {
 		return string;
 	}
 
+	private String abilitiesToString() {
+		String string = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", abilities[0], abilities[1], abilities[2],
+				abilities[3], abilities[4], abilities[5]);
+
+		return string;
+	}
+
 	private String skillsToString() {
 		List<Skill> skillsList = Dice.listFromSet(skills);
 		Dice.AlphabeticalDescending<Skill> sort = new Dice.AlphabeticalDescending<Skill>();
-		
+
 		Collections.sort(skillsList, sort);
 		String string = String.format("%s", skills.toString());
 
@@ -91,12 +94,16 @@ public class Player implements Actor {
 
 	@Override
 	public String toStringDetailed() {
-		String string = String.format("%s the %s %s (%s) %s", name, race, job, archetype, career);
+		String string = String.format("%s the %s %s %s (%s) %s follower of %s", name, alignment, race, job, archetype, career, god);
 
-		// alignment, deity line
-		string += String.format("%n%s follower of %s", alignment, god);
+		// abilities line
+		string += "\n" + abilitiesToString();
 		// skills line
 		string += "\n" + skillsToString();
+		// skills line
+		string += "\n" + armor.toString();
+		// languages line
+		string += "\n" + languages.toString();
 
 		return string;
 	}
@@ -169,6 +176,11 @@ public class Player implements Actor {
 	}
 
 	@Override
+	public Spellcasting getSpellCasting() {
+		return spellcasting;
+	}
+
+	@Override
 	public Career getCareer() {
 		return career;
 	}
@@ -227,6 +239,26 @@ public class Player implements Actor {
 	}
 
 	@Override
+	public EnumSet<Armor> getArmorProficiency() {
+		return armor;
+	}
+
+	@Override
+	public void setArmorProficiency(EnumSet<Armor> armor) {
+		this.armor = armor;
+	}
+
+	@Override
+	public EnumSet<Weapon> getWeaponProficiency() {
+		return weapons;
+	}
+
+	@Override
+	public void setWeaponProficiency(EnumSet<Weapon> weapons) {
+		this.weapons = weapons;
+	}
+
+	@Override
 	public EnumSet<Energy> getResistance() {
 		// TODO Auto-generated method stub
 		return null;
@@ -254,6 +286,16 @@ public class Player implements Actor {
 	public EnumSet<Sense> getSenses() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public EnumSet<Language> getLanguages() {
+		return languages;
+	}
+
+	@Override
+	public void setLanguages(EnumSet<Language> languages) {
+		this.languages = languages;
 	}
 
 	@Override
