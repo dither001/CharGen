@@ -9,6 +9,8 @@ public class Player implements Actor {
 	 * 
 	 */
 	private byte[] abilities;
+	private Size size;
+	private Creature creature;
 
 	private Race race;
 	private Class job;
@@ -63,6 +65,8 @@ public class Player implements Actor {
 		Armor.setupArmorProficiency(this);
 		Weapon.setupWeaponProficiency(this);
 
+		this.size = (race.equals(Race.HALFLING) || race.equals(Race.GNOME)) ? Size.SMALL : Size.MEDIUM;
+		this.creature = Creature.HUMANOID;
 	}
 
 	@Override
@@ -95,11 +99,12 @@ public class Player implements Actor {
 
 	@Override
 	public String toStringDetailed() {
-		String string = String.format("%s the %s %s %s (%s) %s follower of %s", name, alignment, race, job, archetype,
-				career, god);
+		String string = String.format("%s the %s (%s) %s", name, job, archetype, career);
 
 		// abilities line
 		string += "\n" + abilitiesToString();
+		// abilities line
+		string += String.format("%n%s %s (%s) %s follower of %s", size, creature, race, alignment, god);
 		// skills line
 		// string += "\n" + skillsToString();
 		// armor line
