@@ -206,7 +206,7 @@ public enum Weapon {
 		weaponPrototypeMap.put(LIGHT_CROSSBOW, new Prototype(LIGHT_CROSSBOW, Type.CROSSBOW, 1, 8, Energy.PIERCING,
 				Hand.TWO, Trait.AMMUNITION, Trait.LOADING));
 		weaponPrototypeMap.put(DART,
-				new Prototype(DART, Type.SPECIAL, 1, 4, Energy.PIERCING, Hand.ONE, Trait.FINESSE, Trait.THROWN));
+				new Prototype(DART, Type.SPECIAL, 1, 4, Energy.PIERCING, Hand.ONE, Trait.FINESSE, Trait.THROWN, Trait.STACKABLE));
 		weaponPrototypeMap.put(SHORTBOW,
 				new Prototype(SHORTBOW, Type.BOW, 1, 6, Energy.PIERCING, Hand.TWO, Trait.AMMUNITION));
 		weaponPrototypeMap.put(SLING,
@@ -333,6 +333,8 @@ public enum Weapon {
 			ammunition = new Instance(BOLT, 20);
 		else if (weapon.equals(BLOWGUN))
 			ammunition = new Instance(NEEDLE, 50);
+		else if (weapon.equals(DART))
+			ammunition = new Instance(DART, 9);
 
 		return ammunition;
 	}

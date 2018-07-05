@@ -274,7 +274,7 @@ public class Inventory {
 
 			// TODO - add dungeoneer's or explorer's pack
 			// TODO - receive 10 darts
-			weaponList.add(new Weapon.Instance(Weapon.DART));
+			weaponList.add(new Weapon.Instance(Weapon.DART, 10));
 
 		} else if (job.equals(Class.PALADIN)) {
 			// first choice
