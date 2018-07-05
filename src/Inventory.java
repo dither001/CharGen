@@ -1,4 +1,5 @@
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -276,7 +277,7 @@ public class Inventory {
 
 	public boolean canUseArmor(Armor armor) {
 		boolean canUseArmor = false;
-		HashSet<Proficiency> skills = owner.getSkills();
+		EnumSet<Armor> skills = owner.getArmorProficiency();
 
 		if (skills.contains(armor)) {
 			canUseArmor = true;
@@ -306,7 +307,7 @@ public class Inventory {
 
 	public boolean canUseWeapon(Weapon weapon) {
 		boolean canUseWeapon = false;
-		HashSet<Proficiency> skills = owner.getSkills();
+		EnumSet<Weapon> skills = owner.getWeaponProficiency();
 
 		if (skills.contains(weapon)) {
 			canUseWeapon = true;
@@ -406,8 +407,8 @@ public class Inventory {
 	public void startingGear(Actor actor) {
 		owner = actor;
 		Class job = actor.getJob();
-		AbilityArray abilities = actor.getAbilities();
-		HashSet<Proficiency> skills = actor.getSkills();
+		EnumSet<Armor> armor = actor.getArmorProficiency();
+		EnumSet<Weapon> weapons = actor.getWeaponProficiency();
 
 		int dice;
 		if (job.equals(Class.BARBARIAN)) {
@@ -452,11 +453,11 @@ public class Inventory {
 			armory.add(GameArmor.getArmor("Leather Armor"));
 			weapons.add(GameWeapon.getWeapon("Dagger"));
 		} else if (job.equals(Class.CLERIC)) {
-			int strength = abilities.getSTR();
-			int dexterity = abilities.getDEX();
+			int strength = actor.getStrength();
+			int dexterity = actor.getDexterity();
 
 			// first choice
-			if (skills.contains(Weapon.WARHAMMER)) {
+			if (weapons.contains(Weapon.WARHAMMER)) {
 				weapons.add(GameWeapon.getWeapon("Warhammer"));
 			} else {
 				weapons.add(GameWeapon.getWeapon("Mace"));
@@ -465,7 +466,7 @@ public class Inventory {
 			// second choice
 			if (dexterity > 15) {
 				armory.add(GameArmor.getArmor("Leather Armor"));
-			} else if (skills.contains(Armor.CHAIN_MAIL) && strength > 12) {
+			} else if (armor.contains(Armor.CHAIN_MAIL) && strength > 12) {
 				armory.add(GameArmor.getArmor("Chain Mail"));
 			} else {
 				armory.add(GameArmor.getArmor("Scale Mail"));
@@ -504,8 +505,8 @@ public class Inventory {
 			armory.add(GameArmor.getArmor("Leather Armor"));
 		} else if (job.equals(Class.FIGHTER)) {
 			// first choice
-			int strength = abilities.getSTR();
-			int dexterity = abilities.getDEX();
+			int strength = actor.getStrength();
+			int dexterity = actor.getDexterity();
 			if (strength < 13 || dexterity > 15) {
 				// TODO - receive 20 arrows
 				armory.add(GameArmor.getArmor("Leather Armor"));
@@ -571,7 +572,7 @@ public class Inventory {
 			armory.add(GameArmor.getArmor("Chain Mail"));
 		} else if (job.equals(Class.RANGER)) {
 			// first choice
-			int dexterity = abilities.getDEX();
+			int dexterity = actor.getDexterity();
 			if (dexterity > 15) {
 				armory.add(GameArmor.getArmor("Leather Armor"));
 			} else {
