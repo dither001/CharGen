@@ -25,7 +25,7 @@ public enum Armor {
 		}
 	}
 
-	public static class Instance {
+	public static class Instance implements Item {
 		private String name;
 		private Prototype prototype;
 

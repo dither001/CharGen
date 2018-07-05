@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public interface Item {
 	public enum Rarity {
@@ -44,16 +49,19 @@ public interface Item {
 		}
 	}
 
-	public String getName();
+	public static interface ItemList<T> extends List<T> {
+	};
 
-	public float getBaseWeight();
-
-	public int getBaseValue();
-
-	public Rarity getRarity();
-
-	public boolean requiresAttunement();
-
-	public boolean isCursed();
+	// public String getName();
+	//
+	// public float getBaseWeight();
+	//
+	// public int getBaseValue();
+	//
+	// public Rarity getRarity();
+	//
+	// public boolean requiresAttunement();
+	//
+	// public boolean isCursed();
 
 }
