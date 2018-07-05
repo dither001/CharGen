@@ -93,6 +93,22 @@ public class Inventory {
 	 * STARTING GEAR
 	 * 
 	 */
+	private static void randomSimpleHelper(Weapon.WeaponList list) {
+		Weapon.Instance weapon = new Weapon.Instance(Weapon.randomSimpleWeapon());
+		list.add(weapon);
+
+		if (weapon.rangedOrThrown())
+			list.add(Weapon.getAmmunition(weapon.getWeapon()));
+	}
+	
+	private static void randomMartialHelper(Weapon.WeaponList list) {
+		Weapon.Instance weapon = new Weapon.Instance(Weapon.randomMartialWeapon());
+		list.add(weapon);
+
+		if (weapon.rangedOrThrown())
+			list.add(Weapon.getAmmunition(weapon.getWeapon()));
+	}
+		
 	public static void setupStartingGear(Actor actor) {
 		Inventory inventory = new Inventory(actor);
 
@@ -105,8 +121,7 @@ public class Inventory {
 		EnumSet<Weapon> weaponProf = actor.getWeaponProficiency();
 
 		int dice;
-		Weapon weapon;
-		Armor armor;
+		Weapon.Instance weapon;
 
 		Class job = actor.getJob();
 		if (job.equals(Class.BARBARIAN)) {
@@ -116,8 +131,9 @@ public class Inventory {
 				weaponList.add(new Weapon.Instance(Weapon.GREATAXE));
 			} else {
 				// random martial melee
-				weapon = Weapon.randomMartialMelee();
-				weaponList.add(new Weapon.Instance(weapon));
+				weapon = new Weapon.Instance(Weapon.randomMartialMelee());
+				weaponList.add(weapon);
+
 			}
 
 			// second choice
@@ -126,8 +142,8 @@ public class Inventory {
 				weaponList.add(new Weapon.Instance(Weapon.HANDAXE));
 				weaponList.add(new Weapon.Instance(Weapon.HANDAXE));
 			} else {
-				weapon = Weapon.randomSimpleWeapon();
-				weaponList.add(new Weapon.Instance(weapon));
+				randomSimpleHelper(weaponList);
+				
 			}
 
 			// TODO - add explorer's pack
@@ -137,15 +153,13 @@ public class Inventory {
 		} else if (job.equals(Class.BARD)) {
 			dice = Dice.roll(3);
 			if (dice == 1) {
-				weapon = Weapon.RAPIER;
 				weaponList.add(new Weapon.Instance(Weapon.RAPIER));
 			} else if (dice == 2) {
-				weapon = Weapon.LONGSWORD;
 				weaponList.add(new Weapon.Instance(Weapon.LONGSWORD));
 			} else {
 				// random simple weapon
-				weapon = Weapon.randomSimpleWeapon();
-				weaponList.add(new Weapon.Instance(weapon));
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// TODO - add diplomat's or entertainer's pack
@@ -182,8 +196,8 @@ public class Inventory {
 				weaponList.add(new Weapon.Instance(Weapon.LIGHT_CROSSBOW));
 				weaponList.add(new Weapon.Instance(Weapon.BOLT, 20));
 			} else {
-				weapon = Weapon.randomSimpleWeapon();
-				weaponList.add(new Weapon.Instance(weapon));
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// TODO - add priest's or explorer's pack
@@ -193,7 +207,8 @@ public class Inventory {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleWeapon()));
+				randomSimpleHelper(weaponList);
+
 			} else {
 				weaponList.add(new Weapon.Instance(Weapon.SHIELD));
 			}
@@ -203,7 +218,8 @@ public class Inventory {
 			if (dice == 1) {
 				weaponList.add(new Weapon.Instance(Weapon.SCIMITAR));
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleMelee()));
+				weapon = new Weapon.Instance(Weapon.randomSimpleMelee());
+				weaponList.add(weapon);
 			}
 
 			// TODO - receive explorer's pack + druid focus
@@ -225,10 +241,12 @@ public class Inventory {
 			// second choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
-				weaponList.add(new Weapon.Instance(Weapon.randomMartialWeapon()));
+				randomMartialHelper(weaponList);
 				weaponList.add(new Weapon.Instance(Weapon.SHIELD));
+
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleWeapon()));
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// third choice
@@ -250,7 +268,8 @@ public class Inventory {
 			if (dice == 1) {
 				weaponList.add(new Weapon.Instance(Weapon.SHORTSWORD));
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleWeapon()));
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// TODO - add dungeoneer's or explorer's pack
@@ -261,11 +280,13 @@ public class Inventory {
 			// first choice
 			dice = Dice.roll(2);
 			if (dice == 1) {
-				weaponList.add(new Weapon.Instance(Weapon.randomMartialWeapon()));
+				randomMartialHelper(weaponList);
 				weaponList.add(new Weapon.Instance(Weapon.SHIELD));
+
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomMartialWeapon()));
-				weaponList.add(new Weapon.Instance(Weapon.randomMartialWeapon()));
+				randomMartialHelper(weaponList);
+				randomMartialHelper(weaponList);
+
 			}
 
 			// second choice
@@ -274,7 +295,8 @@ public class Inventory {
 				// TODO - receive 5 javelins
 				weaponList.add(new Weapon.Instance(Weapon.JAVELIN, 5));
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleMelee()));
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// TODO - add priest's or explorer's pack
@@ -296,8 +318,9 @@ public class Inventory {
 				weaponList.add(new Weapon.Instance(Weapon.SHORTSWORD));
 				weaponList.add(new Weapon.Instance(Weapon.SHORTSWORD));
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleMelee()));
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleMelee()));
+				randomSimpleHelper(weaponList);
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// third choice
@@ -340,7 +363,8 @@ public class Inventory {
 				weaponList.add(new Weapon.Instance(Weapon.LIGHT_CROSSBOW));
 				weaponList.add(new Weapon.Instance(Weapon.BOLT, 20));
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleWeapon()));
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// TODO - component pouch or arcane focus
@@ -356,13 +380,14 @@ public class Inventory {
 				weaponList.add(new Weapon.Instance(Weapon.LIGHT_CROSSBOW));
 				weaponList.add(new Weapon.Instance(Weapon.BOLT, 20));
 			} else {
-				weaponList.add(new Weapon.Instance(Weapon.randomSimpleWeapon()));
+				randomSimpleHelper(weaponList);
+
 			}
 
 			// TODO - component pouch or arcane focus
 			// TODO - add dungeoneer's or scholar's pack
 			armorList.add(new Armor.Instance(Armor.LEATHER_ARMOR));
-			weaponList.add(new Weapon.Instance(Weapon.randomSimpleWeapon()));
+			randomSimpleHelper(weaponList);
 			weaponList.add(new Weapon.Instance(Weapon.DAGGER));
 			weaponList.add(new Weapon.Instance(Weapon.DAGGER));
 
