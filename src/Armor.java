@@ -1,17 +1,24 @@
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public enum Armor {
 	UNARMORED, BARBARIAN, MAGE, MONK, PADDED_ARMOR, LEATHER_ARMOR, STUDDED_LEATHER, HIDE_ARMOR, CHAIN_SHIRT, SCALE_MAIL, BREASTPLATE, HALF_PLATE, RING_MAIL, CHAIN_MAIL, SPLINT_MAIL, PLATE_MAIL;
 
+	public enum Weight {
+		LIGHT, MEDIUM, HEAVY
+	};
+
 	public static class Prototype {
 		private Armor armor;
+		private Weight weight;
 		private int armorClass, maxDexterity;
 
-		public Prototype(Armor armor, int armorClass, int maxDexterity) {
+		public Prototype(Armor armor, Weight weight, int armorClass, int maxDexterity) {
 			this.armor = armor;
+			this.weight = weight;
 			this.armorClass = armorClass;
 			this.maxDexterity = maxDexterity;
 		}
@@ -35,6 +42,18 @@ public enum Armor {
 
 		public String getName() {
 			return name;
+		}
+
+		public boolean lightArmor() {
+			return (prototype.weight.equals(Weight.LIGHT));
+		}
+
+		public boolean mediumArmor() {
+			return (prototype.weight.equals(Weight.MEDIUM));
+		}
+
+		public boolean heavyArmor() {
+			return (prototype.weight.equals(Weight.HEAVY));
 		}
 
 		public Armor getArmor() {
@@ -71,18 +90,18 @@ public enum Armor {
 
 	static {
 		armorPrototypeMap = new HashMap<Armor, Prototype>();
-		armorPrototypeMap.put(PADDED_ARMOR, new Prototype(PADDED_ARMOR, 11, 10));
-		armorPrototypeMap.put(LEATHER_ARMOR, new Prototype(LEATHER_ARMOR, 11, 10));
-		armorPrototypeMap.put(STUDDED_LEATHER, new Prototype(STUDDED_LEATHER, 12, 10));
-		armorPrototypeMap.put(HIDE_ARMOR, new Prototype(HIDE_ARMOR, 12, 2));
-		armorPrototypeMap.put(CHAIN_SHIRT, new Prototype(CHAIN_SHIRT, 13, 2));
-		armorPrototypeMap.put(SCALE_MAIL, new Prototype(SCALE_MAIL, 14, 2));
-		armorPrototypeMap.put(BREASTPLATE, new Prototype(BREASTPLATE, 14, 2));
-		armorPrototypeMap.put(HALF_PLATE, new Prototype(HALF_PLATE, 15, 2));
-		armorPrototypeMap.put(RING_MAIL, new Prototype(RING_MAIL, 14, 0));
-		armorPrototypeMap.put(CHAIN_MAIL, new Prototype(CHAIN_MAIL, 16, 0));
-		armorPrototypeMap.put(SPLINT_MAIL, new Prototype(SPLINT_MAIL, 17, 0));
-		armorPrototypeMap.put(PLATE_MAIL, new Prototype(PLATE_MAIL, 18, 0));
+		armorPrototypeMap.put(PADDED_ARMOR, new Prototype(PADDED_ARMOR, Weight.LIGHT, 11, 10));
+		armorPrototypeMap.put(LEATHER_ARMOR, new Prototype(LEATHER_ARMOR, Weight.LIGHT, 11, 10));
+		armorPrototypeMap.put(STUDDED_LEATHER, new Prototype(STUDDED_LEATHER, Weight.LIGHT, 12, 10));
+		armorPrototypeMap.put(HIDE_ARMOR, new Prototype(HIDE_ARMOR, Weight.MEDIUM, 12, 2));
+		armorPrototypeMap.put(CHAIN_SHIRT, new Prototype(CHAIN_SHIRT, Weight.MEDIUM, 13, 2));
+		armorPrototypeMap.put(SCALE_MAIL, new Prototype(SCALE_MAIL, Weight.MEDIUM, 14, 2));
+		armorPrototypeMap.put(BREASTPLATE, new Prototype(BREASTPLATE, Weight.MEDIUM, 14, 2));
+		armorPrototypeMap.put(HALF_PLATE, new Prototype(HALF_PLATE, Weight.MEDIUM, 15, 2));
+		armorPrototypeMap.put(RING_MAIL, new Prototype(RING_MAIL, Weight.HEAVY, 14, 0));
+		armorPrototypeMap.put(CHAIN_MAIL, new Prototype(CHAIN_MAIL, Weight.HEAVY, 16, 0));
+		armorPrototypeMap.put(SPLINT_MAIL, new Prototype(SPLINT_MAIL, Weight.HEAVY, 17, 0));
+		armorPrototypeMap.put(PLATE_MAIL, new Prototype(PLATE_MAIL, Weight.HEAVY, 18, 0));
 	}
 
 	/*
@@ -251,4 +270,45 @@ public enum Armor {
 		}
 	}
 
+	public static List<Instance> filterForLightArmor(List<Instance> list) {
+		List<Instance> filteredList = new ArrayList<Instance>();
+
+		Instance instance;
+		for (Iterator<Instance> it = list.iterator(); it.hasNext();) {
+			instance = it.next();
+
+			if (instance.lightArmor())
+				filteredList.add(instance);
+		}
+
+		return filteredList;
+	}
+
+	public static List<Instance> filterForMediumArmor(List<Instance> list) {
+		List<Instance> filteredList = new ArrayList<Instance>();
+
+		Instance instance;
+		for (Iterator<Instance> it = list.iterator(); it.hasNext();) {
+			instance = it.next();
+
+			if (instance.mediumArmor())
+				filteredList.add(instance);
+		}
+
+		return filteredList;
+	}
+
+	public static List<Instance> filterForHeavyArmor(List<Instance> list) {
+		List<Instance> filteredList = new ArrayList<Instance>();
+
+		Instance instance;
+		for (Iterator<Instance> it = list.iterator(); it.hasNext();) {
+			instance = it.next();
+
+			if (instance.heavyArmor())
+				filteredList.add(instance);
+		}
+
+		return filteredList;
+	}
 }
