@@ -1,5 +1,6 @@
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 
 public interface Actor {
 	public enum Ability {
@@ -11,32 +12,28 @@ public interface Actor {
 	}
 
 	public enum Creature {
-		ABERRATION, BEAST, CELESTIAL, CONSTRUCT, DRAGON, ELEMENTAL, FAERIE, FIEND, GIANT, HUMANOID, MONSTER, OOZE, PLANT, UNDEAD
+		ABERRATION, BEAST, CELESTIAL, CONSTRUCT, DRAGON, ELEMENTAL, FAERIE, FIEND, GIANT, HUMANOID, MONSTROSITY, OOZE, PLANT, UNDEAD
 	}
 
 	public enum Alignment {
 		LAWFUL, GOOD, NEUTRAL, CHAOTIC, EVIL;
 
 		public static Alignment random() {
+			// lawful (15%), good (15%, neutral (15%), evil (40%), chaotic (15%)
+			int[] array = new int[] { 15, 15, 15, 40, 15 };
 			Alignment choice;
 
 			int dice = Dice.roll(100);
-			if (dice < 16) {
-				// law represents (15%)
+			if (dice < 1 + array[0])
 				choice = LAWFUL;
-			} else if (dice < 31) {
-				// good represents (15%)
+			else if (dice < 1 + array[0] + array[1])
 				choice = GOOD;
-			} else if (dice < 46) {
-				// neutral represents (15%)
+			else if (dice < 1 + array[0] + array[1] + array[2])
 				choice = NEUTRAL;
-			} else if (dice < 86) {
-				// evil represents majority (40%)
+			else if (dice < 1 + array[0] + array[1] + array[2] + array[3])
 				choice = EVIL;
-			} else {
-				// chaos represents (15%)
+			else
 				choice = CHAOTIC;
-			}
 
 			return choice;
 		}
@@ -228,6 +225,10 @@ public interface Actor {
 
 	public int getChallengeRating();
 
+	public Inventory getInventory();
+
+	public void setInventory(Inventory inventory);
+
 	/*
 	 * DEFAULT METHODS
 	 * 
@@ -346,6 +347,10 @@ public interface Actor {
 
 	public default int getChaSave() {
 		return getSavingThrows()[5];
+	}
+
+	public default List<Weapon.Instance> getWeapons() {
+		return getInventory().getWeapons();
 	}
 
 }

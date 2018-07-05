@@ -1,3 +1,4 @@
+import java.awt.List;
 
 //	BERSERKER(BARBARIAN), BEAR_TOTEM(BARBARIAN), EAGLE_TOTEM(BARBARIAN), WOLF_TOTEM(BARBARIAN), LORE_COLLEGE(BARD), VALOR_COLLEGE(BARD), 
 //	DEATH(CLERIC), KNOWLEDGE(CLERIC), LIFE(CLERIC), LIGHT(CLERIC), NATURE(CLERIC), TEMPEST(CLERIC), TRICKERY(CLERIC), WAR(CLERIC), 
@@ -320,4 +321,24 @@ public enum Class {
 		}
 	}
 
+	/*
+	 * ADDITIONAL CLASS SETUP
+	 * 
+	 */
+	public static void additionalSetup(Actor actor) {
+		Subclass archetype = actor.getArchetype();
+
+		if (archetype.equals(Subclass.LIFE)) {
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		} else if (archetype.equals(Subclass.NATURE)) {
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		} else if (archetype.equals(Subclass.TEMPEST)) {
+			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		} else if (archetype.equals(Subclass.WAR)) {
+			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		}
+		
+	}
 }

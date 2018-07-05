@@ -65,8 +65,15 @@ public class Player implements Actor {
 		Armor.setupArmorProficiency(this);
 		Weapon.setupWeaponProficiency(this);
 
+		// final step after class/subclass chosen
+		Class.additionalSetup(this);
+
+		// must be after race is determined
 		this.size = (race.equals(Race.HALFLING) || race.equals(Race.GNOME)) ? Size.SMALL : Size.MEDIUM;
 		this.creature = Creature.HUMANOID;
+
+		// inventory setup
+		Inventory.setupStartingGear(this);
 	}
 
 	@Override
@@ -113,6 +120,8 @@ public class Player implements Actor {
 		// string += "\n" + weapons.toString();
 		// languages line
 		// string += "\n" + languages.toString();
+		// inventory line
+		string += "\n" + inventory.toStringDetailed();
 
 		return string;
 	}
@@ -311,6 +320,16 @@ public class Player implements Actor {
 	public int getChallengeRating() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	@Override
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
 	}
 
 	/*

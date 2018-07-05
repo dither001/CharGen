@@ -1,4 +1,3 @@
-import java.util.Comparator;
 import java.util.EnumSet;
 
 public enum Skill {
@@ -43,7 +42,10 @@ public enum Skill {
 	private static final Skill[] SOLDIER_SKILLS = { ATHLETICS, INTIMIDATION };
 	private static final Skill[] URCHIN_SKILLS = { SLEIGHT_OF_HAND, STEALTH };
 
-	// static methods
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
 	public static Skill randomSkill() {
 		return Dice.randomFromArray(ALL_SKILLS);
 	}
