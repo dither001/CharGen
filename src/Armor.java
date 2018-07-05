@@ -3,7 +3,10 @@ import java.util.EnumSet;
 public enum Armor {
 	UNARMORED, BARBARIAN, MAGE, MONK, PADDED, LEATHER, STUDDED, HIDE, CHAIN_SHIRT, SCALE_MAIL, BREASTPLATE, HALF_PLATE, RING_MAIL, CHAIN_MAIL, SPLINT, PLATE;
 
-	// static fields
+	/*
+	 * STATIC FIELDS
+	 * 
+	 */
 	private static final Armor[] LIGHT_ARMOR = { PADDED, LEATHER, STUDDED };
 	// private static final Armor[] MEDIUM_ARMOR = { HIDE, CHAIN_SHIRT, SCALE_MAIL,
 	// BREASTPLATE, HALF_PLATE };
@@ -14,7 +17,10 @@ public enum Armor {
 	private static final Armor[] LIGHT_MEDIUM_HEAVY = { PADDED, LEATHER, STUDDED, HIDE, CHAIN_SHIRT, SCALE_MAIL,
 			BREASTPLATE, HALF_PLATE, RING_MAIL, CHAIN_MAIL, SPLINT, PLATE };
 
-	// static methods
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
 	public static int getArmorClass(Armor armor) {
 		int armorClass = 10;
 

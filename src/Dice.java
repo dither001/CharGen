@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class Dice {
+public final class Dice {
 	// static fields
 	private static final Random RAND = new Random();
 
@@ -114,6 +114,47 @@ public class Dice {
 		}
 
 		return sublist;
+	}
+
+	public static <T> Set<T> addToSetFromArray(int toAdd, Set<T> set, T[] array) {
+		int added = 0;
+		T candidate;
+
+		while (added < toAdd) {
+			candidate = randomFromArray(array);
+
+			if (set.contains(candidate) != true) {
+				set.add(candidate);
+				++added;
+			}
+
+		}
+
+		return set;
+	}
+
+	public static <T> Set<T> addToSetOrElseFromArray(int toAdd, T[] element, Set<T> set, T[] array) {
+		int added = 0;
+
+		for (int i = 0; i < element.length; ++i) {
+			if (set.contains(element[i]) != true) {
+				set.add(element[i]);
+				++added;
+			}
+		}
+
+		T candidate;
+		while (added < toAdd) {
+			candidate = randomFromArray(array);
+
+			if (set.contains(candidate) != true) {
+				set.add(candidate);
+				++added;
+			}
+
+		}
+
+		return set;
 	}
 
 	/*

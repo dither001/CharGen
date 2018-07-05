@@ -61,6 +61,7 @@ public class Player implements Actor {
 		Skill.setupRacialSkills(this);
 		Actor.Language.setupLanguages(this);
 		Armor.setupArmorProficiency(this);
+		Weapon.setupWeaponProficiency(this);
 
 	}
 
@@ -94,16 +95,19 @@ public class Player implements Actor {
 
 	@Override
 	public String toStringDetailed() {
-		String string = String.format("%s the %s %s %s (%s) %s follower of %s", name, alignment, race, job, archetype, career, god);
+		String string = String.format("%s the %s %s %s (%s) %s follower of %s", name, alignment, race, job, archetype,
+				career, god);
 
 		// abilities line
 		string += "\n" + abilitiesToString();
 		// skills line
-		string += "\n" + skillsToString();
-		// skills line
-		string += "\n" + armor.toString();
+		// string += "\n" + skillsToString();
+		// armor line
+		// string += "\n" + armor.toString();
+		// weapon line
+		// string += "\n" + weapons.toString();
 		// languages line
-		string += "\n" + languages.toString();
+		// string += "\n" + languages.toString();
 
 		return string;
 	}

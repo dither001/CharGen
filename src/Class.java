@@ -124,28 +124,28 @@ public enum Class {
 		wisdom = actor.getWisdom();
 		charisma = actor.getCharisma();
 
-		int dice = Dice.roll(3);
-		if (charisma > 13 && dice == 1) {
+		int dice = Dice.roll(4);
+		if (charisma > 11 && dice == 1) {
 			job = BARD;
-		} else if (charisma > 13 && dice == 2) {
+		} else if (charisma > 11 && dice == 2) {
 			job = SORCERER;
-		} else if (charisma > 13 && dice == 3) {
+		} else if (charisma > 11 && dice == 3) {
 			job = WARLOCK;
-		} else if (wisdom > 13 && dice == 1) {
+		} else if (wisdom > 11 && dice == 1) {
 			job = CLERIC;
-		} else if (wisdom > 13 && dice == 2) {
+		} else if (wisdom > 11 && dice == 2) {
 			job = DRUID;
-		} else if (wisdom > 13 && dice == 3) {
+		} else if (wisdom > 11 && dice == 3) {
 			job = MONK;
-		} else if (intelligence > 13) {
+		} else if (intelligence > 11 && dice < 3) {
 			job = WIZARD;
-		} else if (dexterity > 13) {
+		} else if (dexterity > 11 && dice < 3) {
 			job = RANGER;
-		} else if (ali.equals(Actor.Alignment.LAWFUL) || ali.equals(Actor.Alignment.GOOD)) {
+		} else if (ali.equals(Actor.Alignment.GOOD)) {
 			job = PALADIN;
-		} else if (ali.equals(Actor.Alignment.CHAOTIC) && dice < 3) {
+		} else if (ali.equals(Actor.Alignment.CHAOTIC)) {
 			job = BARBARIAN;
-		} else if (dice < 3){
+		} else if (ali.equals(Actor.Alignment.LAWFUL) || dice < 4){
 			job = FIGHTER;
 		} else {
 			job = ROGUE;
@@ -251,12 +251,12 @@ public enum Class {
 			} else if (job.equals(Class.FIGHTER)) {
 				dice = Dice.roll(100);
 
-				if (dice < 51) {
-					Subclass = fighters[0]; // 50% of fighters are champions
-				} else if (dice < 81) {
+				if (dice < 21 && actor.getIntelligence() > 9) {
+					Subclass = fighters[2]; // 20% of fighters are eldritch knights
+				} else if (dice < 51) {
 					Subclass = fighters[1]; // 30% of fighters are battle masters
 				} else {
-					Subclass = fighters[2]; // 20% of fighters are eldritch knights
+					Subclass = fighters[0]; // 50% of fighters are champions
 				}
 			} else if (job.equals(Class.MONK)) {
 				dice = Dice.roll(monks.length) - 1;
@@ -270,12 +270,12 @@ public enum Class {
 			} else if (job.equals(Class.ROGUE)) {
 				dice = Dice.roll(100);
 
-				if (dice < 51) {
-					Subclass = rogues[0]; // 50% of rogues are thieves
-				} else if (dice < 81) {
+				if (dice < 21 && actor.getIntelligence() > 9) {
+					Subclass = rogues[2]; // 20% of rogues are arcane tricksters
+				} else if (dice < 51) {
 					Subclass = rogues[1]; // 30% of rogues are assassins
 				} else {
-					Subclass = rogues[2]; // 20% of rogues are arcane tricksters
+					Subclass = rogues[0]; // 50% of rogues are thieves
 				}
 			} else if (job.equals(Class.SORCERER)) {
 				dice = Dice.roll(sorcerers.length) - 1;
