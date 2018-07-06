@@ -200,7 +200,7 @@ public class Inventory {
 	}
 
 	public int getBodyArmorBonus() {
-		int ac, armor, dexMod = owner.getDexMod(), maxDex;
+		int ac, armor, dexMod = owner.getDexterityModifier(), maxDex;
 		if (bodyArmor != null && bodyArmor.heavyArmor()) {
 			armor = bodyArmor.getArmorClass();
 			ac = armor;

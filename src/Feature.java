@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 
 public enum Feature {
@@ -75,7 +76,7 @@ public enum Feature {
 
 	private static Feature abilityImprove(Actor actor) {
 		// TODO - temporarily set to STR BONSUES
-		Feature[] improvement = STR_BONUSES;
+		Feature[] improvement = null;
 
 		// determines index of improvement to return
 		int level = actor.getLevel(), index = 0;
@@ -96,169 +97,151 @@ public enum Feature {
 		else if (level == 19)
 			index = 7;
 
-		int STR = actor.getStrength(), DEX = actor.getDexterity(), CON = actor.getConstitution();
-		int INT = actor.getIntelligence(), WIS = actor.getWisdom(), CHA = actor.getCharisma();
-
-		// maximum scores
-		int maxSTR = actor.getMaxSTR(), maxDEX = actor.getMaxDEX(), maxCON = actor.getMaxCON();
-		int maxINT = actor.getMaxINT(), maxWIS = actor.getMaxWIS(), maxCHA = actor.getMaxCHA();
+		int STR = actor.getStrength(), DEX = actor.getDexterity(), CON = actor.getConstitution(),
+				INT = actor.getIntelligence(), WIS = actor.getWisdom(), CHA = actor.getCharisma();
 
 		Class job = actor.getJob();
 		if (job.equals(Class.BARBARIAN)) {
-			if (STR + 2 <= maxSTR) {
+			if (actor.setStrength(2)) {
 				improvement = STR_BONUSES;
-			} else if (CON + 2 <= maxCON)
+			} else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (DEX + 2 <= maxDEX)
+			else if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
-		} else if (job.equals(Class.BARD) || job.equals(Class.WIZARD)) {
-			if (INT + 2 <= maxINT)
+		} else if (job.equals(Class.WIZARD)) {
+			if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
-			else if (DEX + 2 <= maxDEX)
+			else if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
-			else if (CON + 2 <= maxCON)
+			else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (STR + 2 <= maxSTR)
+			else if (actor.setStrength(2))
 				improvement = STR_BONUSES;
 		} else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID)) {
-			if (WIS + 2 <= maxWIS)
+			if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (CON + 2 <= maxCON)
+			else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (STR + 2 <= maxSTR)
+			else if (actor.setStrength(2))
 				improvement = STR_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
-			else if (DEX + 2 <= maxDEX)
+			else if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
 		} else if (job.equals(Class.FIGHTER)) {
-			if (STR + 2 <= maxSTR)
+			if (actor.setStrength(2))
 				improvement = STR_BONUSES;
-			else if (CON + 2 <= maxCON)
+			else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (DEX + 2 <= maxDEX)
+			else if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
 		} else if (job.equals(Class.MONK)) {
-			if (DEX + 2 <= maxDEX)
+			if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (CON + 2 <= maxCON)
+			else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
-			else if (STR + 2 <= maxSTR)
+			else if (actor.setStrength(2))
 				improvement = STR_BONUSES;
 		} else if (job.equals(Class.PALADIN)) {
-			if (STR + 2 <= maxSTR)
+			if (actor.setStrength(2))
 				improvement = STR_BONUSES;
-			else if (CON + 2 <= maxCON)
+			else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
-			else if (DEX + 2 <= maxDEX)
+			else if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
 		} else if (job.equals(Class.RANGER) || job.equals(Class.ROGUE)) {
-			if (DEX + 2 <= maxDEX)
+			if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (CON + 2 <= maxCON)
+			else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (STR + 2 <= maxSTR)
+			else if (actor.setStrength(2))
 				improvement = STR_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
-		} else if (job.equals(Class.SORCERER) || job.equals(Class.WARLOCK)) {
-			if (CHA + 2 <= maxCHA)
+		} else if (job.equals(Class.BARD) || job.equals(Class.SORCERER) || job.equals(Class.WARLOCK)) {
+			if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (DEX + 2 <= maxDEX)
+			else if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
-			else if (CON + 2 <= maxCON)
+			else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (STR + 2 <= maxSTR)
+			else if (actor.setStrength(2))
 				improvement = STR_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
 		} else {
-			if (STR + 2 <= maxSTR) {
-				System.out.println("Strength: " + STR);
+			if (actor.setStrength(2)) {
 				improvement = STR_BONUSES;
-			} else if (CON + 2 <= maxCON)
+			} else if (actor.setConstitution(2))
 				improvement = CON_BONUSES;
-			else if (DEX + 2 <= maxDEX)
+			else if (actor.setDexterity(2))
 				improvement = DEX_BONUSES;
-			else if (CHA + 2 <= maxCHA)
+			else if (actor.setCharisma(2))
 				improvement = CHA_BONUSES;
-			else if (WIS + 2 <= maxWIS)
+			else if (actor.setWisdom(2))
 				improvement = WIS_BONUSES;
-			else if (INT + 2 <= maxINT)
+			else if (actor.setIntelligence(2))
 				improvement = INT_BONUSES;
 		}
 
 		return improvement[index];
 	}
 
-	public static HashSet<Feature> chooseTwoExpertise(Actor actor) {
-		HashSet<Proficiency> skills = Skill.filterForSkills(actor);
-		HashSet<Feature> features = actor.getFeatures();
+	public static EnumSet<Feature> addRandomExpertise(int toAdd, Actor actor) {
+		EnumSet<Skill> skills = actor.getSkills();
+		EnumSet<Feature> features = actor.getFeatures();
 
-		ArrayList<Proficiency> list = new ArrayList<Proficiency>(skills);
-		Collections.shuffle(list);
+		int added = 0;
+		Feature expertise; 
+		while (added < toAdd) {
+			expertise = matchExpertiseToSkill(Dice.randomFromSet(skills));
 
-		Proficiency candidateOne = list.get(0);
-		list.remove(0);
-		Feature expertiseOne = matchExpertiseToSkill(candidateOne);
-		while (features.contains(expertiseOne)) {
-			candidateOne = list.get(0);
-			list.remove(0);
-			expertiseOne = matchExpertiseToSkill(candidateOne);
+			if (features.contains(expertise) != true) {
+				features.add(expertise);
+				++added;
+			}
 		}
 
-		Proficiency candidateTwo = list.get(0);
-		list.remove(0);
-		Feature expertiseTwo = matchExpertiseToSkill(candidateTwo);
-		while (features.contains(expertiseTwo)) {
-			candidateTwo = list.get(0);
-			list.remove(0);
-			expertiseTwo = matchExpertiseToSkill(candidateTwo);
-		}
-
-		HashSet<Feature> choices = new HashSet<Feature>();
-		choices.add(expertiseOne);
-		choices.add(expertiseTwo);
-		return choices;
+		return features;
 	}
 
-	private static Feature matchExpertiseToSkill(Proficiency skill) {
+	private static Feature matchExpertiseToSkill(Skill skill) {
 		Feature expertise = EXPERTISE_ACROBATICS;
 		if (skill.equals(Skill.ACROBATICS))
 			expertise = EXPERTISE_ACROBATICS;
@@ -300,8 +283,8 @@ public enum Feature {
 		return expertise;
 	}
 
-	private static Proficiency matchSkillToExpertise(Feature feature) {
-		Proficiency skill = Skill.ACROBATICS;
+	private static Skill matchSkillToExpertise(Feature feature) {
+		Skill skill = Skill.ACROBATICS;
 		if (feature.equals(EXPERTISE_ACROBATICS))
 			skill = Skill.ACROBATICS;
 		else if (feature.equals(EXPERTISE_ANIMAL_HANDLING))
@@ -342,201 +325,200 @@ public enum Feature {
 		return skill;
 	}
 
-	public static HashSet<Feature> barbarian(Actor actor) {
+	public static EnumSet<Feature> barbarian(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
-		HashSet<Feature> list = new HashSet<Feature>();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
 		if (level == 1) {
-			list.add(RAGE);
-			list.add(RAGE_PER_DAY_2);
-			list.add(RAGE_BONUS_2);
-			list.add(UNARMORED_DEFENSE_BARBARIAN);
+			set.add(RAGE);
+			set.add(RAGE_PER_DAY_2);
+			set.add(RAGE_BONUS_2);
+			set.add(UNARMORED_DEFENSE_BARBARIAN);
 		} else if (level == 2) {
-			list.add(RECKLESS_ATTACK);
-			list.add(DANGER_SENSE);
+			set.add(RECKLESS_ATTACK);
+			set.add(DANGER_SENSE);
 		} else if (level == 3) {
 			// PRIMAL PATH
-			list.add(RAGE_PER_DAY_3);
+			set.add(RAGE_PER_DAY_3);
 			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				list.add(FRENZY);
+				set.add(FRENZY);
 			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				list.add(SPIRIT_SEEKER);
-				list.add(BEAR_SPIRIT_3);
+				set.add(SPIRIT_SEEKER);
+				set.add(BEAR_SPIRIT_3);
 			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				list.add(SPIRIT_SEEKER);
-				list.add(EAGLE_SPIRIT_3);
+				set.add(SPIRIT_SEEKER);
+				set.add(EAGLE_SPIRIT_3);
 			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				list.add(SPIRIT_SEEKER);
-				list.add(WOLF_SPIRIT_3);
+				set.add(SPIRIT_SEEKER);
+				set.add(WOLF_SPIRIT_3);
 			}
 		} else if (level == 4) {
-			list.add(ABILITY_BONUS_4);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
 		} else if (level == 5) {
-			list.add(EXTRA_ATTACK_1);
-			list.add(FAST_MOVEMENT);
-			list.add(RAGE_PER_DAY_4);
+			set.add(EXTRA_ATTACK_1);
+			set.add(FAST_MOVEMENT);
+			set.add(RAGE_PER_DAY_4);
 		} else if (level == 6) {
 			// PRIMAL PATH
 			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				list.add(MINDLESS_RAGE);
+				set.add(MINDLESS_RAGE);
 			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				list.add(BEAR_ASPECT_6);
+				set.add(BEAR_ASPECT_6);
 			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				list.add(EAGLE_ASPECT_6);
+				set.add(EAGLE_ASPECT_6);
 			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				list.add(WOLF_ASPECT_6);
+				set.add(WOLF_ASPECT_6);
 			}
 		} else if (level == 7) {
-			list.add(FERAL_INSTINCT);
+			set.add(FERAL_INSTINCT);
 		} else if (level == 8) {
-			list.add(ABILITY_BONUS_8);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
 		} else if (level == 9) {
-			list.add(BRUTAL_CRITICAL_1);
-			list.add(RAGE_BONUS_3);
+			set.add(BRUTAL_CRITICAL_1);
+			set.add(RAGE_BONUS_3);
 		} else if (level == 10) {
 			// PRIMAL PATH
 			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				list.add(INTIMIDATING_PRESENCE);
+				set.add(INTIMIDATING_PRESENCE);
 			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				list.add(SPIRIT_WALKER);
+				set.add(SPIRIT_WALKER);
 			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				list.add(SPIRIT_WALKER);
+				set.add(SPIRIT_WALKER);
 			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				list.add(SPIRIT_WALKER);
+				set.add(SPIRIT_WALKER);
 			}
 		} else if (level == 11) {
-			list.add(RELENTLESS_RAGE);
+			set.add(RELENTLESS_RAGE);
 		} else if (level == 12) {
-			list.add(ABILITY_BONUS_12);
-			list.add(abilityImprove(actor));
-			list.add(RAGE_PER_DAY_5);
+			set.add(ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+			set.add(RAGE_PER_DAY_5);
 		} else if (level == 13) {
-			list.add(BRUTAL_CRITICAL_2);
+			set.add(BRUTAL_CRITICAL_2);
 		} else if (level == 14) {
 			// PRIMAL PATH
 			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				list.add(RETALIATION);
+				set.add(RETALIATION);
 			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				list.add(BEAR_ATTUNEMENT_14);
+				set.add(BEAR_ATTUNEMENT_14);
 			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				list.add(EAGLE_ATTUNEMENT_14);
+				set.add(EAGLE_ATTUNEMENT_14);
 			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				list.add(WOLF_ATTUNEMENT_14);
+				set.add(WOLF_ATTUNEMENT_14);
 			}
 		} else if (level == 15) {
-			list.add(PERSISTENT_RAGE);
+			set.add(PERSISTENT_RAGE);
 		} else if (level == 16) {
-			list.add(ABILITY_BONUS_16);
-			list.add(abilityImprove(actor));
-			list.add(RAGE_BONUS_4);
+			set.add(ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+			set.add(RAGE_BONUS_4);
 		} else if (level == 17) {
-			list.add(BRUTAL_CRITICAL_3);
-			list.add(RAGE_PER_DAY_6);
+			set.add(BRUTAL_CRITICAL_3);
+			set.add(RAGE_PER_DAY_6);
 		} else if (level == 18) {
-			list.add(INDOMITABLE_MIGHT);
+			set.add(INDOMITABLE_MIGHT);
 		} else if (level == 19) {
-			list.add(ABILITY_BONUS_19);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
 		} else if (level == 20) {
-			list.add(PRIMAL_CHAMPION);
-			list.add(RAGE_PER_DAY_99);
+			set.add(PRIMAL_CHAMPION);
+			set.add(RAGE_PER_DAY_99);
 		}
 
-		return list;
+		return set;
 	}
 
-	public static HashSet<Feature> bard(Actor actor) {
+	public static EnumSet<Feature> bard(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
-		HashSet<Feature> list = new HashSet<Feature>();
-		HashSet<Proficiency> skills = actor.getSkills();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		EnumSet<Skill> skills = actor.getSkills();
 		int level = actor.getLevel();
 
 		if (level == 1) {
-			list.add(INSPIRATION_D6);
+			set.add(INSPIRATION_D6);
 		} else if (level == 2) {
-			list.add(JACK_OF_ALL_TRADES);
-			list.add(SONG_OF_REST_D6);
+			set.add(JACK_OF_ALL_TRADES);
+			set.add(SONG_OF_REST_D6);
 		} else if (level == 3) {
 			// BARD COLLEGE
-			list.addAll(chooseTwoExpertise(actor));
+			set.addAll(addRandomExpertise(2, actor));
 			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
-				skills.add(Skill.randomSkill(actor));
-				skills.add(Skill.randomSkill(actor));
-				skills.add(Skill.randomSkill(actor));
-				list.add(CUTTING_WORDS);
+				skills.add(Skill.testRandomSkill(actor));
+				skills.add(Skill.testRandomSkill(actor));
+				skills.add(Skill.testRandomSkill(actor));
+				set.add(CUTTING_WORDS);
 			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
-				skills.addAll(Armor.mediumArmorSet());
-				skills.addAll(Weapon.martialMeleeSet());
-				skills.addAll(Weapon.martialRangedSet());
-				skills.add(Weapon.SHIELD);
-				list.add(COMBAT_INSPIRATION);
+				actor.getArmorProficiency().addAll(Armor.getMediumArmorList());
+				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+				actor.getWeaponProficiency().add(Weapon.SHIELD);
+				set.add(COMBAT_INSPIRATION);
 			}
 
 		} else if (level == 4) {
-			list.add(ABILITY_BONUS_4);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
 		} else if (level == 5) {
-			list.add(INSPIRATION_D8);
-			list.add(FONT_OF_INSPIRATION);
+			set.add(INSPIRATION_D8);
+			set.add(FONT_OF_INSPIRATION);
 		} else if (level == 6) {
 			// BARD COLLEGE
-			list.add(COUNTERCHARM);
+			set.add(COUNTERCHARM);
 			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
-				list.add(MAGICAL_SECRETS_6);
+				set.add(MAGICAL_SECRETS_6);
 			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
-				list.add(EXTRA_ATTACK_1);
+				set.add(EXTRA_ATTACK_1);
 			}
 
 		} else if (level == 7) {
 			// spells and nothing else
 		} else if (level == 8) {
-			list.add(ABILITY_BONUS_8);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
 		} else if (level == 9) {
-			list.add(SONG_OF_REST_D8);
+			set.add(SONG_OF_REST_D8);
 		} else if (level == 10) {
 			// magical secrets
-			list.addAll(chooseTwoExpertise(actor));
-			list.add(INSPIRATION_D10);
-			list.add(MAGICAL_SECRETS_10);
+			set.addAll(addRandomExpertise(2, actor));
+			set.add(INSPIRATION_D10);
+			set.add(MAGICAL_SECRETS_10);
 		} else if (level == 11) {
 			// spells and nothing else
 		} else if (level == 12) {
-			list.add(ABILITY_BONUS_12);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
 		} else if (level == 13) {
-			list.add(SONG_OF_REST_D10);
+			set.add(SONG_OF_REST_D10);
 		} else if (level == 14) {
 			// BARD COLLEGE
 			// magical secrets
-			list.add(MAGICAL_SECRETS_14);
+			set.add(MAGICAL_SECRETS_14);
 			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
-				list.add(PEERLESS_SKILL);
+				set.add(PEERLESS_SKILL);
 			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
-				list.add(BATTLE_MAGIC);
+				set.add(BATTLE_MAGIC);
 			}
 
 		} else if (level == 15) {
-			list.add(INSPIRATION_D12);
+			set.add(INSPIRATION_D12);
 		} else if (level == 16) {
-			list.add(ABILITY_BONUS_16);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
 		} else if (level == 17) {
-			list.add(SONG_OF_REST_D12);
+			set.add(SONG_OF_REST_D12);
 		} else if (level == 18) {
 			// magical secrets
-			list.add(MAGICAL_SECRETS_18);
+			set.add(MAGICAL_SECRETS_18);
 		} else if (level == 19) {
-			list.add(ABILITY_BONUS_19);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
 		} else if (level == 20) {
-			list.add(SUPERIOR_INSPIRATION);
+			set.add(SUPERIOR_INSPIRATION);
 		}
 
-		return list;
+		return set;
 	}
 
 	// public static void abilityImprovement() {

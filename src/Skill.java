@@ -50,6 +50,21 @@ public enum Skill {
 		return Dice.randomFromArray(ALL_SKILLS);
 	}
 
+	public static Skill testRandomSkill(Actor actor) {
+		EnumSet<Skill> skills = actor.getSkills();
+		Class job = actor.getJob();
+
+		Skill test;
+		while (true) {
+			test = randomClassSkill(job);
+
+			if (skills.contains(test) != true)
+				break;
+		}
+
+		return test;
+	}
+
 	public static Skill randomClassSkill(Class job) {
 		Skill[] array;
 

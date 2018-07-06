@@ -34,7 +34,7 @@ public class CombatBlock {
 		// TODO - doesn't take into account magical bonuses or other features
 		int level = owner.getLevel();
 		byte[] hitDice = owner.getHitDice();
-		int conMod = owner.getConMod();
+		int conMod = owner.getConstitutionModifier();
 
 		int hp = 0, perLevel = conMod;
 		for (int i = 0; i < level; ++i) {
@@ -45,13 +45,13 @@ public class CombatBlock {
 	}
 
 	private void calcArmorClass() {
-		int dexMod = owner.getDexMod(), conMod, wisMod, ac = 10 + dexMod;
+		int dexMod = owner.getDexterityModifier(), conMod, wisMod, ac = 10 + dexMod;
 		Inventory gear = owner.getInventory();
 
 		Class job = owner.getJob();
 		if (job.equals(Class.BARBARIAN)) {
 			// barbarian unarmored defense
-			conMod = owner.getConMod();
+			conMod = owner.getConstitutionModifier();
 
 			if (owner.notWearingArmor() && owner.usingShield())
 				ac = 10 + dexMod + conMod + gear.getShieldArmorBonus();
@@ -64,7 +64,7 @@ public class CombatBlock {
 
 		} else if (job.equals(Class.MONK)) {
 			// monk unarmored defense
-			wisMod = owner.getWisMod();
+			wisMod = owner.getWisdomModifier();
 
 			if (owner.notWearingArmor() && owner.notUsingShield())
 				ac = 10 + dexMod + wisMod;
@@ -82,7 +82,7 @@ public class CombatBlock {
 	}
 
 	private void calcAttackBonus() {
-		int atk = 0, strMod = owner.getStrMod(), dexMod = owner.getDexMod();
+		int atk = 0, strMod = owner.getStrengthModifier(), dexMod = owner.getDexterityModifier();
 		Weapon.Instance weapon = owner.getInventory().getMainHand();
 
 		if (weapon != null && weapon.useDexterity())
@@ -94,7 +94,7 @@ public class CombatBlock {
 	}
 
 	private void calcAverageDamage() {
-		int dmg = 0, strMod = owner.getStrMod(), dexMod = owner.getDexMod();
+		int dmg = 0, strMod = owner.getStrengthModifier(), dexMod = owner.getDexterityModifier();
 		Weapon.Instance weapon = owner.getInventory().getMainHand();
 
 		if (weapon != null && weapon.useDexterity())

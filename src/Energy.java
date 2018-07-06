@@ -2,9 +2,12 @@
 public enum Energy {
 	BLUDGEONING, PIERCING, SLASHING, FORCE, FIRE, COLD, LIGHTNING, ACID, RADIANT, THUNDER, NECROTIC, PSYCHIC, POISON;
 
-	// static
+	// static fields
+	private static final Energy[] ENERGY_TYPES = { FORCE, FIRE, COLD, LIGHTNING, ACID, RADIANT, THUNDER, NECROTIC,
+			PSYCHIC, POISON };
+
+	// static methods
 	public static Energy randomEnergyType() {
-		Energy[] energyTypes = { FORCE, FIRE, COLD, LIGHTNING, ACID, RADIANT, THUNDER, NECROTIC, PSYCHIC, POISON };
-		return energyTypes[Dice.roll(1, 10) - 1];
+		return Dice.randomFromArray(ENERGY_TYPES);
 	}
 }

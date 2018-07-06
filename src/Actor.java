@@ -287,136 +287,133 @@ public interface Actor {
 		return getAbilityScores()[5];
 	}
 
-	public default void setStrength(int bonus) {
-		int index = 0;
+	public default boolean setAbilityScore(int index, int bonus) {
+		boolean set = false;
+		int ability = getAbilityScores()[index], ceiling = getAbilityCeiling()[index];
+
+		if (ability + bonus <= ceiling) {
+			getAbilityScores()[index] = (byte) (ability + bonus);
+			set = true;
+		}
+
+		return set;
+	}
+
+	public default boolean setStrength(int bonus) {
+		return setAbilityScore(0, bonus);
+	}
+
+	public default boolean setDexterity(int bonus) {
+		return setAbilityScore(1, bonus);
+	}
+
+	public default boolean setConstitution(int bonus) {
+		return setAbilityScore(2, bonus);
+	}
+
+	public default boolean setIntelligence(int bonus) {
+		return setAbilityScore(3, bonus);
+	}
+
+	public default boolean setWisdom(int bonus) {
+		return setAbilityScore(4, bonus);
+	}
+
+	public default boolean setCharisma(int bonus) {
+		return setAbilityScore(5, bonus);
+	}
+
+	public default boolean raiseAbilityMaximum(int index, int bonus) {
+		boolean increased = false;
+		int hardCap = 30, ceiling = getAbilityCeiling()[index];
+
+		if (ceiling + bonus <= hardCap) {
+			getAbilityCeiling()[index] = (byte) (ceiling + bonus);
+			increased = true;
+		}
+
+		return increased;
+	}
+
+	public default boolean raiseMaxStrength(int bonus) {
+		return raiseAbilityMaximum(0, bonus);
+	}
+
+	public default boolean raiseMaxDexterity(int bonus) {
+		return raiseAbilityMaximum(1, bonus);
+	}
+
+	public default boolean raiseMaxConstitution(int bonus) {
+		return raiseAbilityMaximum(2, bonus);
+	}
+
+	public default boolean raiseMaxIntelligence(int bonus) {
+		return raiseAbilityMaximum(3, bonus);
+	}
+
+	public default boolean raiseMaxWisdom(int bonus) {
+		return raiseAbilityMaximum(4, bonus);
+	}
+
+	public default boolean raiseMaxCharisma(int bonus) {
+		return raiseAbilityMaximum(5, bonus);
+	}
+
+	public default int getAbilityModifier(int index) {
 		int ability = getAbilityScores()[index];
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityScores()[index] = (byte) ((ability + bonus > ceiling) ? ceiling : (ability + bonus));
-	}
-
-	public default void setDexterity(int bonus) {
-		int index = 0;
-		int ability = getAbilityScores()[index];
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityScores()[index] = (byte) ((ability + bonus > ceiling) ? ceiling : (ability + bonus));
-	}
-
-	public default void setConstitution(int bonus) {
-		int index = 0;
-		int ability = getAbilityScores()[index];
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityScores()[index] = (byte) ((ability + bonus > ceiling) ? ceiling : (ability + bonus));
-	}
-
-	public default void setIntelligence(int bonus) {
-		int index = 0;
-		int ability = getAbilityScores()[index];
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityScores()[index] = (byte) ((ability + bonus > ceiling) ? ceiling : (ability + bonus));
-	}
-
-	public default void setWisdom(int bonus) {
-		int index = 0;
-		int ability = getAbilityScores()[index];
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityScores()[index] = (byte) ((ability + bonus > ceiling) ? ceiling : (ability + bonus));
-	}
-
-	public default void setCharisma(int bonus) {
-		int index = 0;
-		int ability = getAbilityScores()[index];
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityScores()[index] = (byte) ((ability + bonus > ceiling) ? ceiling : (ability + bonus));
-	}
-
-	public default void raiseMaxStrength(int bonus) {
-		int index = 0, hardCap = 30;
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityCeiling()[index] = (byte) ((ceiling + bonus > hardCap) ? hardCap : (ceiling + bonus));
-	}
-
-	public default void raiseMaxDexterity(int bonus) {
-		int index = 1, hardCap = 30;
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityCeiling()[index] = (byte) ((ceiling + bonus > hardCap) ? hardCap : (ceiling + bonus));
-	}
-
-	public default void raiseMaxConstitution(int bonus) {
-		int index = 2, hardCap = 30;
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityCeiling()[index] = (byte) ((ceiling + bonus > hardCap) ? hardCap : (ceiling + bonus));
-	}
-
-	public default void raiseMaxIntelligence(int bonus) {
-		int index = 3, hardCap = 30;
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityCeiling()[index] = (byte) ((ceiling + bonus > hardCap) ? hardCap : (ceiling + bonus));
-	}
-
-	public default void raiseMaxWisdom(int bonus) {
-		int index = 4, hardCap = 30;
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityCeiling()[index] = (byte) ((ceiling + bonus > hardCap) ? hardCap : (ceiling + bonus));
-	}
-
-	public default void raiseMaxCharisma(int bonus) {
-		int index = 5, hardCap = 30;
-		int ceiling = getAbilityCeiling()[index];
-		getAbilityCeiling()[index] = (byte) ((ceiling + bonus > hardCap) ? hardCap : (ceiling + bonus));
-	}
-
-	public default int getStrMod() {
-		int ability = getAbilityScores()[0];
 		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
 	}
 
-	public default int getDexMod() {
-		int ability = getAbilityScores()[1];
-		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
+	public default int getStrengthModifier() {
+		return getAbilityModifier(0);
 	}
 
-	public default int getConMod() {
-		int ability = getAbilityScores()[2];
-		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
+	public default int getDexterityModifier() {
+		return getAbilityModifier(1);
 	}
 
-	public default int getIntMod() {
-		int ability = getAbilityScores()[3];
-		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
+	public default int getConstitutionModifier() {
+		return getAbilityModifier(2);
 	}
 
-	public default int getWisMod() {
-		int ability = getAbilityScores()[4];
-		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
+	public default int getIntelligenceModifier() {
+		return getAbilityModifier(3);
 	}
 
-	public default int getChaMod() {
-		int ability = getAbilityScores()[5];
-		return (ability > 9) ? (ability - 10) / 2 : (ability - 11) / 2;
+	public default int getWisdomModifier() {
+		return getAbilityModifier(4);
 	}
 
-	public default int getStrSave() {
-		return getSavingThrows()[0];
+	public default int getCharismaModifier() {
+		return getAbilityModifier(5);
 	}
 
-	public default int getDexSave() {
-		return getSavingThrows()[1];
+	public default int getSavingThrow(int index) {
+		return getSavingThrows()[index];
 	}
 
-	public default int getConSave() {
-		return getSavingThrows()[2];
+	public default int getStrengthSave() {
+		return getSavingThrow(0);
 	}
 
-	public default int getIntSave() {
-		return getSavingThrows()[3];
+	public default int getDexteritySave() {
+		return getSavingThrow(1);
 	}
 
-	public default int getWisSave() {
-		return getSavingThrows()[4];
+	public default int getConstitutionSave() {
+		return getSavingThrow(2);
 	}
 
-	public default int getChaSave() {
-		return getSavingThrows()[5];
+	public default int getIntelligenceSave() {
+		return getSavingThrow(3);
+	}
+
+	public default int getWisdomSave() {
+		return getSavingThrow(4);
+	}
+
+	public default int getCharismaSave() {
+		return getSavingThrow(5);
 	}
 
 	public default List<Weapon.Instance> getWeapons() {
