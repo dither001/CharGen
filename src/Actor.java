@@ -193,8 +193,6 @@ public interface Actor {
 
 	public byte[] getAbilities();
 
-	public int getProficiencyBonus();
-
 	public byte[] getSavingThrows();
 
 	public EnumSet<Skill> getSkills();
@@ -223,7 +221,9 @@ public interface Actor {
 
 	public void setLanguages(EnumSet<Language> languages);
 
-	public int getChallengeRating();
+	public CombatBlock getCombatBlock();
+
+	public void setCombatBlock(CombatBlock combat);
 
 	public Inventory getInventory();
 
@@ -233,6 +233,22 @@ public interface Actor {
 	 * DEFAULT METHODS
 	 * 
 	 */
+	public default int getProficiencyBonus() {
+		int bonus, level = getLevel();
+		if (level > 16)
+			bonus = 6;
+		else if (level > 12)
+			bonus = 5;
+		else if (level > 8)
+			bonus = 4;
+		else if (level > 4)
+			bonus = 3;
+		else
+			bonus = 2;
+
+		return bonus;
+	}
+
 	public default boolean hasCondition(Condition condition) {
 		return getConditions().contains(condition);
 	}
@@ -353,4 +369,39 @@ public interface Actor {
 		return getInventory().getWeapons();
 	}
 
+	public default boolean wearingArmor() {
+		return (getInventory().wearingArmor());
+	}
+
+	public default boolean notWearingArmor() {
+		return (getInventory().wearingArmor() != true);
+	}
+
+	public default boolean usingShield() {
+		return (getInventory().usingShield());
+	}
+
+	public default boolean notUsingShield() {
+		return (getInventory().usingShield() != true);
+	}
+
+	public default int getArmorClass() {
+		return getCombatBlock().getArmorClass();
+	}
+
+	public default int getHitPoints() {
+		return getCombatBlock().getHitPoints();
+	}
+
+	public default int getAttackBonus() {
+		return getCombatBlock().getAttackBonus();
+	}
+
+	public default int getAverageDamage() {
+		return getCombatBlock().getAverageDamage();
+	}
+
+	public default int getChallengeRating() {
+		return getCombatBlock().getChallengeRating();
+	}
 }

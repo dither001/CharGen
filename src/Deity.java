@@ -2,7 +2,22 @@
 public enum Deity {
 	ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR;
 
-	private static final Deity[] DEATH_GODS = { RAVEN_QUEEN, TOROG, VECNA };
+	/*
+	 * STATIC FIELDS
+	 * 
+	 */
+	private static final Deity[] ALL_GODS = { ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD,
+			LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR };
+
+	//
+	private static final Deity[] LAWFUL_GODS = { ASMODEUS, BAHAMUT, BANE, ERATHIS, MORADIN, RAVEN_QUEEN, TIAMAT };
+	private static final Deity[] GOOD_GODS = { AVANDRA, BAHAMUT, CORELLON, MORADIN, PELOR, SEHANINE };
+	private static final Deity[] NEUTRAL_GODS = { ERATHIS, IOUN, KORD, MELORA, PELOR, RAVEN_QUEEN, TOROG, VECNA };
+	private static final Deity[] EVIL_GODS = { ASMODEUS, BANE, GRUUMSH, LOLTH, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR };
+	private static final Deity[] CHAOTIC_GODS = { AVANDRA, CORELLON, GRUUMSH, KORD, LOLTH, SEHANINE, THARIZDUN, ZEHIR };
+
+	//
+	private static final Deity[] DEATH_GODS = { RAVEN_QUEEN, TOROG, VECNA, ZEHIR };
 	private static final Deity[] KNOWLEDGE_GODS = { ERATHIS, IOUN, MORADIN, VECNA };
 	private static final Deity[] LIFE_GODS = { BAHAMUT, PELOR, RAVEN_QUEEN };
 	private static final Deity[] LIGHT_GODS = { CORELLON, PELOR };
@@ -22,7 +37,7 @@ public enum Deity {
 			deity = domainToDeity(actor);
 		} else {
 			Deity[] gods = { racialDeity(race), idealDeity(ali), jobDeity(job), randomDeity() };
-			deity = gods[Dice.roll(4) - 1];
+			deity = Dice.randomFromArray(gods);
 		}
 
 		return deity;
@@ -53,10 +68,7 @@ public enum Deity {
 	}
 
 	public static Deity randomDeity() {
-		Deity[] gods = { ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA,
-				MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR };
-
-		return gods[Dice.roll(20) - 1];
+		return Dice.randomFromArray(ALL_GODS);
 	}
 
 	public static Deity racialDeity(Race race) {
@@ -102,29 +114,21 @@ public enum Deity {
 	}
 
 	public static Deity idealDeity(Actor.Alignment ali) {
-		Deity deity;
-		int dieRoll = Dice.roll(6) - 1;
-
-		Deity[] lawfulGods = { ASMODEUS, BAHAMUT, BANE, ERATHIS, MORADIN, RAVEN_QUEEN };
-		Deity[] goodGods = { AVANDRA, BAHAMUT, CORELLON, MORADIN, PELOR, SEHANINE };
-		Deity[] neutralGods = { ERATHIS, IOUN, KORD, MELORA, RAVEN_QUEEN, SEHANINE };
-		Deity[] evilGods = { ASMODEUS, BANE, TIAMAT, TOROG, VECNA, ZEHIR };
-		Deity[] chaoticGods = { GRUUMSH, KORD, LOLTH, THARIZDUN, TIAMAT, TOROG };
+		Deity[] array = null;
 
 		if (ali.equals(Actor.Alignment.LAWFUL)) {
-			deity = lawfulGods[dieRoll];
+			array = LAWFUL_GODS;
 		} else if (ali.equals(Actor.Alignment.GOOD)) {
-			deity = goodGods[dieRoll];
+			array = GOOD_GODS;
 		} else if (ali.equals(Actor.Alignment.NEUTRAL)) {
-			deity = neutralGods[dieRoll];
+			array = NEUTRAL_GODS;
 		} else if (ali.equals(Actor.Alignment.CHAOTIC)) {
-			deity = chaoticGods[dieRoll];
+			array = CHAOTIC_GODS;
 		} else {
-			// default is an evil god
-			deity = evilGods[dieRoll];
+			array = EVIL_GODS;
 		}
 
-		return deity;
+		return Dice.randomFromArray(array);
 	}
 
 	public static Deity jobDeity(Class job) {

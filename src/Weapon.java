@@ -1,5 +1,5 @@
 
-//import java.util.Comparator;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -31,6 +31,7 @@ public enum Weapon {
 		private Hand hand;
 		private EnumSet<Trait> traits;
 
+		//
 		public Prototype(Weapon weapon, Type type, int face, Energy energy, Hand hand, Trait... args) {
 			this(weapon, type, 1, face, energy, hand, args);
 		}
@@ -47,6 +48,7 @@ public enum Weapon {
 			for (int i = 0; i < args.length; ++i) {
 				traits.add(args[i]);
 			}
+
 		}
 
 		public boolean equals(Prototype other) {
@@ -63,7 +65,13 @@ public enum Weapon {
 		private Prototype prototype;
 		private int quantity;
 
-		// constructors
+		//
+		private int attackBonus;
+		private int armorBonus;
+
+		/*
+		 * 
+		 */
 		public Instance(Weapon weapon) {
 			this(weapon, 1);
 		}
@@ -74,6 +82,15 @@ public enum Weapon {
 
 			this.prototype = weaponPrototypeMap.get(weapon);
 			this.quantity = quantity;
+
+			// TODO - take into account magic
+			if (prototype.type.equals(Type.SHIELD))
+				this.armorBonus = 2;
+			else
+				this.armorBonus = 0;
+
+			// TODO - take into account magic
+			attackBonus = 0;
 		}
 
 		// methods
@@ -89,12 +106,24 @@ public enum Weapon {
 			return prototype.type;
 		}
 
+		public boolean isShield() {
+			return prototype.weapon.equals(Weapon.SHIELD);
+		}
+
 		public boolean rangedOrThrown() {
 			boolean rangedOrThrown = false;
 			if (prototype.traits.contains(Trait.AMMUNITION) || prototype.traits.contains(Trait.THROWN))
 				rangedOrThrown = true;
 
 			return rangedOrThrown;
+		}
+
+		public boolean useDexterity() {
+			boolean useDexterity = false;
+			if (prototype.traits.contains(Trait.AMMUNITION) || prototype.traits.contains(Trait.FINESSE))
+				useDexterity = true;
+
+			return useDexterity;
 		}
 
 		public int getAverageDamage() {
@@ -107,6 +136,11 @@ public enum Weapon {
 
 		public Hand getHand() {
 			return prototype.hand;
+		}
+
+		public boolean oneHandUseable() {
+			return prototype.hand.equals(Hand.LIGHT) || prototype.hand.equals(Hand.ONE)
+					|| prototype.hand.equals(Hand.VERSATILE);
 		}
 
 		public boolean stackable() {
@@ -130,6 +164,14 @@ public enum Weapon {
 			return (quantity < 1);
 		}
 
+		public boolean sameAsWeapon(Weapon weapon) {
+			boolean equals = false;
+			if (weapon.equals(this.prototype.weapon))
+				equals = true;
+
+			return equals;
+		}
+
 		public boolean equals(Instance other) {
 			boolean equals = false;
 			if (other.prototype.weapon.equals(this.prototype.weapon))
@@ -148,6 +190,22 @@ public enum Weapon {
 				string = thing;
 
 			return string;
+		}
+
+		@Override
+		public boolean isCursed() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public int getArmorBonus() {
+			return armorBonus;
+		}
+
+		@Override
+		public int getAttackBonus() {
+			return attackBonus;
 		}
 	}
 
@@ -205,8 +263,8 @@ public enum Weapon {
 				new Prototype(SPEAR, Type.SPEAR, 1, 6, Energy.PIERCING, Hand.VERSATILE, Trait.THROWN));
 		weaponPrototypeMap.put(LIGHT_CROSSBOW, new Prototype(LIGHT_CROSSBOW, Type.CROSSBOW, 1, 8, Energy.PIERCING,
 				Hand.TWO, Trait.AMMUNITION, Trait.LOADING));
-		weaponPrototypeMap.put(DART,
-				new Prototype(DART, Type.SPECIAL, 1, 4, Energy.PIERCING, Hand.ONE, Trait.FINESSE, Trait.THROWN, Trait.STACKABLE));
+		weaponPrototypeMap.put(DART, new Prototype(DART, Type.SPECIAL, 1, 4, Energy.PIERCING, Hand.ONE, Trait.FINESSE,
+				Trait.THROWN, Trait.STACKABLE));
 		weaponPrototypeMap.put(SHORTBOW,
 				new Prototype(SHORTBOW, Type.BOW, 1, 6, Energy.PIERCING, Hand.TWO, Trait.AMMUNITION));
 		weaponPrototypeMap.put(SLING,
@@ -710,6 +768,53 @@ public enum Weapon {
 			// System.out.println(list.size());
 			return string + "]";
 		}
+	}
+
+	/*
+	 * COMPARATOR
+	 * 
+	 */
+	public static class SortByWeaponTrait implements Comparator<Instance> {
+		private Trait trait;
+
+		public SortByWeaponTrait(Trait trait) {
+			this.trait = trait;
+		}
+
+		@Override
+		public int compare(Instance left, Instance right) {
+			int one = (left.prototype.traits.contains(trait)) ? 1 : 0;
+			int two = (right.prototype.traits.contains(trait)) ? 1 : 0;
+
+			return two - one;
+		}
+	}
+
+	public static class SortByDefender implements Comparator<Instance> {
+
+		@Override
+		public int compare(Instance one, Instance two) {
+			int left = 0, right = 0;
+			if (one.getHand().equals(Hand.VERSATILE))
+				left += 5;
+			else if (one.getHand().equals(Hand.ONE))
+				left += 2;
+			else if (one.getHand().equals(Hand.LIGHT))
+				left += 1;
+
+			if (two.getHand().equals(Hand.VERSATILE))
+				right += 5;
+			else if (two.getHand().equals(Hand.ONE))
+				right += 2;
+			else if (two.getHand().equals(Hand.LIGHT))
+				right += 1;
+
+			left += (one.isShield()) ? 10 : 0;
+			right += (two.isShield()) ? 10 : 0;
+
+			return right - left;
+		}
+
 	}
 
 }

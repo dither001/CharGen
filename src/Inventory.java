@@ -1,11 +1,14 @@
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class Inventory {
+	public enum Slot {
+		BODY_ARMOR, MAIN_HAND, OFF_HAND, BROW, NECK, GLOVES, BRACERS, BELT, BOOTS, RING
+	}
+
 	/*
 	 * INSTANCE FIELDS
 	 * 
@@ -16,16 +19,9 @@ public class Inventory {
 	private Weapon.WeaponList weaponList;
 	// private ArrayList<Tool.Instance> tools;
 
-	// Helmet brow;
-	// Mask face;
-	// Necklace neck;
-	// private Armor.Instance armor;
+	private Armor.Instance bodyArmor;
 	private Weapon.Instance mainHand;
 	private Weapon.Instance offHand;
-	// Gloves gloves;
-	// Bracers bracers;
-	// Belt belt;
-	// Boots boots;
 	// Ring ring1, ring2, ring3;
 	// ArrayList<> wondrous;
 
@@ -35,10 +31,6 @@ public class Inventory {
 	 */
 	public Inventory(Actor owner) {
 		this.owner = owner;
-
-		// FIXME - testing
-		// String string = String.format("%s %s", owner.getRace(), owner.getJob());
-		// System.out.println("New inventory created for: " + string);
 	}
 
 	/*
@@ -49,9 +41,100 @@ public class Inventory {
 		return owner != null;
 	}
 
-	// public boolean wearingArmor() {
-	// return armor != null;
-	// }
+	private void optimizeArmor() {
+		if (clearBodyArmor() && armorList.size() > 0) {
+			// TODO - needs to sort list
+			List<Armor.Instance> list = filterArmorForUseable(owner);
+			if (list.size() > 0) {
+				Armor.Instance armor = list.get(0);
+				equipArmor(armor);
+				// System.out.println("Equipped " + armor.toString());
+			}
+		}
+	}
+
+	private void optimizeWeapons() {
+		if (clearMainHand() && clearOffHand() && weaponList.size() > 0) {
+			CombatBlock.Role role = CombatBlock.getRoleFromClass(owner.getJob());
+
+			// TODO - needs to sort list
+			List<Weapon.Instance> list = filterWeaponsForUseable(owner);
+			if (list.size() > 0 && role.equals(CombatBlock.Role.STRIKER)) {
+				Weapon.Instance weapon = list.get(0);
+				equipMainHand(weapon);
+				// System.out.println("Equipped " + weapon.toString());
+
+			} else if (list.size() > 0
+					&& (role.equals(CombatBlock.Role.DEFENDER) || role.equals(CombatBlock.Role.LEADER))) {
+				Weapon.SortByDefender sortMethod = new Weapon.SortByDefender();
+				Collections.sort(list, sortMethod);
+
+				Weapon.Instance slotOne = list.get(0), slotTwo;
+				slotTwo = (list.size() > 1) ? list.get(1) : null;
+				if (slotOne.isShield() && (slotTwo != null && slotTwo.oneHandUseable())) {
+					equipMainHand(slotTwo);
+					// System.out.println("Equipped " + slotTwo.toString());
+					equipOffHand(slotOne);
+					// System.out.println("Equipped " + slotOne.toString());
+				} else {
+					equipMainHand(slotOne);
+					// System.out.println("Equipped " + slotOne.toString());
+				}
+
+			} else if (list.size() > 0 && role.equals(CombatBlock.Role.LEADER)) {
+
+			} else if (list.size() > 0 && role.equals(CombatBlock.Role.CONTROLLER)) {
+
+			}
+		}
+	}
+
+	private void equipMainHand(Weapon.Instance weapon) {
+		EnumSet<Weapon> weaponProf = owner.getWeaponProficiency();
+		Weapon check = weapon.getWeapon();
+
+		if (mainHand == null && weaponProf.contains(check))
+			mainHand = weapon;
+		else if ((mainHand != null && mainHand.notCursed()) && weaponProf.contains(check))
+			mainHand = weapon;
+	}
+
+	private void equipOffHand(Weapon.Instance weapon) {
+		EnumSet<Weapon> weaponProf = owner.getWeaponProficiency();
+		Weapon check = weapon.getWeapon();
+
+		boolean ideal = (weapon.oneHandUseable()) ? true : false;
+		if (ideal && offHand == null && weaponProf.contains(check))
+			offHand = weapon;
+		else if ((offHand != null && offHand.notCursed()) && weaponProf.contains(check))
+			offHand = weapon;
+	}
+
+	private void equipArmor(Armor.Instance armor) {
+		EnumSet<Armor> armorProf = owner.getArmorProficiency();
+		Armor check = armor.getArmor();
+
+		if (bodyArmor == null && armorProf.contains(check))
+			bodyArmor = armor;
+		else if ((bodyArmor != null && bodyArmor.notCursed()) && armorProf.contains(check))
+			bodyArmor = armor;
+	}
+
+	/*
+	 * 
+	 * 
+	 */
+	public boolean canUseArmor(Armor armor) {
+		boolean canUse = false;
+		if (owner.getArmorProficiency().contains(armor))
+			canUse = true;
+
+		return canUse;
+	}
+
+	public boolean wearingArmor() {
+		return bodyArmor != null;
+	}
 
 	public boolean holdingMainHand() {
 		return mainHand != null;
@@ -59,6 +142,84 @@ public class Inventory {
 
 	public boolean holdingOffHand() {
 		return offHand != null;
+	}
+
+	public boolean usingShield() {
+		return (offHand != null && offHand.isShield());
+	}
+
+	public boolean clearEquipment() {
+		boolean cleared = true;
+
+		cleared = (clearMainHand()) ? cleared : false;
+		cleared = (clearOffHand()) ? cleared : false;
+		cleared = (clearBodyArmor()) ? cleared : false;
+
+		return cleared;
+	}
+
+	private boolean clearMainHand() {
+		boolean cleared = true;
+
+		if (mainHand != null && mainHand.isCursed())
+			cleared = false;
+		else
+			mainHand = null;
+
+		return cleared;
+	}
+
+	private boolean clearOffHand() {
+		boolean cleared = true;
+
+		if (offHand != null && offHand.isCursed())
+			cleared = false;
+		else
+			offHand = null;
+
+		return cleared;
+	}
+
+	private boolean clearBodyArmor() {
+		boolean cleared = true;
+
+		if (bodyArmor != null && bodyArmor.isCursed())
+			cleared = false;
+		else
+			bodyArmor = null;
+
+		return cleared;
+	}
+
+	public Weapon.Instance getMainHand() {
+		return mainHand;
+	}
+
+	public Weapon.Instance getOffHand() {
+		return offHand;
+	}
+
+	public int getBodyArmorBonus() {
+		int ac, armor, dexMod = owner.getDexMod(), maxDex;
+		if (bodyArmor != null && bodyArmor.heavyArmor()) {
+			armor = bodyArmor.getArmorClass();
+			ac = armor;
+		} else if (bodyArmor != null && bodyArmor.mediumArmor()) {
+			armor = bodyArmor.getArmorClass();
+			maxDex = bodyArmor.getMaxDexterity();
+			ac = (dexMod > maxDex) ? armor + maxDex : armor + dexMod;
+		} else if (bodyArmor != null && bodyArmor.lightArmor()) {
+			armor = bodyArmor.getArmorClass();
+			ac = armor + dexMod;
+		} else {
+			ac = 10 + dexMod;
+		}
+
+		return ac;
+	}
+
+	public int getShieldArmorBonus() {
+		return offHand.getArmorBonus();
 	}
 
 	public List<Weapon.Instance> getWeapons() {
@@ -75,6 +236,36 @@ public class Inventory {
 
 	public void setArmor(List<Armor.Instance> list) {
 		this.armorList = new ArrayList<Armor.Instance>(list);
+	}
+
+	private static List<Weapon.Instance> filterWeaponsForUseable(Actor actor) {
+		List<Weapon.Instance> weaponList, filteredList = new ArrayList<Weapon.Instance>();
+		weaponList = actor.getInventory().getWeapons();
+
+		EnumSet<Weapon> weaponProf = actor.getWeaponProficiency();
+		Weapon.Instance instance;
+		for (Iterator<Weapon.Instance> it = weaponList.iterator(); it.hasNext();) {
+			instance = it.next();
+			if (weaponProf.contains(instance.getWeapon()))
+				filteredList.add(instance);
+		}
+
+		return filteredList;
+	}
+
+	private static List<Armor.Instance> filterArmorForUseable(Actor actor) {
+		List<Armor.Instance> armorList, filteredList = new ArrayList<Armor.Instance>();
+		armorList = actor.getInventory().getArmor();
+
+		EnumSet<Armor> armorProf = actor.getArmorProficiency();
+		Armor.Instance instance;
+		for (Iterator<Armor.Instance> it = armorList.iterator(); it.hasNext();) {
+			instance = it.next();
+			if (armorProf.contains(instance.getArmor()))
+				filteredList.add(instance);
+		}
+
+		return filteredList;
 	}
 
 	public String toStringDetailed() {
@@ -100,7 +291,7 @@ public class Inventory {
 		if (weapon.rangedOrThrown())
 			list.add(Weapon.getAmmunition(weapon.getWeapon()));
 	}
-	
+
 	private static void randomMartialHelper(Weapon.WeaponList list) {
 		Weapon.Instance weapon = new Weapon.Instance(Weapon.randomMartialWeapon());
 		list.add(weapon);
@@ -108,7 +299,7 @@ public class Inventory {
 		if (weapon.rangedOrThrown())
 			list.add(Weapon.getAmmunition(weapon.getWeapon()));
 	}
-		
+
 	public static void setupStartingGear(Actor actor) {
 		Inventory inventory = new Inventory(actor);
 
@@ -143,7 +334,7 @@ public class Inventory {
 				weaponList.add(new Weapon.Instance(Weapon.HANDAXE));
 			} else {
 				randomSimpleHelper(weaponList);
-				
+
 			}
 
 			// TODO - add explorer's pack
@@ -408,6 +599,14 @@ public class Inventory {
 		inventory.setWeapons(weaponList);
 		inventory.setArmor(armorList);
 		actor.setInventory(inventory);
+
+		// has to happen -AFTER- inventory assigned to character
+		inventory.optimizeArmor();
+		inventory.optimizeWeapons();
 	}
 
+	/*
+	 * COMPARATOR
+	 * 
+	 */
 }

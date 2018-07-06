@@ -1,4 +1,3 @@
-import java.util.HashSet;
 
 public class CombatBlock {
 	public enum Role {
@@ -17,116 +16,93 @@ public class CombatBlock {
 	// constructors
 	public CombatBlock(Actor owner) {
 		this.owner = owner;
-		Class job = owner.getJob();
-		Inventory inventory = owner.getInventory();
-
-		if (job.equals(Class.BARBARIAN)) {
-			this.role = Role.DEFENDER;
-		} else if (job.equals(Class.BARD)) {
-			this.role = Role.LEADER;
-		} else if (job.equals(Class.CLERIC)) {
-			this.role = Role.LEADER;
-		} else if (job.equals(Class.DRUID)) {
-			this.role = Role.LEADER;
-		} else if (job.equals(Class.FIGHTER)) {
-			this.role = Role.DEFENDER;
-		} else if (job.equals(Class.MONK)) {
-			this.role = Role.STRIKER;
-		} else if (job.equals(Class.PALADIN)) {
-			this.role = Role.DEFENDER;
-		} else if (job.equals(Class.RANGER)) {
-			this.role = Role.STRIKER;
-		} else if (job.equals(Class.ROGUE)) {
-			this.role = Role.STRIKER;
-		} else if (job.equals(Class.SORCERER)) {
-			this.role = Role.STRIKER;
-		} else if (job.equals(Class.WARLOCK)) {
-			this.role = Role.STRIKER;
-		} else if (job.equals(Class.WIZARD)) {
-			this.role = Role.CONTROLLER;
-		}
-
-		// TODO - to prevent this from being called 20 times
-		calcArmorClass();
-		calcHitPoints();
-		calcAttackBonus();
-		calcAverageDamage();
 	}
 
-	//
+	/*
+	 * INSTANCE METHODS
+	 * 
+	 */
 	public void update() {
-		calcArmorClass();
-		calcHitPoints();
-		calcAttackBonus();
-		calcAverageDamage();
+		// calcHitPoints();
 	}
 
-	public void calcArmorClass() {
-		// TODO
-		Inventory inventory = owner.getInventory();
-		armorClass = inventory.calcArmorClass();
+	public boolean hasOwner() {
+		return owner != null;
 	}
 
-	public void calcHitPoints() {
+	private void calcHitPoints() {
 		// TODO - doesn't take into account magical bonuses or other features
 		int level = owner.getLevel();
 		byte[] hitDice = owner.getHitDice();
-		int CON = owner.getConMod();
+		int conMod = owner.getConMod();
 
-		int hp = 0;
+		int hp = 0, perLevel = conMod;
 		for (int i = 0; i < level; ++i) {
-			hp += (hitDice[i] + CON > 0) ? hitDice[i] + CON : 1;
+			hp += (hitDice[i] + perLevel > 0) ? hitDice[i] + perLevel : 1;
 		}
 
-		hitPoints = hp;
+		this.hitPoints = hp;
 	}
 
-	public void calcAttackBonus() {
-		// TODO - doesn't take into account magical bonuses or other features
-		int proficiencyBonus = owner.getProficiencyBonus();
-		int str = owner.getStrMod(), dex = owner.getDexMod(), abilityMod = str;
+	private void calcArmorClass() {
+		int dexMod = owner.getDexMod(), conMod, wisMod, ac = 10 + dexMod;
+		Inventory gear = owner.getInventory();
 
-		Inventory inventory = owner.getInventory();
-		if (inventory.equippedWeapon()) {
-			Weapon weapon = inventory.getMainHand().getBaseWeaponType();
-			if (weapon.contains(Weapon.Trait.AMMUNITION))
-				abilityMod = dex;
-			else if (weapon.contains(Weapon.Trait.FINESSE))
-				abilityMod = (str >= dex) ? str : dex;
+		Class job = owner.getJob();
+		if (job.equals(Class.BARBARIAN)) {
+			// barbarian unarmored defense
+			conMod = owner.getConMod();
+
+			if (owner.notWearingArmor() && owner.usingShield())
+				ac = 10 + dexMod + conMod + gear.getShieldArmorBonus();
+			else if (owner.notWearingArmor())
+				ac = 10 + dexMod + conMod;
+			else if (owner.wearingArmor() && owner.usingShield())
+				ac = gear.getBodyArmorBonus() + gear.getShieldArmorBonus();
+			else if (owner.wearingArmor())
+				ac = gear.getBodyArmorBonus();
+
+		} else if (job.equals(Class.MONK)) {
+			// monk unarmored defense
+			wisMod = owner.getWisMod();
+
+			if (owner.notWearingArmor() && owner.notUsingShield())
+				ac = 10 + dexMod + wisMod;
+
+		} else {
+			// all others
+
+			if (owner.wearingArmor() && owner.usingShield())
+				ac = gear.getBodyArmorBonus() + gear.getShieldArmorBonus();
 			else
-				abilityMod = str;
+				ac = gear.getBodyArmorBonus();
 		}
 
-		attackBonus = proficiencyBonus + abilityMod;
+		this.armorClass = ac;
 	}
 
-	public void calcAverageDamage() {
-		// TODO - doesn't take into account magical bonuses or other features
-		int str = owner.getStrMod(), dex = owner.getDexMod(), abilityMod = str;
+	private void calcAttackBonus() {
+		int atk = 0, strMod = owner.getStrMod(), dexMod = owner.getDexMod();
+		Weapon.Instance weapon = owner.getInventory().getMainHand();
 
-		Inventory inventory = owner.getInventory();
-		if (inventory.equippedWeapon()) {
-			Weapon weapon = inventory.getMainHand().getBaseWeaponType();
-			if (weapon.contains(Weapon.Trait.AMMUNITION))
-				abilityMod = dex;
-			else if (weapon.contains(Weapon.Trait.FINESSE))
-				abilityMod = (str >= dex) ? str : dex;
-			else
-				abilityMod = str;
-		}
+		if (weapon != null && weapon.useDexterity())
+			atk += owner.getProficiencyBonus() + dexMod + weapon.getAttackBonus();
+		else if (weapon != null)
+			atk += owner.getProficiencyBonus() + strMod + weapon.getAttackBonus();
 
-		int extraAttackMultiplier = 1;
-		HashSet<Feature> features = owner.getFeatures();
-		// TODO
-		if (features.contains(Feature.EXTRA_ATTACK_1))
-			extraAttackMultiplier = 2;
-
-		averageDamage = (inventory.calcAverageDamage() + abilityMod) * extraAttackMultiplier;
+		this.attackBonus = atk;
 	}
 
-	// basic getter methods
-	public boolean hasOwner() {
-		return owner != null;
+	private void calcAverageDamage() {
+		int dmg = 0, strMod = owner.getStrMod(), dexMod = owner.getDexMod();
+		Weapon.Instance weapon = owner.getInventory().getMainHand();
+
+		if (weapon != null && weapon.useDexterity())
+			dmg += weapon.getAverageDamage() + dexMod + weapon.getAttackBonus();
+		else if (weapon != null)
+			dmg += weapon.getAverageDamage() + strMod + weapon.getAttackBonus();
+
+		this.averageDamage = dmg;
 	}
 
 	public Role getRole() {
@@ -147,5 +123,64 @@ public class CombatBlock {
 
 	public int getAverageDamage() {
 		return averageDamage;
+	}
+
+	public int getChallengeRating() {
+		return ChallengeRating.evaluateCR(owner);
+	}
+
+	public String toStringDetailed() {
+		int challengeRating = ChallengeRating.evaluateCR(owner);
+		int experienceValue = ChallengeRating.challengeToXP(challengeRating);
+		String string = String.format("AC %2d || %2d hp || %-2d (%2d) || CR %2d (%-2d)", armorClass, hitPoints,
+				attackBonus, averageDamage, challengeRating, experienceValue);
+
+		return string;
+	}
+
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
+	public static Role getRoleFromClass(Class job) {
+		Role role = null;
+
+		if (job.equals(Class.BARBARIAN))
+			role = Role.DEFENDER;
+		else if (job.equals(Class.BARD))
+			role = Role.LEADER;
+		else if (job.equals(Class.CLERIC))
+			role = Role.LEADER;
+		else if (job.equals(Class.DRUID))
+			role = Role.LEADER;
+		else if (job.equals(Class.FIGHTER))
+			role = Role.DEFENDER;
+		else if (job.equals(Class.MONK))
+			role = Role.STRIKER;
+		else if (job.equals(Class.PALADIN))
+			role = Role.DEFENDER;
+		else if (job.equals(Class.RANGER))
+			role = Role.STRIKER;
+		else if (job.equals(Class.ROGUE))
+			role = Role.STRIKER;
+		else if (job.equals(Class.SORCERER))
+			role = Role.STRIKER;
+		else if (job.equals(Class.WARLOCK))
+			role = Role.STRIKER;
+		else if (job.equals(Class.WIZARD))
+			role = Role.CONTROLLER;
+
+		return role;
+	}
+
+	public static void setupCombatBlock(Actor actor) {
+		CombatBlock combat = new CombatBlock(actor);
+
+		combat.calcArmorClass();
+		combat.calcHitPoints();
+		combat.calcAttackBonus();
+		combat.calcAverageDamage();
+		//
+		actor.setCombatBlock(combat);
 	}
 }

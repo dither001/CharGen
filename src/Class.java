@@ -116,31 +116,30 @@ public enum Class {
 		charisma = actor.getCharisma();
 
 		int dice = Dice.roll(4);
-		if (charisma > 11 && dice == 1) {
+		if (charisma > 11 && dice == 1)
 			job = BARD;
-		} else if (charisma > 11 && dice == 2) {
+		else if (charisma > 11 && dice == 2)
 			job = SORCERER;
-		} else if (charisma > 11 && dice == 3) {
+		else if (charisma > 11 && dice == 3)
 			job = WARLOCK;
-		} else if (wisdom > 11 && dice == 1) {
+		else if (wisdom > 11 && dice == 1)
 			job = CLERIC;
-		} else if (wisdom > 11 && dice == 2) {
+		else if (wisdom > 11 && dice == 2)
 			job = DRUID;
-		} else if (wisdom > 11 && dice == 3) {
+		else if (wisdom > 11 && dice == 3)
 			job = MONK;
-		} else if (intelligence > 11 && dice < 3) {
+		else if (intelligence > 11 && dice < 3)
 			job = WIZARD;
-		} else if (dexterity > 11 && dice < 3) {
+		else if (dexterity > 11 && dice < 3)
 			job = RANGER;
-		} else if (ali.equals(Actor.Alignment.GOOD)) {
+		else if (ali.equals(Actor.Alignment.GOOD))
 			job = PALADIN;
-		} else if (ali.equals(Actor.Alignment.CHAOTIC)) {
+		else if (ali.equals(Actor.Alignment.CHAOTIC))
 			job = BARBARIAN;
-		} else if (ali.equals(Actor.Alignment.LAWFUL) || dice < 4) {
+		else if (ali.equals(Actor.Alignment.LAWFUL) || dice < 4)
 			job = FIGHTER;
-		} else {
+		else
 			job = ROGUE;
-		}
 
 		return job;
 	}

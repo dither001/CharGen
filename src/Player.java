@@ -11,6 +11,7 @@ public class Player implements Actor {
 	private byte[] abilities;
 	private Size size;
 	private Creature creature;
+	private byte[] hitDice;
 
 	private Race race;
 	private Class job;
@@ -58,6 +59,11 @@ public class Player implements Actor {
 		career = Career.randomCareer();
 
 		//
+		this.level = 1;
+		this.experience = 0;
+		this.hitDice = Dice.rollHitDice(job);
+
+		//
 		Skill.setupClassSkills(this);
 		Skill.setupCareerSkills(this);
 		Skill.setupRacialSkills(this);
@@ -74,6 +80,7 @@ public class Player implements Actor {
 
 		// inventory setup
 		Inventory.setupStartingGear(this);
+		CombatBlock.setupCombatBlock(this);
 	}
 
 	@Override
@@ -106,12 +113,15 @@ public class Player implements Actor {
 
 	@Override
 	public String toStringDetailed() {
-		String string = String.format("%s the %s (%s) %s", name, job, archetype, career);
+		String string = String.format("%s the %s %s %s (%s)", name, alignment, race, job, archetype);
 
+		// creature line
+		// string += String.format("%n%s %s (%s) %s follower of %s", size, creature,
+		// race, alignment, god);
+		// combat line
+		string += "\n" + combat.toStringDetailed();
 		// abilities line
 		string += "\n" + abilitiesToString();
-		// abilities line
-		string += String.format("%n%s %s (%s) %s follower of %s", size, creature, race, alignment, god);
 		// skills line
 		// string += "\n" + skillsToString();
 		// armor line
@@ -174,8 +184,7 @@ public class Player implements Actor {
 
 	@Override
 	public byte[] getHitDice() {
-		// TODO Auto-generated method stub
-		return null;
+		return hitDice;
 	}
 
 	@Override
@@ -232,12 +241,6 @@ public class Player implements Actor {
 	@Override
 	public byte[] getAbilities() {
 		return abilities;
-	}
-
-	@Override
-	public int getProficiencyBonus() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -317,9 +320,13 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public int getChallengeRating() {
-		// TODO Auto-generated method stub
-		return 0;
+	public CombatBlock getCombatBlock() {
+		return combat;
+	}
+
+	@Override
+	public void setCombatBlock(CombatBlock combat) {
+		this.combat = combat;
 	}
 
 	@Override
@@ -331,9 +338,4 @@ public class Player implements Actor {
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
 	}
-
-	/*
-	 * INSTANCE METHODS
-	 * 
-	 */
 }

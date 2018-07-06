@@ -72,6 +72,24 @@ public enum Armor {
 		public String toString() {
 			return prototype.armor.toString();
 		}
+
+		@Override
+		public boolean isCursed() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public int getArmorBonus() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int getAttackBonus() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 	}
 
 	/*

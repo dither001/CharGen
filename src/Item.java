@@ -52,6 +52,8 @@ public interface Item {
 	public static interface ItemList<T> extends List<T> {
 	};
 
+	public boolean isCursed();
+
 	// public String getName();
 	//
 	// public float getBaseWeight();
@@ -62,6 +64,12 @@ public interface Item {
 	//
 	// public boolean requiresAttunement();
 	//
-	// public boolean isCursed();
 
+	public int getArmorBonus();
+
+	public int getAttackBonus();
+
+	public default boolean notCursed() {
+		return isCursed() != true;
+	}
 }
