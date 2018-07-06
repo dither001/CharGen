@@ -1,8 +1,6 @@
-import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Vector;
 
 public class Main {
 	private static int PCS_TO_ROLL = 50;
@@ -15,113 +13,234 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		// rollRogues();
-		// setupActorLadder();
-		// characterAdvance(Class.BARBARIAN);
-		// rollCharacter();
+		// jobProportions();
+		// raceProportions();
+		// alignmentProportions();
+		// deityProportions();
+		// rollCharacters();
+		levelUpTest(Class.BARBARIAN);
 
 	}
 
-	public static void characterAdvance(Class job) {
-		Actor test = new Actor();
-		while (test.getJob().equals(job) != true) {
-			test = new Actor();
+	public static void levelUpTest(Class job) {
+		Player player;
+		player = new Player();
+		while (player.getJob().equals(job) != true) {
+			player = new Player();
+
 		}
 
-		rollCharacter(test);
-		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
+		for (int i = 1; i < 20; ++i) {
+			player.setExp(500000);
+			player.advance();
 
-		for (int i = 0; test.getLevel() < 20 && i < 50; ++i) {
-			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
-			test.advance();
-			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
-			rollCharacter(test);
-		}
-	}
-
-	public static void spellbookTest() {
-		Actor test = new Actor();
-		while (test.getJob().equals(Class.WIZARD) != true) {
-			test = new Actor();
-		}
-
-		rollCharacter(test);
-		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
-
-		for (int i = 0; test.getLevel() < 20 && i < 50; ++i) {
-			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
-			test.advance();
-			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
-			rollCharacter(test);
-		}
-	}
-
-	public static void levelUpTest() {
-		Actor test = new Actor();
-		while (test.getJob().equals(Class.BARBARIAN) != true) {
-			test = new Actor();
-		}
-
-		rollCharacter(test);
-		System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
-
-		for (int i = 0; test.getLevel() < 20 && i < 50; ++i) {
-			test.gainEXP(((i + 1000) * (i + 1)) + test.getEXP());
-			test.advance();
-			System.out.println(String.format("%2d: %7d", test.getLevel(), test.getEXP()));
-			rollCharacter(test);
-		}
-	}
-
-	public static void setupActorLadder() {
-		Vector<Actor> actors = new Vector<Actor>();
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			actors.add(new Actor());
-		}
-
-		Ladder<Actor> ladder = new Ladder<Actor>();
-		for (int i = 0; i < actors.size(); ++i) {
-			ladder.add(actors.get(i));
-
-			// if (i > 20)
-			// System.out.println(ladder.size());
-		}
-
-		// System.out.println();
-		// System.out.println(ladder.toString());
-		System.out.println();
-		System.out.println("Hierarch: " + ladder.getHierarch().toString());
-		System.out.println();
-
-		// test contains
-		// int contains = 0;
-		// for (int i = 0; i < actors.size(); ++i) {
-		// contains += (ladder.contains(actors.get(i))) ? 1 : 0;
-		// }
-		// System.out.println("Ladder contains " + contains + " of " + actors.size() + "
-		// actors added.");
-
-		// for (int i = 0; i < 10; ++i) {
-		// ladder.updateTurn();
-		//
-		// System.out.println();
-		// System.out.println(ladder.toString());
-		// }
-
-		int previous = 0;
-		while (ladder.hierarchTurns() < 20) {
-			ladder.update();
-
+			System.out.println(player.toStringDetailed());
 			System.out.println();
-			if (ladder.hierarchTurns() == previous) {
-				// System.out.println(ladder.toString());
-				++previous;
-			}
 		}
-		ladder.printTurnsDescending();
+	}
+	
+	public static void rollCharactersOfClass(Class job) {
+		Player player;
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			player = new Player();
+			while (player.getJob().equals(job) != true) {
+				player = new Player();
 
-		// System.out.println(ladder.readyToAct().toString());
+			}
+			System.out.println(player.toStringDetailed());
+			System.out.println();
+		}
 
+	}
+
+	public static void rollCharacters() {
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			rollOneCharacter();
+		}
+	}
+
+	public static void rollOneCharacter() {
+		System.out.println(new Player().toStringDetailed());
+		System.out.println();
+	}
+
+	public static void deityProportions() {
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		Deity[] gods = new Deity[] { Deity.ASMODEUS, Deity.AVANDRA, Deity.BAHAMUT, Deity.BANE, Deity.CORELLON,
+				Deity.ERATHIS, Deity.GRUUMSH, Deity.IOUN, Deity.KORD, Deity.LOLTH, Deity.MELORA, Deity.MORADIN,
+				Deity.PELOR, Deity.RAVEN_QUEEN, Deity.SEHANINE, Deity.THARIZDUN, Deity.TIAMAT, Deity.TOROG, Deity.VECNA,
+				Deity.ZEHIR };
+
+		Player player;
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			player = new Player();
+
+			if (player.getDeity().equals(Deity.ASMODEUS))
+				++array[0];
+			else if (player.getDeity().equals(Deity.AVANDRA))
+				++array[1];
+			else if (player.getDeity().equals(Deity.BAHAMUT))
+				++array[2];
+			else if (player.getDeity().equals(Deity.BANE))
+				++array[3];
+			else if (player.getDeity().equals(Deity.CORELLON))
+				++array[4];
+			else if (player.getDeity().equals(Deity.ERATHIS))
+				++array[5];
+			else if (player.getDeity().equals(Deity.GRUUMSH))
+				++array[6];
+			else if (player.getDeity().equals(Deity.IOUN))
+				++array[7];
+			else if (player.getDeity().equals(Deity.KORD))
+				++array[8];
+			else if (player.getDeity().equals(Deity.LOLTH))
+				++array[9];
+			else if (player.getDeity().equals(Deity.MELORA))
+				++array[10];
+			else if (player.getDeity().equals(Deity.MORADIN))
+				++array[11];
+			else if (player.getDeity().equals(Deity.PELOR))
+				++array[12];
+			else if (player.getDeity().equals(Deity.RAVEN_QUEEN))
+				++array[13];
+			else if (player.getDeity().equals(Deity.SEHANINE))
+				++array[14];
+			else if (player.getDeity().equals(Deity.THARIZDUN))
+				++array[15];
+			else if (player.getDeity().equals(Deity.TIAMAT))
+				++array[16];
+			else if (player.getDeity().equals(Deity.TOROG))
+				++array[17];
+			else if (player.getDeity().equals(Deity.VECNA))
+				++array[18];
+			else if (player.getDeity().equals(Deity.ZEHIR))
+				++array[19];
+		}
+
+		for (int i = 0; i < gods.length; ++i) {
+			String string = String.format("%12s %5d (%5.1f)", gods[i], array[i], (0.0 + array[i]) / PCS_TO_ROLL * 100);
+			System.out.println(string);
+		}
+	}
+
+	public static void jobProportions() {
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+		Player player;
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			player = new Player();
+
+			if (player.getJob().equals(Class.BARBARIAN))
+				++array[0];
+			else if (player.getJob().equals(Class.BARD))
+				++array[1];
+			else if (player.getJob().equals(Class.CLERIC))
+				++array[2];
+			else if (player.getJob().equals(Class.DRUID))
+				++array[3];
+			else if (player.getJob().equals(Class.FIGHTER))
+				++array[4];
+			else if (player.getJob().equals(Class.MONK))
+				++array[5];
+			else if (player.getJob().equals(Class.PALADIN))
+				++array[6];
+			else if (player.getJob().equals(Class.RANGER))
+				++array[7];
+			else if (player.getJob().equals(Class.ROGUE))
+				++array[8];
+			else if (player.getJob().equals(Class.SORCERER))
+				++array[9];
+			else if (player.getJob().equals(Class.WARLOCK))
+				++array[10];
+			else if (player.getJob().equals(Class.WIZARD))
+				++array[11];
+		}
+
+		Class[] jobs = new Class[] { Class.BARBARIAN, Class.BARD, Class.CLERIC, Class.DRUID, Class.FIGHTER, Class.MONK,
+				Class.PALADIN, Class.RANGER, Class.ROGUE, Class.SORCERER, Class.WARLOCK, Class.WIZARD };
+		for (int i = 0; i < jobs.length; ++i) {
+			String string = String.format("%10s %5d (%5.1f)", jobs[i], array[i], (0.0 + array[i]) / PCS_TO_ROLL * 100);
+			System.out.println(string);
+		}
+	}
+
+	public static void raceProportions() {
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		int elves = 0;
+
+		Player player;
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			player = new Player();
+
+			if (player.getRace().equals(Race.HUMAN))
+				++array[0];
+			else if (player.getRace().equals(Race.DWARF))
+				++array[1];
+			else if (player.getRace().equals(Race.HIGH_ELF)) {
+				++array[2];
+				++elves;
+
+			} else if (player.getRace().equals(Race.WOOD_ELF)) {
+				++array[3];
+				++elves;
+
+			} else if (player.getRace().equals(Race.HALFLING))
+				++array[4];
+			else if (player.getRace().equals(Race.DRAGONBORN))
+				++array[5];
+			else if (player.getRace().equals(Race.DARK_ELF)) {
+				++array[6];
+				++elves;
+
+			} else if (player.getRace().equals(Race.GNOME))
+				++array[7];
+			else if (player.getRace().equals(Race.HALF_ELF))
+				++array[8];
+			else if (player.getRace().equals(Race.HALF_ORC))
+				++array[9];
+			else if (player.getRace().equals(Race.TIEFLING))
+				++array[10];
+		}
+
+		Race[] races = new Race[] { Race.HUMAN, Race.DWARF, Race.HIGH_ELF, Race.WOOD_ELF, Race.HALFLING,
+				Race.DRAGONBORN, Race.DARK_ELF, Race.GNOME, Race.HALF_ELF, Race.HALF_ORC, Race.TIEFLING };
+		String string;
+		for (int i = 0; i < races.length; ++i) {
+			string = String.format("%12s %5d (%5.1f)", races[i], array[i], (0.0 + array[i]) / PCS_TO_ROLL * 100);
+			System.out.println(string);
+		}
+
+		System.out.println();
+		string = String.format("%12s %5d (%5.1f)", "Total Elves", elves, (0.0 + elves) / PCS_TO_ROLL * 100);
+		System.out.println(string);
+	}
+
+	public static void alignmentProportions() {
+		int[] array = new int[] { 0, 0, 0, 0, 0 };
+
+		Player player;
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			player = new Player();
+
+			if (player.getAlignment().equals(Actor.Alignment.LAWFUL))
+				++array[0];
+			else if (player.getAlignment().equals(Actor.Alignment.GOOD))
+				++array[1];
+			else if (player.getAlignment().equals(Actor.Alignment.NEUTRAL))
+				++array[2];
+			else if (player.getAlignment().equals(Actor.Alignment.EVIL))
+				++array[3];
+			else if (player.getAlignment().equals(Actor.Alignment.CHAOTIC))
+				++array[4];
+		}
+
+		Actor.Alignment[] alignments = new Actor.Alignment[] { Actor.Alignment.LAWFUL, Actor.Alignment.GOOD,
+				Actor.Alignment.NEUTRAL, Actor.Alignment.EVIL, Actor.Alignment.CHAOTIC };
+		for (int i = 0; i < alignments.length; ++i) {
+			String string = String.format("%10s %5d (%5.1f)", alignments[i], array[i],
+					(0.0 + array[i]) / PCS_TO_ROLL * 100);
+			System.out.println(string);
+		}
 	}
 
 	public static void agendaReaction() {
@@ -157,12 +276,12 @@ public class Main {
 	}
 
 	public static void rollOneSpellbook(int bookLevel) {
-		HashSet<Spells> spellbook = Spells.randomWizardSpellbook(bookLevel);
-		Spells[][] spellsByLevel = new Spells[10][8];
+		HashSet<Spell> spellbook = Spell.randomWizardSpellbook(bookLevel);
+		Spell[][] spellsByLevel = new Spell[10][8];
 
-		Spells current;
+		Spell current;
 		int level;
-		for (Iterator<Spells> it = spellbook.iterator(); it.hasNext();) {
+		for (Iterator<Spell> it = spellbook.iterator(); it.hasNext();) {
 			current = it.next();
 			level = current.getLevel();
 
@@ -175,9 +294,9 @@ public class Main {
 		}
 
 		int spellsPrinted;
-		for (Spells[] em : spellsByLevel) {
+		for (Spell[] em : spellsByLevel) {
 			spellsPrinted = 0;
-			for (Spells el : em) {
+			for (Spell el : em) {
 				if (el != null) {
 					++spellsPrinted;
 					System.out.print(el.toString() + ", ");
@@ -189,137 +308,6 @@ public class Main {
 		}
 
 		System.out.println();
-	}
-
-	public static void rollCharacter() {
-		rollCharacter(new Actor());
-	}
-
-	public static void rollCharacter(Class job) {
-		Actor test = new Actor();
-		while (test.getJob().equals(job) != true) {
-			test = new Actor();
-		}
-
-		rollCharacter(test);
-	}
-
-	public static void rollArcaneTrickster() {
-		Actor test = new Actor();
-		while (test.getArchetype().equals(Class.Subclass.ARCANE_TRICKSTER) != true) {
-			test = new Actor();
-		}
-
-		rollCharacter(test);
-	}
-
-	public static void rollEldritchKnight() {
-		Actor test = new Actor();
-		while (test.getArchetype().equals(Class.Subclass.ELDRITCH_KNIGHT) != true) {
-			test = new Actor();
-		}
-
-		rollCharacter(test);
-	}
-
-	public static void rollCharacter(Actor actor) {
-		int ac = actor.getArmorClass(), hp = actor.getHitPoints();
-		int atk = actor.getAttackBonus(), dmg = actor.getAverageDamage();
-
-		int rating = ChallengeRating.evaluateCR(actor);
-		int dCR = ChallengeRating.defenseRating(hp, ac);
-		int oCR = ChallengeRating.offenseRating(atk, dmg);
-
-		System.out.print("Name");
-		System.out.print(" " + actor.getAli().toString());
-		System.out.print(" " + actor.getRace().toString());
-		System.out.print(" " + actor.getCareer().toString());
-		System.out.print(" " + actor.getJob().toString());
-		System.out.print(" (" + actor.getArchetype().toString() + ")");
-		System.out.print(" " + actor.getDeity().toString());
-		System.out.print(" (" + actor.getEXPRate() + ")");
-
-		// System.out.println();
-		// System.out.print(actor.getTraitOne() + "\n");
-		// System.out.print(actor.getTraitTwo() + "\n");
-		// System.out.print(actor.getIdeal() + "\n");
-		// System.out.print(actor.getBond() + "\n");
-		// System.out.print(actor.getFlaw());
-
-		System.out.println("");
-		// String s = String.format("AC %2d hp %3d atk +%-2d (%2d) || oCR %2d dCR %2d",
-		// ac, hp, atk, dmg, oCR, dCR);
-		String s = String.format("AC %2d hp %3d atk %2d (%2d) || CR %2d", ac, hp, atk, dmg, rating);
-		System.out.print(s);
-		System.out.print(" || exp " + ChallengeRating.challengeToXP(rating));
-
-		if (actor.getInventory().equippedWeapon()) {
-			GameWeapon weapon = actor.getInventory().getMainHand();
-
-			System.out.println("");
-			System.out.print("Wielding " + weapon.toString());
-
-			Weapon.Trait[] traits = weapon.getBasicTraits();
-			if (traits.length > 0) {
-				for (int i = 0; i < traits.length; ++i) {
-					if (i == 0)
-						System.out.print(" [" + traits[i]);
-
-					if (i > 0)
-						System.out.print(", " + traits[i]);
-
-					if (i == traits.length - 1)
-						System.out.print("]");
-				}
-			}
-		}
-
-		if (actor.getInventory().equippedOffHand()) {
-			GameWeapon weapon = actor.getInventory().getOffHand();
-
-			System.out.println("");
-			System.out.print("Wielding " + weapon.toString());
-
-			Weapon.Trait[] traits = weapon.getBasicTraits();
-			if (traits.length > 0) {
-				for (int i = 0; i < traits.length; ++i) {
-					if (i == 0)
-						System.out.print(" [" + traits[i]);
-
-					if (i > 0)
-						System.out.print(", " + traits[i]);
-
-					if (i == traits.length - 1)
-						System.out.print("]");
-				}
-			}
-		}
-
-		// TODO - used below
-		Spellcasting spellcasting = actor.getSpellcasting();
-		// HashSet<Proficiency> skills = Skills.filterForSkills(actor);
-
-		System.out.println("");
-		System.out.print(actor.getAbilities().toString());
-		// System.out.println("");
-		// System.out.print(actor.getInventory().toString());
-		System.out.println("");
-		System.out.print(actor.getSkills().toString());
-		System.out.println("");
-		System.out.print(actor.getFeatures().toString());
-		if (spellcasting != null) {
-			if (spellcasting.hasSpells()) {
-				System.out.println("");
-				System.out.println("Spells known: " + spellcasting.getSpellsKnown().size());
-				System.out.println(spellcasting.getSpellsKnown().toString());
-			}
-			if (spellcasting.hasCantrips())
-				System.out.println(actor.getCantrips().toString());
-		}
-
-		System.out.println("");
-		System.out.println("");
-
 	}
 
 }
