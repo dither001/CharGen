@@ -1,8 +1,5 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashSet;
 
 public enum Feature {
 	ABILITY_BONUS_4, ABILITY_BONUS_6, ABILITY_BONUS_8, ABILITY_BONUS_10, ABILITY_BONUS_12, ABILITY_BONUS_14, ABILITY_BONUS_16, ABILITY_BONUS_19, STR_BONUS_4, STR_BONUS_6, STR_BONUS_8, STR_BONUS_10, STR_BONUS_12, STR_BONUS_14, STR_BONUS_16, STR_BONUS_19, DEX_BONUS_4, DEX_BONUS_6, DEX_BONUS_8, DEX_BONUS_10, DEX_BONUS_12, DEX_BONUS_14, DEX_BONUS_16, DEX_BONUS_19, CON_BONUS_4, CON_BONUS_6, CON_BONUS_8, CON_BONUS_10, CON_BONUS_12, CON_BONUS_14, CON_BONUS_16, CON_BONUS_19, INT_BONUS_4, INT_BONUS_6, INT_BONUS_8, INT_BONUS_10, INT_BONUS_12, INT_BONUS_14, INT_BONUS_16, INT_BONUS_19, WIS_BONUS_4, WIS_BONUS_6, WIS_BONUS_8, WIS_BONUS_10, WIS_BONUS_12, WIS_BONUS_14, WIS_BONUS_16, WIS_BONUS_19, CHA_BONUS_4, CHA_BONUS_6, CHA_BONUS_8, CHA_BONUS_10, CHA_BONUS_12, CHA_BONUS_14, CHA_BONUS_16, CHA_BONUS_19, EXPERTISE_ATHLETICS, EXPERTISE_ACROBATICS, EXPERTISE_SLEIGHT_OF_HAND, EXPERTISE_STEALTH, EXPERTISE_ARCANA, EXPERTISE_HISTORY, EXPERTISE_INVESTIGATION, EXPERTISE_NATURE, EXPERTISE_RELIGION, EXPERTISE_ANIMAL_HANDLING, EXPERTISE_INSIGHT, EXPERTISE_MEDICINE, EXPERTISE_PERCEPTION, EXPERTISE_SURVIVAL, EXPERTISE_DECEPTION, EXPERTISE_INTIMIDATION, EXPERTISE_PERFORMANCE, EXPERTISE_PERSUASION, RAGE, RAGE_PER_DAY_2, RAGE_PER_DAY_3, RAGE_PER_DAY_4, RAGE_PER_DAY_5, RAGE_PER_DAY_6, RAGE_PER_DAY_99, RAGE_BONUS_2, RAGE_BONUS_3, RAGE_BONUS_4, UNARMORED_DEFENSE_BARBARIAN, RECKLESS_ATTACK, DANGER_SENSE, EXTRA_ATTACK_1, FAST_MOVEMENT, FERAL_INSTINCT, BRUTAL_CRITICAL_1, RELENTLESS_RAGE, BRUTAL_CRITICAL_2, PERSISTENT_RAGE, BRUTAL_CRITICAL_3, INDOMITABLE_MIGHT, PRIMAL_CHAMPION, FRENZY, MINDLESS_RAGE, INTIMIDATING_PRESENCE, RETALIATION, SPIRIT_SEEKER, BEAR_SPIRIT_3, EAGLE_SPIRIT_3, WOLF_SPIRIT_3, BEAR_ASPECT_6, EAGLE_ASPECT_6, WOLF_ASPECT_6, SPIRIT_WALKER, BEAR_ATTUNEMENT_14, EAGLE_ATTUNEMENT_14, WOLF_ATTUNEMENT_14, BARD_CANTRIPS_2, BARD_CANTRIPS_3, BARD_CANTRIPS_4, INSPIRATION_D6, JACK_OF_ALL_TRADES, SONG_OF_REST_D6, INSPIRATION_D8, FONT_OF_INSPIRATION, COUNTERCHARM, SONG_OF_REST_D8, INSPIRATION_D10, MAGICAL_SECRETS_10, SONG_OF_REST_D10, MAGICAL_SECRETS_14, INSPIRATION_D12, SONG_OF_REST_D12, MAGICAL_SECRETS_18, SUPERIOR_INSPIRATION, CUTTING_WORDS, MAGICAL_SECRETS_6, PEERLESS_SKILL, COMBAT_INSPIRATION, BATTLE_MAGIC;
@@ -43,7 +40,7 @@ public enum Feature {
 		int count = 0;
 		Class job = actor.getJob();
 
-		HashSet<Feature> list = new HashSet<Feature>(actor.getFeatures());
+		EnumSet<Feature> list = EnumSet.copyOf(actor.getFeatures());
 
 		if (job.equals(Class.BARD)) {
 			list.retainAll(Arrays.asList(bardCantrips));
@@ -53,22 +50,26 @@ public enum Feature {
 		return count;
 	}
 
-	public static HashSet<Feature> getClassFeatures(Actor actor) {
-		HashSet<Feature> list = new HashSet<Feature>();
+	public static void updateClassFeatures(Actor actor) {
+		EnumSet<Feature> features;
+		if (actor.getFeatures() == null)
+			features = EnumSet.noneOf(Feature.class);
+		else
+			features = actor.getFeatures();
+
 		// TODO
 		Class job = actor.getJob();
-
 		if (job.equals(Class.BARBARIAN)) {
-			list.addAll(barbarian(actor));
+			features.addAll(barbarian(actor));
 		} else if (job.equals(Class.BARD)) {
-			list.addAll(bard(actor));
+			features.addAll(bard(actor));
 		}
 
-		return list;
+		actor.setFeatures(features);
 	}
 
-	public static HashSet<Feature> getRacialFeatures(Actor actor) {
-		HashSet<Feature> list = new HashSet<Feature>();
+	public static EnumSet<Feature> getRacialFeatures(Actor actor) {
+		EnumSet<Feature> list = EnumSet.noneOf(Feature.class);
 		// TODO
 
 		return list;
@@ -228,7 +229,7 @@ public enum Feature {
 		EnumSet<Feature> features = actor.getFeatures();
 
 		int added = 0;
-		Feature expertise; 
+		Feature expertise;
 		while (added < toAdd) {
 			expertise = matchExpertiseToSkill(Dice.randomFromSet(skills));
 
@@ -541,9 +542,9 @@ public enum Feature {
 	//
 	// }
 
-	public static HashSet<Feature> blank(Actor actor) {
+	public static EnumSet<Feature> blank(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
-		HashSet<Feature> list = new HashSet<Feature>();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
 		if (level == 1) {
@@ -553,8 +554,8 @@ public enum Feature {
 		} else if (level == 3) {
 
 		} else if (level == 4) {
-			list.add(ABILITY_BONUS_4);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
 		} else if (level == 5) {
 
 		} else if (level == 6) {
@@ -562,8 +563,8 @@ public enum Feature {
 		} else if (level == 7) {
 
 		} else if (level == 8) {
-			list.add(ABILITY_BONUS_8);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
 		} else if (level == 9) {
 
 		} else if (level == 10) {
@@ -571,8 +572,8 @@ public enum Feature {
 		} else if (level == 11) {
 
 		} else if (level == 12) {
-			list.add(ABILITY_BONUS_12);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
 		} else if (level == 13) {
 
 		} else if (level == 14) {
@@ -580,19 +581,19 @@ public enum Feature {
 		} else if (level == 15) {
 
 		} else if (level == 16) {
-			list.add(ABILITY_BONUS_16);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
 		} else if (level == 17) {
 
 		} else if (level == 18) {
 
 		} else if (level == 19) {
-			list.add(ABILITY_BONUS_19);
-			list.add(abilityImprove(actor));
+			set.add(ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
 		} else if (level == 20) {
 
 		}
 
-		return list;
+		return set;
 	}
 }

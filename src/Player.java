@@ -71,6 +71,7 @@ public class Player implements Actor {
 		Actor.Language.setupLanguages(this);
 		Armor.setupArmorProficiency(this);
 		Weapon.setupWeaponProficiency(this);
+		Feature.updateClassFeatures(this);
 
 		// final step after class/subclass chosen
 		Class.additionalSetup(this);
@@ -96,8 +97,8 @@ public class Player implements Actor {
 	}
 
 	private String abilitiesToString() {
-		String string = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", abilityScores[0], abilityScores[1], abilityScores[2],
-				abilityScores[3], abilityScores[4], abilityScores[5]);
+		String string = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", abilityScores[0], abilityScores[1],
+				abilityScores[2], abilityScores[3], abilityScores[4], abilityScores[5]);
 
 		return string;
 	}
@@ -114,7 +115,7 @@ public class Player implements Actor {
 
 	@Override
 	public String toStringDetailed() {
-		String string = String.format("%s the %s %s %s (%s)", name, alignment, race, job, archetype);
+		String string = String.format("%s the level %d %s %s (%s)", name, level, race, job, archetype);
 
 		// creature line
 		// string += String.format("%n%s %s (%s) %s follower of %s", size, creature,
@@ -133,6 +134,8 @@ public class Player implements Actor {
 		// string += "\n" + languages.toString();
 		// inventory line
 		string += "\n" + inventory.toStringDetailed();
+		// features line
+		string += "\n" + features.toString();
 
 		return string;
 	}
@@ -214,7 +217,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public Spellcasting getSpellCasting() {
+	public Spellcasting getSpellcasting() {
 		return spellcasting;
 	}
 
@@ -234,7 +237,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public int getExp() {
+	public int getExperience() {
 		return experience;
 	}
 

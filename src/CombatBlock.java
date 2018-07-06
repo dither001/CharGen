@@ -23,7 +23,10 @@ public class CombatBlock {
 	 * 
 	 */
 	public void update() {
-		// calcHitPoints();
+		calcArmorClass();
+		calcHitPoints();
+		calcAttackBonus();
+		calcAverageDamage();
 	}
 
 	public boolean hasOwner() {

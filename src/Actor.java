@@ -181,7 +181,7 @@ public interface Actor {
 
 	public Race getRace();
 
-	public Spellcasting getSpellCasting();
+	public Spellcasting getSpellcasting();
 
 	public Career getCareer();
 
@@ -189,7 +189,7 @@ public interface Actor {
 
 	public void setLevel(int level);
 
-	public int getExp();
+	public int getExperience();
 
 	public void setExp(int exp);
 
@@ -239,6 +239,34 @@ public interface Actor {
 	 * DEFAULT METHODS
 	 * 
 	 */
+	public default void advance() {
+		boolean advanced = advancementCheck();
+		
+		if (advanced) {
+			// TODO
+			Feature.updateClassFeatures(this);
+			getCombatBlock().update();
+
+		}
+	}
+
+	public default boolean advancementCheck() {
+		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,
+				165000, 195000, 225000, 265000, 305000, 355000 };
+		int currentLevel = getLevel(), currentEXP = getExperience();
+
+		boolean advanced = false;
+		if (currentLevel < 20 && currentEXP >= requires[currentLevel]) {
+			setLevel(currentLevel + 1);
+			advanced = true;
+
+			if (currentLevel < 19 && currentEXP >= requires[currentLevel + 1])
+				currentEXP = requires[currentLevel + 1] - 1;
+		}
+		
+		return advanced;
+	}
+
 	public default int getProficiencyBonus() {
 		int bonus, level = getLevel();
 		if (level > 16)
