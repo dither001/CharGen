@@ -36,36 +36,6 @@ public enum Feature {
 	/*
 	 * STATIC METHODS
 	 */
-	public static HashSet<Feature> getSTRBonuses() {
-		HashSet<Feature> set = new HashSet<Feature>(Arrays.asList(STR_BONUSES));
-		return set;
-	}
-
-	public static HashSet<Feature> getDEXBonuses() {
-		HashSet<Feature> set = new HashSet<Feature>(Arrays.asList(DEX_BONUSES));
-		return set;
-	}
-
-	public static HashSet<Feature> getCONBonuses() {
-		HashSet<Feature> set = new HashSet<Feature>(Arrays.asList(CON_BONUSES));
-		return set;
-	}
-
-	public static HashSet<Feature> getINTBonuses() {
-		HashSet<Feature> set = new HashSet<Feature>(Arrays.asList(INT_BONUSES));
-		return set;
-	}
-
-	public static HashSet<Feature> getWISBonuses() {
-		HashSet<Feature> set = new HashSet<Feature>(Arrays.asList(WIS_BONUSES));
-		return set;
-	}
-
-	public static HashSet<Feature> getCHABonuses() {
-		HashSet<Feature> set = new HashSet<Feature>(Arrays.asList(CHA_BONUSES));
-		return set;
-	}
-
 	public static int cantripCount(Actor actor) {
 		// TODO - add cantrips array for each class as they're added
 		Feature[] bardCantrips = { BARD_CANTRIPS_2, BARD_CANTRIPS_3, BARD_CANTRIPS_4 };
@@ -126,13 +96,12 @@ public enum Feature {
 		else if (level == 19)
 			index = 7;
 
-		AbilityArray abilities = actor.getAbilities();
-		int STR = abilities.getSTR(), DEX = abilities.getDEX(), CON = abilities.getCON();
-		int INT = abilities.getINT(), WIS = abilities.getWIS(), CHA = abilities.getCHA();
+		int STR = actor.getStrength(), DEX = actor.getDexterity(), CON = actor.getConstitution();
+		int INT = actor.getIntelligence(), WIS = actor.getWisdom(), CHA = actor.getCharisma();
 
 		// maximum scores
-		int maxSTR = abilities.getMaxSTR(), maxDEX = abilities.getMaxDEX(), maxCON = abilities.getMaxCON();
-		int maxINT = abilities.getMaxINT(), maxWIS = abilities.getMaxWIS(), maxCHA = abilities.getMaxCHA();
+		int maxSTR = actor.getMaxSTR(), maxDEX = actor.getMaxDEX(), maxCON = actor.getMaxCON();
+		int maxINT = actor.getMaxINT(), maxWIS = actor.getMaxWIS(), maxCHA = actor.getMaxCHA();
 
 		Class job = actor.getJob();
 		if (job.equals(Class.BARBARIAN)) {

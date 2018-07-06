@@ -3,12 +3,12 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Player implements Actor {
-
 	/*
 	 * INSTANCE FIELDS
 	 * 
 	 */
-	private byte[] abilities;
+	private byte[] abilityScores;
+	private byte[] abilityCeiling;
 	private Size size;
 	private Creature creature;
 	private byte[] hitDice;
@@ -48,7 +48,8 @@ public class Player implements Actor {
 		name = "Default";
 
 		//
-		abilities = Dice.rollAbilities();
+		abilityScores = Dice.rollAbilities();
+		abilityCeiling = new byte[] { 20, 20, 20, 20, 20, 20 };
 		alignment = Actor.Alignment.random();
 
 		//
@@ -95,8 +96,8 @@ public class Player implements Actor {
 	}
 
 	private String abilitiesToString() {
-		String string = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", abilities[0], abilities[1], abilities[2],
-				abilities[3], abilities[4], abilities[5]);
+		String string = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", abilityScores[0], abilityScores[1], abilityScores[2],
+				abilityScores[3], abilityScores[4], abilityScores[5]);
 
 		return string;
 	}
@@ -188,6 +189,16 @@ public class Player implements Actor {
 	}
 
 	@Override
+	public EnumSet<Feature> getFeatures() {
+		return features;
+	}
+
+	@Override
+	public void setFeatures(EnumSet<Feature> features) {
+		this.features = features;
+	}
+
+	@Override
 	public Class getJob() {
 		return job;
 	}
@@ -239,8 +250,13 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public byte[] getAbilities() {
-		return abilities;
+	public byte[] getAbilityScores() {
+		return abilityScores;
+	}
+
+	@Override
+	public byte[] getAbilityCeiling() {
+		return abilityCeiling;
 	}
 
 	@Override

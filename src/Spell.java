@@ -640,7 +640,7 @@ public enum Spell {
 	public static HashSet<Spell> fighterCantripSetup(Actor actor) {
 		HashSet<Spell> toAdd = new HashSet<Spell>();
 
-		if (actor.getAbilities().getINT() > 11) {
+		if (actor.getAbilityScores().getINT() > 11) {
 			while (toAdd.size() < 3)
 				toAdd.add(randomWizardCantrip());
 		} else {
@@ -658,7 +658,7 @@ public enum Spell {
 		// every ARCANE TRICKSTER learns mage hand
 		toAdd.add(MAGE_HAND);
 
-		if (actor.getAbilities().getINT() > 11) {
+		if (actor.getAbilityScores().getINT() > 11) {
 			while (toAdd.size() < 3)
 				toAdd.add(randomWizardCantrip());
 		} else {
