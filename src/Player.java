@@ -20,7 +20,7 @@ public class Player implements Actor {
 
 	private Deity god;
 	private Actor.Alignment alignment;
-	private Career career;
+	private Career.Profile career;
 
 	// proficiency
 	private EnumSet<Armor> armor;
@@ -57,7 +57,7 @@ public class Player implements Actor {
 		archetype = Class.Subclass.selectSubclass(this);
 		race = Race.selectRace();
 		god = Deity.selectDeity(this);
-		career = Career.randomCareer();
+		career = new Career.Profile(this);
 
 		//
 		this.level = 1;
@@ -136,6 +136,8 @@ public class Player implements Actor {
 		string += "\n" + inventory.toStringDetailed();
 		// features line
 		string += "\n" + features.toString();
+		// profile line
+		// string += "\n" + career.toStringDetailed();
 
 		return string;
 	}
@@ -222,7 +224,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public Career getCareer() {
+	public Career.Profile getCareer() {
 		return career;
 	}
 

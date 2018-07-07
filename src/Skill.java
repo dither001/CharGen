@@ -157,7 +157,7 @@ public enum Skill {
 		else
 			skills = actor.getSkills();
 
-		Career job = actor.getCareer();
+		Career.Profile job = actor.getCareer();
 		int addedSkills = 0, skillsToAdd = 2;
 		// TODO
 		Skill[] array = null;

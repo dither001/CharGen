@@ -3,7 +3,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
-	private static int PCS_TO_ROLL = 50;
+	private static int PCS_TO_ROLL = 5;
 	private static int SPELLBOOK_LEVEL = 17;
 
 	//
@@ -17,8 +17,8 @@ public class Main {
 		// raceProportions();
 		// alignmentProportions();
 		// deityProportions();
-		// rollCharacters();
-		levelUpTest(Class.BARBARIAN);
+		rollCharacters();
+		// levelUpTest(Class.BARBARIAN);
 
 	}
 
@@ -38,7 +38,7 @@ public class Main {
 			System.out.println();
 		}
 	}
-	
+
 	public static void rollCharactersOfClass(Class job) {
 		Player player;
 		for (int i = 0; i < PCS_TO_ROLL; ++i) {

@@ -183,7 +183,7 @@ public interface Actor {
 
 	public Spellcasting getSpellcasting();
 
-	public Career getCareer();
+	public Career.Profile getCareer();
 
 	public int getLevel();
 
