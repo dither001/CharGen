@@ -17,6 +17,7 @@ public class Player implements Actor {
 	private Class job;
 	private Class.Subclass archetype;
 	private Spellcasting spellcasting;
+	private EnumSet<Spell> spellsKnown;
 
 	private Deity god;
 	private Actor.Alignment alignment;
@@ -72,6 +73,7 @@ public class Player implements Actor {
 		Armor.setupArmorProficiency(this);
 		Weapon.setupWeaponProficiency(this);
 		Feature.updateClassFeatures(this);
+		Spell.setupSpellsKnown(this);
 
 		// final step after class/subclass chosen
 		Class.additionalSetup(this);
@@ -135,9 +137,12 @@ public class Player implements Actor {
 		// inventory line
 		string += "\n" + inventory.toStringDetailed();
 		// features line
-		string += "\n" + features.toString();
+		if (features.size() > 0)
+			string += "\n" + features.toString();
 		// profile line
 		// string += "\n" + career.toStringDetailed();
+		if (spellsKnown.size() > 0)
+			string += "\n" + spellsKnown.toString();
 
 		return string;
 	}
@@ -221,6 +226,16 @@ public class Player implements Actor {
 	@Override
 	public Spellcasting getSpellcasting() {
 		return spellcasting;
+	}
+
+	@Override
+	public EnumSet<Spell> getSpellsKnown() {
+		return spellsKnown;
+	}
+
+	@Override
+	public void setSpellsKnown(EnumSet<Spell> spellsKnown) {
+		this.spellsKnown = spellsKnown;
 	}
 
 	@Override

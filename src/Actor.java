@@ -183,6 +183,10 @@ public interface Actor {
 
 	public Spellcasting getSpellcasting();
 
+	public EnumSet<Spell> getSpellsKnown();
+
+	public void setSpellsKnown(EnumSet<Spell> spellsKnown);
+
 	public Career.Profile getCareer();
 
 	public int getLevel();
@@ -483,4 +487,5 @@ public interface Actor {
 	public default int getChallengeRating() {
 		return getCombatBlock().getChallengeRating();
 	}
+	
 }

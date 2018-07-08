@@ -3,7 +3,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
-	private static int PCS_TO_ROLL = 5;
+	private static int PCS_TO_ROLL = 50;
 	private static int SPELLBOOK_LEVEL = 17;
 
 	//
@@ -268,45 +268,6 @@ public class Main {
 		System.out.println(Career.randomMeans());
 		System.out.println(Career.randomMotive());
 		System.out.println(Career.randomOpportunity());
-		System.out.println();
-	}
-
-	public static void rollOneSpellbook() {
-		rollOneSpellbook(SPELLBOOK_LEVEL);
-	}
-
-	public static void rollOneSpellbook(int bookLevel) {
-		HashSet<Spell> spellbook = Spell.randomWizardSpellbook(bookLevel);
-		Spell[][] spellsByLevel = new Spell[10][8];
-
-		Spell current;
-		int level;
-		for (Iterator<Spell> it = spellbook.iterator(); it.hasNext();) {
-			current = it.next();
-			level = current.getLevel();
-
-			for (int i = 0; i < 8; ++i) {
-				if (spellsByLevel[level][i] == null) {
-					spellsByLevel[level][i] = current;
-					break;
-				}
-			}
-		}
-
-		int spellsPrinted;
-		for (Spell[] em : spellsByLevel) {
-			spellsPrinted = 0;
-			for (Spell el : em) {
-				if (el != null) {
-					++spellsPrinted;
-					System.out.print(el.toString() + ", ");
-				}
-			}
-
-			if (spellsPrinted > 0)
-				System.out.println();
-		}
-
 		System.out.println();
 	}
 
