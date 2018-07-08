@@ -13,12 +13,13 @@ public class CombatBlock {
 	private Actor owner;
 	private Role role;
 	private Attack preferredAttack;
+	private Weapon.Instance preferredWeapon;
 	private Spell preferredCantrip;
 
 	private int armorClass;
 	private int hitPoints;
 	private int attackBonus;
-	private int averageDamage;
+	private int averageDamage, damageModifier;
 
 	// constructors
 	public CombatBlock(Actor owner) {
@@ -131,12 +132,12 @@ public class CombatBlock {
 		Class job = owner.getJob();
 		Set<Spell> spellsKnown, cantrips;
 		if (preferredAttack.equals(Attack.MELEE) || preferredAttack.equals(Attack.RANGED)) {
-			Weapon.Instance weapon = owner.getInventory().getMainHand();
+			preferredWeapon = owner.getInventory().getMainHand();
 
-			if (weapon != null && weapon.useDexterity())
-				atk += owner.getProficiencyBonus() + DEX + weapon.getAttackBonus();
-			else if (weapon != null)
-				atk += owner.getProficiencyBonus() + STR + weapon.getAttackBonus();
+			if (preferredWeapon != null && preferredWeapon.useDexterity())
+				atk += owner.getProficiencyBonus() + DEX + preferredWeapon.getAttackBonus();
+			else if (preferredWeapon != null)
+				atk += owner.getProficiencyBonus() + STR + preferredWeapon.getAttackBonus();
 
 		} else if (preferredAttack.equals(Attack.SPELL)) {
 			spellsKnown = owner.getSpellsKnown();
@@ -162,10 +163,13 @@ public class CombatBlock {
 
 		Weapon.Instance weapon = owner.getInventory().getMainHand();
 		if (preferredAttack.equals(Attack.MELEE) || preferredAttack.equals(Attack.RANGED)) {
-			if (weapon != null && weapon.useDexterity())
+			if (weapon != null && weapon.useDexterity()) {
 				dmg += weapon.getAverageDamage() + DEX + weapon.getAttackBonus();
-			else if (weapon != null)
+				damageModifier = DEX + weapon.getAttackBonus();
+			} else if (weapon != null) {
 				dmg += weapon.getAverageDamage() + STR + weapon.getAttackBonus();
+				damageModifier = STR + weapon.getAttackBonus();
+			}
 
 		} else if (preferredAttack.equals(Attack.SPELL)) {
 			if (preferredCantrip != null)
@@ -217,19 +221,26 @@ public class CombatBlock {
 	public String toStringDetailed() {
 		int challengeRating = ChallengeRating.evaluateCR(owner);
 		int experienceValue = ChallengeRating.challengeToXP(challengeRating);
-		String string = "", attackType = "", attack = "";
+		String string = "", attack = "";
 
 		if (preferredAttack.equals(Attack.MELEE) || preferredAttack.equals(Attack.RANGED)) {
-			attackType = owner.getHeldWeapon().toString();
-			attack += (attackBonus > -1) ? "+" + attackBonus : attackBonus;
-			string = String.format("AC %2d || %2d hp || %s %s (%2d damage) || CR %2d (%-2d)", armorClass, hitPoints,
-					attackType, attack, averageDamage, challengeRating, experienceValue);
+			attack = (preferredWeapon != null) ? preferredWeapon.toString() + " " : "Unarmed ";
+			attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
+			attack += preferredWeapon.getDiceString();
+			attack += (damageModifier > -1) ? "+" + damageModifier : damageModifier;
+			attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
+
+			string = String.format("AC %2d || %2d hp || %s || CR %2d (%-2d)", armorClass, hitPoints, attack,
+					challengeRating, experienceValue);
 
 		} else if (preferredAttack.equals(Attack.SPELL)) {
-			attackType = (preferredCantrip != null) ? preferredCantrip.toString() : "Cantrip";
-			attack += (attackBonus > -1) ? "+" + attackBonus : attackBonus;
-			string = String.format("AC %2d || %2d hp || %s %s (%2d damage) || CR %2d (%-2d)", armorClass, hitPoints,
-					attackType, attack, averageDamage, challengeRating, experienceValue);
+			attack = (preferredCantrip != null) ? preferredCantrip.toString() + " " : "Cantrip ";
+			attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
+			attack += Spell.getDiceString(preferredCantrip);
+			attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
+
+			string = String.format("AC %2d || %2d hp || %s || CR %2d (%-2d)", armorClass, hitPoints, attack,
+					challengeRating, experienceValue);
 
 		}
 

@@ -42,6 +42,10 @@ public enum Spell {
 		public int getAverageDamage() {
 			return faces * dice / 2;
 		}
+
+		public String getDiceString() {
+			return dice + "d" + faces;
+		}
 	}
 
 	/*
@@ -891,6 +895,13 @@ public enum Spell {
 
 	public static int getAverageDamage(Spell spell) {
 		return spellMap.get(spell).getAverageDamage();
+	}
+
+	public static String getDiceString(Spell spell) {
+		Instance instance = spellMap.get(spell);
+		String string = (instance != null) ? instance.getDiceString() : "0";
+
+		return string;
 	}
 
 	// public static HashSet<Spell> bardCantripSetup(Actor actor) {

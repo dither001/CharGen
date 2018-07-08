@@ -180,6 +180,10 @@ public enum Weapon {
 			return equals;
 		}
 
+		public String getDiceString() {
+			return prototype.dice + "d" + prototype.faces;
+		}
+
 		@Override
 		public String toString() {
 			String string, thing = prototype.weapon.toString();
