@@ -16,7 +16,6 @@ public class Player implements Actor {
 	private Race race;
 	private Class job;
 	private Class.Subclass archetype;
-	private Spellcasting spellcasting;
 	private EnumSet<Spell> spellsKnown;
 
 	private Deity god;
@@ -221,11 +220,6 @@ public class Player implements Actor {
 	@Override
 	public Race getRace() {
 		return race;
-	}
-
-	@Override
-	public Spellcasting getSpellcasting() {
-		return spellcasting;
 	}
 
 	@Override

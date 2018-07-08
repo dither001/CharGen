@@ -181,8 +181,6 @@ public interface Actor {
 
 	public Race getRace();
 
-	public Spellcasting getSpellcasting();
-
 	public EnumSet<Spell> getSpellsKnown();
 
 	public void setSpellsKnown(EnumSet<Spell> spellsKnown);
