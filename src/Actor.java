@@ -243,7 +243,7 @@ public interface Actor {
 	 */
 	public default void advance() {
 		boolean advanced = advancementCheck();
-		
+
 		if (advanced) {
 			// TODO
 			Feature.updateClassFeatures(this);
@@ -265,7 +265,7 @@ public interface Actor {
 			if (currentLevel < 19 && currentEXP >= requires[currentLevel + 1])
 				currentEXP = requires[currentLevel + 1] - 1;
 		}
-		
+
 		return advanced;
 	}
 
@@ -450,6 +450,10 @@ public interface Actor {
 		return getInventory().getWeapons();
 	}
 
+	public default Weapon.Instance getHeldWeapon() {
+		return getInventory().getMainHand();
+	}
+
 	public default boolean wearingArmor() {
 		return (getInventory().wearingArmor());
 	}
@@ -474,6 +478,10 @@ public interface Actor {
 		return getCombatBlock().getHitPoints();
 	}
 
+	public default CombatBlock.Attack getPreferredAttackType() {
+		return getCombatBlock().getPreferredAttackType();
+	}
+
 	public default int getAttackBonus() {
 		return getCombatBlock().getAttackBonus();
 	}
@@ -482,8 +490,12 @@ public interface Actor {
 		return getCombatBlock().getAverageDamage();
 	}
 
+	public default int getHighestSpellDamage() {
+		return getCombatBlock().highestSpellDamage();
+	}
+
 	public default int getChallengeRating() {
 		return getCombatBlock().getChallengeRating();
 	}
-	
+
 }

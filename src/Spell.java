@@ -1,11 +1,7 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public enum Spell {
@@ -27,11 +23,33 @@ public enum Spell {
 		}
 	}
 
+	public static class Instance {
+		private Prototype prototype;
+		private int dice, faces;
+
+		public Instance(Prototype prototype, int... is) {
+			this.prototype = prototype;
+
+			if (is.length > 1) {
+				this.dice = is[0];
+				this.faces = is[1];
+			} else {
+				this.dice = 0;
+				this.faces = 0;
+			}
+		}
+
+		public int getAverageDamage() {
+			return faces * dice / 2;
+		}
+	}
+
 	/*
 	 * STATIC FIELDS
 	 * 
 	 */
-	private static HashMap<Spell, Prototype> spellMap;
+	private static HashMap<Spell, Prototype> prototypeMap;
+	private static HashMap<Spell, Instance> spellMap;
 
 	// used by ELDRITCH_KNIGHT fighter and ARCANE_TRICKSTER rogue
 	private static final int[][] FIGHTER_SLOTS = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 2, 0, 0, 0 }, { 3, 0, 0, 0 },
@@ -185,6 +203,8 @@ public enum Spell {
 	private static Spell[][] WARLOCK_SPELLS = {
 			{ BLADE_WARD, CHILL_TOUCH, ELDRITCH_BLAST, FRIENDS, MAGE_HAND, MINOR_ILLUSION, POISON_SPRAY,
 					PRESTIDIGITATION, TRUE_STRIKE },
+			{ ARMOR_OF_AGATHYS, ARMS_OF_HADAR, CHARM_PERSON, COMPREHEND_LANGUAGES, EXPEDITIOUS_RETREAT, HELLISH_REBUKE,
+					HEX, ILLUSORY_SCRIPT, PROTECTION_FROM_EVIL_AND_GOOD, UNSEEN_SERVANT, WITCH_BOLT },
 			{ CLOUD_OF_DAGGERS, CROWN_OF_MADNESS, DARKNESS, ENTHRALL, HOLD_PERSON, INVISIBILITY, MIRROR_IMAGE,
 					MISTY_STEP, RAY_OF_ENFEEBLEMENT, SHATTER, SPIDER_CLIMB, SUGGESTION },
 			{ COUNTERSPELL, DISPEL_MAGIC, FEAR, FLY, GASEOUS_FORM, HUNGER_OF_HADAR, HYPNOTIC_PATTERN, MAGIC_CIRCLE,
@@ -250,402 +270,493 @@ public enum Spell {
 			15 };
 
 	static {
-		spellMap = new HashMap<Spell, Prototype>();
-		spellMap.put(ACID_SPLASH, new Prototype(ACID_SPLASH, 0, School.CONJURATION));
-		spellMap.put(AID, new Prototype(AID, 2, School.ABJURATION));
-		spellMap.put(ALARM, new Prototype(ALARM, 1, School.ABJURATION));
-		spellMap.put(ALTER_SELF, new Prototype(ALTER_SELF, 2, School.TRANSMUTATION));
-		spellMap.put(ANIMAL_FRIENDSHIP, new Prototype(ANIMAL_FRIENDSHIP, 1, School.ENCHANTMENT));
-		spellMap.put(ANIMAL_MESSENGER, new Prototype(ANIMAL_MESSENGER, 2, School.ENCHANTMENT));
-		spellMap.put(ANIMAL_SHAPES, new Prototype(ANIMAL_SHAPES, 8, School.TRANSMUTATION));
-		spellMap.put(ANIMATE_DEAD, new Prototype(ANIMATE_DEAD, 3, School.NECROMANCY));
-		spellMap.put(ANIMATE_OBJECTS, new Prototype(ANIMATE_OBJECTS, 5, School.TRANSMUTATION));
-		spellMap.put(ANTILIFE_SHELL, new Prototype(ANTILIFE_SHELL, 5, School.ABJURATION));
-		spellMap.put(ANTIMAGIC_FIELD, new Prototype(ANTIMAGIC_FIELD, 8, School.ABJURATION));
-		spellMap.put(ANTIPATHY_SYMPATHY, new Prototype(ANTIPATHY_SYMPATHY, 8, School.ENCHANTMENT));
-		spellMap.put(ARCANE_EYE, new Prototype(ARCANE_EYE, 4, School.DIVINATION));
-		spellMap.put(ARCANE_GATE, new Prototype(ARCANE_GATE, 6, School.CONJURATION));
-		spellMap.put(ARCANE_LOCK, new Prototype(ARCANE_LOCK, 2, School.ABJURATION));
-		spellMap.put(ARMOR_OF_AGATHYS, new Prototype(ARMOR_OF_AGATHYS, 1, School.ABJURATION));
-		spellMap.put(ARMS_OF_HADAR, new Prototype(ARMS_OF_HADAR, 1, School.CONJURATION));
-		spellMap.put(ASTRAL_PROJECTION, new Prototype(ASTRAL_PROJECTION, 9, School.NECROMANCY));
-		spellMap.put(AUGURY, new Prototype(AUGURY, 2, School.DIVINATION));
-		spellMap.put(AURA_OF_LIFE, new Prototype(AURA_OF_LIFE, 4, School.ABJURATION));
-		spellMap.put(AURA_OF_PURITY, new Prototype(AURA_OF_PURITY, 4, School.ABJURATION));
-		spellMap.put(AURA_OF_VITALITY, new Prototype(AURA_OF_VITALITY, 3, School.EVOCATION));
-		spellMap.put(AWAKEN, new Prototype(AWAKEN, 5, School.TRANSMUTATION));
-		spellMap.put(BANE, new Prototype(BANE, 1, School.ENCHANTMENT));
-		spellMap.put(BANISHING_SMITE, new Prototype(BANISHING_SMITE, 5, School.ABJURATION));
-		spellMap.put(BANISHMENT, new Prototype(BANISHMENT, 4, School.ABJURATION));
-		spellMap.put(BARKSKIN, new Prototype(BARKSKIN, 2, School.TRANSMUTATION));
-		spellMap.put(BEACON_OF_HOPE, new Prototype(BEACON_OF_HOPE, 3, School.ABJURATION));
-		spellMap.put(BEAST_SENSE, new Prototype(BEAST_SENSE, 2, School.DIVINATION));
-		spellMap.put(BESTOW_CURSE, new Prototype(BESTOW_CURSE, 3, School.NECROMANCY));
-		spellMap.put(BIGBYS_HAND, new Prototype(BIGBYS_HAND, 5, School.EVOCATION));
-		spellMap.put(BLADE_BARRIER, new Prototype(BLADE_BARRIER, 6, School.EVOCATION));
-		spellMap.put(BLADE_WARD, new Prototype(BLADE_WARD, 0, School.ABJURATION));
-		spellMap.put(BLESS, new Prototype(BLESS, 1, School.ENCHANTMENT));
-		spellMap.put(BLIGHT, new Prototype(BLIGHT, 4, School.NECROMANCY));
-		spellMap.put(BLINDING_SMITE, new Prototype(BLINDING_SMITE, 3, School.EVOCATION));
-		spellMap.put(BLINDNESS_DEAFNESS, new Prototype(BLINDNESS_DEAFNESS, 2, School.NECROMANCY));
-		spellMap.put(BLINK, new Prototype(BLINK, 3, School.TRANSMUTATION));
-		spellMap.put(BLUR, new Prototype(BLUR, 2, School.ILLUSION));
-		spellMap.put(BRANDING_SMITE, new Prototype(BRANDING_SMITE, 2, School.EVOCATION));
-		spellMap.put(BURNING_HANDS, new Prototype(BURNING_HANDS, 1, School.EVOCATION));
-		spellMap.put(CALL_LIGHTNING, new Prototype(CALL_LIGHTNING, 3, School.CONJURATION));
-		spellMap.put(CALM_EMOTIONS, new Prototype(CALM_EMOTIONS, 2, School.ENCHANTMENT));
-		spellMap.put(CHAIN_LIGHTNING, new Prototype(CHAIN_LIGHTNING, 6, School.EVOCATION));
-		spellMap.put(CHARM_PERSON, new Prototype(CHARM_PERSON, 1, School.ENCHANTMENT));
-		spellMap.put(CHILL_TOUCH, new Prototype(CHILL_TOUCH, 0, School.NECROMANCY));
-		spellMap.put(CHROMATIC_ORB, new Prototype(CHROMATIC_ORB, 1, School.EVOCATION));
-		spellMap.put(CIRCLE_OF_DEATH, new Prototype(CIRCLE_OF_DEATH, 6, School.NECROMANCY));
-		spellMap.put(CIRCLE_OF_POWER, new Prototype(CIRCLE_OF_POWER, 5, School.ABJURATION));
-		spellMap.put(CLAIRVOYANCE, new Prototype(CLAIRVOYANCE, 3, School.DIVINATION));
-		spellMap.put(CLONE, new Prototype(CLONE, 8, School.NECROMANCY));
-		spellMap.put(CLOUD_OF_DAGGERS, new Prototype(CLOUD_OF_DAGGERS, 2, School.CONJURATION));
-		spellMap.put(CLOUDKILL, new Prototype(CLOUDKILL, 5, School.CONJURATION));
-		spellMap.put(COLOR_SPRAY, new Prototype(COLOR_SPRAY, 1, School.ILLUSION));
-		spellMap.put(COMMAND, new Prototype(COMMAND, 1, School.ENCHANTMENT));
-		spellMap.put(COMMUNE, new Prototype(COMMUNE, 5, School.DIVINATION));
-		spellMap.put(COMMUNE_WITH_NATURE, new Prototype(COMMUNE_WITH_NATURE, 5, School.DIVINATION));
-		spellMap.put(COMPELLED_DUEL, new Prototype(COMPELLED_DUEL, 1, School.ENCHANTMENT));
-		spellMap.put(COMPREHEND_LANGUAGES, new Prototype(COMPREHEND_LANGUAGES, 1, School.DIVINATION));
-		spellMap.put(COMPULSION, new Prototype(COMPULSION, 4, School.ENCHANTMENT));
-		spellMap.put(CONE_OF_COLD, new Prototype(CONE_OF_COLD, 5, School.EVOCATION));
-		spellMap.put(CONFUSION, new Prototype(CONFUSION, 4, School.ENCHANTMENT));
-		spellMap.put(CONJURE_ANIMALS, new Prototype(CONJURE_ANIMALS, 3, School.CONJURATION));
-		spellMap.put(CONJURE_BARRAGE, new Prototype(CONJURE_BARRAGE, 3, School.CONJURATION));
-		spellMap.put(CONJURE_CELESTIAL, new Prototype(CONJURE_CELESTIAL, 7, School.CONJURATION));
-		spellMap.put(CONJURE_ELEMENTAL, new Prototype(CONJURE_ELEMENTAL, 5, School.CONJURATION));
-		spellMap.put(CONJURE_FEY, new Prototype(CONJURE_FEY, 6, School.CONJURATION));
-		spellMap.put(CONJURE_MINOR_ELEMENTALS, new Prototype(CONJURE_MINOR_ELEMENTALS, 4, School.CONJURATION));
-		spellMap.put(CONJURE_VOLLEY, new Prototype(CONJURE_VOLLEY, 5, School.CONJURATION));
-		spellMap.put(CONJURE_WOODLAND_BEINGS, new Prototype(CONJURE_WOODLAND_BEINGS, 4, School.CONJURATION));
-		spellMap.put(CONTACT_OTHER_PLANE, new Prototype(CONTACT_OTHER_PLANE, 5, School.DIVINATION));
-		spellMap.put(CONTAGION, new Prototype(CONTAGION, 5, School.NECROMANCY));
-		spellMap.put(CONTINGENCY, new Prototype(CONTINGENCY, 6, School.EVOCATION));
-		spellMap.put(CONTINUAL_FLAME, new Prototype(CONTINUAL_FLAME, 2, School.EVOCATION));
-		spellMap.put(CONTROL_WATER, new Prototype(CONTROL_WATER, 4, School.TRANSMUTATION));
-		spellMap.put(CONTROL_WEATHER, new Prototype(CONTROL_WEATHER, 8, School.TRANSMUTATION));
-		spellMap.put(CORDON_OF_ARROWS, new Prototype(CORDON_OF_ARROWS, 2, School.TRANSMUTATION));
-		spellMap.put(COUNTERSPELL, new Prototype(COUNTERSPELL, 3, School.ABJURATION));
-		spellMap.put(CREATE_FOOD_AND_WATER, new Prototype(CREATE_FOOD_AND_WATER, 3, School.CONJURATION));
-		spellMap.put(CREATE_OR_DESTROY_WATER, new Prototype(CREATE_OR_DESTROY_WATER, 1, School.TRANSMUTATION));
-		spellMap.put(CREATE_UNDEAD, new Prototype(CREATE_UNDEAD, 6, School.NECROMANCY));
-		spellMap.put(CREATION, new Prototype(CREATION, 5, School.ILLUSION));
-		spellMap.put(CROWN_OF_MADNESS, new Prototype(CROWN_OF_MADNESS, 2, School.ENCHANTMENT));
-		spellMap.put(CRUSADERS_MANTLE, new Prototype(CRUSADERS_MANTLE, 3, School.EVOCATION));
-		spellMap.put(CURE_WOUNDS, new Prototype(CURE_WOUNDS, 1, School.EVOCATION));
-		spellMap.put(DANCING_LIGHTS, new Prototype(DANCING_LIGHTS, 0, School.EVOCATION));
-		spellMap.put(DARKNESS, new Prototype(DARKNESS, 2, School.EVOCATION));
-		spellMap.put(DARKVISION, new Prototype(DARKVISION, 2, School.TRANSMUTATION));
-		spellMap.put(DAYLIGHT, new Prototype(DAYLIGHT, 3, School.EVOCATION));
-		spellMap.put(DEATH_WARD, new Prototype(DEATH_WARD, 4, School.ABJURATION));
-		spellMap.put(DELAYED_BLAST_FIREBALL, new Prototype(DELAYED_BLAST_FIREBALL, 7, School.EVOCATION));
-		spellMap.put(DEMIPLANE, new Prototype(DEMIPLANE, 8, School.CONJURATION));
-		spellMap.put(DESTRUCTIVE_WAVE, new Prototype(DESTRUCTIVE_WAVE, 5, School.EVOCATION));
-		spellMap.put(DETECT_EVIL_AND_GOOD, new Prototype(DETECT_EVIL_AND_GOOD, 1, School.DIVINATION));
-		spellMap.put(DETECT_MAGIC, new Prototype(DETECT_MAGIC, 1, School.DIVINATION));
-		spellMap.put(DETECT_POISON_AND_DISEASE, new Prototype(DETECT_POISON_AND_DISEASE, 1, School.DIVINATION));
-		spellMap.put(DETECT_THOUGHTS, new Prototype(DETECT_THOUGHTS, 2, School.DIVINATION));
-		spellMap.put(DIMENSION_DOOR, new Prototype(DIMENSION_DOOR, 4, School.CONJURATION));
-		spellMap.put(DISGUISE_SELF, new Prototype(DISGUISE_SELF, 1, School.ILLUSION));
-		spellMap.put(DISINTEGRATE, new Prototype(DISINTEGRATE, 6, School.TRANSMUTATION));
-		spellMap.put(DISPEL_EVIL_AND_GOOD, new Prototype(DISPEL_EVIL_AND_GOOD, 5, School.ABJURATION));
-		spellMap.put(DISPEL_MAGIC, new Prototype(DISPEL_MAGIC, 3, School.ABJURATION));
-		spellMap.put(DISSONANT_WHISPERS, new Prototype(DISSONANT_WHISPERS, 1, School.ENCHANTMENT));
-		spellMap.put(DIVINATION, new Prototype(DIVINATION, 4, School.DIVINATION));
-		spellMap.put(DIVINE_FAVOR, new Prototype(DIVINE_FAVOR, 1, School.EVOCATION));
-		spellMap.put(DIVINE_WORD, new Prototype(DIVINE_WORD, 7, School.EVOCATION));
-		spellMap.put(DOMINATE_BEAST, new Prototype(DOMINATE_BEAST, 4, School.ENCHANTMENT));
-		spellMap.put(DOMINATE_MONSTER, new Prototype(DOMINATE_MONSTER, 8, School.ENCHANTMENT));
-		spellMap.put(DOMINATE_PERSON, new Prototype(DOMINATE_PERSON, 5, School.ENCHANTMENT));
-		spellMap.put(DRAWMIJS_INSTANT_SUMMONS, new Prototype(DRAWMIJS_INSTANT_SUMMONS, 6, School.CONJURATION));
-		spellMap.put(DREAM, new Prototype(DREAM, 5, School.ILLUSION));
-		spellMap.put(DRUIDCRAFT, new Prototype(DRUIDCRAFT, 0, School.TRANSMUTATION));
-		spellMap.put(EARTHQUAKE, new Prototype(EARTHQUAKE, 8, School.EVOCATION));
-		spellMap.put(ELDRITCH_BLAST, new Prototype(ELDRITCH_BLAST, 0, School.EVOCATION));
-		spellMap.put(ELEMENTAL_WEAPON, new Prototype(ELEMENTAL_WEAPON, 3, School.TRANSMUTATION));
-		spellMap.put(ENHANCE_ABILITY, new Prototype(ENHANCE_ABILITY, 2, School.TRANSMUTATION));
-		spellMap.put(ENLARGE_REDUCE, new Prototype(ENLARGE_REDUCE, 2, School.TRANSMUTATION));
-		spellMap.put(ENSNARING_STRIKE, new Prototype(ENSNARING_STRIKE, 1, School.CONJURATION));
-		spellMap.put(ENTANGLE, new Prototype(ENTANGLE, 1, School.CONJURATION));
-		spellMap.put(ENTHRALL, new Prototype(ENTHRALL, 2, School.ENCHANTMENT));
-		spellMap.put(ETHEREALNESS, new Prototype(ETHEREALNESS, 7, School.TRANSMUTATION));
-		spellMap.put(EVARDS_BLACK_TENTACLES, new Prototype(EVARDS_BLACK_TENTACLES, 4, School.CONJURATION));
-		spellMap.put(EXPEDITIOUS_RETREAT, new Prototype(EXPEDITIOUS_RETREAT, 1, School.TRANSMUTATION));
-		spellMap.put(EYEBITE, new Prototype(EYEBITE, 6, School.NECROMANCY));
-		spellMap.put(FABRICATE, new Prototype(FABRICATE, 4, School.TRANSMUTATION));
-		spellMap.put(FAERIE_FIRE, new Prototype(FAERIE_FIRE, 1, School.EVOCATION));
-		spellMap.put(FALSE_LIFE, new Prototype(FALSE_LIFE, 1, School.NECROMANCY));
-		spellMap.put(FEAR, new Prototype(FEAR, 3, School.ILLUSION));
-		spellMap.put(FEATHER_FALL, new Prototype(FEATHER_FALL, 1, School.TRANSMUTATION));
-		spellMap.put(FEEBLEMIND, new Prototype(FEEBLEMIND, 8, School.ENCHANTMENT));
-		spellMap.put(FEIGN_DEATH, new Prototype(FEIGN_DEATH, 3, School.NECROMANCY));
-		spellMap.put(FIND_FAMILIAR, new Prototype(FIND_FAMILIAR, 1, School.CONJURATION));
-		spellMap.put(FIND_STEED, new Prototype(FIND_STEED, 2, School.CONJURATION));
-		spellMap.put(FIND_THE_PATH, new Prototype(FIND_THE_PATH, 6, School.DIVINATION));
-		spellMap.put(FIND_TRAPS, new Prototype(FIND_TRAPS, 2, School.DIVINATION));
-		spellMap.put(FINGER_OF_DEATH, new Prototype(FINGER_OF_DEATH, 7, School.NECROMANCY));
-		spellMap.put(FIREBALL, new Prototype(FIREBALL, 3, School.EVOCATION));
-		spellMap.put(FIREBOLT, new Prototype(FIREBOLT, 0, School.EVOCATION));
-		spellMap.put(FIRE_SHIELD, new Prototype(FIRE_SHIELD, 4, School.EVOCATION));
-		spellMap.put(FIRE_STORM, new Prototype(FIRE_STORM, 7, School.EVOCATION));
-		spellMap.put(FLAME_BLADE, new Prototype(FLAME_BLADE, 2, School.EVOCATION));
-		spellMap.put(FLAME_STRIKE, new Prototype(FLAME_STRIKE, 5, School.EVOCATION));
-		spellMap.put(FLAMING_SPHERE, new Prototype(FLAMING_SPHERE, 2, School.CONJURATION));
-		spellMap.put(FLESH_TO_STONE, new Prototype(FLESH_TO_STONE, 6, School.TRANSMUTATION));
-		spellMap.put(FLY, new Prototype(FLY, 3, School.TRANSMUTATION));
-		spellMap.put(FOG_CLOUD, new Prototype(FOG_CLOUD, 1, School.CONJURATION));
-		spellMap.put(FORBIDDANCE, new Prototype(FORBIDDANCE, 6, School.ABJURATION));
-		spellMap.put(FORCECAGE, new Prototype(FORCECAGE, 7, School.EVOCATION));
-		spellMap.put(FORESIGHT, new Prototype(FORESIGHT, 9, School.DIVINATION));
-		spellMap.put(FREEDOM_OF_MOVEMENT, new Prototype(FREEDOM_OF_MOVEMENT, 4, School.ABJURATION));
-		spellMap.put(FRIENDS, new Prototype(FRIENDS, 0, School.ENCHANTMENT));
-		spellMap.put(GASEOUS_FORM, new Prototype(GASEOUS_FORM, 3, School.TRANSMUTATION));
-		spellMap.put(GATE, new Prototype(GATE, 9, School.CONJURATION));
-		spellMap.put(GEAS, new Prototype(GEAS, 5, School.ENCHANTMENT));
-		spellMap.put(GENTLE_REPOSE, new Prototype(GENTLE_REPOSE, 2, School.NECROMANCY));
-		spellMap.put(GIANT_INSECT, new Prototype(GIANT_INSECT, 4, School.TRANSMUTATION));
-		spellMap.put(GLIBNESS, new Prototype(GLIBNESS, 8, School.TRANSMUTATION));
-		spellMap.put(GLOBE_OF_INVULNERABILITY, new Prototype(GLOBE_OF_INVULNERABILITY, 6, School.ABJURATION));
-		spellMap.put(GLYPH_OF_WARDING, new Prototype(GLYPH_OF_WARDING, 3, School.ABJURATION));
-		spellMap.put(GOODBERRY, new Prototype(GOODBERRY, 1, School.TRANSMUTATION));
-		spellMap.put(GRASPING_VINE, new Prototype(GRASPING_VINE, 4, School.CONJURATION));
-		spellMap.put(GREASE, new Prototype(GREASE, 1, School.CONJURATION));
-		spellMap.put(GREATER_INVISIBILITY, new Prototype(GREATER_INVISIBILITY, 4, School.ILLUSION));
-		spellMap.put(GREATER_RESTORATION, new Prototype(GREATER_RESTORATION, 5, School.ABJURATION));
-		spellMap.put(GUARDIAN_OF_FAITH, new Prototype(GUARDIAN_OF_FAITH, 4, School.CONJURATION));
-		spellMap.put(GUARDS_AND_WARDS, new Prototype(GUARDS_AND_WARDS, 6, School.ABJURATION));
-		spellMap.put(GUIDANCE, new Prototype(GUIDANCE, 0, School.DIVINATION));
-		spellMap.put(GUIDING_BOLT, new Prototype(GUIDING_BOLT, 1, School.EVOCATION));
-		spellMap.put(GUST_OF_WIND, new Prototype(GUST_OF_WIND, 2, School.EVOCATION));
-		spellMap.put(HAIL_OF_THORNS, new Prototype(HAIL_OF_THORNS, 1, School.CONJURATION));
-		spellMap.put(HALLOW, new Prototype(HALLOW, 5, School.EVOCATION));
-		spellMap.put(HALLUCINATORY_TERRAIN, new Prototype(HALLUCINATORY_TERRAIN, 4, School.ILLUSION));
-		spellMap.put(HARM, new Prototype(HARM, 6, School.NECROMANCY));
-		spellMap.put(HASTE, new Prototype(HASTE, 3, School.TRANSMUTATION));
-		spellMap.put(HEAL, new Prototype(HEAL, 6, School.EVOCATION));
-		spellMap.put(HEALING_WORD, new Prototype(HEALING_WORD, 1, School.EVOCATION));
-		spellMap.put(HEAT_METAL, new Prototype(HEAT_METAL, 2, School.TRANSMUTATION));
-		spellMap.put(HELLISH_REBUKE, new Prototype(HELLISH_REBUKE, 1, School.EVOCATION));
-		spellMap.put(HEROES_FEAST, new Prototype(HEROES_FEAST, 6, School.CONJURATION));
-		spellMap.put(HEROISM, new Prototype(HEROISM, 1, School.ENCHANTMENT));
-		spellMap.put(HEX, new Prototype(HEX, 1, School.ENCHANTMENT));
-		spellMap.put(HOLD_MONSTER, new Prototype(HOLD_MONSTER, 5, School.ENCHANTMENT));
-		spellMap.put(HOLD_PERSON, new Prototype(HOLD_PERSON, 2, School.ENCHANTMENT));
-		spellMap.put(HOLY_AURA, new Prototype(HOLY_AURA, 8, School.ABJURATION));
-		spellMap.put(HUNGER_OF_HADAR, new Prototype(HUNGER_OF_HADAR, 3, School.CONJURATION));
-		spellMap.put(HUNTERS_MARK, new Prototype(HUNTERS_MARK, 1, School.DIVINATION));
-		spellMap.put(HYPNOTIC_PATTERN, new Prototype(HYPNOTIC_PATTERN, 3, School.ILLUSION));
-		spellMap.put(ICE_STORM, new Prototype(ICE_STORM, 4, School.EVOCATION));
-		spellMap.put(IDENTIFY, new Prototype(IDENTIFY, 1, School.DIVINATION));
-		spellMap.put(ILLUSORY_SCRIPT, new Prototype(ILLUSORY_SCRIPT, 1, School.ILLUSION));
-		spellMap.put(IMPRISONMENT, new Prototype(IMPRISONMENT, 9, School.ABJURATION));
-		spellMap.put(INCENDIARY_CLOUD, new Prototype(INCENDIARY_CLOUD, 8, School.CONJURATION));
-		spellMap.put(INFLICT_WOUNDS, new Prototype(INFLICT_WOUNDS, 1, School.NECROMANCY));
-		spellMap.put(INSECT_PLAGUE, new Prototype(INSECT_PLAGUE, 5, School.CONJURATION));
-		spellMap.put(INVISIBILITY, new Prototype(INVISIBILITY, 2, School.ILLUSION));
-		spellMap.put(JUMP, new Prototype(JUMP, 1, School.TRANSMUTATION));
-		spellMap.put(KNOCK, new Prototype(KNOCK, 2, School.TRANSMUTATION));
-		spellMap.put(LEGEND_LORE, new Prototype(LEGEND_LORE, 5, School.DIVINATION));
-		spellMap.put(LEOMUNDS_SECRET_CHEST, new Prototype(LEOMUNDS_SECRET_CHEST, 4, School.CONJURATION));
-		spellMap.put(LEOMUNDS_TINY_HUT, new Prototype(LEOMUNDS_TINY_HUT, 3, School.EVOCATION));
-		spellMap.put(LESSER_RESTORATION, new Prototype(LESSER_RESTORATION, 2, School.ABJURATION));
-		spellMap.put(LEVITATE, new Prototype(LEVITATE, 2, School.TRANSMUTATION));
-		spellMap.put(LIGHT, new Prototype(LIGHT, 0, School.EVOCATION));
-		spellMap.put(LIGHTNING_ARROW, new Prototype(LIGHTNING_ARROW, 3, School.TRANSMUTATION));
-		spellMap.put(LIGHTNING_BOLT, new Prototype(LIGHTNING_BOLT, 3, School.EVOCATION));
-		spellMap.put(LOCATE_ANIMALS_OR_PLANTS, new Prototype(LOCATE_ANIMALS_OR_PLANTS, 2, School.DIVINATION));
-		spellMap.put(LOCATE_CREATURE, new Prototype(LOCATE_CREATURE, 4, School.DIVINATION));
-		spellMap.put(LOCATE_OBJECT, new Prototype(LOCATE_OBJECT, 2, School.DIVINATION));
-		spellMap.put(LONGSTRIDER, new Prototype(LONGSTRIDER, 1, School.TRANSMUTATION));
-		spellMap.put(MAGE_ARMOR, new Prototype(MAGE_ARMOR, 1, School.ABJURATION));
-		spellMap.put(MAGE_HAND, new Prototype(MAGE_HAND, 0, School.CONJURATION));
-		spellMap.put(MAGIC_CIRCLE, new Prototype(MAGIC_CIRCLE, 3, School.ABJURATION));
-		spellMap.put(MAGIC_JAR, new Prototype(MAGIC_JAR, 6, School.NECROMANCY));
-		spellMap.put(MAGIC_MISSILE, new Prototype(MAGIC_MISSILE, 1, School.EVOCATION));
-		spellMap.put(MAGIC_MOUTH, new Prototype(MAGIC_MOUTH, 2, School.ILLUSION));
-		spellMap.put(MAGIC_WEAPON, new Prototype(MAGIC_WEAPON, 2, School.TRANSMUTATION));
-		spellMap.put(MAJOR_IMAGE, new Prototype(MAJOR_IMAGE, 3, School.ILLUSION));
-		spellMap.put(MASS_CURE_WOUNDS, new Prototype(MASS_CURE_WOUNDS, 5, School.CONJURATION));
-		spellMap.put(MASS_HEAL, new Prototype(MASS_HEAL, 9, School.CONJURATION));
-		spellMap.put(MASS_HEALING_WORD, new Prototype(MASS_HEALING_WORD, 3, School.EVOCATION));
-		spellMap.put(MASS_SUGGESTION, new Prototype(MASS_SUGGESTION, 6, School.ENCHANTMENT));
-		spellMap.put(MAZE, new Prototype(MAZE, 8, School.CONJURATION));
-		spellMap.put(MELD_INTO_STONE, new Prototype(MELD_INTO_STONE, 3, School.TRANSMUTATION));
-		spellMap.put(MELFS_ACID_ARROW, new Prototype(MELFS_ACID_ARROW, 2, School.EVOCATION));
-		spellMap.put(MENDING, new Prototype(MENDING, 0, School.TRANSMUTATION));
-		spellMap.put(MESSAGE, new Prototype(MESSAGE, 0, School.TRANSMUTATION));
-		spellMap.put(METEOR_SWARM, new Prototype(METEOR_SWARM, 9, School.EVOCATION));
-		spellMap.put(MIND_BLANK, new Prototype(MIND_BLANK, 8, School.ABJURATION));
-		spellMap.put(MINOR_ILLUSION, new Prototype(MINOR_ILLUSION, 0, School.ILLUSION));
-		spellMap.put(MIRAGE_ARCANA, new Prototype(MIRAGE_ARCANA, 7, School.ILLUSION));
-		spellMap.put(MIRROR_IMAGE, new Prototype(MIRROR_IMAGE, 2, School.ILLUSION));
-		spellMap.put(MISLEAD, new Prototype(MISLEAD, 5, School.ILLUSION));
-		spellMap.put(MISTY_STEP, new Prototype(MISTY_STEP, 2, School.CONJURATION));
-		spellMap.put(MODIFY_MEMORY, new Prototype(MODIFY_MEMORY, 5, School.ENCHANTMENT));
-		spellMap.put(MOONBEAM, new Prototype(MOONBEAM, 2, School.EVOCATION));
-		spellMap.put(MORDENKAINENS_FAITHFUL_HOUND, new Prototype(MORDENKAINENS_FAITHFUL_HOUND, 4, School.CONJURATION));
-		spellMap.put(MORDENKAINENS_MAGNIFICENT_MANSION,
+		prototypeMap = new HashMap<Spell, Prototype>();
+		spellMap = new HashMap<Spell, Instance>();
+
+		//
+		prototypeMap.put(ACID_SPLASH, new Prototype(ACID_SPLASH, 0, School.CONJURATION));
+		prototypeMap.put(AID, new Prototype(AID, 2, School.ABJURATION));
+		prototypeMap.put(ALARM, new Prototype(ALARM, 1, School.ABJURATION));
+		prototypeMap.put(ALTER_SELF, new Prototype(ALTER_SELF, 2, School.TRANSMUTATION));
+		prototypeMap.put(ANIMAL_FRIENDSHIP, new Prototype(ANIMAL_FRIENDSHIP, 1, School.ENCHANTMENT));
+		prototypeMap.put(ANIMAL_MESSENGER, new Prototype(ANIMAL_MESSENGER, 2, School.ENCHANTMENT));
+		prototypeMap.put(ANIMAL_SHAPES, new Prototype(ANIMAL_SHAPES, 8, School.TRANSMUTATION));
+		prototypeMap.put(ANIMATE_DEAD, new Prototype(ANIMATE_DEAD, 3, School.NECROMANCY));
+		prototypeMap.put(ANIMATE_OBJECTS, new Prototype(ANIMATE_OBJECTS, 5, School.TRANSMUTATION));
+		prototypeMap.put(ANTILIFE_SHELL, new Prototype(ANTILIFE_SHELL, 5, School.ABJURATION));
+		prototypeMap.put(ANTIMAGIC_FIELD, new Prototype(ANTIMAGIC_FIELD, 8, School.ABJURATION));
+		prototypeMap.put(ANTIPATHY_SYMPATHY, new Prototype(ANTIPATHY_SYMPATHY, 8, School.ENCHANTMENT));
+		prototypeMap.put(ARCANE_EYE, new Prototype(ARCANE_EYE, 4, School.DIVINATION));
+		prototypeMap.put(ARCANE_GATE, new Prototype(ARCANE_GATE, 6, School.CONJURATION));
+		prototypeMap.put(ARCANE_LOCK, new Prototype(ARCANE_LOCK, 2, School.ABJURATION));
+		prototypeMap.put(ARMOR_OF_AGATHYS, new Prototype(ARMOR_OF_AGATHYS, 1, School.ABJURATION));
+		prototypeMap.put(ARMS_OF_HADAR, new Prototype(ARMS_OF_HADAR, 1, School.CONJURATION));
+		prototypeMap.put(ASTRAL_PROJECTION, new Prototype(ASTRAL_PROJECTION, 9, School.NECROMANCY));
+		prototypeMap.put(AUGURY, new Prototype(AUGURY, 2, School.DIVINATION));
+		prototypeMap.put(AURA_OF_LIFE, new Prototype(AURA_OF_LIFE, 4, School.ABJURATION));
+		prototypeMap.put(AURA_OF_PURITY, new Prototype(AURA_OF_PURITY, 4, School.ABJURATION));
+		prototypeMap.put(AURA_OF_VITALITY, new Prototype(AURA_OF_VITALITY, 3, School.EVOCATION));
+		prototypeMap.put(AWAKEN, new Prototype(AWAKEN, 5, School.TRANSMUTATION));
+		prototypeMap.put(BANE, new Prototype(BANE, 1, School.ENCHANTMENT));
+		prototypeMap.put(BANISHING_SMITE, new Prototype(BANISHING_SMITE, 5, School.ABJURATION));
+		prototypeMap.put(BANISHMENT, new Prototype(BANISHMENT, 4, School.ABJURATION));
+		prototypeMap.put(BARKSKIN, new Prototype(BARKSKIN, 2, School.TRANSMUTATION));
+		prototypeMap.put(BEACON_OF_HOPE, new Prototype(BEACON_OF_HOPE, 3, School.ABJURATION));
+		prototypeMap.put(BEAST_SENSE, new Prototype(BEAST_SENSE, 2, School.DIVINATION));
+		prototypeMap.put(BESTOW_CURSE, new Prototype(BESTOW_CURSE, 3, School.NECROMANCY));
+		prototypeMap.put(BIGBYS_HAND, new Prototype(BIGBYS_HAND, 5, School.EVOCATION));
+		prototypeMap.put(BLADE_BARRIER, new Prototype(BLADE_BARRIER, 6, School.EVOCATION));
+		prototypeMap.put(BLADE_WARD, new Prototype(BLADE_WARD, 0, School.ABJURATION));
+		prototypeMap.put(BLESS, new Prototype(BLESS, 1, School.ENCHANTMENT));
+		prototypeMap.put(BLIGHT, new Prototype(BLIGHT, 4, School.NECROMANCY));
+		prototypeMap.put(BLINDING_SMITE, new Prototype(BLINDING_SMITE, 3, School.EVOCATION));
+		prototypeMap.put(BLINDNESS_DEAFNESS, new Prototype(BLINDNESS_DEAFNESS, 2, School.NECROMANCY));
+		prototypeMap.put(BLINK, new Prototype(BLINK, 3, School.TRANSMUTATION));
+		prototypeMap.put(BLUR, new Prototype(BLUR, 2, School.ILLUSION));
+		prototypeMap.put(BRANDING_SMITE, new Prototype(BRANDING_SMITE, 2, School.EVOCATION));
+		prototypeMap.put(BURNING_HANDS, new Prototype(BURNING_HANDS, 1, School.EVOCATION));
+		prototypeMap.put(CALL_LIGHTNING, new Prototype(CALL_LIGHTNING, 3, School.CONJURATION));
+		prototypeMap.put(CALM_EMOTIONS, new Prototype(CALM_EMOTIONS, 2, School.ENCHANTMENT));
+		prototypeMap.put(CHAIN_LIGHTNING, new Prototype(CHAIN_LIGHTNING, 6, School.EVOCATION));
+		prototypeMap.put(CHARM_PERSON, new Prototype(CHARM_PERSON, 1, School.ENCHANTMENT));
+		prototypeMap.put(CHILL_TOUCH, new Prototype(CHILL_TOUCH, 0, School.NECROMANCY));
+		prototypeMap.put(CHROMATIC_ORB, new Prototype(CHROMATIC_ORB, 1, School.EVOCATION));
+		prototypeMap.put(CIRCLE_OF_DEATH, new Prototype(CIRCLE_OF_DEATH, 6, School.NECROMANCY));
+		prototypeMap.put(CIRCLE_OF_POWER, new Prototype(CIRCLE_OF_POWER, 5, School.ABJURATION));
+		prototypeMap.put(CLAIRVOYANCE, new Prototype(CLAIRVOYANCE, 3, School.DIVINATION));
+		prototypeMap.put(CLONE, new Prototype(CLONE, 8, School.NECROMANCY));
+		prototypeMap.put(CLOUD_OF_DAGGERS, new Prototype(CLOUD_OF_DAGGERS, 2, School.CONJURATION));
+		prototypeMap.put(CLOUDKILL, new Prototype(CLOUDKILL, 5, School.CONJURATION));
+		prototypeMap.put(COLOR_SPRAY, new Prototype(COLOR_SPRAY, 1, School.ILLUSION));
+		prototypeMap.put(COMMAND, new Prototype(COMMAND, 1, School.ENCHANTMENT));
+		prototypeMap.put(COMMUNE, new Prototype(COMMUNE, 5, School.DIVINATION));
+		prototypeMap.put(COMMUNE_WITH_NATURE, new Prototype(COMMUNE_WITH_NATURE, 5, School.DIVINATION));
+		prototypeMap.put(COMPELLED_DUEL, new Prototype(COMPELLED_DUEL, 1, School.ENCHANTMENT));
+		prototypeMap.put(COMPREHEND_LANGUAGES, new Prototype(COMPREHEND_LANGUAGES, 1, School.DIVINATION));
+		prototypeMap.put(COMPULSION, new Prototype(COMPULSION, 4, School.ENCHANTMENT));
+		prototypeMap.put(CONE_OF_COLD, new Prototype(CONE_OF_COLD, 5, School.EVOCATION));
+		prototypeMap.put(CONFUSION, new Prototype(CONFUSION, 4, School.ENCHANTMENT));
+		prototypeMap.put(CONJURE_ANIMALS, new Prototype(CONJURE_ANIMALS, 3, School.CONJURATION));
+		prototypeMap.put(CONJURE_BARRAGE, new Prototype(CONJURE_BARRAGE, 3, School.CONJURATION));
+		prototypeMap.put(CONJURE_CELESTIAL, new Prototype(CONJURE_CELESTIAL, 7, School.CONJURATION));
+		prototypeMap.put(CONJURE_ELEMENTAL, new Prototype(CONJURE_ELEMENTAL, 5, School.CONJURATION));
+		prototypeMap.put(CONJURE_FEY, new Prototype(CONJURE_FEY, 6, School.CONJURATION));
+		prototypeMap.put(CONJURE_MINOR_ELEMENTALS, new Prototype(CONJURE_MINOR_ELEMENTALS, 4, School.CONJURATION));
+		prototypeMap.put(CONJURE_VOLLEY, new Prototype(CONJURE_VOLLEY, 5, School.CONJURATION));
+		prototypeMap.put(CONJURE_WOODLAND_BEINGS, new Prototype(CONJURE_WOODLAND_BEINGS, 4, School.CONJURATION));
+		prototypeMap.put(CONTACT_OTHER_PLANE, new Prototype(CONTACT_OTHER_PLANE, 5, School.DIVINATION));
+		prototypeMap.put(CONTAGION, new Prototype(CONTAGION, 5, School.NECROMANCY));
+		prototypeMap.put(CONTINGENCY, new Prototype(CONTINGENCY, 6, School.EVOCATION));
+		prototypeMap.put(CONTINUAL_FLAME, new Prototype(CONTINUAL_FLAME, 2, School.EVOCATION));
+		prototypeMap.put(CONTROL_WATER, new Prototype(CONTROL_WATER, 4, School.TRANSMUTATION));
+		prototypeMap.put(CONTROL_WEATHER, new Prototype(CONTROL_WEATHER, 8, School.TRANSMUTATION));
+		prototypeMap.put(CORDON_OF_ARROWS, new Prototype(CORDON_OF_ARROWS, 2, School.TRANSMUTATION));
+		prototypeMap.put(COUNTERSPELL, new Prototype(COUNTERSPELL, 3, School.ABJURATION));
+		prototypeMap.put(CREATE_FOOD_AND_WATER, new Prototype(CREATE_FOOD_AND_WATER, 3, School.CONJURATION));
+		prototypeMap.put(CREATE_OR_DESTROY_WATER, new Prototype(CREATE_OR_DESTROY_WATER, 1, School.TRANSMUTATION));
+		prototypeMap.put(CREATE_UNDEAD, new Prototype(CREATE_UNDEAD, 6, School.NECROMANCY));
+		prototypeMap.put(CREATION, new Prototype(CREATION, 5, School.ILLUSION));
+		prototypeMap.put(CROWN_OF_MADNESS, new Prototype(CROWN_OF_MADNESS, 2, School.ENCHANTMENT));
+		prototypeMap.put(CRUSADERS_MANTLE, new Prototype(CRUSADERS_MANTLE, 3, School.EVOCATION));
+		prototypeMap.put(CURE_WOUNDS, new Prototype(CURE_WOUNDS, 1, School.EVOCATION));
+		prototypeMap.put(DANCING_LIGHTS, new Prototype(DANCING_LIGHTS, 0, School.EVOCATION));
+		prototypeMap.put(DARKNESS, new Prototype(DARKNESS, 2, School.EVOCATION));
+		prototypeMap.put(DARKVISION, new Prototype(DARKVISION, 2, School.TRANSMUTATION));
+		prototypeMap.put(DAYLIGHT, new Prototype(DAYLIGHT, 3, School.EVOCATION));
+		prototypeMap.put(DEATH_WARD, new Prototype(DEATH_WARD, 4, School.ABJURATION));
+		prototypeMap.put(DELAYED_BLAST_FIREBALL, new Prototype(DELAYED_BLAST_FIREBALL, 7, School.EVOCATION));
+		prototypeMap.put(DEMIPLANE, new Prototype(DEMIPLANE, 8, School.CONJURATION));
+		prototypeMap.put(DESTRUCTIVE_WAVE, new Prototype(DESTRUCTIVE_WAVE, 5, School.EVOCATION));
+		prototypeMap.put(DETECT_EVIL_AND_GOOD, new Prototype(DETECT_EVIL_AND_GOOD, 1, School.DIVINATION));
+		prototypeMap.put(DETECT_MAGIC, new Prototype(DETECT_MAGIC, 1, School.DIVINATION));
+		prototypeMap.put(DETECT_POISON_AND_DISEASE, new Prototype(DETECT_POISON_AND_DISEASE, 1, School.DIVINATION));
+		prototypeMap.put(DETECT_THOUGHTS, new Prototype(DETECT_THOUGHTS, 2, School.DIVINATION));
+		prototypeMap.put(DIMENSION_DOOR, new Prototype(DIMENSION_DOOR, 4, School.CONJURATION));
+		prototypeMap.put(DISGUISE_SELF, new Prototype(DISGUISE_SELF, 1, School.ILLUSION));
+		prototypeMap.put(DISINTEGRATE, new Prototype(DISINTEGRATE, 6, School.TRANSMUTATION));
+		prototypeMap.put(DISPEL_EVIL_AND_GOOD, new Prototype(DISPEL_EVIL_AND_GOOD, 5, School.ABJURATION));
+		prototypeMap.put(DISPEL_MAGIC, new Prototype(DISPEL_MAGIC, 3, School.ABJURATION));
+		prototypeMap.put(DISSONANT_WHISPERS, new Prototype(DISSONANT_WHISPERS, 1, School.ENCHANTMENT));
+		prototypeMap.put(DIVINATION, new Prototype(DIVINATION, 4, School.DIVINATION));
+		prototypeMap.put(DIVINE_FAVOR, new Prototype(DIVINE_FAVOR, 1, School.EVOCATION));
+		prototypeMap.put(DIVINE_WORD, new Prototype(DIVINE_WORD, 7, School.EVOCATION));
+		prototypeMap.put(DOMINATE_BEAST, new Prototype(DOMINATE_BEAST, 4, School.ENCHANTMENT));
+		prototypeMap.put(DOMINATE_MONSTER, new Prototype(DOMINATE_MONSTER, 8, School.ENCHANTMENT));
+		prototypeMap.put(DOMINATE_PERSON, new Prototype(DOMINATE_PERSON, 5, School.ENCHANTMENT));
+		prototypeMap.put(DRAWMIJS_INSTANT_SUMMONS, new Prototype(DRAWMIJS_INSTANT_SUMMONS, 6, School.CONJURATION));
+		prototypeMap.put(DREAM, new Prototype(DREAM, 5, School.ILLUSION));
+		prototypeMap.put(DRUIDCRAFT, new Prototype(DRUIDCRAFT, 0, School.TRANSMUTATION));
+		prototypeMap.put(EARTHQUAKE, new Prototype(EARTHQUAKE, 8, School.EVOCATION));
+		prototypeMap.put(ELDRITCH_BLAST, new Prototype(ELDRITCH_BLAST, 0, School.EVOCATION));
+		prototypeMap.put(ELEMENTAL_WEAPON, new Prototype(ELEMENTAL_WEAPON, 3, School.TRANSMUTATION));
+		prototypeMap.put(ENHANCE_ABILITY, new Prototype(ENHANCE_ABILITY, 2, School.TRANSMUTATION));
+		prototypeMap.put(ENLARGE_REDUCE, new Prototype(ENLARGE_REDUCE, 2, School.TRANSMUTATION));
+		prototypeMap.put(ENSNARING_STRIKE, new Prototype(ENSNARING_STRIKE, 1, School.CONJURATION));
+		prototypeMap.put(ENTANGLE, new Prototype(ENTANGLE, 1, School.CONJURATION));
+		prototypeMap.put(ENTHRALL, new Prototype(ENTHRALL, 2, School.ENCHANTMENT));
+		prototypeMap.put(ETHEREALNESS, new Prototype(ETHEREALNESS, 7, School.TRANSMUTATION));
+		prototypeMap.put(EVARDS_BLACK_TENTACLES, new Prototype(EVARDS_BLACK_TENTACLES, 4, School.CONJURATION));
+		prototypeMap.put(EXPEDITIOUS_RETREAT, new Prototype(EXPEDITIOUS_RETREAT, 1, School.TRANSMUTATION));
+		prototypeMap.put(EYEBITE, new Prototype(EYEBITE, 6, School.NECROMANCY));
+		prototypeMap.put(FABRICATE, new Prototype(FABRICATE, 4, School.TRANSMUTATION));
+		prototypeMap.put(FAERIE_FIRE, new Prototype(FAERIE_FIRE, 1, School.EVOCATION));
+		prototypeMap.put(FALSE_LIFE, new Prototype(FALSE_LIFE, 1, School.NECROMANCY));
+		prototypeMap.put(FEAR, new Prototype(FEAR, 3, School.ILLUSION));
+		prototypeMap.put(FEATHER_FALL, new Prototype(FEATHER_FALL, 1, School.TRANSMUTATION));
+		prototypeMap.put(FEEBLEMIND, new Prototype(FEEBLEMIND, 8, School.ENCHANTMENT));
+		prototypeMap.put(FEIGN_DEATH, new Prototype(FEIGN_DEATH, 3, School.NECROMANCY));
+		prototypeMap.put(FIND_FAMILIAR, new Prototype(FIND_FAMILIAR, 1, School.CONJURATION));
+		prototypeMap.put(FIND_STEED, new Prototype(FIND_STEED, 2, School.CONJURATION));
+		prototypeMap.put(FIND_THE_PATH, new Prototype(FIND_THE_PATH, 6, School.DIVINATION));
+		prototypeMap.put(FIND_TRAPS, new Prototype(FIND_TRAPS, 2, School.DIVINATION));
+		prototypeMap.put(FINGER_OF_DEATH, new Prototype(FINGER_OF_DEATH, 7, School.NECROMANCY));
+		prototypeMap.put(FIREBALL, new Prototype(FIREBALL, 3, School.EVOCATION));
+		prototypeMap.put(FIREBOLT, new Prototype(FIREBOLT, 0, School.EVOCATION));
+		prototypeMap.put(FIRE_SHIELD, new Prototype(FIRE_SHIELD, 4, School.EVOCATION));
+		prototypeMap.put(FIRE_STORM, new Prototype(FIRE_STORM, 7, School.EVOCATION));
+		prototypeMap.put(FLAME_BLADE, new Prototype(FLAME_BLADE, 2, School.EVOCATION));
+		prototypeMap.put(FLAME_STRIKE, new Prototype(FLAME_STRIKE, 5, School.EVOCATION));
+		prototypeMap.put(FLAMING_SPHERE, new Prototype(FLAMING_SPHERE, 2, School.CONJURATION));
+		prototypeMap.put(FLESH_TO_STONE, new Prototype(FLESH_TO_STONE, 6, School.TRANSMUTATION));
+		prototypeMap.put(FLY, new Prototype(FLY, 3, School.TRANSMUTATION));
+		prototypeMap.put(FOG_CLOUD, new Prototype(FOG_CLOUD, 1, School.CONJURATION));
+		prototypeMap.put(FORBIDDANCE, new Prototype(FORBIDDANCE, 6, School.ABJURATION));
+		prototypeMap.put(FORCECAGE, new Prototype(FORCECAGE, 7, School.EVOCATION));
+		prototypeMap.put(FORESIGHT, new Prototype(FORESIGHT, 9, School.DIVINATION));
+		prototypeMap.put(FREEDOM_OF_MOVEMENT, new Prototype(FREEDOM_OF_MOVEMENT, 4, School.ABJURATION));
+		prototypeMap.put(FRIENDS, new Prototype(FRIENDS, 0, School.ENCHANTMENT));
+		prototypeMap.put(GASEOUS_FORM, new Prototype(GASEOUS_FORM, 3, School.TRANSMUTATION));
+		prototypeMap.put(GATE, new Prototype(GATE, 9, School.CONJURATION));
+		prototypeMap.put(GEAS, new Prototype(GEAS, 5, School.ENCHANTMENT));
+		prototypeMap.put(GENTLE_REPOSE, new Prototype(GENTLE_REPOSE, 2, School.NECROMANCY));
+		prototypeMap.put(GIANT_INSECT, new Prototype(GIANT_INSECT, 4, School.TRANSMUTATION));
+		prototypeMap.put(GLIBNESS, new Prototype(GLIBNESS, 8, School.TRANSMUTATION));
+		prototypeMap.put(GLOBE_OF_INVULNERABILITY, new Prototype(GLOBE_OF_INVULNERABILITY, 6, School.ABJURATION));
+		prototypeMap.put(GLYPH_OF_WARDING, new Prototype(GLYPH_OF_WARDING, 3, School.ABJURATION));
+		prototypeMap.put(GOODBERRY, new Prototype(GOODBERRY, 1, School.TRANSMUTATION));
+		prototypeMap.put(GRASPING_VINE, new Prototype(GRASPING_VINE, 4, School.CONJURATION));
+		prototypeMap.put(GREASE, new Prototype(GREASE, 1, School.CONJURATION));
+		prototypeMap.put(GREATER_INVISIBILITY, new Prototype(GREATER_INVISIBILITY, 4, School.ILLUSION));
+		prototypeMap.put(GREATER_RESTORATION, new Prototype(GREATER_RESTORATION, 5, School.ABJURATION));
+		prototypeMap.put(GUARDIAN_OF_FAITH, new Prototype(GUARDIAN_OF_FAITH, 4, School.CONJURATION));
+		prototypeMap.put(GUARDS_AND_WARDS, new Prototype(GUARDS_AND_WARDS, 6, School.ABJURATION));
+		prototypeMap.put(GUIDANCE, new Prototype(GUIDANCE, 0, School.DIVINATION));
+		prototypeMap.put(GUIDING_BOLT, new Prototype(GUIDING_BOLT, 1, School.EVOCATION));
+		prototypeMap.put(GUST_OF_WIND, new Prototype(GUST_OF_WIND, 2, School.EVOCATION));
+		prototypeMap.put(HAIL_OF_THORNS, new Prototype(HAIL_OF_THORNS, 1, School.CONJURATION));
+		prototypeMap.put(HALLOW, new Prototype(HALLOW, 5, School.EVOCATION));
+		prototypeMap.put(HALLUCINATORY_TERRAIN, new Prototype(HALLUCINATORY_TERRAIN, 4, School.ILLUSION));
+		prototypeMap.put(HARM, new Prototype(HARM, 6, School.NECROMANCY));
+		prototypeMap.put(HASTE, new Prototype(HASTE, 3, School.TRANSMUTATION));
+		prototypeMap.put(HEAL, new Prototype(HEAL, 6, School.EVOCATION));
+		prototypeMap.put(HEALING_WORD, new Prototype(HEALING_WORD, 1, School.EVOCATION));
+		prototypeMap.put(HEAT_METAL, new Prototype(HEAT_METAL, 2, School.TRANSMUTATION));
+		prototypeMap.put(HELLISH_REBUKE, new Prototype(HELLISH_REBUKE, 1, School.EVOCATION));
+		prototypeMap.put(HEROES_FEAST, new Prototype(HEROES_FEAST, 6, School.CONJURATION));
+		prototypeMap.put(HEROISM, new Prototype(HEROISM, 1, School.ENCHANTMENT));
+		prototypeMap.put(HEX, new Prototype(HEX, 1, School.ENCHANTMENT));
+		prototypeMap.put(HOLD_MONSTER, new Prototype(HOLD_MONSTER, 5, School.ENCHANTMENT));
+		prototypeMap.put(HOLD_PERSON, new Prototype(HOLD_PERSON, 2, School.ENCHANTMENT));
+		prototypeMap.put(HOLY_AURA, new Prototype(HOLY_AURA, 8, School.ABJURATION));
+		prototypeMap.put(HUNGER_OF_HADAR, new Prototype(HUNGER_OF_HADAR, 3, School.CONJURATION));
+		prototypeMap.put(HUNTERS_MARK, new Prototype(HUNTERS_MARK, 1, School.DIVINATION));
+		prototypeMap.put(HYPNOTIC_PATTERN, new Prototype(HYPNOTIC_PATTERN, 3, School.ILLUSION));
+		prototypeMap.put(ICE_STORM, new Prototype(ICE_STORM, 4, School.EVOCATION));
+		prototypeMap.put(IDENTIFY, new Prototype(IDENTIFY, 1, School.DIVINATION));
+		prototypeMap.put(ILLUSORY_SCRIPT, new Prototype(ILLUSORY_SCRIPT, 1, School.ILLUSION));
+		prototypeMap.put(IMPRISONMENT, new Prototype(IMPRISONMENT, 9, School.ABJURATION));
+		prototypeMap.put(INCENDIARY_CLOUD, new Prototype(INCENDIARY_CLOUD, 8, School.CONJURATION));
+		prototypeMap.put(INFLICT_WOUNDS, new Prototype(INFLICT_WOUNDS, 1, School.NECROMANCY));
+		prototypeMap.put(INSECT_PLAGUE, new Prototype(INSECT_PLAGUE, 5, School.CONJURATION));
+		prototypeMap.put(INVISIBILITY, new Prototype(INVISIBILITY, 2, School.ILLUSION));
+		prototypeMap.put(JUMP, new Prototype(JUMP, 1, School.TRANSMUTATION));
+		prototypeMap.put(KNOCK, new Prototype(KNOCK, 2, School.TRANSMUTATION));
+		prototypeMap.put(LEGEND_LORE, new Prototype(LEGEND_LORE, 5, School.DIVINATION));
+		prototypeMap.put(LEOMUNDS_SECRET_CHEST, new Prototype(LEOMUNDS_SECRET_CHEST, 4, School.CONJURATION));
+		prototypeMap.put(LEOMUNDS_TINY_HUT, new Prototype(LEOMUNDS_TINY_HUT, 3, School.EVOCATION));
+		prototypeMap.put(LESSER_RESTORATION, new Prototype(LESSER_RESTORATION, 2, School.ABJURATION));
+		prototypeMap.put(LEVITATE, new Prototype(LEVITATE, 2, School.TRANSMUTATION));
+		prototypeMap.put(LIGHT, new Prototype(LIGHT, 0, School.EVOCATION));
+		prototypeMap.put(LIGHTNING_ARROW, new Prototype(LIGHTNING_ARROW, 3, School.TRANSMUTATION));
+		prototypeMap.put(LIGHTNING_BOLT, new Prototype(LIGHTNING_BOLT, 3, School.EVOCATION));
+		prototypeMap.put(LOCATE_ANIMALS_OR_PLANTS, new Prototype(LOCATE_ANIMALS_OR_PLANTS, 2, School.DIVINATION));
+		prototypeMap.put(LOCATE_CREATURE, new Prototype(LOCATE_CREATURE, 4, School.DIVINATION));
+		prototypeMap.put(LOCATE_OBJECT, new Prototype(LOCATE_OBJECT, 2, School.DIVINATION));
+		prototypeMap.put(LONGSTRIDER, new Prototype(LONGSTRIDER, 1, School.TRANSMUTATION));
+		prototypeMap.put(MAGE_ARMOR, new Prototype(MAGE_ARMOR, 1, School.ABJURATION));
+		prototypeMap.put(MAGE_HAND, new Prototype(MAGE_HAND, 0, School.CONJURATION));
+		prototypeMap.put(MAGIC_CIRCLE, new Prototype(MAGIC_CIRCLE, 3, School.ABJURATION));
+		prototypeMap.put(MAGIC_JAR, new Prototype(MAGIC_JAR, 6, School.NECROMANCY));
+		prototypeMap.put(MAGIC_MISSILE, new Prototype(MAGIC_MISSILE, 1, School.EVOCATION));
+		prototypeMap.put(MAGIC_MOUTH, new Prototype(MAGIC_MOUTH, 2, School.ILLUSION));
+		prototypeMap.put(MAGIC_WEAPON, new Prototype(MAGIC_WEAPON, 2, School.TRANSMUTATION));
+		prototypeMap.put(MAJOR_IMAGE, new Prototype(MAJOR_IMAGE, 3, School.ILLUSION));
+		prototypeMap.put(MASS_CURE_WOUNDS, new Prototype(MASS_CURE_WOUNDS, 5, School.CONJURATION));
+		prototypeMap.put(MASS_HEAL, new Prototype(MASS_HEAL, 9, School.CONJURATION));
+		prototypeMap.put(MASS_HEALING_WORD, new Prototype(MASS_HEALING_WORD, 3, School.EVOCATION));
+		prototypeMap.put(MASS_SUGGESTION, new Prototype(MASS_SUGGESTION, 6, School.ENCHANTMENT));
+		prototypeMap.put(MAZE, new Prototype(MAZE, 8, School.CONJURATION));
+		prototypeMap.put(MELD_INTO_STONE, new Prototype(MELD_INTO_STONE, 3, School.TRANSMUTATION));
+		prototypeMap.put(MELFS_ACID_ARROW, new Prototype(MELFS_ACID_ARROW, 2, School.EVOCATION));
+		prototypeMap.put(MENDING, new Prototype(MENDING, 0, School.TRANSMUTATION));
+		prototypeMap.put(MESSAGE, new Prototype(MESSAGE, 0, School.TRANSMUTATION));
+		prototypeMap.put(METEOR_SWARM, new Prototype(METEOR_SWARM, 9, School.EVOCATION));
+		prototypeMap.put(MIND_BLANK, new Prototype(MIND_BLANK, 8, School.ABJURATION));
+		prototypeMap.put(MINOR_ILLUSION, new Prototype(MINOR_ILLUSION, 0, School.ILLUSION));
+		prototypeMap.put(MIRAGE_ARCANA, new Prototype(MIRAGE_ARCANA, 7, School.ILLUSION));
+		prototypeMap.put(MIRROR_IMAGE, new Prototype(MIRROR_IMAGE, 2, School.ILLUSION));
+		prototypeMap.put(MISLEAD, new Prototype(MISLEAD, 5, School.ILLUSION));
+		prototypeMap.put(MISTY_STEP, new Prototype(MISTY_STEP, 2, School.CONJURATION));
+		prototypeMap.put(MODIFY_MEMORY, new Prototype(MODIFY_MEMORY, 5, School.ENCHANTMENT));
+		prototypeMap.put(MOONBEAM, new Prototype(MOONBEAM, 2, School.EVOCATION));
+		prototypeMap.put(MORDENKAINENS_FAITHFUL_HOUND,
+				new Prototype(MORDENKAINENS_FAITHFUL_HOUND, 4, School.CONJURATION));
+		prototypeMap.put(MORDENKAINENS_MAGNIFICENT_MANSION,
 				new Prototype(MORDENKAINENS_MAGNIFICENT_MANSION, 7, School.CONJURATION));
-		spellMap.put(MORDENKAINENS_PRIVATE_SANCTUM, new Prototype(MORDENKAINENS_PRIVATE_SANCTUM, 4, School.ABJURATION));
-		spellMap.put(MORDENKAINENS_SWORD, new Prototype(MORDENKAINENS_SWORD, 7, School.EVOCATION));
-		spellMap.put(MOVE_EARTH, new Prototype(MOVE_EARTH, 6, School.TRANSMUTATION));
-		spellMap.put(NONDETECTION, new Prototype(NONDETECTION, 3, School.ABJURATION));
-		spellMap.put(NYSTULS_MAGIC_AURA, new Prototype(NYSTULS_MAGIC_AURA, 2, School.ILLUSION));
-		spellMap.put(OTILUKES_FREEZING_SPHERE, new Prototype(OTILUKES_FREEZING_SPHERE, 6, School.EVOCATION));
-		spellMap.put(OTILUKES_RESILIENT_SPHERE, new Prototype(OTILUKES_RESILIENT_SPHERE, 4, School.EVOCATION));
-		spellMap.put(OTTOS_IRRESISTIBLE_DANCE, new Prototype(OTTOS_IRRESISTIBLE_DANCE, 6, School.ENCHANTMENT));
-		spellMap.put(PASS_WITHOUT_TRACE, new Prototype(PASS_WITHOUT_TRACE, 2, School.ABJURATION));
-		spellMap.put(PASSWALL, new Prototype(PASSWALL, 5, School.TRANSMUTATION));
-		spellMap.put(PHANTASMAL_FORCE, new Prototype(PHANTASMAL_FORCE, 2, School.ILLUSION));
-		spellMap.put(PHANTASMAL_KILLER, new Prototype(PHANTASMAL_KILLER, 4, School.ILLUSION));
-		spellMap.put(PHANTOM_STEED, new Prototype(PHANTOM_STEED, 3, School.ILLUSION));
-		spellMap.put(PLANAR_ALLY, new Prototype(PLANAR_ALLY, 6, School.CONJURATION));
-		spellMap.put(PLANAR_BINDING, new Prototype(PLANAR_BINDING, 5, School.ABJURATION));
-		spellMap.put(PLANE_SHIFT, new Prototype(PLANE_SHIFT, 7, School.CONJURATION));
-		spellMap.put(PLANT_GROWTH, new Prototype(PLANT_GROWTH, 3, School.TRANSMUTATION));
-		spellMap.put(POISON_SPRAY, new Prototype(POISON_SPRAY, 0, School.CONJURATION));
-		spellMap.put(POLYMORPH, new Prototype(POLYMORPH, 4, School.TRANSMUTATION));
-		spellMap.put(POWER_WORD_HEAL, new Prototype(POWER_WORD_HEAL, 9, School.EVOCATION));
-		spellMap.put(POWER_WORD_KILL, new Prototype(POWER_WORD_KILL, 9, School.ENCHANTMENT));
-		spellMap.put(POWER_WORD_STUN, new Prototype(POWER_WORD_STUN, 8, School.ENCHANTMENT));
-		spellMap.put(PRAYER_OF_HEALING, new Prototype(PRAYER_OF_HEALING, 2, School.EVOCATION));
-		spellMap.put(PRESTIDIGITATION, new Prototype(PRESTIDIGITATION, 0, School.TRANSMUTATION));
-		spellMap.put(PRISMATIC_SPRAY, new Prototype(PRISMATIC_SPRAY, 7, School.EVOCATION));
-		spellMap.put(PRISMATIC_WALL, new Prototype(PRISMATIC_WALL, 9, School.ABJURATION));
-		spellMap.put(PRODUCE_FLAME, new Prototype(PRODUCE_FLAME, 0, School.CONJURATION));
-		spellMap.put(PROGRAMMED_ILLUSION, new Prototype(PROGRAMMED_ILLUSION, 6, School.ILLUSION));
-		spellMap.put(PROJECT_IMAGE, new Prototype(PROJECT_IMAGE, 7, School.ILLUSION));
-		spellMap.put(PROTECTION_FROM_ENERGY, new Prototype(PROTECTION_FROM_ENERGY, 3, School.ABJURATION));
-		spellMap.put(PROTECTION_FROM_EVIL_AND_GOOD, new Prototype(PROTECTION_FROM_EVIL_AND_GOOD, 1, School.ABJURATION));
-		spellMap.put(PROTECTION_FROM_POISON, new Prototype(PROTECTION_FROM_POISON, 2, School.ABJURATION));
-		spellMap.put(PURIFY_FOOD_AND_DRINK, new Prototype(PURIFY_FOOD_AND_DRINK, 1, School.TRANSMUTATION));
-		spellMap.put(RAISE_DEAD, new Prototype(RAISE_DEAD, 5, School.NECROMANCY));
-		spellMap.put(RARYS_TELEPATHIC_BOND, new Prototype(RARYS_TELEPATHIC_BOND, 5, School.DIVINATION));
-		spellMap.put(RAY_OF_ENFEEBLEMENT, new Prototype(RAY_OF_ENFEEBLEMENT, 2, School.NECROMANCY));
-		spellMap.put(RAY_OF_FROST, new Prototype(RAY_OF_FROST, 0, School.EVOCATION));
-		spellMap.put(RAY_OF_SICKNESS, new Prototype(RAY_OF_SICKNESS, 1, School.NECROMANCY));
-		spellMap.put(REGENERATE, new Prototype(REGENERATE, 7, School.TRANSMUTATION));
-		spellMap.put(REINCARNATE, new Prototype(REINCARNATE, 5, School.TRANSMUTATION));
-		spellMap.put(REMOVE_CURSE, new Prototype(REMOVE_CURSE, 3, School.ABJURATION));
-		spellMap.put(RESISTANCE, new Prototype(RESISTANCE, 0, School.ABJURATION));
-		spellMap.put(RESURRECTION, new Prototype(RESURRECTION, 7, School.NECROMANCY));
-		spellMap.put(REVERSE_GRAVITY, new Prototype(REVERSE_GRAVITY, 7, School.TRANSMUTATION));
-		spellMap.put(REVIVIFY, new Prototype(REVIVIFY, 3, School.CONJURATION));
-		spellMap.put(ROPE_TRICK, new Prototype(ROPE_TRICK, 2, School.TRANSMUTATION));
-		spellMap.put(SACRED_FLAME, new Prototype(SACRED_FLAME, 0, School.EVOCATION));
-		spellMap.put(SANCTUARY, new Prototype(SANCTUARY, 1, School.ABJURATION));
-		spellMap.put(SCORCHING_RAY, new Prototype(SCORCHING_RAY, 2, School.EVOCATION));
-		spellMap.put(SCRYING, new Prototype(SCRYING, 5, School.DIVINATION));
-		spellMap.put(SEARING_SMITE, new Prototype(SEARING_SMITE, 1, School.EVOCATION));
-		spellMap.put(SEE_INVISIBILITY, new Prototype(SEE_INVISIBILITY, 2, School.DIVINATION));
-		spellMap.put(SEEMING, new Prototype(SEEMING, 5, School.ILLUSION));
-		spellMap.put(SENDING, new Prototype(SENDING, 3, School.EVOCATION));
-		spellMap.put(SEQUESTER, new Prototype(SEQUESTER, 7, School.TRANSMUTATION));
-		spellMap.put(SHAPECHANGE, new Prototype(SHAPECHANGE, 9, School.TRANSMUTATION));
-		spellMap.put(SHATTER, new Prototype(SHATTER, 2, School.EVOCATION));
-		spellMap.put(SHIELD, new Prototype(SHIELD, 1, School.ABJURATION));
-		spellMap.put(SHIELD_OF_FAITH, new Prototype(SHIELD_OF_FAITH, 1, School.ABJURATION));
-		spellMap.put(SHILLELAGH, new Prototype(SHILLELAGH, 0, School.TRANSMUTATION));
-		spellMap.put(SHOCKING_GRASP, new Prototype(SHOCKING_GRASP, 0, School.EVOCATION));
-		spellMap.put(SILENCE, new Prototype(SILENCE, 2, School.ILLUSION));
-		spellMap.put(SILENT_IMAGE, new Prototype(SILENT_IMAGE, 1, School.ILLUSION));
-		spellMap.put(SIMULACRUM, new Prototype(SIMULACRUM, 7, School.ILLUSION));
-		spellMap.put(SLEEP, new Prototype(SLEEP, 1, School.ENCHANTMENT));
-		spellMap.put(SLEET_STORM, new Prototype(SLEET_STORM, 3, School.CONJURATION));
-		spellMap.put(SLOW, new Prototype(SLOW, 3, School.TRANSMUTATION));
-		spellMap.put(SPARE_THE_DYING, new Prototype(SPARE_THE_DYING, 0, School.NECROMANCY));
-		spellMap.put(SPEAK_WITH_ANIMALS, new Prototype(SPEAK_WITH_ANIMALS, 1, School.DIVINATION));
-		spellMap.put(SPEAK_WITH_DEAD, new Prototype(SPEAK_WITH_DEAD, 3, School.NECROMANCY));
-		spellMap.put(SPEAK_WITH_PLANTS, new Prototype(SPEAK_WITH_PLANTS, 3, School.TRANSMUTATION));
-		spellMap.put(SPIDER_CLIMB, new Prototype(SPIDER_CLIMB, 2, School.TRANSMUTATION));
-		spellMap.put(SPIKE_GROWTH, new Prototype(SPIKE_GROWTH, 2, School.TRANSMUTATION));
-		spellMap.put(SPIRIT_GUARDIANS, new Prototype(SPIRIT_GUARDIANS, 3, School.CONJURATION));
-		spellMap.put(SPIRITUAL_WEAPON, new Prototype(SPIRITUAL_WEAPON, 2, School.EVOCATION));
-		spellMap.put(STAGGERING_SMITE, new Prototype(STAGGERING_SMITE, 4, School.EVOCATION));
-		spellMap.put(STINKING_CLOUD, new Prototype(STINKING_CLOUD, 3, School.CONJURATION));
-		spellMap.put(STONE_SHAPE, new Prototype(STONE_SHAPE, 4, School.TRANSMUTATION));
-		spellMap.put(STONESKIN, new Prototype(STONESKIN, 4, School.ABJURATION));
-		spellMap.put(STORM_OF_VENGEANCE, new Prototype(STORM_OF_VENGEANCE, 9, School.CONJURATION));
-		spellMap.put(SUGGESTION, new Prototype(SUGGESTION, 2, School.ENCHANTMENT));
-		spellMap.put(SUNBEAM, new Prototype(SUNBEAM, 6, School.EVOCATION));
-		spellMap.put(SUNBURST, new Prototype(SUNBURST, 8, School.EVOCATION));
-		spellMap.put(SWIFT_QUIVER, new Prototype(SWIFT_QUIVER, 5, School.TRANSMUTATION));
-		spellMap.put(SYMBOL, new Prototype(SYMBOL, 7, School.ABJURATION));
-		spellMap.put(TASHAS_HIDEOUS_LAUGHTER, new Prototype(TASHAS_HIDEOUS_LAUGHTER, 1, School.ENCHANTMENT));
-		spellMap.put(TELEKINESIS, new Prototype(TELEKINESIS, 5, School.TRANSMUTATION));
-		spellMap.put(TELEPATHY, new Prototype(TELEPATHY, 8, School.EVOCATION));
-		spellMap.put(TELEPORT, new Prototype(TELEPORT, 7, School.CONJURATION));
-		spellMap.put(TELEPORTATION_CIRCLE, new Prototype(TELEPORTATION_CIRCLE, 5, School.CONJURATION));
-		spellMap.put(TENSERS_FLOATING_DISK, new Prototype(TENSERS_FLOATING_DISK, 1, School.CONJURATION));
-		spellMap.put(THAUMATURGY, new Prototype(THAUMATURGY, 0, School.TRANSMUTATION));
-		spellMap.put(THORN_WHIP, new Prototype(THORN_WHIP, 0, School.TRANSMUTATION));
-		spellMap.put(THUNDEROUS_SMITE, new Prototype(THUNDEROUS_SMITE, 1, School.EVOCATION));
-		spellMap.put(THUNDERWAVE, new Prototype(THUNDERWAVE, 1, School.EVOCATION));
-		spellMap.put(TIME_STOP, new Prototype(TIME_STOP, 9, School.TRANSMUTATION));
-		spellMap.put(TONGUES, new Prototype(TONGUES, 3, School.DIVINATION));
-		spellMap.put(TRANSPORT_VIA_PLANTS, new Prototype(TRANSPORT_VIA_PLANTS, 6, School.CONJURATION));
-		spellMap.put(TREE_STRIDE, new Prototype(TREE_STRIDE, 5, School.CONJURATION));
-		spellMap.put(TRUE_POLYMORPH, new Prototype(TRUE_POLYMORPH, 9, School.TRANSMUTATION));
-		spellMap.put(TRUE_RESURRECTION, new Prototype(TRUE_RESURRECTION, 9, School.NECROMANCY));
-		spellMap.put(TRUE_SEEING, new Prototype(TRUE_SEEING, 6, School.DIVINATION));
-		spellMap.put(TRUE_STRIKE, new Prototype(TRUE_STRIKE, 0, School.DIVINATION));
-		spellMap.put(TSUNAMI, new Prototype(TSUNAMI, 8, School.CONJURATION));
-		spellMap.put(UNSEEN_SERVANT, new Prototype(UNSEEN_SERVANT, 1, School.CONJURATION));
-		spellMap.put(VAMPIRIC_TOUCH, new Prototype(VAMPIRIC_TOUCH, 3, School.NECROMANCY));
-		spellMap.put(VICIOUS_MOCKERY, new Prototype(VICIOUS_MOCKERY, 0, School.ENCHANTMENT));
-		spellMap.put(WALL_OF_FIRE, new Prototype(WALL_OF_FIRE, 4, School.EVOCATION));
-		spellMap.put(WALL_OF_FORCE, new Prototype(WALL_OF_FORCE, 5, School.EVOCATION));
-		spellMap.put(WALL_OF_ICE, new Prototype(WALL_OF_ICE, 6, School.EVOCATION));
-		spellMap.put(WALL_OF_STONE, new Prototype(WALL_OF_STONE, 5, School.EVOCATION));
-		spellMap.put(WALL_OF_THORNS, new Prototype(WALL_OF_THORNS, 6, School.CONJURATION));
-		spellMap.put(WARDING_BOND, new Prototype(WARDING_BOND, 2, School.ABJURATION));
-		spellMap.put(WATER_BREATHING, new Prototype(WATER_BREATHING, 3, School.TRANSMUTATION));
-		spellMap.put(WATER_WALK, new Prototype(WATER_WALK, 3, School.TRANSMUTATION));
-		spellMap.put(WEB, new Prototype(WEB, 2, School.CONJURATION));
-		spellMap.put(WEIRD, new Prototype(WEIRD, 9, School.ILLUSION));
-		spellMap.put(WIND_WALK, new Prototype(WIND_WALK, 6, School.TRANSMUTATION));
-		spellMap.put(WIND_WALL, new Prototype(WIND_WALL, 3, School.EVOCATION));
-		spellMap.put(WISH, new Prototype(WISH, 9, School.CONJURATION));
-		spellMap.put(WITCH_BOLT, new Prototype(WITCH_BOLT, 1, School.EVOCATION));
-		spellMap.put(WORD_OF_RECALL, new Prototype(WORD_OF_RECALL, 6, School.CONJURATION));
-		spellMap.put(WRATHFUL_SMITE, new Prototype(WRATHFUL_SMITE, 1, School.EVOCATION));
-		spellMap.put(ZONE_OF_TRUTH, new Prototype(ZONE_OF_TRUTH, 2, School.ENCHANTMENT));
+		prototypeMap.put(MORDENKAINENS_PRIVATE_SANCTUM,
+				new Prototype(MORDENKAINENS_PRIVATE_SANCTUM, 4, School.ABJURATION));
+		prototypeMap.put(MORDENKAINENS_SWORD, new Prototype(MORDENKAINENS_SWORD, 7, School.EVOCATION));
+		prototypeMap.put(MOVE_EARTH, new Prototype(MOVE_EARTH, 6, School.TRANSMUTATION));
+		prototypeMap.put(NONDETECTION, new Prototype(NONDETECTION, 3, School.ABJURATION));
+		prototypeMap.put(NYSTULS_MAGIC_AURA, new Prototype(NYSTULS_MAGIC_AURA, 2, School.ILLUSION));
+		prototypeMap.put(OTILUKES_FREEZING_SPHERE, new Prototype(OTILUKES_FREEZING_SPHERE, 6, School.EVOCATION));
+		prototypeMap.put(OTILUKES_RESILIENT_SPHERE, new Prototype(OTILUKES_RESILIENT_SPHERE, 4, School.EVOCATION));
+		prototypeMap.put(OTTOS_IRRESISTIBLE_DANCE, new Prototype(OTTOS_IRRESISTIBLE_DANCE, 6, School.ENCHANTMENT));
+		prototypeMap.put(PASS_WITHOUT_TRACE, new Prototype(PASS_WITHOUT_TRACE, 2, School.ABJURATION));
+		prototypeMap.put(PASSWALL, new Prototype(PASSWALL, 5, School.TRANSMUTATION));
+		prototypeMap.put(PHANTASMAL_FORCE, new Prototype(PHANTASMAL_FORCE, 2, School.ILLUSION));
+		prototypeMap.put(PHANTASMAL_KILLER, new Prototype(PHANTASMAL_KILLER, 4, School.ILLUSION));
+		prototypeMap.put(PHANTOM_STEED, new Prototype(PHANTOM_STEED, 3, School.ILLUSION));
+		prototypeMap.put(PLANAR_ALLY, new Prototype(PLANAR_ALLY, 6, School.CONJURATION));
+		prototypeMap.put(PLANAR_BINDING, new Prototype(PLANAR_BINDING, 5, School.ABJURATION));
+		prototypeMap.put(PLANE_SHIFT, new Prototype(PLANE_SHIFT, 7, School.CONJURATION));
+		prototypeMap.put(PLANT_GROWTH, new Prototype(PLANT_GROWTH, 3, School.TRANSMUTATION));
+		prototypeMap.put(POISON_SPRAY, new Prototype(POISON_SPRAY, 0, School.CONJURATION));
+		prototypeMap.put(POLYMORPH, new Prototype(POLYMORPH, 4, School.TRANSMUTATION));
+		prototypeMap.put(POWER_WORD_HEAL, new Prototype(POWER_WORD_HEAL, 9, School.EVOCATION));
+		prototypeMap.put(POWER_WORD_KILL, new Prototype(POWER_WORD_KILL, 9, School.ENCHANTMENT));
+		prototypeMap.put(POWER_WORD_STUN, new Prototype(POWER_WORD_STUN, 8, School.ENCHANTMENT));
+		prototypeMap.put(PRAYER_OF_HEALING, new Prototype(PRAYER_OF_HEALING, 2, School.EVOCATION));
+		prototypeMap.put(PRESTIDIGITATION, new Prototype(PRESTIDIGITATION, 0, School.TRANSMUTATION));
+		prototypeMap.put(PRISMATIC_SPRAY, new Prototype(PRISMATIC_SPRAY, 7, School.EVOCATION));
+		prototypeMap.put(PRISMATIC_WALL, new Prototype(PRISMATIC_WALL, 9, School.ABJURATION));
+		prototypeMap.put(PRODUCE_FLAME, new Prototype(PRODUCE_FLAME, 0, School.CONJURATION));
+		prototypeMap.put(PROGRAMMED_ILLUSION, new Prototype(PROGRAMMED_ILLUSION, 6, School.ILLUSION));
+		prototypeMap.put(PROJECT_IMAGE, new Prototype(PROJECT_IMAGE, 7, School.ILLUSION));
+		prototypeMap.put(PROTECTION_FROM_ENERGY, new Prototype(PROTECTION_FROM_ENERGY, 3, School.ABJURATION));
+		prototypeMap.put(PROTECTION_FROM_EVIL_AND_GOOD,
+				new Prototype(PROTECTION_FROM_EVIL_AND_GOOD, 1, School.ABJURATION));
+		prototypeMap.put(PROTECTION_FROM_POISON, new Prototype(PROTECTION_FROM_POISON, 2, School.ABJURATION));
+		prototypeMap.put(PURIFY_FOOD_AND_DRINK, new Prototype(PURIFY_FOOD_AND_DRINK, 1, School.TRANSMUTATION));
+		prototypeMap.put(RAISE_DEAD, new Prototype(RAISE_DEAD, 5, School.NECROMANCY));
+		prototypeMap.put(RARYS_TELEPATHIC_BOND, new Prototype(RARYS_TELEPATHIC_BOND, 5, School.DIVINATION));
+		prototypeMap.put(RAY_OF_ENFEEBLEMENT, new Prototype(RAY_OF_ENFEEBLEMENT, 2, School.NECROMANCY));
+		prototypeMap.put(RAY_OF_FROST, new Prototype(RAY_OF_FROST, 0, School.EVOCATION));
+		prototypeMap.put(RAY_OF_SICKNESS, new Prototype(RAY_OF_SICKNESS, 1, School.NECROMANCY));
+		prototypeMap.put(REGENERATE, new Prototype(REGENERATE, 7, School.TRANSMUTATION));
+		prototypeMap.put(REINCARNATE, new Prototype(REINCARNATE, 5, School.TRANSMUTATION));
+		prototypeMap.put(REMOVE_CURSE, new Prototype(REMOVE_CURSE, 3, School.ABJURATION));
+		prototypeMap.put(RESISTANCE, new Prototype(RESISTANCE, 0, School.ABJURATION));
+		prototypeMap.put(RESURRECTION, new Prototype(RESURRECTION, 7, School.NECROMANCY));
+		prototypeMap.put(REVERSE_GRAVITY, new Prototype(REVERSE_GRAVITY, 7, School.TRANSMUTATION));
+		prototypeMap.put(REVIVIFY, new Prototype(REVIVIFY, 3, School.CONJURATION));
+		prototypeMap.put(ROPE_TRICK, new Prototype(ROPE_TRICK, 2, School.TRANSMUTATION));
+		prototypeMap.put(SACRED_FLAME, new Prototype(SACRED_FLAME, 0, School.EVOCATION));
+		prototypeMap.put(SANCTUARY, new Prototype(SANCTUARY, 1, School.ABJURATION));
+		prototypeMap.put(SCORCHING_RAY, new Prototype(SCORCHING_RAY, 2, School.EVOCATION));
+		prototypeMap.put(SCRYING, new Prototype(SCRYING, 5, School.DIVINATION));
+		prototypeMap.put(SEARING_SMITE, new Prototype(SEARING_SMITE, 1, School.EVOCATION));
+		prototypeMap.put(SEE_INVISIBILITY, new Prototype(SEE_INVISIBILITY, 2, School.DIVINATION));
+		prototypeMap.put(SEEMING, new Prototype(SEEMING, 5, School.ILLUSION));
+		prototypeMap.put(SENDING, new Prototype(SENDING, 3, School.EVOCATION));
+		prototypeMap.put(SEQUESTER, new Prototype(SEQUESTER, 7, School.TRANSMUTATION));
+		prototypeMap.put(SHAPECHANGE, new Prototype(SHAPECHANGE, 9, School.TRANSMUTATION));
+		prototypeMap.put(SHATTER, new Prototype(SHATTER, 2, School.EVOCATION));
+		prototypeMap.put(SHIELD, new Prototype(SHIELD, 1, School.ABJURATION));
+		prototypeMap.put(SHIELD_OF_FAITH, new Prototype(SHIELD_OF_FAITH, 1, School.ABJURATION));
+		prototypeMap.put(SHILLELAGH, new Prototype(SHILLELAGH, 0, School.TRANSMUTATION));
+		prototypeMap.put(SHOCKING_GRASP, new Prototype(SHOCKING_GRASP, 0, School.EVOCATION));
+		prototypeMap.put(SILENCE, new Prototype(SILENCE, 2, School.ILLUSION));
+		prototypeMap.put(SILENT_IMAGE, new Prototype(SILENT_IMAGE, 1, School.ILLUSION));
+		prototypeMap.put(SIMULACRUM, new Prototype(SIMULACRUM, 7, School.ILLUSION));
+		prototypeMap.put(SLEEP, new Prototype(SLEEP, 1, School.ENCHANTMENT));
+		prototypeMap.put(SLEET_STORM, new Prototype(SLEET_STORM, 3, School.CONJURATION));
+		prototypeMap.put(SLOW, new Prototype(SLOW, 3, School.TRANSMUTATION));
+		prototypeMap.put(SPARE_THE_DYING, new Prototype(SPARE_THE_DYING, 0, School.NECROMANCY));
+		prototypeMap.put(SPEAK_WITH_ANIMALS, new Prototype(SPEAK_WITH_ANIMALS, 1, School.DIVINATION));
+		prototypeMap.put(SPEAK_WITH_DEAD, new Prototype(SPEAK_WITH_DEAD, 3, School.NECROMANCY));
+		prototypeMap.put(SPEAK_WITH_PLANTS, new Prototype(SPEAK_WITH_PLANTS, 3, School.TRANSMUTATION));
+		prototypeMap.put(SPIDER_CLIMB, new Prototype(SPIDER_CLIMB, 2, School.TRANSMUTATION));
+		prototypeMap.put(SPIKE_GROWTH, new Prototype(SPIKE_GROWTH, 2, School.TRANSMUTATION));
+		prototypeMap.put(SPIRIT_GUARDIANS, new Prototype(SPIRIT_GUARDIANS, 3, School.CONJURATION));
+		prototypeMap.put(SPIRITUAL_WEAPON, new Prototype(SPIRITUAL_WEAPON, 2, School.EVOCATION));
+		prototypeMap.put(STAGGERING_SMITE, new Prototype(STAGGERING_SMITE, 4, School.EVOCATION));
+		prototypeMap.put(STINKING_CLOUD, new Prototype(STINKING_CLOUD, 3, School.CONJURATION));
+		prototypeMap.put(STONE_SHAPE, new Prototype(STONE_SHAPE, 4, School.TRANSMUTATION));
+		prototypeMap.put(STONESKIN, new Prototype(STONESKIN, 4, School.ABJURATION));
+		prototypeMap.put(STORM_OF_VENGEANCE, new Prototype(STORM_OF_VENGEANCE, 9, School.CONJURATION));
+		prototypeMap.put(SUGGESTION, new Prototype(SUGGESTION, 2, School.ENCHANTMENT));
+		prototypeMap.put(SUNBEAM, new Prototype(SUNBEAM, 6, School.EVOCATION));
+		prototypeMap.put(SUNBURST, new Prototype(SUNBURST, 8, School.EVOCATION));
+		prototypeMap.put(SWIFT_QUIVER, new Prototype(SWIFT_QUIVER, 5, School.TRANSMUTATION));
+		prototypeMap.put(SYMBOL, new Prototype(SYMBOL, 7, School.ABJURATION));
+		prototypeMap.put(TASHAS_HIDEOUS_LAUGHTER, new Prototype(TASHAS_HIDEOUS_LAUGHTER, 1, School.ENCHANTMENT));
+		prototypeMap.put(TELEKINESIS, new Prototype(TELEKINESIS, 5, School.TRANSMUTATION));
+		prototypeMap.put(TELEPATHY, new Prototype(TELEPATHY, 8, School.EVOCATION));
+		prototypeMap.put(TELEPORT, new Prototype(TELEPORT, 7, School.CONJURATION));
+		prototypeMap.put(TELEPORTATION_CIRCLE, new Prototype(TELEPORTATION_CIRCLE, 5, School.CONJURATION));
+		prototypeMap.put(TENSERS_FLOATING_DISK, new Prototype(TENSERS_FLOATING_DISK, 1, School.CONJURATION));
+		prototypeMap.put(THAUMATURGY, new Prototype(THAUMATURGY, 0, School.TRANSMUTATION));
+		prototypeMap.put(THORN_WHIP, new Prototype(THORN_WHIP, 0, School.TRANSMUTATION));
+		prototypeMap.put(THUNDEROUS_SMITE, new Prototype(THUNDEROUS_SMITE, 1, School.EVOCATION));
+		prototypeMap.put(THUNDERWAVE, new Prototype(THUNDERWAVE, 1, School.EVOCATION));
+		prototypeMap.put(TIME_STOP, new Prototype(TIME_STOP, 9, School.TRANSMUTATION));
+		prototypeMap.put(TONGUES, new Prototype(TONGUES, 3, School.DIVINATION));
+		prototypeMap.put(TRANSPORT_VIA_PLANTS, new Prototype(TRANSPORT_VIA_PLANTS, 6, School.CONJURATION));
+		prototypeMap.put(TREE_STRIDE, new Prototype(TREE_STRIDE, 5, School.CONJURATION));
+		prototypeMap.put(TRUE_POLYMORPH, new Prototype(TRUE_POLYMORPH, 9, School.TRANSMUTATION));
+		prototypeMap.put(TRUE_RESURRECTION, new Prototype(TRUE_RESURRECTION, 9, School.NECROMANCY));
+		prototypeMap.put(TRUE_SEEING, new Prototype(TRUE_SEEING, 6, School.DIVINATION));
+		prototypeMap.put(TRUE_STRIKE, new Prototype(TRUE_STRIKE, 0, School.DIVINATION));
+		prototypeMap.put(TSUNAMI, new Prototype(TSUNAMI, 8, School.CONJURATION));
+		prototypeMap.put(UNSEEN_SERVANT, new Prototype(UNSEEN_SERVANT, 1, School.CONJURATION));
+		prototypeMap.put(VAMPIRIC_TOUCH, new Prototype(VAMPIRIC_TOUCH, 3, School.NECROMANCY));
+		prototypeMap.put(VICIOUS_MOCKERY, new Prototype(VICIOUS_MOCKERY, 0, School.ENCHANTMENT));
+		prototypeMap.put(WALL_OF_FIRE, new Prototype(WALL_OF_FIRE, 4, School.EVOCATION));
+		prototypeMap.put(WALL_OF_FORCE, new Prototype(WALL_OF_FORCE, 5, School.EVOCATION));
+		prototypeMap.put(WALL_OF_ICE, new Prototype(WALL_OF_ICE, 6, School.EVOCATION));
+		prototypeMap.put(WALL_OF_STONE, new Prototype(WALL_OF_STONE, 5, School.EVOCATION));
+		prototypeMap.put(WALL_OF_THORNS, new Prototype(WALL_OF_THORNS, 6, School.CONJURATION));
+		prototypeMap.put(WARDING_BOND, new Prototype(WARDING_BOND, 2, School.ABJURATION));
+		prototypeMap.put(WATER_BREATHING, new Prototype(WATER_BREATHING, 3, School.TRANSMUTATION));
+		prototypeMap.put(WATER_WALK, new Prototype(WATER_WALK, 3, School.TRANSMUTATION));
+		prototypeMap.put(WEB, new Prototype(WEB, 2, School.CONJURATION));
+		prototypeMap.put(WEIRD, new Prototype(WEIRD, 9, School.ILLUSION));
+		prototypeMap.put(WIND_WALK, new Prototype(WIND_WALK, 6, School.TRANSMUTATION));
+		prototypeMap.put(WIND_WALL, new Prototype(WIND_WALL, 3, School.EVOCATION));
+		prototypeMap.put(WISH, new Prototype(WISH, 9, School.CONJURATION));
+		prototypeMap.put(WITCH_BOLT, new Prototype(WITCH_BOLT, 1, School.EVOCATION));
+		prototypeMap.put(WORD_OF_RECALL, new Prototype(WORD_OF_RECALL, 6, School.CONJURATION));
+		prototypeMap.put(WRATHFUL_SMITE, new Prototype(WRATHFUL_SMITE, 1, School.EVOCATION));
+		prototypeMap.put(ZONE_OF_TRUTH, new Prototype(ZONE_OF_TRUTH, 2, School.ENCHANTMENT));
+
+		//
+		spellMap.put(ACID_SPLASH, new Instance(prototypeMap.get(ACID_SPLASH), 1, 6));
+		spellMap.put(ARMS_OF_HADAR, new Instance(prototypeMap.get(ARMS_OF_HADAR), 2, 6));
+		spellMap.put(BANISHING_SMITE, new Instance(prototypeMap.get(BANISHING_SMITE), 5, 10));
+		spellMap.put(BLIGHT, new Instance(prototypeMap.get(BLIGHT), 8, 8));
+		spellMap.put(BLINDING_SMITE, new Instance(prototypeMap.get(BLINDING_SMITE), 3, 8));
+		spellMap.put(BRANDING_SMITE, new Instance(prototypeMap.get(BRANDING_SMITE), 2, 6));
+		spellMap.put(BURNING_HANDS, new Instance(prototypeMap.get(BURNING_HANDS), 3, 6));
+		spellMap.put(CALL_LIGHTNING, new Instance(prototypeMap.get(CALL_LIGHTNING), 3, 10));
+		spellMap.put(CHAIN_LIGHTNING, new Instance(prototypeMap.get(CHAIN_LIGHTNING), 10, 8));
+		spellMap.put(CHILL_TOUCH, new Instance(prototypeMap.get(CHILL_TOUCH), 1, 8));
+		spellMap.put(CHROMATIC_ORB, new Instance(prototypeMap.get(CHROMATIC_ORB), 3, 8));
+		spellMap.put(CIRCLE_OF_DEATH, new Instance(prototypeMap.get(CIRCLE_OF_DEATH), 8, 6));
+		spellMap.put(CLOUD_OF_DAGGERS, new Instance(prototypeMap.get(CLOUD_OF_DAGGERS), 4, 4));
+		spellMap.put(CLOUDKILL, new Instance(prototypeMap.get(CLOUDKILL), 5, 8));
+		spellMap.put(CONE_OF_COLD, new Instance(prototypeMap.get(CONE_OF_COLD), 8, 8));
+		spellMap.put(CONJURE_BARRAGE, new Instance(prototypeMap.get(CONJURE_BARRAGE), 3, 8));
+		spellMap.put(CONJURE_VOLLEY, new Instance(prototypeMap.get(CONJURE_VOLLEY), 8, 8));
+		spellMap.put(DELAYED_BLAST_FIREBALL, new Instance(prototypeMap.get(DELAYED_BLAST_FIREBALL), 12, 6));
+		spellMap.put(DESTRUCTIVE_WAVE, new Instance(prototypeMap.get(DESTRUCTIVE_WAVE), 5, 6));
+		spellMap.put(DISINTEGRATE, new Instance(prototypeMap.get(DISINTEGRATE), 10, 6));
+		spellMap.put(DISSONANT_WHISPERS, new Instance(prototypeMap.get(DISSONANT_WHISPERS), 3, 6));
+		spellMap.put(ELDRITCH_BLAST, new Instance(prototypeMap.get(ELDRITCH_BLAST), 1, 10));
+		spellMap.put(EVARDS_BLACK_TENTACLES, new Instance(prototypeMap.get(EVARDS_BLACK_TENTACLES), 3, 6));
+		spellMap.put(FINGER_OF_DEATH, new Instance(prototypeMap.get(FINGER_OF_DEATH), 7, 8));
+		spellMap.put(FIREBALL, new Instance(prototypeMap.get(FIREBALL), 8, 6));
+		spellMap.put(FIREBOLT, new Instance(prototypeMap.get(FIREBOLT), 1, 10));
+		spellMap.put(FIRE_STORM, new Instance(prototypeMap.get(FIRE_STORM), 7, 10));
+		spellMap.put(FLAME_BLADE, new Instance(prototypeMap.get(FLAME_BLADE), 3, 6));
+		spellMap.put(FLAME_STRIKE, new Instance(prototypeMap.get(FLAME_STRIKE), 4, 6));
+		spellMap.put(FLAMING_SPHERE, new Instance(prototypeMap.get(FLAMING_SPHERE), 2, 6));
+		spellMap.put(GLYPH_OF_WARDING, new Instance(prototypeMap.get(GLYPH_OF_WARDING), 5, 8));
+		spellMap.put(GUIDING_BOLT, new Instance(prototypeMap.get(GUIDING_BOLT), 4, 6));
+		spellMap.put(HAIL_OF_THORNS, new Instance(prototypeMap.get(HAIL_OF_THORNS), 1, 10));
+		spellMap.put(HARM, new Instance(prototypeMap.get(HARM), 14, 6));
+		spellMap.put(HEAT_METAL, new Instance(prototypeMap.get(HEAT_METAL), 2, 8));
+		spellMap.put(HELLISH_REBUKE, new Instance(prototypeMap.get(HELLISH_REBUKE), 2, 10));
+		spellMap.put(HUNGER_OF_HADAR, new Instance(prototypeMap.get(HUNGER_OF_HADAR), 2, 6));
+		spellMap.put(ICE_STORM, new Instance(prototypeMap.get(ICE_STORM), 2, 8));
+		spellMap.put(INCENDIARY_CLOUD, new Instance(prototypeMap.get(INCENDIARY_CLOUD), 10, 8));
+		spellMap.put(INFLICT_WOUNDS, new Instance(prototypeMap.get(INFLICT_WOUNDS), 3, 10));
+		spellMap.put(INSECT_PLAGUE, new Instance(prototypeMap.get(INSECT_PLAGUE), 4, 10));
+		spellMap.put(LIGHTNING_ARROW, new Instance(prototypeMap.get(LIGHTNING_ARROW), 4, 8));
+		spellMap.put(LIGHTNING_BOLT, new Instance(prototypeMap.get(LIGHTNING_BOLT), 8, 6));
+		spellMap.put(MAGIC_MISSILE, new Instance(prototypeMap.get(MAGIC_MISSILE), 3, 4));
+		spellMap.put(MELFS_ACID_ARROW, new Instance(prototypeMap.get(MELFS_ACID_ARROW), 4, 4));
+		spellMap.put(METEOR_SWARM, new Instance(prototypeMap.get(METEOR_SWARM), 40, 6));
+		spellMap.put(MOONBEAM, new Instance(prototypeMap.get(MOONBEAM), 2, 10));
+		spellMap.put(MORDENKAINENS_SWORD, new Instance(prototypeMap.get(MORDENKAINENS_SWORD), 3, 10));
+		spellMap.put(OTILUKES_FREEZING_SPHERE, new Instance(prototypeMap.get(OTILUKES_FREEZING_SPHERE), 10, 6));
+		spellMap.put(PHANTASMAL_KILLER, new Instance(prototypeMap.get(PHANTASMAL_KILLER), 4, 10));
+		spellMap.put(POISON_SPRAY, new Instance(prototypeMap.get(POISON_SPRAY), 1, 12));
+		spellMap.put(PRISMATIC_SPRAY, new Instance(prototypeMap.get(PRISMATIC_SPRAY), 10, 6));
+		spellMap.put(PRISMATIC_WALL, new Instance(prototypeMap.get(PRISMATIC_WALL), 50, 6));
+		spellMap.put(PRODUCE_FLAME, new Instance(prototypeMap.get(PRODUCE_FLAME), 1, 8));
+		spellMap.put(RAY_OF_FROST, new Instance(prototypeMap.get(RAY_OF_FROST), 1, 8));
+		spellMap.put(RAY_OF_SICKNESS, new Instance(prototypeMap.get(RAY_OF_SICKNESS), 2, 8));
+		spellMap.put(SACRED_FLAME, new Instance(prototypeMap.get(SACRED_FLAME), 1, 8));
+		spellMap.put(SCORCHING_RAY, new Instance(prototypeMap.get(SCORCHING_RAY), 2, 6));
+		spellMap.put(SEARING_SMITE, new Instance(prototypeMap.get(SEARING_SMITE), 1, 6));
+		spellMap.put(SHATTER, new Instance(prototypeMap.get(SHATTER), 3, 8));
+		spellMap.put(SHILLELAGH, new Instance(prototypeMap.get(SHILLELAGH), 1, 8));
+		spellMap.put(SHOCKING_GRASP, new Instance(prototypeMap.get(SHOCKING_GRASP), 1, 8));
+		spellMap.put(SPIRITUAL_WEAPON, new Instance(prototypeMap.get(SPIRITUAL_WEAPON), 1, 8));
+		spellMap.put(STAGGERING_SMITE, new Instance(prototypeMap.get(STAGGERING_SMITE), 4, 6));
+		spellMap.put(STORM_OF_VENGEANCE, new Instance(prototypeMap.get(STORM_OF_VENGEANCE), 10, 6));
+		spellMap.put(SUNBEAM, new Instance(prototypeMap.get(SUNBEAM), 6, 8));
+		spellMap.put(SUNBURST, new Instance(prototypeMap.get(SUNBURST), 12, 6));
+		spellMap.put(SYMBOL, new Instance(prototypeMap.get(SYMBOL), 10, 10));
+		spellMap.put(THORN_WHIP, new Instance(prototypeMap.get(THORN_WHIP), 1, 6));
+		spellMap.put(THUNDEROUS_SMITE, new Instance(prototypeMap.get(THUNDEROUS_SMITE), 2, 6));
+		spellMap.put(THUNDERWAVE, new Instance(prototypeMap.get(THUNDERWAVE), 2, 8));
+		spellMap.put(VAMPIRIC_TOUCH, new Instance(prototypeMap.get(VAMPIRIC_TOUCH), 3, 6));
+		spellMap.put(VICIOUS_MOCKERY, new Instance(prototypeMap.get(VICIOUS_MOCKERY), 1, 4));
+		spellMap.put(WALL_OF_FIRE, new Instance(prototypeMap.get(WALL_OF_FIRE), 5, 8));
+		spellMap.put(WALL_OF_ICE, new Instance(prototypeMap.get(WALL_OF_ICE), 10, 6));
+		spellMap.put(WALL_OF_THORNS, new Instance(prototypeMap.get(WALL_OF_THORNS), 7, 8));
+		spellMap.put(WEIRD, new Instance(prototypeMap.get(WEIRD), 4, 10));
+		spellMap.put(WITCH_BOLT, new Instance(prototypeMap.get(WITCH_BOLT), 1, 12));
+		spellMap.put(WRATHFUL_SMITE, new Instance(prototypeMap.get(WRATHFUL_SMITE), 1, 6));
+
 	}
 
 	/*
 	 * STATIC METHODS
 	 * 
 	 */
-	private static Set<Spell> listToSet(Class job, int spellTier) {
+	private static Set<Spell> listToSet(Class job, int tier) {
 		Spell[] array = null;
 		Set<Spell> set = EnumSet.noneOf(Spell.class);
 
 		if (job.equals(Class.BARD))
-			array = BARD_SPELLS[spellTier];
+			array = BARD_SPELLS[tier];
 		else if (job.equals(Class.CLERIC))
-			array = CLERIC_SPELLS[spellTier];
+			array = CLERIC_SPELLS[tier];
 		else if (job.equals(Class.DRUID))
-			array = DRUID_SPELLS[spellTier];
-		else if (job.equals(Class.FIGHTER))
-			array = WIZARD_SPELLS[spellTier];
-		else if (job.equals(Class.PALADIN))
-			array = PALADIN_SPELLS[spellTier];
-		else if (job.equals(Class.RANGER))
-			array = RANGER_SPELLS[spellTier];
-		else if (job.equals(Class.ROGUE))
-			array = WIZARD_SPELLS[spellTier];
+			array = DRUID_SPELLS[tier];
+		else if (job.equals(Class.FIGHTER) && tier <= 4)
+			array = WIZARD_SPELLS[tier];
+		else if (job.equals(Class.PALADIN) && tier <= 5)
+			array = PALADIN_SPELLS[tier];
+		else if (job.equals(Class.RANGER) && tier <= 5)
+			array = RANGER_SPELLS[tier];
+		else if (job.equals(Class.ROGUE) && tier <= 4)
+			array = WIZARD_SPELLS[tier];
 		else if (job.equals(Class.SORCERER))
-			array = SORCERER_SPELLS[spellTier];
+			array = SORCERER_SPELLS[tier];
 		else if (job.equals(Class.WARLOCK))
-			array = WARLOCK_SPELLS[spellTier];
+			array = WARLOCK_SPELLS[tier];
 		else if (job.equals(Class.WIZARD))
-			array = WIZARD_SPELLS[spellTier];
+			array = WIZARD_SPELLS[tier];
 
-		for (Spell el : array)
-			set.add(el);
+		if (array != null) {
+			for (Spell el : array)
+				set.add(el);
+
+		}
 
 		return set;
 	}
@@ -719,7 +830,7 @@ public enum Spell {
 		Spell candidate;
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			candidate = it.next();
-			if (spellMap.get(candidate).school.equals(school))
+			if (prototypeMap.get(candidate).school.equals(school))
 				set.add(candidate);
 		}
 
@@ -732,11 +843,54 @@ public enum Spell {
 		Spell candidate;
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			candidate = it.next();
-			if (spellMap.get(candidate).level == tier)
+			if (prototypeMap.get(candidate).level == tier)
 				set.add(candidate);
 		}
 
 		return set;
+	}
+
+	public static Spell highestDamagingSpell(Set<Spell> spellsKnown) {
+		Set<Spell> filteredSet;
+		Spell candidate, highestDamage = null;
+		int currentDamage, previousDamage = 0;
+
+		for (int i = 9; i >= 0; --i) {
+			filteredSet = EnumSet.copyOf(spellsKnown);
+			filterSpellsByTier(i, filteredSet);
+
+			for (Iterator<Spell> it = filteredSet.iterator(); it.hasNext();) {
+				candidate = it.next();
+				if (spellMap.get(candidate) != null)
+					currentDamage = spellMap.get(candidate).getAverageDamage();
+				else
+					currentDamage = 0;
+
+				if (currentDamage > 0 && currentDamage > previousDamage) {
+					previousDamage = currentDamage;
+					highestDamage = candidate;
+				}
+			}
+
+			if (highestDamage != null)
+				break;
+		}
+
+		return highestDamage;
+	}
+
+	public static Set<Spell> getAllSpells(Class job) {
+		Set<Spell> spells = EnumSet.noneOf(Spell.class);
+
+		for (int i = 9; i >= 0; --i) {
+			spells.addAll(listToSet(job, i));
+		}
+
+		return spells;
+	}
+
+	public static int getAverageDamage(Spell spell) {
+		return spellMap.get(spell).getAverageDamage();
 	}
 
 	// public static HashSet<Spell> bardCantripSetup(Actor actor) {
