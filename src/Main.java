@@ -18,7 +18,7 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-		levelUpTest(Class.BARBARIAN);
+		levelUpTest(Class.BARD);
 
 	}
 

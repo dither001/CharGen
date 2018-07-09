@@ -348,8 +348,8 @@ public enum Class implements Option {
 		Class job = actor.getJob();
 		if (job.equals(Class.BARBARIAN)) {
 			features.addAll(barbarian(actor));
-			// } else if (job.equals(Class.BARD)) {
-			// features.addAll(bard(actor));
+		} else if (job.equals(Class.BARD)) {
+			features.addAll(bard(actor));
 			// } else if (job.equals(Class.CLERIC)) {
 			// features.addAll(cleric(actor));
 			// } else if (job.equals(Class.DRUID)) {
@@ -374,7 +374,6 @@ public enum Class implements Option {
 
 		actor.setFeatures(features);
 	}
-
 
 	public static void setupClassFeatures(Actor actor) {
 		EnumSet<Feature> features;
@@ -387,8 +386,8 @@ public enum Class implements Option {
 		Class job = actor.getJob();
 		if (job.equals(Class.BARBARIAN)) {
 			features.addAll(barbarian(actor));
-			// } else if (job.equals(Class.BARD)) {
-			// features.addAll(bard(actor));
+		} else if (job.equals(Class.BARD)) {
+			features.addAll(bard(actor));
 			// } else if (job.equals(Class.CLERIC)) {
 			// features.addAll(cleric(actor));
 			// } else if (job.equals(Class.DRUID)) {
@@ -414,6 +413,227 @@ public enum Class implements Option {
 		actor.setFeatures(features);
 	}
 
+	public static EnumSet<Feature> barbarian(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		if (level == 1) {
+			set.add(Feature.RAGE);
+			set.add(Feature.RAGE_PER_DAY_2);
+			set.add(Feature.RAGE_BONUS_2);
+			set.add(Feature.UNARMORED_DEFENSE_BARBARIAN);
+		} else if (level == 2) {
+			set.add(Feature.RECKLESS_ATTACK);
+			set.add(Feature.DANGER_SENSE);
+		} else if (level == 3) {
+			// PRIMAL PATH
+			set.add(Feature.RAGE_PER_DAY_3);
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.FRENZY);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.SPIRIT_SEEKER);
+				set.add(Feature.BEAR_SPIRIT_3);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.SPIRIT_SEEKER);
+				set.add(Feature.EAGLE_SPIRIT_3);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.SPIRIT_SEEKER);
+				set.add(Feature.WOLF_SPIRIT_3);
+			}
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+		} else if (level == 5) {
+			set.add(Feature.EXTRA_ATTACK_1);
+			set.add(Feature.FAST_MOVEMENT);
+			set.add(Feature.RAGE_PER_DAY_4);
+		} else if (level == 6) {
+			// PRIMAL PATH
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.MINDLESS_RAGE);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.BEAR_ASPECT_6);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.EAGLE_ASPECT_6);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.WOLF_ASPECT_6);
+			}
+		} else if (level == 7) {
+			set.add(Feature.FERAL_INSTINCT);
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+		} else if (level == 9) {
+			set.add(Feature.BRUTAL_CRITICAL_1);
+			set.add(Feature.RAGE_BONUS_3);
+		} else if (level == 10) {
+			// PRIMAL PATH
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.INTIMIDATING_PRESENCE);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.SPIRIT_WALKER);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.SPIRIT_WALKER);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.SPIRIT_WALKER);
+			}
+		} else if (level == 11) {
+			set.add(Feature.RELENTLESS_RAGE);
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+			set.add(Feature.RAGE_PER_DAY_5);
+		} else if (level == 13) {
+			set.add(Feature.BRUTAL_CRITICAL_2);
+		} else if (level == 14) {
+			// PRIMAL PATH
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.RETALIATION);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.BEAR_ATTUNEMENT_14);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.EAGLE_ATTUNEMENT_14);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.WOLF_ATTUNEMENT_14);
+			}
+		} else if (level == 15) {
+			set.add(Feature.PERSISTENT_RAGE);
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+			set.add(Feature.RAGE_BONUS_4);
+		} else if (level == 17) {
+			set.add(Feature.BRUTAL_CRITICAL_3);
+			set.add(Feature.RAGE_PER_DAY_6);
+		} else if (level == 18) {
+			set.add(Feature.INDOMITABLE_MIGHT);
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+			set.add(Feature.PRIMAL_CHAMPION);
+			set.add(Feature.RAGE_PER_DAY_99);
+		}
+
+		return set;
+	}
+
+	public static EnumSet<Feature> bard(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		EnumSet<Skill> skills = actor.getSkills();
+		int level = actor.getLevel();
+
+		if (level == 1) {
+			set.add(Feature.INSPIRATION_D6);
+		} else if (level == 2) {
+			set.add(Feature.JACK_OF_ALL_TRADES);
+			set.add(Feature.SONG_OF_REST_D6);
+		} else if (level == 3) {
+			// BARD COLLEGE
+			set.addAll(addRandomExpertise(2, actor));
+			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
+				skills.add(Skill.testRandomSkill(actor));
+				skills.add(Skill.testRandomSkill(actor));
+				skills.add(Skill.testRandomSkill(actor));
+				set.add(Feature.CUTTING_WORDS);
+			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
+				actor.getArmorProficiency().addAll(Armor.getMediumArmorList());
+				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+				actor.getWeaponProficiency().add(Weapon.SHIELD);
+				set.add(Feature.COMBAT_INSPIRATION);
+			}
+
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+		} else if (level == 5) {
+			set.add(Feature.INSPIRATION_D8);
+			set.add(Feature.FONT_OF_INSPIRATION);
+		} else if (level == 6) {
+			// BARD COLLEGE
+			set.add(Feature.COUNTERCHARM);
+			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
+				set.add(Feature.MAGICAL_SECRETS_6);
+			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
+				set.add(Feature.EXTRA_ATTACK_1);
+			}
+
+		} else if (level == 7) {
+			// spells and nothing else
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+		} else if (level == 9) {
+			set.add(Feature.SONG_OF_REST_D8);
+		} else if (level == 10) {
+			// magical secrets
+			set.addAll(addRandomExpertise(2, actor));
+			set.add(Feature.INSPIRATION_D10);
+			set.add(Feature.MAGICAL_SECRETS_10);
+		} else if (level == 11) {
+			// spells and nothing else
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+		} else if (level == 13) {
+			set.add(Feature.SONG_OF_REST_D10);
+		} else if (level == 14) {
+			// BARD COLLEGE
+			// magical secrets
+			set.add(Feature.MAGICAL_SECRETS_14);
+			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
+				set.add(Feature.PEERLESS_SKILL);
+			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
+				set.add(Feature.BATTLE_MAGIC);
+			}
+
+		} else if (level == 15) {
+			set.add(Feature.INSPIRATION_D12);
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+		} else if (level == 17) {
+			set.add(Feature.SONG_OF_REST_D12);
+		} else if (level == 18) {
+			// magical secrets
+			set.add(Feature.MAGICAL_SECRETS_18);
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+			set.add(Feature.SUPERIOR_INSPIRATION);
+		}
+
+		return set;
+	}
+
+	/*
+	 * ADDITIONAL CLASS SETUP
+	 * 
+	 */
+	public static void additionalSetup(Actor actor) {
+		Subclass archetype = actor.getArchetype();
+
+		if (archetype.equals(Subclass.LIFE)) {
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		} else if (archetype.equals(Subclass.NATURE)) {
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		} else if (archetype.equals(Subclass.TEMPEST)) {
+			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		} else if (archetype.equals(Subclass.WAR)) {
+			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+		}
+
+	}
+
+	/*
+	 * SETUP HELPER METHODS & UPDATE HELPER METHODS
+	 * 
+	 */
 	private static Feature abilityImprove(Actor actor) {
 		Feature[] improvement = null;
 
@@ -564,130 +784,105 @@ public enum Class implements Option {
 		return improvement[index];
 	}
 
-	public static EnumSet<Feature> barbarian(Actor actor) {
-		Class.Subclass archetype = actor.getArchetype();
-		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
-		int level = actor.getLevel();
+	public static EnumSet<Feature> addRandomExpertise(int toAdd, Actor actor) {
+		EnumSet<Skill> skills = actor.getSkills();
+		EnumSet<Feature> features = actor.getFeatures();
 
-		if (level == 1) {
-			set.add(Feature.RAGE);
-			set.add(Feature.RAGE_PER_DAY_2);
-			set.add(Feature.RAGE_BONUS_2);
-			set.add(Feature.UNARMORED_DEFENSE_BARBARIAN);
-		} else if (level == 2) {
-			set.add(Feature.RECKLESS_ATTACK);
-			set.add(Feature.DANGER_SENSE);
-		} else if (level == 3) {
-			// PRIMAL PATH
-			set.add(Feature.RAGE_PER_DAY_3);
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				set.add(Feature.FRENZY);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				set.add(Feature.SPIRIT_SEEKER);
-				set.add(Feature.BEAR_SPIRIT_3);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				set.add(Feature.SPIRIT_SEEKER);
-				set.add(Feature.EAGLE_SPIRIT_3);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				set.add(Feature.SPIRIT_SEEKER);
-				set.add(Feature.WOLF_SPIRIT_3);
+		int added = 0;
+		Feature expertise;
+		while (added < toAdd) {
+			expertise = matchExpertiseToSkill(Dice.randomFromSet(skills));
+
+			if (features.contains(expertise) != true) {
+				features.add(expertise);
+				++added;
 			}
-		} else if (level == 4) {
-			set.add(Feature.ABILITY_BONUS_4);
-			set.add(abilityImprove(actor));
-		} else if (level == 5) {
-			set.add(Feature.EXTRA_ATTACK_1);
-			set.add(Feature.FAST_MOVEMENT);
-			set.add(Feature.RAGE_PER_DAY_4);
-		} else if (level == 6) {
-			// PRIMAL PATH
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				set.add(Feature.MINDLESS_RAGE);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				set.add(Feature.BEAR_ASPECT_6);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				set.add(Feature.EAGLE_ASPECT_6);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				set.add(Feature.WOLF_ASPECT_6);
-			}
-		} else if (level == 7) {
-			set.add(Feature.FERAL_INSTINCT);
-		} else if (level == 8) {
-			set.add(Feature.ABILITY_BONUS_8);
-			set.add(abilityImprove(actor));
-		} else if (level == 9) {
-			set.add(Feature.BRUTAL_CRITICAL_1);
-			set.add(Feature.RAGE_BONUS_3);
-		} else if (level == 10) {
-			// PRIMAL PATH
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				set.add(Feature.INTIMIDATING_PRESENCE);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				set.add(Feature.SPIRIT_WALKER);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				set.add(Feature.SPIRIT_WALKER);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				set.add(Feature.SPIRIT_WALKER);
-			}
-		} else if (level == 11) {
-			set.add(Feature.RELENTLESS_RAGE);
-		} else if (level == 12) {
-			set.add(Feature.ABILITY_BONUS_12);
-			set.add(abilityImprove(actor));
-			set.add(Feature.RAGE_PER_DAY_5);
-		} else if (level == 13) {
-			set.add(Feature.BRUTAL_CRITICAL_2);
-		} else if (level == 14) {
-			// PRIMAL PATH
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
-				set.add(Feature.RETALIATION);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
-				set.add(Feature.BEAR_ATTUNEMENT_14);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
-				set.add(Feature.EAGLE_ATTUNEMENT_14);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
-				set.add(Feature.WOLF_ATTUNEMENT_14);
-			}
-		} else if (level == 15) {
-			set.add(Feature.PERSISTENT_RAGE);
-		} else if (level == 16) {
-			set.add(Feature.ABILITY_BONUS_16);
-			set.add(abilityImprove(actor));
-			set.add(Feature.RAGE_BONUS_4);
-		} else if (level == 17) {
-			set.add(Feature.BRUTAL_CRITICAL_3);
-			set.add(Feature.RAGE_PER_DAY_6);
-		} else if (level == 18) {
-			set.add(Feature.INDOMITABLE_MIGHT);
-		} else if (level == 19) {
-			set.add(Feature.ABILITY_BONUS_19);
-			set.add(abilityImprove(actor));
-		} else if (level == 20) {
-			set.add(Feature.PRIMAL_CHAMPION);
-			set.add(Feature.RAGE_PER_DAY_99);
 		}
 
-		return set;
+		return features;
 	}
 
-	/*
-	 * ADDITIONAL CLASS SETUP
-	 * 
-	 */
-	public static void additionalSetup(Actor actor) {
-		Subclass archetype = actor.getArchetype();
+	private static Feature matchExpertiseToSkill(Skill skill) {
+		Feature expertise = null;
+		if (skill.equals(Skill.ACROBATICS))
+			expertise = Feature.EXPERTISE_ACROBATICS;
+		else if (skill.equals(Skill.ANIMAL_HANDLING))
+			expertise = Feature.EXPERTISE_ANIMAL_HANDLING;
+		else if (skill.equals(Skill.ARCANA))
+			expertise = Feature.EXPERTISE_ARCANA;
+		else if (skill.equals(Skill.ATHLETICS))
+			expertise = Feature.EXPERTISE_ATHLETICS;
+		else if (skill.equals(Skill.DECEPTION))
+			expertise = Feature.EXPERTISE_DECEPTION;
+		else if (skill.equals(Skill.HISTORY))
+			expertise = Feature.EXPERTISE_HISTORY;
+		else if (skill.equals(Skill.INSIGHT))
+			expertise = Feature.EXPERTISE_INSIGHT;
+		else if (skill.equals(Skill.INTIMIDATION))
+			expertise = Feature.EXPERTISE_INTIMIDATION;
+		else if (skill.equals(Skill.INVESTIGATION))
+			expertise = Feature.EXPERTISE_INVESTIGATION;
+		else if (skill.equals(Skill.MEDICINE))
+			expertise = Feature.EXPERTISE_MEDICINE;
+		else if (skill.equals(Skill.NATURE))
+			expertise = Feature.EXPERTISE_NATURE;
+		else if (skill.equals(Skill.PERCEPTION))
+			expertise = Feature.EXPERTISE_PERCEPTION;
+		else if (skill.equals(Skill.PERFORMANCE))
+			expertise = Feature.EXPERTISE_PERFORMANCE;
+		else if (skill.equals(Skill.PERSUASION))
+			expertise = Feature.EXPERTISE_PERSUASION;
+		else if (skill.equals(Skill.RELIGION))
+			expertise = Feature.EXPERTISE_RELIGION;
+		else if (skill.equals(Skill.SLEIGHT_OF_HAND))
+			expertise = Feature.EXPERTISE_SLEIGHT_OF_HAND;
+		else if (skill.equals(Skill.STEALTH))
+			expertise = Feature.EXPERTISE_STEALTH;
+		else if (skill.equals(Skill.SURVIVAL))
+			expertise = Feature.EXPERTISE_SURVIVAL;
 
-		if (archetype.equals(Subclass.LIFE)) {
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		} else if (archetype.equals(Subclass.NATURE)) {
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		} else if (archetype.equals(Subclass.TEMPEST)) {
-			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		} else if (archetype.equals(Subclass.WAR)) {
-			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		}
-
+		return expertise;
 	}
+
+	// private static Skill matchSkillToExpertise(Feature feature) {
+	// Skill skill = null;
+	// if (feature.equals(Feature.EXPERTISE_ACROBATICS))
+	// skill = Skill.ACROBATICS;
+	// else if (feature.equals(Feature.EXPERTISE_ANIMAL_HANDLING))
+	// skill = Skill.ANIMAL_HANDLING;
+	// else if (feature.equals(Feature.EXPERTISE_ARCANA))
+	// skill = Skill.ARCANA;
+	// else if (feature.equals(Feature.EXPERTISE_ATHLETICS))
+	// skill = Skill.ATHLETICS;
+	// else if (feature.equals(Feature.EXPERTISE_DECEPTION))
+	// skill = Skill.DECEPTION;
+	// else if (feature.equals(Feature.EXPERTISE_HISTORY))
+	// skill = Skill.HISTORY;
+	// else if (feature.equals(Feature.EXPERTISE_INSIGHT))
+	// skill = Skill.INSIGHT;
+	// else if (feature.equals(Feature.EXPERTISE_INTIMIDATION))
+	// skill = Skill.INTIMIDATION;
+	// else if (feature.equals(Feature.EXPERTISE_INVESTIGATION))
+	// skill = Skill.INVESTIGATION;
+	// else if (feature.equals(Feature.EXPERTISE_MEDICINE))
+	// skill = Skill.MEDICINE;
+	// else if (feature.equals(Feature.EXPERTISE_NATURE))
+	// skill = Skill.NATURE;
+	// else if (feature.equals(Feature.EXPERTISE_PERCEPTION))
+	// skill = Skill.PERCEPTION;
+	// else if (feature.equals(Feature.EXPERTISE_PERFORMANCE))
+	// skill = Skill.PERFORMANCE;
+	// else if (feature.equals(Feature.EXPERTISE_PERSUASION))
+	// skill = Skill.PERSUASION;
+	// else if (feature.equals(Feature.EXPERTISE_RELIGION))
+	// skill = Skill.RELIGION;
+	// else if (feature.equals(Feature.EXPERTISE_SLEIGHT_OF_HAND))
+	// skill = Skill.SLEIGHT_OF_HAND;
+	// else if (feature.equals(Feature.EXPERTISE_STEALTH))
+	// skill = Skill.STEALTH;
+	// else if (feature.equals(Feature.EXPERTISE_SURVIVAL))
+	// skill = Skill.SURVIVAL;
+	//
+	// return skill;
+	// }
 }
