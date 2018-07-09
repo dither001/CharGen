@@ -610,6 +610,65 @@ public enum Class implements Option {
 	}
 
 	/*
+	 * CLASS TEMPLATE
+	 * 
+	 */
+	public static EnumSet<Feature> blank(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		if (level == 1) {
+
+		} else if (level == 2) {
+
+		} else if (level == 3) {
+
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+		} else if (level == 5) {
+
+		} else if (level == 6) {
+
+		} else if (level == 7) {
+
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+		} else if (level == 9) {
+
+		} else if (level == 10) {
+
+		} else if (level == 11) {
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+		} else if (level == 13) {
+
+		} else if (level == 14) {
+
+		} else if (level == 15) {
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+		} else if (level == 17) {
+
+		} else if (level == 18) {
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+
+		}
+
+		return set;
+	}
+
+	/*
 	 * ADDITIONAL CLASS SETUP
 	 * 
 	 */
