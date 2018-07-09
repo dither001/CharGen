@@ -828,7 +828,7 @@ public enum Spell {
 		actor.setSpellsKnown(spellsKnown);
 	}
 
-	public static Set<Spell> filterSpellsBySchool(School school, Set<Spell> spells) {
+	public static Set<Spell> retainSpellsOfSchool(School school, Set<Spell> spells) {
 		Set<Spell> set = EnumSet.noneOf(Spell.class);
 
 		Spell candidate;
@@ -841,7 +841,7 @@ public enum Spell {
 		return set;
 	}
 
-	public static Set<Spell> filterSpellsByTier(int tier, Set<Spell> spells) {
+	public static Set<Spell> retainSpellsOfTier(int tier, Set<Spell> spells) {
 		Set<Spell> set = EnumSet.noneOf(Spell.class);
 
 		Spell candidate;
@@ -854,6 +854,46 @@ public enum Spell {
 		return set;
 	}
 
+	public static Set<Spell> retainSpellsExceptOfTier(int tier, Set<Spell> spells) {
+		Set<Spell> set = EnumSet.noneOf(Spell.class);
+
+		Spell candidate;
+		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
+			candidate = it.next();
+			if (prototypeMap.get(candidate).level != tier)
+				set.add(candidate);
+		}
+
+		return set;
+	}
+
+	public static void addToSpellsKnown(int characterLevel, Class job, EnumSet<Spell> spellsKnown) {
+		int tier = ((characterLevel - 1) / 2 + 1 > 9) ? 9
+				: ((characterLevel - 1) / 2 + 1 < 1) ? 1 : (characterLevel - 1) / 2 + 1;
+		spellSelector(1, tier, job, spellsKnown);
+	}
+
+	public static void addMagicalSecret(int tier, Actor actor) {
+		EnumSet<Spell> spellsKnown = actor.getSpellsKnown();
+
+		Class job = actor.getJob();
+		if (job.equals(Class.BARD)) {
+			// TODO - paladin, ranger, sorcerer, and warlock spells should be possible but
+			// I'm lazy
+			Class[] jobs = { Class.CLERIC, Class.DRUID, Class.WIZARD };
+
+			job = Dice.randomFromArray(jobs);
+			// TODO - testing
+			// System.out.println("Choosing secret from " + job.toString());
+			spellSelector(1, tier, job, spellsKnown);
+		}
+
+		actor.setSpellsKnown(spellsKnown);
+	}
+
+	/*
+	 * 
+	 */
 	public static Spell highestDamagingSpell(Set<Spell> spellsKnown) {
 		Set<Spell> filteredSet;
 		Spell candidate, highestDamage = null;
@@ -861,7 +901,7 @@ public enum Spell {
 
 		for (int i = 9; i >= 0; --i) {
 			filteredSet = EnumSet.copyOf(spellsKnown);
-			filterSpellsByTier(i, filteredSet);
+			retainSpellsOfTier(i, filteredSet);
 
 			for (Iterator<Spell> it = filteredSet.iterator(); it.hasNext();) {
 				candidate = it.next();

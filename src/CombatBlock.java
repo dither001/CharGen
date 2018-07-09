@@ -151,7 +151,7 @@ public class CombatBlock {
 
 		} else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
 			spellsKnown = owner.getSpellsKnown();
-			cantrips = Spell.filterSpellsByTier(0, spellsKnown);
+			cantrips = Spell.retainSpellsOfTier(0, spellsKnown);
 			preferredCantrip = Spell.highestDamagingSpell(cantrips);
 
 			if (job.equals(Class.BARD) || job.equals(Class.SORCERER) || job.equals(Class.WARLOCK))

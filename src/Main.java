@@ -18,11 +18,29 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-		levelUpTest(Class.BARD);
+		levelUpTestClass(Class.BARD);
+		// levelUpTestArchetype(Class.Subclass.LORE_COLLEGE);
 
 	}
 
-	public static void levelUpTest(Class job) {
+	public static void levelUpTestArchetype(Class.Subclass job) {
+		Player player;
+		player = new Player();
+		while (player.getArchetype().equals(job) != true) {
+			player = new Player();
+
+		}
+
+		for (int i = 1; i < 20; ++i) {
+			player.setExp(500000);
+			player.advance();
+
+			System.out.println(player.toStringDetailed());
+			System.out.println();
+		}
+	}
+
+	public static void levelUpTestClass(Class job) {
 		Player player;
 		player = new Player();
 		while (player.getJob().equals(job) != true) {

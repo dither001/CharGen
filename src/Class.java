@@ -525,12 +525,18 @@ public enum Class implements Option {
 		EnumSet<Skill> skills = actor.getSkills();
 		int level = actor.getLevel();
 
+		Class job = actor.getJob();
+		EnumSet<Spell> spellsKnown = actor.getSpellsKnown();
+
 		if (level == 1) {
 			set.add(Feature.INSPIRATION_D6);
 		} else if (level == 2) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
 			set.add(Feature.JACK_OF_ALL_TRADES);
 			set.add(Feature.SONG_OF_REST_D6);
 		} else if (level == 3) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
+
 			// BARD COLLEGE
 			set.addAll(addRandomExpertise(2, actor));
 			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
@@ -546,43 +552,64 @@ public enum Class implements Option {
 			}
 
 		} else if (level == 4) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
+			
 			set.add(Feature.ABILITY_BONUS_4);
 			set.add(abilityImprove(actor));
 		} else if (level == 5) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
+			
 			set.add(Feature.INSPIRATION_D8);
 			set.add(Feature.FONT_OF_INSPIRATION);
 		} else if (level == 6) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
+
 			// BARD COLLEGE
 			set.add(Feature.COUNTERCHARM);
 			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
+				// magical secrets
 				set.add(Feature.MAGICAL_SECRETS_6);
+				Spell.addMagicalSecret(3, actor);
+				Spell.addMagicalSecret(3, actor);
 			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
 				set.add(Feature.EXTRA_ATTACK_1);
 			}
 
 		} else if (level == 7) {
 			// spells and nothing else
+			Spell.addToSpellsKnown(level, job, spellsKnown);
+
 		} else if (level == 8) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
 			set.add(Feature.ABILITY_BONUS_8);
 			set.add(abilityImprove(actor));
 		} else if (level == 9) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
 			set.add(Feature.SONG_OF_REST_D8);
 		} else if (level == 10) {
 			// magical secrets
 			set.addAll(addRandomExpertise(2, actor));
 			set.add(Feature.INSPIRATION_D10);
 			set.add(Feature.MAGICAL_SECRETS_10);
+			Spell.addMagicalSecret(5, actor);
+			Spell.addMagicalSecret(5, actor);
 		} else if (level == 11) {
 			// spells and nothing else
+			Spell.addToSpellsKnown(level, job, spellsKnown);
+
 		} else if (level == 12) {
 			set.add(Feature.ABILITY_BONUS_12);
 			set.add(abilityImprove(actor));
 		} else if (level == 13) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
 			set.add(Feature.SONG_OF_REST_D10);
 		} else if (level == 14) {
 			// BARD COLLEGE
 			// magical secrets
 			set.add(Feature.MAGICAL_SECRETS_14);
+			Spell.addMagicalSecret(7, actor);
+			Spell.addMagicalSecret(7, actor);
+
 			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
 				set.add(Feature.PEERLESS_SKILL);
 			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
@@ -590,15 +617,19 @@ public enum Class implements Option {
 			}
 
 		} else if (level == 15) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
 			set.add(Feature.INSPIRATION_D12);
 		} else if (level == 16) {
 			set.add(Feature.ABILITY_BONUS_16);
 			set.add(abilityImprove(actor));
 		} else if (level == 17) {
+			Spell.addToSpellsKnown(level, job, spellsKnown);
 			set.add(Feature.SONG_OF_REST_D12);
 		} else if (level == 18) {
 			// magical secrets
 			set.add(Feature.MAGICAL_SECRETS_18);
+			Spell.addMagicalSecret(9, actor);
+			Spell.addMagicalSecret(9, actor);
 		} else if (level == 19) {
 			set.add(Feature.ABILITY_BONUS_19);
 			set.add(abilityImprove(actor));
