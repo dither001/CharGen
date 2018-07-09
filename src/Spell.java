@@ -867,6 +867,10 @@ public enum Spell {
 		return set;
 	}
 
+	public static void addCantripKnown(Class job, EnumSet<Spell> spellsKnown) {
+		spellSelector(1, 0, job, spellsKnown);
+	}
+
 	public static void addToSpellsKnown(int characterLevel, Class job, EnumSet<Spell> spellsKnown) {
 		int tier = ((characterLevel - 1) / 2 + 1 > 9) ? 9
 				: ((characterLevel - 1) / 2 + 1 < 1) ? 1 : (characterLevel - 1) / 2 + 1;

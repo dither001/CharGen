@@ -350,8 +350,8 @@ public enum Class implements Option {
 			features.addAll(barbarian(actor));
 		} else if (job.equals(Class.BARD)) {
 			features.addAll(bard(actor));
-			// } else if (job.equals(Class.CLERIC)) {
-			// features.addAll(cleric(actor));
+		} else if (job.equals(Class.CLERIC)) {
+			features.addAll(cleric(actor));
 			// } else if (job.equals(Class.DRUID)) {
 			// features.addAll(druid(actor));
 			// } else if (job.equals(Class.FIGHTER)) {
@@ -388,8 +388,8 @@ public enum Class implements Option {
 			features.addAll(barbarian(actor));
 		} else if (job.equals(Class.BARD)) {
 			features.addAll(bard(actor));
-			// } else if (job.equals(Class.CLERIC)) {
-			// features.addAll(cleric(actor));
+		} else if (job.equals(Class.CLERIC)) {
+			features.addAll(cleric(actor));
 			// } else if (job.equals(Class.DRUID)) {
 			// features.addAll(druid(actor));
 			// } else if (job.equals(Class.FIGHTER)) {
@@ -552,13 +552,15 @@ public enum Class implements Option {
 			}
 
 		} else if (level == 4) {
+			// cantrip
+			Spell.addCantripKnown(job, spellsKnown);
 			Spell.addToSpellsKnown(level, job, spellsKnown);
-			
+
 			set.add(Feature.ABILITY_BONUS_4);
 			set.add(abilityImprove(actor));
 		} else if (level == 5) {
 			Spell.addToSpellsKnown(level, job, spellsKnown);
-			
+
 			set.add(Feature.INSPIRATION_D8);
 			set.add(Feature.FONT_OF_INSPIRATION);
 		} else if (level == 6) {
@@ -587,6 +589,9 @@ public enum Class implements Option {
 			Spell.addToSpellsKnown(level, job, spellsKnown);
 			set.add(Feature.SONG_OF_REST_D8);
 		} else if (level == 10) {
+			// cantrip
+			Spell.addCantripKnown(job, spellsKnown);
+
 			// magical secrets
 			set.addAll(addRandomExpertise(2, actor));
 			set.add(Feature.INSPIRATION_D10);
@@ -641,6 +646,186 @@ public enum Class implements Option {
 	}
 
 	/*
+	 * CLERIC ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> cleric(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		Class job = actor.getJob();
+		EnumSet<Spell> spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			// divine domain
+			if (archetype.equals(Class.Subclass.DEATH)) {
+				//
+			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+				//
+				Skill[] array = { Skill.ARCANA, Skill.HISTORY, Skill.NATURE, Skill.RELIGION };
+				set.add(Feature.BLESSINGS_OF_KNOWLEDGE);
+				Actor.Language.learnNonsecretLanguage(actor);
+				Actor.Language.learnNonsecretLanguage(actor);
+				Skill.testSkillFromArray(array, actor);
+				Skill.testSkillFromArray(array, actor);
+			} else if (archetype.equals(Class.Subclass.LIFE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+				//
+			} else if (archetype.equals(Class.Subclass.NATURE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+				//
+			} else if (archetype.equals(Class.Subclass.WAR)) {
+				//
+			}
+
+		} else if (level == 2) {
+			set.add(Feature.CHANNEL_DIVINITY_1);
+			// divine domain
+			if (archetype.equals(Class.Subclass.DEATH)) {
+				//
+			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+				//
+				set.add(Feature.KNOWLEDGE_OF_THE_AGES);
+			} else if (archetype.equals(Class.Subclass.LIFE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+				//
+			} else if (archetype.equals(Class.Subclass.NATURE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+				//
+			} else if (archetype.equals(Class.Subclass.WAR)) {
+				//
+			}
+
+
+		} else if (level == 3) {
+
+		} else if (level == 4) {
+			// cantrip
+			Spell.addCantripKnown(job, spellsKnown);
+
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+		} else if (level == 5) {
+			set.add(Feature.DESTROY_UNDEAD_5);
+
+		} else if (level == 6) {
+			set.add(Feature.CHANNEL_DIVINITY_2);
+			// domain
+			if (archetype.equals(Class.Subclass.DEATH)) {
+				//
+			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+				//
+				set.add(Feature.READ_THOUGHTS);
+			} else if (archetype.equals(Class.Subclass.LIFE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+				//
+			} else if (archetype.equals(Class.Subclass.NATURE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+				//
+			} else if (archetype.equals(Class.Subclass.WAR)) {
+				//
+			}
+
+
+		} else if (level == 7) {
+
+		} else if (level == 8) {
+			set.add(Feature.DESTROY_UNDEAD_8);
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+			if (archetype.equals(Class.Subclass.DEATH)) {
+				//
+			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+				//
+				set.add(Feature.POTENT_SPELLCASTING);
+			} else if (archetype.equals(Class.Subclass.LIFE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+				//
+			} else if (archetype.equals(Class.Subclass.NATURE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+				//
+			} else if (archetype.equals(Class.Subclass.WAR)) {
+				//
+			}
+
+
+		} else if (level == 9) {
+
+		} else if (level == 10) {
+			// cantrip
+			Spell.addCantripKnown(job, spellsKnown);
+			set.add(Feature.DIVINE_INTERVENTION_10);
+
+		} else if (level == 11) {
+			set.add(Feature.DESTROY_UNDEAD_11);
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+		} else if (level == 13) {
+
+		} else if (level == 14) {
+			set.add(Feature.DESTROY_UNDEAD_14);
+
+		} else if (level == 15) {
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+		} else if (level == 17) {
+			set.add(Feature.DESTROY_UNDEAD_17);
+			if (archetype.equals(Class.Subclass.DEATH)) {
+				//
+			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+				//
+				set.add(Feature.VISIONS_OF_THE_PAST);
+			} else if (archetype.equals(Class.Subclass.LIFE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+				//
+			} else if (archetype.equals(Class.Subclass.NATURE)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+				//
+			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+				//
+			} else if (archetype.equals(Class.Subclass.WAR)) {
+				//
+			}
+
+
+		} else if (level == 18) {
+			set.add(Feature.CHANNEL_DIVINITY_3);
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+			set.add(Feature.DIVINE_INTERVENTION_20);
+
+		}
+
+		return set;
+	}
+
+	/*
 	 * CLASS TEMPLATE
 	 * 
 	 */
@@ -648,6 +833,9 @@ public enum Class implements Option {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
+
+		// Class job = actor.getJob();
+		// EnumSet<Spell> spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
 

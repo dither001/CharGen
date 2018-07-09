@@ -50,7 +50,32 @@ public enum Skill {
 		return Dice.randomFromArray(ALL_SKILLS);
 	}
 
+	public static boolean testSkillFromArray(Skill[] array, Actor actor) {
+		boolean canAdd = false, added = false;
+
+		EnumSet<Skill> skills = actor.getSkills();
+		for (Skill el : array) {
+			if (skills.contains(el) != true) {
+				canAdd = true;
+				break;
+			}
+		}
+
+		Skill candidate;
+		while (canAdd && added != true) {
+			candidate = Dice.randomFromArray(array);
+			if (skills.contains(candidate) != true) {
+				skills.add(candidate);
+				added = true;
+				actor.setSkills(skills);
+			}
+		}
+
+		return added;
+	}
+
 	public static Skill testRandomSkill(Actor actor) {
+		// FIXME - broken method; it becomes infinite if you have all class skills
 		EnumSet<Skill> skills = actor.getSkills();
 		Class job = actor.getJob();
 

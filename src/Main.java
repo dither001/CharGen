@@ -18,8 +18,9 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-		levelUpTestClass(Class.BARD);
-		// levelUpTestArchetype(Class.Subclass.LORE_COLLEGE);
+		// rollCharactersOfArchetype(Class.Subclass.KNOWLEDGE);
+		// levelUpTestClass(Class.CLERIC);
+		levelUpTestArchetype(Class.Subclass.KNOWLEDGE);
 
 	}
 
@@ -31,6 +32,9 @@ public class Main {
 
 		}
 
+		// print level one first
+		System.out.println(player.toStringDetailed());
+		System.out.println();
 		for (int i = 1; i < 20; ++i) {
 			player.setExp(500000);
 			player.advance();
@@ -48,6 +52,9 @@ public class Main {
 
 		}
 
+		// print level one first
+		System.out.println(player.toStringDetailed());
+		System.out.println();
 		for (int i = 1; i < 20; ++i) {
 			player.setExp(500000);
 			player.advance();
@@ -55,6 +62,20 @@ public class Main {
 			System.out.println(player.toStringDetailed());
 			System.out.println();
 		}
+	}
+
+	public static void rollCharactersOfArchetype(Class.Subclass job) {
+		Player player;
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			player = new Player();
+			while (player.getArchetype().equals(job) != true) {
+				player = new Player();
+
+			}
+			System.out.println(player.toStringDetailed());
+			System.out.println();
+		}
+
 	}
 
 	public static void rollCharactersOfClass(Class job) {

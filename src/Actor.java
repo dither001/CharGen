@@ -56,6 +56,9 @@ public interface Actor {
 	public enum Language {
 		COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING, ORCISH, ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL, PRIMORDIAL, SYLVAN, UNDERCOMMON, SUPERNAL, DRUIDIC, THIEVES_CANT;
 
+		private static final Language[] NONSECRET_LANGUAGES = { COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN,
+				HALFLING, ORCISH, ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL, PRIMORDIAL, SYLVAN,
+				UNDERCOMMON };
 		private static final Language[] COMMON_LANGUAGES = { COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING,
 				ORCISH };
 		private static final Language[] EXOTIC_LANGUAGES = { ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL,
@@ -67,6 +70,39 @@ public interface Actor {
 
 		public static Language randomExoticLanguage() {
 			return Dice.randomFromArray(EXOTIC_LANGUAGES);
+		}
+
+		public static void learnNonsecretLanguage(Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() == null)
+				languages = EnumSet.noneOf(Language.class);
+			else
+				languages = actor.getLanguages();
+
+			languages.addAll((EnumSet<Language>) Dice.addToSetFromArray(1, languages, NONSECRET_LANGUAGES));
+			actor.setLanguages(languages);
+		}
+
+		public static void learnCommonLanguage(Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() == null)
+				languages = EnumSet.noneOf(Language.class);
+			else
+				languages = actor.getLanguages();
+
+			languages.addAll((EnumSet<Language>) Dice.addToSetFromArray(1, languages, COMMON_LANGUAGES));
+			actor.setLanguages(languages);
+		}
+
+		public static void learnExoticLanguage(Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() == null)
+				languages = EnumSet.noneOf(Language.class);
+			else
+				languages = actor.getLanguages();
+
+			languages.addAll((EnumSet<Language>) Dice.addToSetFromArray(1, languages, EXOTIC_LANGUAGES));
+			actor.setLanguages(languages);
 		}
 
 		public static void setupLanguages(Actor actor) {
