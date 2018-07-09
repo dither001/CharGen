@@ -218,9 +218,26 @@ public class CombatBlock {
 		return ChallengeRating.evaluateCR(owner);
 	}
 
-	public String toStringDetailed() {
+	private String toStringCR() {
+		String string = "";
+
 		int challengeRating = ChallengeRating.evaluateCR(owner);
+		if (challengeRating > 0)
+			string += challengeRating;
+		else if (challengeRating == 0)
+			string += "1/2";
+		else if (challengeRating == -1)
+			string += "1/4";
+		else if (challengeRating == -2)
+			string += "1/8";
+		else if (challengeRating == -3)
+			string += "0";
+
 		int experienceValue = ChallengeRating.challengeToXP(challengeRating);
+		return String.format("CR %s (%-2d) ", string, experienceValue);
+	}
+
+	public String toStringDetailed() {
 		String string = "", attack = "";
 
 		if (preferredAttack.equals(Attack.MELEE) || preferredAttack.equals(Attack.RANGED)) {
@@ -230,8 +247,7 @@ public class CombatBlock {
 			attack += (damageModifier > -1) ? "+" + damageModifier : damageModifier;
 			attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
 
-			string = String.format("AC %2d || %2d hp || %s || CR %2d (%-2d)", armorClass, hitPoints, attack,
-					challengeRating, experienceValue);
+			string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints, attack, toStringCR());
 
 		} else if (preferredAttack.equals(Attack.SPELL)) {
 			attack = (preferredCantrip != null) ? preferredCantrip.toString() + " " : "Cantrip ";
@@ -239,8 +255,7 @@ public class CombatBlock {
 			attack += Spell.getDiceString(preferredCantrip);
 			attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
 
-			string = String.format("AC %2d || %2d hp || %s || CR %2d (%-2d)", armorClass, hitPoints, attack,
-					challengeRating, experienceValue);
+			string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints, attack, toStringCR());
 
 		}
 
