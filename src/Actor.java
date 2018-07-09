@@ -171,9 +171,9 @@ public interface Actor {
 
 	public byte[] getHitDice();
 
-	public EnumSet<Feature> getFeatures();
+	public EnumSet<Option.Feature> getFeatures();
 
-	public void setFeatures(EnumSet<Feature> features);
+	public void setFeatures(EnumSet<Option.Feature> features);
 
 	public Class getJob();
 
@@ -246,7 +246,7 @@ public interface Actor {
 
 		if (advanced) {
 			// TODO
-			Feature.updateClassFeatures(this);
+			Class.updateClassFeatures(this);
 			getCombatBlock().update();
 
 		}
@@ -478,7 +478,7 @@ public interface Actor {
 		return getCombatBlock().getHitPoints();
 	}
 
-	public default CombatBlock.Attack getPreferredAttackType() {
+	public default CombatBlock.AttackMode getPreferredAttackType() {
 		return getCombatBlock().getPreferredAttackType();
 	}
 

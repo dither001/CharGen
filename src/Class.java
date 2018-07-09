@@ -1,8 +1,12 @@
+import java.util.EnumSet;
 
-public enum Class {
+public enum Class implements Option {
 	BARBARIAN, BARD, CLERIC, DRUID, FIGHTER, MONK, PALADIN, RANGER, ROGUE, SORCERER, WARLOCK, WIZARD;
 
-	// static fields
+	/*
+	 * STATIC FIELDS
+	 * 
+	 */
 	private static final float BEST_XP = 1.10f;
 	private static final float GOOD_XP = 1.05f;
 	private static final float BAD_XP = 0.90f;
@@ -327,6 +331,343 @@ public enum Class {
 		public static Class getJob(Subclass Subclass) {
 			return Subclass.job;
 		}
+	}
+
+	/*
+	 * SETUP CLASS FEATURES & UPDATE CLASS FEATURES
+	 * 
+	 */
+	public static void updateClassFeatures(Actor actor) {
+		EnumSet<Feature> features;
+		if (actor.getFeatures() == null)
+			features = EnumSet.noneOf(Feature.class);
+		else
+			features = actor.getFeatures();
+
+		// TODO
+		Class job = actor.getJob();
+		if (job.equals(Class.BARBARIAN)) {
+			features.addAll(barbarian(actor));
+			// } else if (job.equals(Class.BARD)) {
+			// features.addAll(bard(actor));
+			// } else if (job.equals(Class.CLERIC)) {
+			// features.addAll(cleric(actor));
+			// } else if (job.equals(Class.DRUID)) {
+			// features.addAll(druid(actor));
+			// } else if (job.equals(Class.FIGHTER)) {
+			// features.addAll(fighter(actor));
+			// } else if (job.equals(Class.MONK)) {
+			// features.addAll(monk(actor));
+			// } else if (job.equals(Class.PALADIN)) {
+			// features.addAll(paladin(actor));
+			// } else if (job.equals(Class.RANGER)) {
+			// features.addAll(ranger(actor));
+			// } else if (job.equals(Class.ROGUE)) {
+			// features.addAll(rogue(actor));
+			// } else if (job.equals(Class.SORCERER)) {
+			// features.addAll(sorcerer(actor));
+			// } else if (job.equals(Class.WARLOCK)) {
+			// features.addAll(warlock(actor));
+			// } else if (job.equals(Class.WIZARD)) {
+			// features.addAll(wizard(actor));
+		}
+
+		actor.setFeatures(features);
+	}
+
+
+	public static void setupClassFeatures(Actor actor) {
+		EnumSet<Feature> features;
+		if (actor.getFeatures() == null)
+			features = EnumSet.noneOf(Feature.class);
+		else
+			features = actor.getFeatures();
+
+		// TODO
+		Class job = actor.getJob();
+		if (job.equals(Class.BARBARIAN)) {
+			features.addAll(barbarian(actor));
+			// } else if (job.equals(Class.BARD)) {
+			// features.addAll(bard(actor));
+			// } else if (job.equals(Class.CLERIC)) {
+			// features.addAll(cleric(actor));
+			// } else if (job.equals(Class.DRUID)) {
+			// features.addAll(druid(actor));
+			// } else if (job.equals(Class.FIGHTER)) {
+			// features.addAll(fighter(actor));
+			// } else if (job.equals(Class.MONK)) {
+			// features.addAll(monk(actor));
+			// } else if (job.equals(Class.PALADIN)) {
+			// features.addAll(paladin(actor));
+			// } else if (job.equals(Class.RANGER)) {
+			// features.addAll(ranger(actor));
+			// } else if (job.equals(Class.ROGUE)) {
+			// features.addAll(rogue(actor));
+			// } else if (job.equals(Class.SORCERER)) {
+			// features.addAll(sorcerer(actor));
+			// } else if (job.equals(Class.WARLOCK)) {
+			// features.addAll(warlock(actor));
+			// } else if (job.equals(Class.WIZARD)) {
+			// features.addAll(wizard(actor));
+		}
+
+		actor.setFeatures(features);
+	}
+
+	private static Feature abilityImprove(Actor actor) {
+		Feature[] improvement = null;
+
+		// determines index of improvement to return
+		int level = actor.getLevel(), index = 0;
+		if (level == 4)
+			index = 0;
+		else if (level == 6)
+			index = 1;
+		else if (level == 8)
+			index = 2;
+		else if (level == 10)
+			index = 3;
+		else if (level == 12)
+			index = 4;
+		else if (level == 14)
+			index = 5;
+		else if (level == 16)
+			index = 6;
+		else if (level == 19)
+			index = 7;
+
+		// int STR = actor.getStrength(), DEX = actor.getDexterity(), CON =
+		// actor.getConstitution(),
+		// INT = actor.getIntelligence(), WIS = actor.getWisdom(), CHA =
+		// actor.getCharisma();
+
+		Class job = actor.getJob();
+		if (job.equals(Class.BARBARIAN)) {
+			if (actor.setStrength(2)) {
+				improvement = Feature.STR_BONUSES;
+			} else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+		} else if (job.equals(Class.WIZARD)) {
+			if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+			else if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+			else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setStrength(2))
+				improvement = Feature.STR_BONUSES;
+		} else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID)) {
+			if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setStrength(2))
+				improvement = Feature.STR_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+			else if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+		} else if (job.equals(Class.FIGHTER)) {
+			if (actor.setStrength(2))
+				improvement = Feature.STR_BONUSES;
+			else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+		} else if (job.equals(Class.MONK)) {
+			if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+			else if (actor.setStrength(2))
+				improvement = Feature.STR_BONUSES;
+		} else if (job.equals(Class.PALADIN)) {
+			if (actor.setStrength(2))
+				improvement = Feature.STR_BONUSES;
+			else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+			else if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+		} else if (job.equals(Class.RANGER) || job.equals(Class.ROGUE)) {
+			if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setStrength(2))
+				improvement = Feature.STR_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+		} else if (job.equals(Class.BARD) || job.equals(Class.SORCERER) || job.equals(Class.WARLOCK)) {
+			if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+			else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setStrength(2))
+				improvement = Feature.STR_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+		} else {
+			if (actor.setStrength(2)) {
+				improvement = Feature.STR_BONUSES;
+			} else if (actor.setConstitution(2))
+				improvement = Feature.CON_BONUSES;
+			else if (actor.setDexterity(2))
+				improvement = Feature.DEX_BONUSES;
+			else if (actor.setCharisma(2))
+				improvement = Feature.CHA_BONUSES;
+			else if (actor.setWisdom(2))
+				improvement = Feature.WIS_BONUSES;
+			else if (actor.setIntelligence(2))
+				improvement = Feature.INT_BONUSES;
+		}
+
+		return improvement[index];
+	}
+
+	public static EnumSet<Feature> barbarian(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		if (level == 1) {
+			set.add(Feature.RAGE);
+			set.add(Feature.RAGE_PER_DAY_2);
+			set.add(Feature.RAGE_BONUS_2);
+			set.add(Feature.UNARMORED_DEFENSE_BARBARIAN);
+		} else if (level == 2) {
+			set.add(Feature.RECKLESS_ATTACK);
+			set.add(Feature.DANGER_SENSE);
+		} else if (level == 3) {
+			// PRIMAL PATH
+			set.add(Feature.RAGE_PER_DAY_3);
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.FRENZY);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.SPIRIT_SEEKER);
+				set.add(Feature.BEAR_SPIRIT_3);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.SPIRIT_SEEKER);
+				set.add(Feature.EAGLE_SPIRIT_3);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.SPIRIT_SEEKER);
+				set.add(Feature.WOLF_SPIRIT_3);
+			}
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+		} else if (level == 5) {
+			set.add(Feature.EXTRA_ATTACK_1);
+			set.add(Feature.FAST_MOVEMENT);
+			set.add(Feature.RAGE_PER_DAY_4);
+		} else if (level == 6) {
+			// PRIMAL PATH
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.MINDLESS_RAGE);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.BEAR_ASPECT_6);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.EAGLE_ASPECT_6);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.WOLF_ASPECT_6);
+			}
+		} else if (level == 7) {
+			set.add(Feature.FERAL_INSTINCT);
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+		} else if (level == 9) {
+			set.add(Feature.BRUTAL_CRITICAL_1);
+			set.add(Feature.RAGE_BONUS_3);
+		} else if (level == 10) {
+			// PRIMAL PATH
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.INTIMIDATING_PRESENCE);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.SPIRIT_WALKER);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.SPIRIT_WALKER);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.SPIRIT_WALKER);
+			}
+		} else if (level == 11) {
+			set.add(Feature.RELENTLESS_RAGE);
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+			set.add(Feature.RAGE_PER_DAY_5);
+		} else if (level == 13) {
+			set.add(Feature.BRUTAL_CRITICAL_2);
+		} else if (level == 14) {
+			// PRIMAL PATH
+			if (archetype.equals(Class.Subclass.BERSERKER)) {
+				set.add(Feature.RETALIATION);
+			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+				set.add(Feature.BEAR_ATTUNEMENT_14);
+			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+				set.add(Feature.EAGLE_ATTUNEMENT_14);
+			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+				set.add(Feature.WOLF_ATTUNEMENT_14);
+			}
+		} else if (level == 15) {
+			set.add(Feature.PERSISTENT_RAGE);
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+			set.add(Feature.RAGE_BONUS_4);
+		} else if (level == 17) {
+			set.add(Feature.BRUTAL_CRITICAL_3);
+			set.add(Feature.RAGE_PER_DAY_6);
+		} else if (level == 18) {
+			set.add(Feature.INDOMITABLE_MIGHT);
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+			set.add(Feature.PRIMAL_CHAMPION);
+			set.add(Feature.RAGE_PER_DAY_99);
+		}
+
+		return set;
 	}
 
 	/*

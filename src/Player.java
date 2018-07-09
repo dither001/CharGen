@@ -123,7 +123,7 @@ public class Player implements Actor {
 	private EnumSet<Armor> armor;
 	private EnumSet<Weapon> weapons;
 	private EnumSet<Skill> skills;
-	private EnumSet<Feature> features;
+	private EnumSet<Option.Feature> features;
 	private EnumSet<Language> languages;
 
 	// gear
@@ -167,7 +167,7 @@ public class Player implements Actor {
 		Actor.Language.setupLanguages(this);
 		Armor.setupArmorProficiency(this);
 		Weapon.setupWeaponProficiency(this);
-		Feature.updateClassFeatures(this);
+		Class.setupClassFeatures(this);
 		Spell.setupSpellsKnown(this);
 
 		// final step after class/subclass chosen
@@ -215,8 +215,8 @@ public class Player implements Actor {
 		String string = String.format("%s the level %d %s %s (%s)", name, level, race, job, archetype);
 
 		// creature line
-		// string += String.format("%n%s %s (%s) %s follower of %s", size, creature,
-		// race, alignment, god);
+		String sex = (isFemale) ? "female" : "male";
+		string += String.format("%n%s %s %s (%s) %s follower of %s", size, sex, creature, race, alignment, god);
 		// combat line
 		string += "\n" + combat.toStringDetailed();
 		// abilities line
@@ -294,12 +294,12 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public EnumSet<Feature> getFeatures() {
+	public EnumSet<Option.Feature> getFeatures() {
 		return features;
 	}
 
 	@Override
-	public void setFeatures(EnumSet<Feature> features) {
+	public void setFeatures(EnumSet<Option.Feature> features) {
 		this.features = features;
 	}
 

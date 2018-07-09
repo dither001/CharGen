@@ -16,7 +16,7 @@ public class ChallengeRating {
 		int atk = actor.getAttackBonus();
 
 		int dmg;
-		if (actor.getPreferredAttackType().equals(CombatBlock.Attack.SPELL))
+		if (actor.getPreferredAttackType().equals(CombatBlock.AttackMode.SPELL_ATTACK))
 			dmg = actor.getHighestSpellDamage();
 		else
 			dmg = actor.getAverageDamage();

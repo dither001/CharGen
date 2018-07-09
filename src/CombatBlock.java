@@ -5,14 +5,24 @@ public class CombatBlock {
 		STRIKER, DEFENDER, LEADER, CONTROLLER
 	}
 
-	public enum Attack {
-		MELEE, RANGED, SPELL
+	public enum AttackMode {
+		MELEE_ATTACK, RANGED_ATTACK, SPELL_ATTACK, SPELL_SAVE
+	}
+
+	private class Attack {
+		private Actor subject;
+		private Weapon.Instance weapon;
+
+		public Attack(Actor subject, Weapon.Instance weapon) {
+			
+		}
+		
 	}
 
 	// fields
 	private Actor owner;
 	private Role role;
-	private Attack preferredAttack;
+	private AttackMode preferredAttack;
 	private Weapon.Instance preferredWeapon;
 	private Spell preferredCantrip;
 
@@ -47,29 +57,29 @@ public class CombatBlock {
 		int STR = owner.getStrength(), DEX = owner.getDexterity(), CON = owner.getConstitution(),
 				INT = owner.getIntelligence(), WIS = owner.getWisdom(), CHA = owner.getCharisma();
 		if (job.equals(Class.BARBARIAN))
-			preferredAttack = (STR > DEX) ? Attack.MELEE : Attack.RANGED;
+			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
 		else if (job.equals(Class.BARD))
-			preferredAttack = Attack.SPELL;
+			preferredAttack = AttackMode.SPELL_ATTACK;
 		else if (job.equals(Class.CLERIC))
-			preferredAttack = Attack.SPELL;
+			preferredAttack = AttackMode.SPELL_ATTACK;
 		else if (job.equals(Class.DRUID))
-			preferredAttack = Attack.SPELL;
+			preferredAttack = AttackMode.SPELL_ATTACK;
 		else if (job.equals(Class.FIGHTER))
-			preferredAttack = (STR > DEX) ? Attack.MELEE : Attack.RANGED;
+			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
 		else if (job.equals(Class.MONK))
-			preferredAttack = (STR > DEX) ? Attack.MELEE : Attack.RANGED;
+			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
 		else if (job.equals(Class.PALADIN))
-			preferredAttack = (STR > DEX) ? Attack.MELEE : Attack.RANGED;
+			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
 		else if (job.equals(Class.RANGER))
-			preferredAttack = (STR > DEX) ? Attack.MELEE : Attack.RANGED;
+			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
 		else if (job.equals(Class.ROGUE))
-			preferredAttack = (STR > DEX) ? Attack.MELEE : Attack.RANGED;
+			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
 		else if (job.equals(Class.SORCERER))
-			preferredAttack = Attack.SPELL;
+			preferredAttack = AttackMode.SPELL_ATTACK;
 		else if (job.equals(Class.WARLOCK))
-			preferredAttack = Attack.SPELL;
+			preferredAttack = AttackMode.SPELL_ATTACK;
 		else if (job.equals(Class.WIZARD))
-			preferredAttack = Attack.SPELL;
+			preferredAttack = AttackMode.SPELL_ATTACK;
 
 	}
 
@@ -131,7 +141,7 @@ public class CombatBlock {
 
 		Class job = owner.getJob();
 		Set<Spell> spellsKnown, cantrips;
-		if (preferredAttack.equals(Attack.MELEE) || preferredAttack.equals(Attack.RANGED)) {
+		if (preferredAttack.equals(AttackMode.MELEE_ATTACK) || preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
 			preferredWeapon = owner.getInventory().getMainHand();
 
 			if (preferredWeapon != null && preferredWeapon.useDexterity())
@@ -139,7 +149,7 @@ public class CombatBlock {
 			else if (preferredWeapon != null)
 				atk += owner.getProficiencyBonus() + STR + preferredWeapon.getAttackBonus();
 
-		} else if (preferredAttack.equals(Attack.SPELL)) {
+		} else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
 			spellsKnown = owner.getSpellsKnown();
 			cantrips = Spell.filterSpellsByTier(0, spellsKnown);
 			preferredCantrip = Spell.highestDamagingSpell(cantrips);
@@ -162,7 +172,7 @@ public class CombatBlock {
 				CHA = owner.getCharismaModifier();
 
 		Weapon.Instance weapon = owner.getInventory().getMainHand();
-		if (preferredAttack.equals(Attack.MELEE) || preferredAttack.equals(Attack.RANGED)) {
+		if (preferredAttack.equals(AttackMode.MELEE_ATTACK) || preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
 			if (weapon != null && weapon.useDexterity()) {
 				dmg += weapon.getAverageDamage() + DEX + weapon.getAttackBonus();
 				damageModifier = DEX + weapon.getAttackBonus();
@@ -171,7 +181,7 @@ public class CombatBlock {
 				damageModifier = STR + weapon.getAttackBonus();
 			}
 
-		} else if (preferredAttack.equals(Attack.SPELL)) {
+		} else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
 			if (preferredCantrip != null)
 				dmg = Spell.getAverageDamage(preferredCantrip);
 
@@ -184,7 +194,7 @@ public class CombatBlock {
 		return (role != null) ? role : Role.STRIKER;
 	}
 
-	public Attack getPreferredAttackType() {
+	public AttackMode getPreferredAttackType() {
 		return preferredAttack;
 	}
 
@@ -240,7 +250,7 @@ public class CombatBlock {
 	public String toStringDetailed() {
 		String string = "", attack = "";
 
-		if (preferredAttack.equals(Attack.MELEE) || preferredAttack.equals(Attack.RANGED)) {
+		if (preferredAttack.equals(AttackMode.MELEE_ATTACK) || preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
 			attack = (preferredWeapon != null) ? preferredWeapon.toString() + " " : "Unarmed ";
 			attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
 			attack += preferredWeapon.getDiceString();
@@ -249,7 +259,7 @@ public class CombatBlock {
 
 			string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints, attack, toStringCR());
 
-		} else if (preferredAttack.equals(Attack.SPELL)) {
+		} else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
 			attack = (preferredCantrip != null) ? preferredCantrip.toString() + " " : "Cantrip ";
 			attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
 			attack += Spell.getDiceString(preferredCantrip);
