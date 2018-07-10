@@ -72,6 +72,12 @@ public interface Actor {
 			return Dice.randomFromArray(EXOTIC_LANGUAGES);
 		}
 
+		public static void addLanguage(Language language, Actor actor) {
+			EnumSet<Language> languages = actor.getLanguages();
+			languages.add(language);
+			actor.setLanguages(languages);
+		}
+
 		public static void learnNonsecretLanguage(Actor actor) {
 			EnumSet<Language> languages;
 			if (actor.getLanguages() == null)
@@ -158,21 +164,6 @@ public interface Actor {
 			} else if (race.equals(Race.TIEFLING)) {
 				languages.add(COMMON);
 				languages.add(INFERNAL);
-
-			}
-
-			Class job = actor.getJob();
-			Class.Subclass archetype = actor.getArchetype();
-			if (job.equals(Class.DRUID)) {
-				languages.add(DRUIDIC);
-
-			} else if (job.equals(Class.ROGUE)) {
-				languages.add(THIEVES_CANT);
-
-			} else if (archetype.equals(Class.Subclass.DRAGON_ORIGIN)) {
-				Language[] array = new Language[] { DRACONIC };
-				languages.addAll(
-						(EnumSet<Language>) Dice.addToSetOrElseFromArray(1, array, languages, COMMON_LANGUAGES));
 
 			}
 

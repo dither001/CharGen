@@ -352,8 +352,8 @@ public enum Class implements Option {
 			features.addAll(bard(actor));
 		} else if (job.equals(Class.CLERIC)) {
 			features.addAll(cleric(actor));
-			// } else if (job.equals(Class.DRUID)) {
-			// features.addAll(druid(actor));
+		} else if (job.equals(Class.DRUID)) {
+			features.addAll(druid(actor));
 			// } else if (job.equals(Class.FIGHTER)) {
 			// features.addAll(fighter(actor));
 			// } else if (job.equals(Class.MONK)) {
@@ -390,8 +390,8 @@ public enum Class implements Option {
 			features.addAll(bard(actor));
 		} else if (job.equals(Class.CLERIC)) {
 			features.addAll(cleric(actor));
-			// } else if (job.equals(Class.DRUID)) {
-			// features.addAll(druid(actor));
+			 } else if (job.equals(Class.DRUID)) {
+			 features.addAll(druid(actor));
 			// } else if (job.equals(Class.FIGHTER)) {
 			// features.addAll(fighter(actor));
 			// } else if (job.equals(Class.MONK)) {
@@ -868,6 +868,118 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 		} else if (level == 20) {
 			set.add(Feature.DIVINE_INTERVENTION_20);
+
+		}
+
+		return set;
+	}
+
+	public static EnumSet<Feature> druid(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		Class job = actor.getJob();
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			Actor.Language.addLanguage(Actor.Language.DRUIDIC, actor);
+			set.add(Feature.RITUAL_CASTING_DRUID);
+
+		} else if (level == 2) {
+			// moon circle gets one wild shape, everyone else gets another
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+				set.add(Feature.MOON_SHAPE_2);
+			else
+				set.add(Feature.WILD_SHAPE_2);
+
+			// land circle gets a bonus cantrip
+			if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+				Spell.addCantripKnown(job, spellsKnown);
+
+		} else if (level == 3) {
+			if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+				set.addAll(Dice.addToSetFromArray(1, set, Feature.CIRCLE_SPELLS));
+
+		} else if (level == 4) {
+			// cantrip
+			Spell.addCantripKnown(job, spellsKnown);
+
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE) != true)
+				set.add(Feature.WILD_SHAPE_4);
+
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+		} else if (level == 5) {
+
+		} else if (level == 6) {
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
+				set.add(Feature.MOON_SHAPE_6);
+				set.add(Feature.PRIMAL_STRIKE);
+
+			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+				set.add(Feature.LANDS_STRIDE);
+
+		} else if (level == 7) {
+
+		} else if (level == 8) {
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE) != true)
+				set.add(Feature.WILD_SHAPE_8);
+
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+		} else if (level == 9) {
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+				set.add(Feature.MOON_SHAPE_9);
+
+		} else if (level == 10) {
+			// cantrip
+			Spell.addCantripKnown(job, spellsKnown);
+
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
+				set.add(Feature.ELEMENTAL_SHAPE);
+			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+				set.add(Feature.NATURES_WARD);
+		} else if (level == 11) {
+
+		} else if (level == 12) {
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+				set.add(Feature.MOON_SHAPE_12);
+
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+		} else if (level == 13) {
+
+		} else if (level == 14) {
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
+				set.add(Feature.THOUSAND_FORMS);
+			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+				set.add(Feature.NATURES_SANCTUARY);
+
+		} else if (level == 15) {
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+				set.add(Feature.MOON_SHAPE_15);
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+		} else if (level == 17) {
+
+		} else if (level == 18) {
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+				set.add(Feature.MOON_SHAPE_18);
+
+			set.add(Feature.TIMELESS_BODY);
+			set.add(Feature.BEAST_SPELLS);
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+			set.add(Feature.ARCHDRUID);
 
 		}
 
