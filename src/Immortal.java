@@ -34,6 +34,10 @@ public abstract class Immortal implements Actor {
 
 	public enum Lesser {
 		/*
+		 * DEMIGODS are explicitly "lesser gods" like elevated heroes and whatnot
+		 */
+		DEMIGOD,
+		/*
 		 * ANGELS are "lawful" servants of the gods, and they are led by a group of
 		 * powerful angels like a council of sorts
 		 */
@@ -44,22 +48,56 @@ public abstract class Immortal implements Actor {
 		 */
 		DEMON,
 		/*
-		 * ELEMENTALS include a variety of creatures like the powerful SHAITAN, DJINN,
-		 * GENIES, JANN, and a host of lesser creatures
+		 * true DRAGONS are all unique, such as the Mesopotamian Bahamut and Tiamat,
+		 * Greek Python, Ladon, Hydra (et al), feathered serpents, the Japanese
+		 * Yamata-no-Orochi, Tolkein's Smaug, and most of the named dragons from various
+		 * editions of Dungeons & Dragons; therefore "Dragon" is not explicitly a
+		 * creature type: it instead refers to a class of (usually selfish) cosmic
+		 * beings that resemble lizards, snakes, and other reptiles
 		 */
-		ELEMENTAL,
-		/*
-		 * SIDHE are "chaotic" and led by powerful entities such as OBERON and TITANIA
-		 */
-		SIDHE,
+		DRAGON,
 		/*
 		 * ABOMINATIONS are a bizarre class of "created" beings that lack a formal
 		 * definition or anything list consistent depiction
 		 */
-		ABOMINATION
+		ABOMINATION,
+		/*
+		 * India: DEVA/SURA, ASURA, YAKSHA/BHUTA, RAKSHASA
+		 */
+		ASURA, DEVA, YAKSHA, RAKSHASA,
+		/*
+		 * Middle east: JINNI (plural djinn)
+		 */
+		JINNI,
+		/*
+		 * Greek/Hellenic
+		 */
+		TITAN, OLYMPIAN,
+		/*
+		 * Norse/Germanic: JOTUNN, NORNS (include "fylgjas," "hamingjas," and valkyries)
+		 * are always female, known to control the fates of men and gods)
+		 */
+		AESIR, VANIR, JOTUNN, NORN,
+		/*
+		 * Scots/Celt/Irish: SIDHE (alt. Scottish "Sith") are "chaotic" and led by
+		 * powerful entities such as OBERON and TITANIA
+		 */
+		SIDHE,
+		/*
+		 * Japanese/Shinto: KAMI are explicitly known to be "of two mind," meaning they
+		 * can be nurturing and/or destructive; MONONOKE are possessing spirits; ONI are
+		 * Japanese giants; YOKAI include oni, and the "henge" or "mutated beings"
+		 */
+		KAMI, MONONOKE, SHINIGAMI, YOKAI
+		/*
+		 * Chinese ghosts and spirits are well-documented on Wikipedia (must read):
+		 * https://en.wikipedia.org/wiki/Ghosts_in_Chinese_culture
+		 */
 	}
-
 	/*
-	 * DJINN
+	 * ELEMENTALS include a variety of creatures like the powerful SHAITAN, DJINN,
+	 * GENIES, JANN, and a host of lesser creatures
 	 */
+	// ELEMENTAL,
+
 }
