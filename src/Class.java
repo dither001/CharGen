@@ -390,8 +390,8 @@ public enum Class implements Option {
 			features.addAll(bard(actor));
 		} else if (job.equals(Class.CLERIC)) {
 			features.addAll(cleric(actor));
-			 } else if (job.equals(Class.DRUID)) {
-			 features.addAll(druid(actor));
+		} else if (job.equals(Class.DRUID)) {
+			features.addAll(druid(actor));
 			// } else if (job.equals(Class.FIGHTER)) {
 			// features.addAll(fighter(actor));
 			// } else if (job.equals(Class.MONK)) {
@@ -670,12 +670,14 @@ public enum Class implements Option {
 			if (archetype.equals(Class.Subclass.DEATH)) {
 				//
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+				set.add(Feature.DIVINE_DOMAIN_DEATH);
 				set.add(Feature.REAPER);
 				Spell spell = Dice.randomFromSet(Spell.allSpellsOfSchool(0, Spell.School.NECROMANCY));
 				Spell.addCantripOrElse(spell, CLERIC, actor);
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
 				Skill[] array = { Skill.ARCANA, Skill.HISTORY, Skill.NATURE, Skill.RELIGION };
+				set.add(Feature.DIVINE_DOMAIN_KNOWLEDGE);
 				set.add(Feature.BLESSINGS_OF_KNOWLEDGE);
 				Actor.Language.learnNonsecretLanguage(actor);
 				Actor.Language.learnNonsecretLanguage(actor);
@@ -684,27 +686,33 @@ public enum Class implements Option {
 			} else if (archetype.equals(Class.Subclass.LIFE)) {
 				//
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+				set.add(Feature.DIVINE_DOMAIN_LIFE);
 				set.add(Feature.DISCIPLE_OF_LIFE);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
 				Spell.addCantripOrElse(Spell.LIGHT, CLERIC, actor);
+				set.add(Feature.DIVINE_DOMAIN_LIGHT);
 				set.add(Feature.WARDING_FLARE);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
 				Spell.addCantripKnown(DRUID, spellsKnown);
+				set.add(Feature.DIVINE_DOMAIN_NATURE);
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
 			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
 				//
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+				set.add(Feature.DIVINE_DOMAIN_TEMPEST);
 				set.add(Feature.WRATH_OF_THE_STORM);
 			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
 				//
+				set.add(Feature.DIVINE_DOMAIN_TRICKERY);
 				set.add(Feature.BLESSING_OF_THE_TRICKSTER);
 			} else if (archetype.equals(Class.Subclass.WAR)) {
 				//
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+				set.add(Feature.DIVINE_DOMAIN_WAR);
 				set.add(Feature.WAR_PRIEST);
 			}
 
@@ -892,10 +900,14 @@ public enum Class implements Option {
 
 		} else if (level == 2) {
 			// moon circle gets one wild shape, everyone else gets another
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
 				set.add(Feature.MOON_SHAPE_2);
-			else
+				set.add(Feature.COMBAT_WILD_SHAPE);
+
+			} else {
 				set.add(Feature.WILD_SHAPE_2);
+
+			}
 
 			// land circle gets a bonus cantrip
 			if (archetype.equals(Class.Subclass.LAND_CIRCLE))
@@ -942,8 +954,12 @@ public enum Class implements Option {
 
 			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
 				set.add(Feature.ELEMENTAL_SHAPE);
-			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+				
+			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE)) {
 				set.add(Feature.NATURES_WARD);
+				
+			}
+
 		} else if (level == 11) {
 
 		} else if (level == 12) {

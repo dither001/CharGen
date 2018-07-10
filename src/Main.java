@@ -13,39 +13,28 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+		// Main.levelUpTestDisplayOnly(3, Class.DRUID);
+		//
+		// }
+
 		// jobProportions();
 		// raceProportions();
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-		Main.rollCharactersOfClass(Class.CLERIC);
+		Main.rollCharactersOfClass(Class.DRUID);
 		// rollCharactersOfArchetype(Class.Subclass.DEATH);
-//		levelUpTestClass(Class.CLERIC);
-//		 levelUpTestArchetype(Class.Subclass.DEATH);
+		// levelUpTest(20, Class.CLERIC);
+		// levelUpTest(Class.Subclass.DEATH);
 
 	}
 
-	public static void levelUpTestArchetype(Class.Subclass job) {
-		Player player;
-		player = new Player();
-		while (player.getArchetype().equals(job) != true) {
-			player = new Player();
-
-		}
-
-		// print level one first
-		System.out.println(player.toStringDetailed());
-		System.out.println();
-		for (int i = 1; i < 20; ++i) {
-			player.setExp(500000);
-			player.advance();
-
-			System.out.println(player.toStringDetailed());
-			System.out.println();
-		}
+	public static void levelUpTest(Class job) {
+		levelUpTest(1, job);
 	}
 
-	public static void levelUpTestClass(Class job) {
+	public static void levelUpTest(int level, Class job) {
 		Player player;
 		player = new Player();
 		while (player.getJob().equals(job) != true) {
@@ -53,16 +42,47 @@ public class Main {
 
 		}
 
-		// print level one first
-		System.out.println(player.toStringDetailed());
-		System.out.println();
-		for (int i = 1; i < 20; ++i) {
-			player.setExp(500000);
-			player.advance();
-
+		for (int i = 1; i <= level; ++i) {
 			System.out.println(player.toStringDetailed());
 			System.out.println();
+
+			player.setExp(500000);
+			player.advance();
 		}
+
+		System.out.print("Done.");
+	}
+
+	public static void levelUpTestDisplayOnly(int level, Class job) {
+		Player player;
+		player = new Player();
+		while (player.getJob().equals(job) != true) {
+			player = new Player();
+		}
+
+		for (int i = 1; i < level; ++i) {
+			player.setExp(500000);
+			player.advance();
+		}
+
+		System.out.println(player.toStringDetailed());
+		System.out.println();
+	}
+
+	public static void levelUpTestDisplayOnly(int level, Class.Subclass job) {
+		Player player;
+		player = new Player();
+		while (player.getArchetype().equals(job) != true) {
+			player = new Player();
+		}
+
+		for (int i = 1; i < level; ++i) {
+			player.setExp(500000);
+			player.advance();
+		}
+
+		System.out.println(player.toStringDetailed());
+		System.out.println();
 	}
 
 	public static void rollCharactersOfArchetype(Class.Subclass job) {
@@ -77,6 +97,7 @@ public class Main {
 			System.out.println();
 		}
 
+		System.out.print("Done.");
 	}
 
 	public static void rollCharactersOfClass(Class job) {
@@ -91,6 +112,7 @@ public class Main {
 			System.out.println();
 		}
 
+		System.out.print("Done.");
 	}
 
 	public static void rollCharacters() {
