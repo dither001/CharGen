@@ -526,7 +526,11 @@ public enum Class implements Option {
 		int level = actor.getLevel();
 
 		Class job = actor.getJob();
-		EnumSet<Spell> spellsKnown = actor.getSpellsKnown();
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
 			set.add(Feature.INSPIRATION_D6);
@@ -655,7 +659,11 @@ public enum Class implements Option {
 		int level = actor.getLevel();
 
 		Class job = actor.getJob();
-		EnumSet<Spell> spellsKnown = actor.getSpellsKnown();
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
 			// divine domain
@@ -671,16 +679,29 @@ public enum Class implements Option {
 				Skill.testSkillFromArray(array, actor);
 			} else if (archetype.equals(Class.Subclass.LIFE)) {
 				//
+				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+				set.add(Feature.DISCIPLE_OF_LIFE);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
+				Spell.addCantripOrElse(Spell.LIGHT, CLERIC, spellsKnown);
+				set.add(Feature.WARDING_FLARE);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
+				Spell.addCantripKnown(DRUID, spellsKnown);
+				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
 			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
 				//
+				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+				set.add(Feature.WRATH_OF_THE_STORM);
 			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
 				//
+				set.add(Feature.BLESSING_OF_THE_TRICKSTER);
 			} else if (archetype.equals(Class.Subclass.WAR)) {
 				//
+				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
+				set.add(Feature.WAR_PRIEST);
 			}
 
 		} else if (level == 2) {
@@ -693,18 +714,23 @@ public enum Class implements Option {
 				set.add(Feature.KNOWLEDGE_OF_THE_AGES);
 			} else if (archetype.equals(Class.Subclass.LIFE)) {
 				//
+				set.add(Feature.PRESERVE_LIFE);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
+				set.add(Feature.RADIANCE_OF_THE_DAWN);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
+				set.add(Feature.CHARM_ANIMALS_AND_PLANTS);
 			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
 				//
+				set.add(Feature.DESTRUCTIVE_WRATH);
 			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
 				//
+				set.add(Feature.INVOKE_DUPLICITY);
 			} else if (archetype.equals(Class.Subclass.WAR)) {
 				//
+				set.add(Feature.GUIDED_STRIKE);
 			}
-
 
 		} else if (level == 3) {
 
@@ -727,18 +753,23 @@ public enum Class implements Option {
 				set.add(Feature.READ_THOUGHTS);
 			} else if (archetype.equals(Class.Subclass.LIFE)) {
 				//
+				set.add(Feature.BLESSED_HEALER);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
+				set.add(Feature.IMPROVED_FLARE);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
+				set.add(Feature.DAMPEN_ELEMENTS);
 			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
 				//
+				set.add(Feature.THUNDERBOLT_STRIKE);
 			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
 				//
+				set.add(Feature.CLOAK_OF_SHADOWS);
 			} else if (archetype.equals(Class.Subclass.WAR)) {
 				//
+				set.add(Feature.WAR_GODS_BLESSING);
 			}
-
 
 		} else if (level == 7) {
 
@@ -750,21 +781,26 @@ public enum Class implements Option {
 				//
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
-				set.add(Feature.POTENT_SPELLCASTING);
+				set.add(Feature.POTENT_SPELLCASTING_CLERIC);
 			} else if (archetype.equals(Class.Subclass.LIFE)) {
 				//
+				set.add(Feature.DIVINE_STRIKE_LIFE);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
+				set.add(Feature.POTENT_SPELLCASTING_CLERIC);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
+				set.add(Feature.DIVINE_STRIKE_NATURE);
 			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
 				//
+				set.add(Feature.DIVINE_STRIKE_TEMPEST);
 			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
 				//
+				set.add(Feature.DIVINE_STRIKE_TRICKERY);
 			} else if (archetype.equals(Class.Subclass.WAR)) {
 				//
+				set.add(Feature.DIVINE_STRIKE_WAR);
 			}
-
 
 		} else if (level == 9) {
 
@@ -798,18 +834,23 @@ public enum Class implements Option {
 				set.add(Feature.VISIONS_OF_THE_PAST);
 			} else if (archetype.equals(Class.Subclass.LIFE)) {
 				//
+				set.add(Feature.SUPREME_HEALING);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
+				set.add(Feature.POTENT_SPELLCASTING_CLERIC);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
+				set.add(Feature.MASTER_OF_NATURE);
 			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
 				//
+				set.add(Feature.STORMBORN);
 			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
 				//
+				set.add(Feature.IMPROVED_DUPLICITY);
 			} else if (archetype.equals(Class.Subclass.WAR)) {
 				//
+				set.add(Feature.AVATAR_OF_BATTLE);
 			}
-
 
 		} else if (level == 18) {
 			set.add(Feature.CHANNEL_DIVINITY_3);
@@ -835,7 +876,11 @@ public enum Class implements Option {
 		int level = actor.getLevel();
 
 		// Class job = actor.getJob();
-		// EnumSet<Spell> spellsKnown = actor.getSpellsKnown();
+		// EnumSet<Spell> spellsKnown;
+		// if (actor.getSpellsKnown() == null)
+		// spellsKnown = EnumSet.noneOf(Spell.class);
+		// else
+		// spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
 
@@ -885,27 +930,6 @@ public enum Class implements Option {
 		}
 
 		return set;
-	}
-
-	/*
-	 * ADDITIONAL CLASS SETUP
-	 * 
-	 */
-	public static void additionalSetup(Actor actor) {
-		Subclass archetype = actor.getArchetype();
-
-		if (archetype.equals(Subclass.LIFE)) {
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		} else if (archetype.equals(Subclass.NATURE)) {
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		} else if (archetype.equals(Subclass.TEMPEST)) {
-			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		} else if (archetype.equals(Subclass.WAR)) {
-			actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
-			actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-		}
-
 	}
 
 	/*

@@ -169,9 +169,6 @@ public interface Actor {
 			} else if (job.equals(Class.ROGUE)) {
 				languages.add(THIEVES_CANT);
 
-			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
-				skillsToAdd += 2;
-
 			} else if (archetype.equals(Class.Subclass.DRAGON_ORIGIN)) {
 				Language[] array = new Language[] { DRACONIC };
 				languages.addAll(

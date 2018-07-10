@@ -76,9 +76,6 @@ public class Player implements Actor {
 		Class.setupClassFeatures(this);
 		Spell.setupSpellsKnown(this);
 
-		// final step after class/subclass chosen
-		Class.additionalSetup(this);
-
 		// must be after race is determined
 		this.size = (race.equals(Race.HALFLING) || race.equals(Race.GNOME)) ? Size.SMALL : Size.MEDIUM;
 		this.creature = Creature.HUMANOID;
@@ -129,13 +126,13 @@ public class Player implements Actor {
 		// abilities line
 		string += "\n" + abilitiesToString();
 		// skills line
-		string += "\n" + skillsToString();
+//		string += "\n" + skillsToString();
 		// armor line
 		// string += "\n" + armor.toString();
 		// weapon line
 		// string += "\n" + weapons.toString();
 		// languages line
-		string += "\n" + languages.toString();
+//		string += "\n" + languages.toString();
 		// inventory line
 		string += "\n" + inventory.toStringDetailed();
 		// features line

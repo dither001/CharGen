@@ -867,6 +867,25 @@ public enum Spell {
 		return set;
 	}
 
+	public static void addCantripOrElse(Spell spell, Class job, EnumSet<Spell> spellsKnown) {
+		Spell[] array = null;
+
+		if (job.equals(Class.BARD))
+			array = BARD_SPELLS[0];
+		else if (job.equals(Class.CLERIC))
+			array = CLERIC_SPELLS[0];
+		else if (job.equals(Class.DRUID))
+			array = DRUID_SPELLS[0];
+		else if (job.equals(Class.SORCERER))
+			array = SORCERER_SPELLS[0];
+		else if (job.equals(Class.WARLOCK))
+			array = WARLOCK_SPELLS[0];
+		else if (job.equals(Class.WIZARD))
+			array = WIZARD_SPELLS[0];
+
+		Dice.addToSetOrElseFromArray(1, new Spell[] { spell }, spellsKnown, array);
+	}
+
 	public static void addCantripKnown(Class job, EnumSet<Spell> spellsKnown) {
 		spellSelector(1, 0, job, spellsKnown);
 	}
