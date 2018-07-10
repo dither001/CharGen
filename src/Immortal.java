@@ -62,6 +62,11 @@ public abstract class Immortal implements Actor {
 		 */
 		ABOMINATION,
 		/*
+		 * UNDEAD are properly a form of lesser "immortal" creatures; includes ghosts,
+		 * vampires, liches, mummies, and many others
+		 */
+		UNDEAD,
+		/*
 		 * India: DEVA/SURA, ASURA, YAKSHA/BHUTA, RAKSHASA
 		 */
 		ASURA, DEVA, YAKSHA, RAKSHASA,
