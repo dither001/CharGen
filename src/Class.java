@@ -669,6 +669,10 @@ public enum Class implements Option {
 			// divine domain
 			if (archetype.equals(Class.Subclass.DEATH)) {
 				//
+				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
+				set.add(Feature.REAPER);
+				Spell spell = Dice.randomFromSet(Spell.allSpellsOfSchool(0, Spell.School.NECROMANCY));
+				Spell.addCantripOrElse(spell, CLERIC, actor);
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
 				Skill[] array = { Skill.ARCANA, Skill.HISTORY, Skill.NATURE, Skill.RELIGION };
@@ -683,7 +687,7 @@ public enum Class implements Option {
 				set.add(Feature.DISCIPLE_OF_LIFE);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
-				Spell.addCantripOrElse(Spell.LIGHT, CLERIC, spellsKnown);
+				Spell.addCantripOrElse(Spell.LIGHT, CLERIC, actor);
 				set.add(Feature.WARDING_FLARE);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
@@ -709,6 +713,7 @@ public enum Class implements Option {
 			// divine domain
 			if (archetype.equals(Class.Subclass.DEATH)) {
 				//
+				set.add(Feature.TOUCH_OF_DEATH);
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.KNOWLEDGE_OF_THE_AGES);
@@ -748,6 +753,7 @@ public enum Class implements Option {
 			// domain
 			if (archetype.equals(Class.Subclass.DEATH)) {
 				//
+				set.add(Feature.INESCAPABLE_DESTRUCTION);
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.READ_THOUGHTS);
@@ -779,6 +785,7 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 			if (archetype.equals(Class.Subclass.DEATH)) {
 				//
+				set.add(Feature.DIVINE_STRIKE_DEATH);
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.POTENT_SPELLCASTING_CLERIC);
@@ -829,6 +836,7 @@ public enum Class implements Option {
 			set.add(Feature.DESTROY_UNDEAD_17);
 			if (archetype.equals(Class.Subclass.DEATH)) {
 				//
+				set.add(Feature.IMPROVED_REAPER);
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.VISIONS_OF_THE_PAST);

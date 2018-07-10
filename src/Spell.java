@@ -765,6 +765,21 @@ public enum Spell {
 		return set;
 	}
 
+	public static Set<Spell> allSpellsOfSchool(int tier, School school) {
+		Set<Spell> spells = EnumSet.noneOf(Spell.class);
+
+		Spell candidate;
+		Prototype prototype;
+		for (Iterator<Spell> it = prototypeMap.keySet().iterator(); it.hasNext();) {
+			candidate = it.next();
+			prototype = prototypeMap.get(candidate);
+			if (prototype.level == tier && prototype.school.equals(school))
+				spells.add(candidate);
+		}
+
+		return spells;
+	}
+
 	private static void spellSelector(int spellsToAdd, int tier, Class job, Set<Spell> spellsKnown) {
 		int spellsAdded = 0;
 
@@ -867,9 +882,14 @@ public enum Spell {
 		return set;
 	}
 
-	public static void addCantripOrElse(Spell spell, Class job, EnumSet<Spell> spellsKnown) {
-		Spell[] array = null;
+	public static void addCantripOrElse(Spell spell, Class job, Actor actor) {
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
 
+		Spell[] array = null;
 		if (job.equals(Class.BARD))
 			array = BARD_SPELLS[0];
 		else if (job.equals(Class.CLERIC))
@@ -883,7 +903,8 @@ public enum Spell {
 		else if (job.equals(Class.WIZARD))
 			array = WIZARD_SPELLS[0];
 
-		Dice.addToSetOrElseFromArray(1, new Spell[] { spell }, spellsKnown, array);
+		spellsKnown.addAll(Dice.addToSetOrElseFromArray(1, new Spell[] { spell }, spellsKnown, array));
+		actor.setSpellsKnown(spellsKnown);
 	}
 
 	public static void addCantripKnown(Class job, EnumSet<Spell> spellsKnown) {

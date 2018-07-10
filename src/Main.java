@@ -18,9 +18,9 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-//		rollCharactersOfArchetype(Class.Subclass.LIFE);
+		rollCharactersOfArchetype(Class.Subclass.DEATH);
 //		 levelUpTestClass(Class.CLERIC);
-		 levelUpTestArchetype(Class.Subclass.WAR);
+//		 levelUpTestArchetype(Class.Subclass.DEATH);
 
 	}
 
