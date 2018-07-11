@@ -80,6 +80,10 @@ public abstract class Immortal implements Actor {
 		 */
 		ABOMINATION, ELEMENTAL,
 		/*
+		 * CANAANITE pantheon: Elohim or "sons of El"
+		 */
+		ELOHIM,
+		/*
 		 * India: DEVA/SURA, ASURA, YAKSHA/BHUTA, RAKSHASA
 		 */
 		ASURA, DEVA, YAKSHA, RAKSHASA,
@@ -132,10 +136,12 @@ public abstract class Immortal implements Actor {
 	private enum Entity {
 		// DAWN WAR GODS (4e D&D)
 		ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR,
+		// Canaanite gods: Elohim, "sons of El"
+		ANAT, ASHERAH, ASTARTE, ATHIRAT, ATTAR, BETH_HORON, DAGON, ELYON, ERETZ, ESHMUN, HADAD, HAMMON, HERMON, ISHAT, KHIKHIBI, KOTHAR_WA_KHASIS, KOTHARAT, LOTAN, MARQOD, MELQART, MISOR, MOLOCH, MOT, NIKKAL_WA_IB, QADESHTU, RESHEPH, SHAHAR, SHALIM, SHAMAYIM, SHAPASH, SHEOL, SYDYK, TAAUTUS, TANIT, YAM, YARIKH,
 		// Jewish angels
 		CAMAEL, CASSIEL, GABRIEL, MICHAEL, OPHANIEL, ABADDON, ADRIEL, ANAEL, HANIEL, ARARIEL, ARIEL, AZAZEL, BARAQIEL, CHERUBIEL, DANIEL, DUMAH, EREMIEL, GADREEL, HADRANIEL, HAHASIAH, HASMAL, HESEDIEL, ZADKIEL, HOFNIEL, IMAMIAH, JEHOEL, JEQUN, JERAHMEEL, JOPHIEL, KEPHAREL, KERUBIEL, KUSHIEL, LELIEL, HELEL, MEBAHIAH, METATRON, MIKAIL, NANAEL, NETZACH, NITHAEL, NURIEL, PHANUEL, POYEL, PRAVUIL, PURIEL, QAPHSIEL, RADUERIEL, RAGUEL, AZRAEL, RAPHAEL, RAZIEL, REMIEL, RIKBIEL, SACHIEL, SAHAQUIEL, SABRIEL, SANDALPHON, SARIEL, SCHEMHAMPHARAE, SERAPHIEL, SHAMSIEL, SIDRIEL, TEMELUCHUS, URIEL, UZIEL, VASIARIAH, VEHUEL, ZAPHKIEL, ZEPHANIEL, ZEPHON, ZOPHIEL,
 		// Jewish demons
-		ABEZETHIBOU, ABYZOU, AGALIAREPT, AGRAT_BAT_MAHLAT, AGRIEL, ARMAROS, ASB_EL, BALBERITH, BEELZEBUB, BEHEMOTH, BELIAL, DANJAL, EISHETH, GADER_EL, GRIGORI, KASADYA, LEVIATHAN, LILIN, MASTEMA, MOLOCH, NAAMAH, ONOSKELIS, PENEMUE, RAHAB, SAMAEL, SEMYAZA, SHEDIM, TANNIN, YEQON,
+		ABEZETHIBOU, ABYZOU, AGALIAREPT, AGRAT_BAT_MAHLAT, AGRIEL, ARMAROS, ASB_EL, BALBERITH, BEELZEBUB, BEHEMOTH, BELIAL, DANJAL, EISHETH, GADER_EL, GRIGORI, KASADYA, LEVIATHAN, LILIN, MASTEMA, NAAMAH, ONOSKELIS, PENEMUE, RAHAB, SAMAEL, SEMYAZA, SHEDIM, TANNIN, YEQON,
 		// Christian angels
 		BARACHIEL, JEGUDIEL, LUCIFER, MURIEL, PAHALIAH, SARATHIEL, SELAPHIEL, WORMWOOD, ZACHARIEL,
 		// Christian demons
@@ -243,6 +249,16 @@ public abstract class Immortal implements Actor {
 			Entity.TOROG, Entity.VECNA, Entity.ZEHIR };
 
 	/*
+	 * CANAANITE - ELOHIM
+	 */
+	private static final Entity[] ELOHIM = { Entity.ANAT, Entity.ASHERAH, Entity.ASTARTE, Entity.ATHIRAT, Entity.ATTAR,
+			Entity.BETH_HORON, Entity.DAGON, Entity.ELYON, Entity.ERETZ, Entity.ESHMUN, Entity.HADAD, Entity.HAMMON,
+			Entity.HERMON, Entity.ISHAT, Entity.KHIKHIBI, Entity.KOTHAR_WA_KHASIS, Entity.KOTHARAT, Entity.LOTAN,
+			Entity.MARQOD, Entity.MELQART, Entity.MISOR, Entity.MOLOCH, Entity.MOT, Entity.NIKKAL_WA_IB,
+			Entity.QADESHTU, Entity.RESHEPH, Entity.SHAHAR, Entity.SHALIM, Entity.SHAMAYIM, Entity.SHAPASH,
+			Entity.SHEOL, Entity.SYDYK, Entity.TAAUTUS, Entity.TANIT, Entity.YAM, Entity.YARIKH };
+
+	/*
 	 * JUDAISM
 	 */
 	private static final Entity[] JEWISH_ANGELS = { Entity.CAMAEL, Entity.CASSIEL, Entity.GABRIEL, Entity.MICHAEL,
@@ -281,9 +297,8 @@ public abstract class Immortal implements Actor {
 	private static final Entity[] JEWISH_DEMONS = { Entity.ABEZETHIBOU, Entity.ABYZOU, Entity.AGALIAREPT,
 			Entity.AGRAT_BAT_MAHLAT, Entity.AGRIEL, Entity.ARMAROS, Entity.ASB_EL, Entity.BALBERITH, Entity.BEELZEBUB,
 			Entity.BEHEMOTH, Entity.BELIAL, Entity.DANJAL, Entity.EISHETH, Entity.GADER_EL, Entity.GRIGORI,
-			Entity.KASADYA, Entity.LEVIATHAN, Entity.LILIN, Entity.MASTEMA, Entity.MOLOCH, Entity.NAAMAH,
-			Entity.ONOSKELIS, Entity.PENEMUE, Entity.RAHAB, Entity.SAMAEL, Entity.SEMYAZA, Entity.SHEDIM, Entity.TANNIN,
-			Entity.YEQON };
+			Entity.KASADYA, Entity.LEVIATHAN, Entity.LILIN, Entity.MASTEMA, Entity.NAAMAH, Entity.ONOSKELIS,
+			Entity.PENEMUE, Entity.RAHAB, Entity.SAMAEL, Entity.SEMYAZA, Entity.SHEDIM, Entity.TANNIN, Entity.YEQON };
 
 	/*
 	 * ISLAM
@@ -426,10 +441,15 @@ public abstract class Immortal implements Actor {
 		greaterImmortals.put(Entity.ZEHIR, new Prototype(Entity.ZEHIR, Greater.GOD,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.DEATH, Domain.TRICKERY }));
 
-		// JOTNAR
-		Entity[] array = JOTNAR;
+		/*
+		 * ADD LESSER BEINGS
+		 */
+		Entity[] array = null;
+
+		// CANAANITE - ELOHIM
+		array = ELOHIM;
 		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.JOTUNN, Alignment.NEUTRAL));
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ELOHIM, Alignment.NEUTRAL));
 		}
 
 		// JEWISH ANGELS
@@ -460,6 +480,12 @@ public abstract class Immortal implements Actor {
 		array = ISLAMIC_DEMONS;
 		for (int i = 0; i < array.length; ++i) {
 			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.EVIL));
+		}
+
+		// JOTNAR
+		array = JOTNAR;
+		for (int i = 0; i < array.length; ++i) {
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.JOTUNN, Alignment.CHAOTIC));
 		}
 
 		// ENOCHIAN ANGELS
