@@ -15,7 +15,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		lesserBeings();
+		System.out.println(Immortal.lesserBeingsAlignmentToString());
+//		lesserBeings();
 
 		// powersByAlignment();
 
@@ -41,6 +42,7 @@ public class Main {
 			System.out.println(it.next());
 		}
 
+		System.out.println(Immortal.getLesserBeings().size());
 	}
 
 	public static void powersByAlignment() {
