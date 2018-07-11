@@ -15,7 +15,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		powersByAlignment();
+		lesserBeings();
+
+		// powersByAlignment();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// Main.levelUpTestDisplayOnly(3, Class.DRUID);
@@ -31,6 +33,13 @@ public class Main {
 		// rollCharactersOfArchetype(Class.Subclass.DEATH);
 		// levelUpTest(20, Class.CLERIC);
 		// levelUpTest(Class.Subclass.DEATH);
+
+	}
+
+	public static void lesserBeings() {
+		for (Iterator<?> it = Immortal.getLesserBeings().iterator(); it.hasNext();) {
+			System.out.println(it.next());
+		}
 
 	}
 

@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -129,10 +130,12 @@ public abstract class Immortal implements Actor {
 	}
 
 	private enum Entity {
-		// DAWN WAR GODS
+		// DAWN WAR GODS (4e D&D)
 		ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR,
-		// JOTNAR
-		AEGIR, ALFARIN, ALSVART, AM, AMA, AMGERD, ANGEYJA, ANGRBODA, ASVID, ATLA, AURBODA, AURGELMIR, AURGRIMNIR, AURNIR, AURVANDIL, BAKRAUF, BARA, BAUGI, BEINVID, BELI, BERGELMIR, BESTLA, BILLINGR, BJORGOLF, BLAIN, BLAPTHVARI, BLODUGHADDA, BOLTHORN, BRANDINGI, BRIMIR, BRYJA, BUSEYRA, BYLEIPTR, BYLEIST, BYLGJA, DOFRI, DROFN, DUFA, DUMBR, DURNIR, EGGTHER, EIMGEITIR, EISTLA, EISURFALDA, ELD, EYRGJAFA, FALA, FARBAUTI, FENJA, MENJA, FENRIR, FJOLVERK, FJOLVOR, FLEGG, FORAD, FORNJOT, FYRNIR, GANGLATI, GANGLOT, GANGR, GEIRROD, GEITIR, GEITLA, GERD, GESTILJA, GEYSA, GILLING, GJALP, GREIP, GLAM, GLAUM, GLAUMAR, GLUMRA, GNEIP, GNEIPA, GNISSA, GRID, GRIMLING, GRIMNIR, GROTTINTANNA, GRYLA, GUNNLOD, GUSIR, GYLLIR, GYMIR, HAERA, HAFLI, HALA, HARDGREIP, HARDVERK, HASTIGI, HATI, HEFRING, HEIDREK, HEL, HELBLINDI, HELREGINN, HENGIKEPTA, HENGJANKJAPTA, HERKIR, HERKJA, HIMINGLAEVA, GLOI, HOLGABRUD, HORN, HRAESVELGR, HRAUDNIR, HRAUDUNG, HRIMGERD, HRIMGRIMNIR, HRIMNIR, HRIMTHURS, HRINGVOLNIR, HRIPSTOD, HROAR, HRODR, HRODVITNIR, HROKKVIR, HRONN, HROSSTHJOF, HRUGA, HRUNGNIR, HRYGGDA, HRYM, HUNDALF, HVAL, HVEDRA, HVEDRUNG, HYMIR, HYNDLA, HYROKKIN, IDI, IM, IMA, IMD, IMGERD, IVIDJA, JARNGLUMRA, JARNSAXA, JARNVIDJA, JORMUNGAND, KALDGRANI, KARI, KEILA, KJALLANDI, KOLGA, KOTT, KRAKA, KYRMIR, LAUFEY, LEIFI, LEIKN, LEIRVOR, LITR, LJOTA, LODINFINGRA, LOGI, LOKI, LOPTR, LUT, MANAGARM, MARGERD, MIDJUNG, MIMIR, MODGUD, MOGTHRASIR, MOKKURKALFI, MORN, MUNNHARPA, MYRKRIDA, NAGLFARI, NAL, NARFI, NARI, NATI, NORFI, NOTT, OFLUGBARDA, OFLUGBARDI, OFOTI, OGLADNIR, OLVALDI, ONDUD, OSGRUI, OSKRUD, RANGBEIN, RIFINGAFLA, RINDR, RUNGNIR, RYG, SAEKARLSMULI, SALFANG, SAMENDIL, SIGYN, SIMUL, SIVOR, SKADI, SKAERIR, SKALLI, SKERKIR, SKOLL, SKRATI, SKRIKJA, SKRYMIR, SOKKMIMIR, SOM, SPRETTING, STARKAD, STIGANDI, STORVERK, STUMI, SURTR, SUTTUNG, SVARANG, SVART, SVASUD, SVEIPINFALDA, SVIVOR, THISTILBARDI, THJAZI, THORN, THRASIR, THRIGEITIR, THRIVALDI, THRUDGELMIR, THRYM, THURBORD, ULFRUN, UNN, UTGARDA_LOKI, VAFTHRUDNIR, VAGNHOFDI, VALI, VANARGAND, VANDIL, VARDRUN, VASAD, VER, VIDBLINDI, VIDDI, VIDGYMNIR, VIGGLOD, VIND, VINDLONI, VINDSVAL, VINGNIR, VINGRIP, VIPAR, VORNIR, YMIR, YMSI
+		// JOTNAR (Norse)
+		AEGIR, ALFARIN, ALSVART, AM, AMA, AMGERD, ANGEYJA, ANGRBODA, ASVID, ATLA, AURBODA, AURGELMIR, AURGRIMNIR, AURNIR, AURVANDIL, BAKRAUF, BARA, BAUGI, BEINVID, BELI, BERGELMIR, BESTLA, BILLINGR, BJORGOLF, BLAIN, BLAPTHVARI, BLODUGHADDA, BOLTHORN, BRANDINGI, BRIMIR, BRYJA, BUSEYRA, BYLEIPTR, BYLEIST, BYLGJA, DOFRI, DROFN, DUFA, DUMBR, DURNIR, EGGTHER, EIMGEITIR, EISTLA, EISURFALDA, ELD, EYRGJAFA, FALA, FARBAUTI, FENJA, MENJA, FENRIR, FJOLVERK, FJOLVOR, FLEGG, FORAD, FORNJOT, FYRNIR, GANGLATI, GANGLOT, GANGR, GEIRROD, GEITIR, GEITLA, GERD, GESTILJA, GEYSA, GILLING, GJALP, GREIP, GLAM, GLAUM, GLAUMAR, GLUMRA, GNEIP, GNEIPA, GNISSA, GRID, GRIMLING, GRIMNIR, GROTTINTANNA, GRYLA, GUNNLOD, GUSIR, GYLLIR, GYMIR, HAERA, HAFLI, HALA, HARDGREIP, HARDVERK, HASTIGI, HATI, HEFRING, HEIDREK, HEL, HELBLINDI, HELREGINN, HENGIKEPTA, HENGJANKJAPTA, HERKIR, HERKJA, HIMINGLAEVA, GLOI, HOLGABRUD, HORN, HRAESVELGR, HRAUDNIR, HRAUDUNG, HRIMGERD, HRIMGRIMNIR, HRIMNIR, HRIMTHURS, HRINGVOLNIR, HRIPSTOD, HROAR, HRODR, HRODVITNIR, HROKKVIR, HRONN, HROSSTHJOF, HRUGA, HRUNGNIR, HRYGGDA, HRYM, HUNDALF, HVAL, HVEDRA, HVEDRUNG, HYMIR, HYNDLA, HYROKKIN, IDI, IM, IMA, IMD, IMGERD, IVIDJA, JARNGLUMRA, JARNSAXA, JARNVIDJA, JORMUNGAND, KALDGRANI, KARI, KEILA, KJALLANDI, KOLGA, KOTT, KRAKA, KYRMIR, LAUFEY, LEIFI, LEIKN, LEIRVOR, LITR, LJOTA, LODINFINGRA, LOGI, LOKI, LOPTR, LUT, MANAGARM, MARGERD, MIDJUNG, MIMIR, MODGUD, MOGTHRASIR, MOKKURKALFI, MORN, MUNNHARPA, MYRKRIDA, NAGLFARI, NAL, NARFI, NARI, NATI, NORFI, NOTT, OFLUGBARDA, OFLUGBARDI, OFOTI, OGLADNIR, OLVALDI, ONDUD, OSGRUI, OSKRUD, RANGBEIN, RIFINGAFLA, RINDR, RUNGNIR, RYG, SAEKARLSMULI, SALFANG, SAMENDIL, SIGYN, SIMUL, SIVOR, SKADI, SKAERIR, SKALLI, SKERKIR, SKOLL, SKRATI, SKRIKJA, SKRYMIR, SOKKMIMIR, SOM, SPRETTING, STARKAD, STIGANDI, STORVERK, STUMI, SURTR, SUTTUNG, SVARANG, SVART, SVASUD, SVEIPINFALDA, SVIVOR, THISTILBARDI, THJAZI, THORN, THRASIR, THRIGEITIR, THRIVALDI, THRUDGELMIR, THRYM, THURBORD, ULFRUN, UNN, UTGARDA_LOKI, VAFTHRUDNIR, VAGNHOFDI, VALI, VANARGAND, VANDIL, VARDRUN, VASAD, VER, VIDBLINDI, VIDDI, VIDGYMNIR, VIGGLOD, VIND, VINDLONI, VINDSVAL, VINGNIR, VINGRIP, VIPAR, VORNIR, YMIR, YMSI,
+		// Enochian Angels 1500s
+		AAAN, AADT, AAETPIO, AANAA, AAODT, AAOXAIF, AAVAN, AAVNA, AAX, ABAMO, ABAOZ, ABMO, ABOZ, ACAR, ACCA, ACMBICU, ACPS, ACRAR, ACUCA, ACUPS, ACZINOR, ADAEOET, ADI, ADIRE, ADNOP, ADOPT, ADOPA, ADOTA, ADRE, ADTA, AGB, AGLM, AGMLM, AHAOZPI, AIAOAI_OIIIT, AIGRA, AIRA, AMOX, AMSOX, ANCRO, ANIMOTIX, ANPIEL, ANVAA, APA, APAHR, APDOCE, APHR, APLST, APM, APST, ARIZL, ARN, ARZL, ARYLIC, ATAAD, ATDIM, ATO, AVTOTAR, BARADIEL, BARNABAS, BATAIVA, BIVHD, BRAP, BRIAP, BRCN, CADAAMP, CAMAEL, CASSIEL, CMS, CNABR, CNBR, CPSA, CPUSA, DIARI, DIMT, DIMNT, DIOM, DIRI, DIXOM, DMX, DMITRI, DOLOP, DONPA, DOOP, DOPA, DTAA, DTOAA, DXAGZ, DXGZ, EAC, EBOZA, ECAOP, ECANUS, ECOP, EDLPRNAA, EPHRA, ERG, ERN, ERUBEY, ERZLA, EUTPA, EXARP, EXR, FAAX, FMND, GABRIEL, GALGALLIEL, GBAL, GBEAL, GLMA, GLMMA, GMDNM, HABIORO, HBR, HCNBR, HCOMA, HIPOTGA, HRAAP, HRAP, HROAN, HRU, HTMORDA, HUA, HXGZD, ICZHIHA, IMNTD, IMTD, IZAZ, IZINR, IZIXP, IZNR, IZRAZ, IZXP, KOKABIEL, LAIRZ, LANG, LAOAXRP, LARZ, LAVAVOTH, LEAOC, LEVANAEL, LIGDISA, LMAG, LMMAG, LSRAPHM, MASGM, MICHAEL, MIZ, MMA, MSAL, MSMAL, MTDI, MTNDI, MTO, NAAA, NANTA, NAOO, NAOOO, NAVAA, NBARC, NBRC, NDAZN, NDZN, NHDD, NHODD, NLIRX, NLRX, NPAT, NRCOA, NROA, OACNR, OANR, OAP, OBGOTA_AABACO, OCNM, OMAGG, OMGG, OMIA, OMSIA, ONA, ONH, ONP, OODPZ, OOPZ, OPAD, OPAMN, OPAMA, OPHANIEL, OPMN, OPNA, OPNAD, ORMN, ORO_IBAH_AOZPI, ORPMN, OTOI, OTROI, OYAUB, OYUB, OZAAB, OZAB, PACO, PADO, PAEOC, PAICO, PIZ, PMAGL, PMOX, PMZOX, PPSAC, RAAGIOSL, RAPH, RAPHAEL, RBNH, RBZNH, RCANB, RCNB, RDA, RGAN, RGOAN, RLEMU, RLMU, RPA, RRB, RRL, RSI, RSONI, RUOI, RUROI, RXAO, RXINL, RXNL, RXP, RXPAO, RZILA, RZLA, RZIONR_NRZFM, SAIINOU, SAIINOV, SAAIZ, SAUCP, SACP, SCMIO, SIOSP, SISP, SHONDA, SLGAIOL, SONIZNT, TDIM, TDNIM, TPAU, TPLAU, URIEL, USPSN, USSN, UTIPA, UTPA, UVB, VAASA, VASA, VOLXDO_SIODA, XAI, XCZ, XDZ, XGAZD, XGZD, XII, XNILR, XOM, XOY, XPA, XPAXN, XPCN, XRINH, XRNH, XXAN, YASEN, ZAABO, ZABO, ZARNAAH, ZARZI, ZARZILG, ZAZI, ZDAXG, ZDXG, ZEDEKIEL, ZINGGEN, ZIRACAH, ZIRZ, ZIZA, ZURCHOL
 
 	}
 
@@ -189,6 +192,16 @@ public abstract class Immortal implements Actor {
 			return (lesser != null);
 		}
 
+		@Override
+		public String toString() {
+			String string;
+
+			// string = String.format("%s %s %s", entity, alignment.toString(),
+			// domains.toString());
+			string = String.format("%-15s %s", entity, domains.toString());
+
+			return string;
+		}
 	}
 
 	/*
@@ -260,6 +273,50 @@ public abstract class Immortal implements Actor {
 			Entity.VIDBLINDI, Entity.VIDDI, Entity.VIDGYMNIR, Entity.VIGGLOD, Entity.VIND, Entity.VINDLONI,
 			Entity.VINDSVAL, Entity.VINGNIR, Entity.VINGRIP, Entity.VIPAR, Entity.VORNIR, Entity.YMIR, Entity.YMSI };
 
+	/*
+	 * ENOCHIAN ANGELS (John Dee: 1500s)
+	 */
+	private static final Entity[] ENOCHIAN_ANGELS = { Entity.AAAN, Entity.AADT, Entity.AAETPIO, Entity.AANAA,
+			Entity.AAODT, Entity.AAOXAIF, Entity.AAVAN, Entity.AAVAN, Entity.AAVNA, Entity.AAX, Entity.ABAMO,
+			Entity.ABAOZ, Entity.ABMO, Entity.ABOZ, Entity.ACAR, Entity.ACCA, Entity.ACMBICU, Entity.ACPS, Entity.ACRAR,
+			Entity.ACUCA, Entity.ACUPS, Entity.ACZINOR, Entity.ADAEOET, Entity.ADI, Entity.ADIRE, Entity.ADNOP,
+			Entity.ADOPT, Entity.ADOPA, Entity.ADOTA, Entity.ADRE, Entity.ADTA, Entity.AGB, Entity.AGLM, Entity.AGMLM,
+			Entity.AHAOZPI, Entity.AIAOAI_OIIIT, Entity.AIGRA, Entity.AIRA, Entity.AMOX, Entity.AMSOX, Entity.ANCRO,
+			Entity.ANIMOTIX, Entity.ANPIEL, Entity.ANVAA, Entity.APA, Entity.APAHR, Entity.APDOCE, Entity.APHR,
+			Entity.APLST, Entity.APM, Entity.APST, Entity.ARIZL, Entity.ARN, Entity.ARZL, Entity.ARYLIC, Entity.ATAAD,
+			Entity.ATDIM, Entity.ATO, Entity.AVTOTAR, Entity.BARADIEL, Entity.BARNABAS, Entity.BATAIVA, Entity.BIVHD,
+			Entity.BRAP, Entity.BRIAP, Entity.BRCN, Entity.CADAAMP, Entity.CAMAEL, Entity.CASSIEL, Entity.CMS,
+			Entity.CNABR, Entity.CNBR, Entity.CPSA, Entity.CPUSA, Entity.DIARI, Entity.DIMT, Entity.DIMNT, Entity.DIOM,
+			Entity.DIRI, Entity.DIXOM, Entity.DMX, Entity.DMITRI, Entity.DOLOP, Entity.DONPA, Entity.DOOP, Entity.DOPA,
+			Entity.DTAA, Entity.DTOAA, Entity.DXAGZ, Entity.DXGZ, Entity.EAC, Entity.EBOZA, Entity.ECAOP, Entity.ECANUS,
+			Entity.ECOP, Entity.EDLPRNAA, Entity.EPHRA, Entity.ERG, Entity.ERN, Entity.ERUBEY, Entity.ERZLA,
+			Entity.EUTPA, Entity.EXARP, Entity.EXR, Entity.FAAX, Entity.FMND, Entity.GABRIEL, Entity.GALGALLIEL,
+			Entity.GBAL, Entity.GBEAL, Entity.GLMA, Entity.GLMMA, Entity.GMDNM, Entity.HABIORO, Entity.HBR,
+			Entity.HCNBR, Entity.HCOMA, Entity.HIPOTGA, Entity.HRAAP, Entity.HRAP, Entity.HROAN, Entity.HRU,
+			Entity.HTMORDA, Entity.HUA, Entity.HXGZD, Entity.ICZHIHA, Entity.IMNTD, Entity.IMTD, Entity.IZAZ,
+			Entity.IZINR, Entity.IZIXP, Entity.IZNR, Entity.IZRAZ, Entity.IZXP, Entity.KOKABIEL, Entity.LAIRZ,
+			Entity.LANG, Entity.LAOAXRP, Entity.LARZ, Entity.LAVAVOTH, Entity.LEAOC, Entity.LEVANAEL, Entity.LIGDISA,
+			Entity.LMAG, Entity.LMMAG, Entity.LSRAPHM, Entity.MASGM, Entity.MICHAEL, Entity.MIZ, Entity.MMA,
+			Entity.MSAL, Entity.MSMAL, Entity.MTDI, Entity.MTNDI, Entity.MTO, Entity.NAAA, Entity.NANTA, Entity.NAOO,
+			Entity.NAOOO, Entity.NAVAA, Entity.NBARC, Entity.NBRC, Entity.NDAZN, Entity.NDZN, Entity.NHDD, Entity.NHODD,
+			Entity.NLIRX, Entity.NLRX, Entity.NPAT, Entity.NRCOA, Entity.NROA, Entity.OACNR, Entity.OANR, Entity.OAP,
+			Entity.OBGOTA_AABACO, Entity.OCNM, Entity.OMAGG, Entity.OMGG, Entity.OMIA, Entity.OMSIA, Entity.ONA,
+			Entity.ONH, Entity.ONP, Entity.OODPZ, Entity.OOPZ, Entity.OPAD, Entity.OPAMN, Entity.OPAMA, Entity.OPHANIEL,
+			Entity.OPMN, Entity.OPNA, Entity.OPNAD, Entity.ORMN, Entity.ORO_IBAH_AOZPI, Entity.ORPMN, Entity.OTOI,
+			Entity.OTROI, Entity.OYAUB, Entity.OYUB, Entity.OZAAB, Entity.OZAB, Entity.PACO, Entity.PADO, Entity.PAEOC,
+			Entity.PAICO, Entity.PIZ, Entity.PMAGL, Entity.PMOX, Entity.PMZOX, Entity.PPSAC, Entity.RAAGIOSL,
+			Entity.RAPH, Entity.RAPHAEL, Entity.RBNH, Entity.RBZNH, Entity.RCANB, Entity.RCNB, Entity.RDA, Entity.RGAN,
+			Entity.RGOAN, Entity.RLEMU, Entity.RLMU, Entity.RPA, Entity.RRB, Entity.RRL, Entity.RSI, Entity.RSONI,
+			Entity.RUOI, Entity.RUROI, Entity.RXAO, Entity.RXINL, Entity.RXNL, Entity.RXP, Entity.RXPAO, Entity.RZILA,
+			Entity.RZLA, Entity.RZIONR_NRZFM, Entity.SAIINOU, Entity.SAIINOV, Entity.SAAIZ, Entity.SAUCP, Entity.SACP,
+			Entity.SCMIO, Entity.SIOSP, Entity.SISP, Entity.SHONDA, Entity.SLGAIOL, Entity.SONIZNT, Entity.TDIM,
+			Entity.TDNIM, Entity.TPAU, Entity.TPLAU, Entity.URIEL, Entity.USPSN, Entity.USSN, Entity.UTIPA, Entity.UTPA,
+			Entity.UVB, Entity.VAASA, Entity.VASA, Entity.VOLXDO_SIODA, Entity.XAI, Entity.XCZ, Entity.XDZ,
+			Entity.XGAZD, Entity.XGZD, Entity.XII, Entity.XNILR, Entity.XOM, Entity.XOY, Entity.XPA, Entity.XPAXN,
+			Entity.XPCN, Entity.XRINH, Entity.XRNH, Entity.XXAN, Entity.YASEN, Entity.ZAABO, Entity.ZABO,
+			Entity.ZARNAAH, Entity.ZARZI, Entity.ZARZILG, Entity.ZAZI, Entity.ZDAXG, Entity.ZDXG, Entity.ZEDEKIEL,
+			Entity.ZINGGEN, Entity.ZIRACAH, Entity.ZIRZ, Entity.ZIZA, Entity.ZURCHOL };
+
 	static {
 		greaterImmortals = new HashMap<Entity, Prototype>();
 		lesserImmortals = new HashMap<Entity, Prototype>();
@@ -309,9 +366,14 @@ public abstract class Immortal implements Actor {
 		// JOTNAR
 		Entity[] array = JOTNAR;
 		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], jotunnRandomizer(array[i]));
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.JOTUNN, Alignment.NEUTRAL));
 		}
 
+		// ENOCHIAN ANGELS
+		array = ENOCHIAN_ANGELS;
+		for (int i = 0; i < array.length; ++i) {
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
+		}
 	}
 
 	/*
@@ -340,22 +402,8 @@ public abstract class Immortal implements Actor {
 		return set;
 	}
 
-	public static Set<Entity> getLesserBeings() {
-		/*
-		 * TODO - WIP
-		 */
-		Set<Entity> set = new HashSet<Entity>();
-
-		Entity candidate;
-		Prototype prototype;
-		for (Iterator<Entity> it = lesserImmortals.keySet().iterator(); it.hasNext();) {
-			candidate = it.next();
-			prototype = lesserImmortals.get(candidate);
-
-			set.add(candidate);
-		}
-
-		return set;
+	public static Collection<Prototype> getLesserBeings() {
+		return lesserImmortals.values();
 	}
 
 	public static Set<Greater> greaterImmortalTypes() {
@@ -403,22 +451,49 @@ public abstract class Immortal implements Actor {
 				set.add(Dice.randomFromArray(DOMAINS));
 			}
 
-			array = Dice.setToArray(set);
+			Iterator<Domain> it = set.iterator();
+			for (int i = 0; i < array.length; ++i) {
+				array[i] = it.next();
+			}
 		}
 
 		return array;
 	}
 
-	private static Prototype jotunnRandomizer(Entity entity) {
-		Alignment[] alignment = null;
-		int dice = Dice.roll(4);
-		if (dice == 1 || dice == 2)
-			alignment = new Alignment[] { Alignment.CHAOTIC, Alignment.NEUTRAL };
-		else if (dice == 3)
-			alignment = new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL };
-		else if (dice == 4)
-			alignment = new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD };
+	private static Prototype lesserBeing(Entity entity, Lesser lesser, Alignment axis) {
+		Alignment[][] axes = new Alignment[][] {
+				// LAWFUL
+				{ Alignment.LAWFUL, Alignment.NEUTRAL }, { Alignment.LAWFUL, Alignment.GOOD },
+				{ Alignment.LAWFUL, Alignment.EVIL },
+				// CHAOTIC
+				{ Alignment.CHAOTIC, Alignment.NEUTRAL }, { Alignment.CHAOTIC, Alignment.GOOD },
+				{ Alignment.CHAOTIC, Alignment.EVIL },
+				// GOOD
+				{ Alignment.GOOD, Alignment.NEUTRAL }, { Alignment.GOOD, Alignment.CHAOTIC },
+				{ Alignment.GOOD, Alignment.LAWFUL },
+				// EVIL
+				{ Alignment.EVIL, Alignment.NEUTRAL }, { Alignment.EVIL, Alignment.CHAOTIC },
+				{ Alignment.EVIL, Alignment.LAWFUL } };
 
-		return new Prototype(entity, Lesser.JOTUNN, alignment, domainRandomizer());
+		Alignment[] corners = new Alignment[] { Alignment.LAWFUL, Alignment.CHAOTIC, Alignment.GOOD, Alignment.EVIL };
+
+		//
+		Alignment[] alignment = null;
+		int dice = Dice.roll(10);
+		if (axis.equals(Alignment.LAWFUL)) {
+			alignment = axes[0];
+		} else if (axis.equals(Alignment.CHAOTIC)) {
+			alignment = axes[1];
+		} else if (axis.equals(Alignment.GOOD)) {
+			alignment = axes[2];
+		} else if (axis.equals(Alignment.EVIL)) {
+			alignment = axes[3];
+		} else if (dice < 5) {
+			alignment = new Alignment[] { Alignment.NEUTRAL };
+		} else {
+			alignment = new Alignment[] { Alignment.NEUTRAL, Dice.randomFromArray(corners) };
+		}
+
+		return new Prototype(entity, lesser, alignment, domainRandomizer());
 	}
 }
