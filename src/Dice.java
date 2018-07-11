@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -106,7 +107,19 @@ public final class Dice {
 		return choice;
 	}
 
-	public static <T> List<T> listFromSet(Set<T> set) {
+	@SuppressWarnings("unchecked")
+	public static <T> T[] setToArray(Set<T> set) {
+		T[] array = (T[]) new Object[set.size()];
+
+		Iterator<T> it = set.iterator();
+		for (int i = 0; i < array.length; ++i) {
+			array[i] = it.next();
+		}
+
+		return array;
+	}
+
+	public static <T> List<T> setToList(Set<T> set) {
 		return new ArrayList<T>(set);
 	}
 

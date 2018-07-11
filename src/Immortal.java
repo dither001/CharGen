@@ -197,6 +197,9 @@ public abstract class Immortal implements Actor {
 	private static HashMap<Entity, Prototype> greaterImmortals;
 	private static HashMap<Entity, Prototype> lesserImmortals;
 
+	private static final Domain[] DOMAINS = new Domain[] { Domain.DEATH, Domain.KNOWLEDGE, Domain.LIFE, Domain.LIGHT,
+			Domain.NATURE, Domain.TEMPEST, Domain.TRICKERY, Domain.WAR };
+
 	private static final Greater[] GREATER_IMMORTALS = { Greater.GOD, Greater.PRIMORDIAL, Greater.SPIRIT,
 			Greater.VESTIGE, Greater.HORROR };
 	private static final Lesser[] LESSER_IMMORTALS = { Lesser.ANCESTOR, Lesser.SAINT, Lesser.DEMIGOD, Lesser.DEMIURGE,
@@ -337,6 +340,24 @@ public abstract class Immortal implements Actor {
 		return set;
 	}
 
+	public static Set<Entity> getLesserBeings() {
+		/*
+		 * TODO - WIP
+		 */
+		Set<Entity> set = new HashSet<Entity>();
+
+		Entity candidate;
+		Prototype prototype;
+		for (Iterator<Entity> it = lesserImmortals.keySet().iterator(); it.hasNext();) {
+			candidate = it.next();
+			prototype = lesserImmortals.get(candidate);
+
+			set.add(candidate);
+		}
+
+		return set;
+	}
+
 	public static Set<Greater> greaterImmortalTypes() {
 		Set<Greater> set = EnumSet.noneOf(Greater.class);
 		for (Greater el : GREATER_IMMORTALS)
@@ -353,7 +374,42 @@ public abstract class Immortal implements Actor {
 		return set;
 	}
 
-	public static Prototype jotunnRandomizer(Entity entity) {
+	private static Domain[] domainRandomizer() {
+		Domain[] array = null;
+
+		int dice = Dice.roll(10);
+		if (dice < 5)
+			array = new Domain[1];
+		else if (dice == 5 || dice == 6 || dice == 7)
+			array = new Domain[2];
+		else if (dice == 8 || dice == 9)
+			array = new Domain[3];
+		else
+			array = new Domain[4];
+
+		dice = Dice.roll(10);
+		if (array.length == 1 && dice < 5) {
+			array[0] = Domain.NATURE;
+		} else if (array.length == 1 && (dice == 5 || dice == 6 || dice == 7)) {
+			array[0] = (Dice.roll(2) == 1) ? Domain.LIFE : Domain.LIGHT;
+		} else if (array.length == 1 && (dice == 8 || dice == 9)) {
+			array[0] = (Dice.roll(2) == 1) ? Domain.TRICKERY : Domain.WAR;
+		} else if (array.length == 1) {
+			array[0] = Dice.randomFromArray(DOMAINS);
+		} else {
+			// all bets are off
+			EnumSet<Domain> set = EnumSet.noneOf(Domain.class);
+			while (set.size() < array.length) {
+				set.add(Dice.randomFromArray(DOMAINS));
+			}
+
+			array = Dice.setToArray(set);
+		}
+
+		return array;
+	}
+
+	private static Prototype jotunnRandomizer(Entity entity) {
 		Alignment[] alignment = null;
 		int dice = Dice.roll(4);
 		if (dice == 1 || dice == 2)
@@ -363,21 +419,6 @@ public abstract class Immortal implements Actor {
 		else if (dice == 4)
 			alignment = new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD };
 
-		Domain[] domains = null;
-		dice = Dice.roll(6);
-		if (dice == 1)
-			domains = new Domain[] { Domain.NATURE };
-		else if (dice == 2)
-			domains = new Domain[] { Domain.NATURE, Domain.DEATH };
-		else if (dice == 3)
-			domains = new Domain[] { Domain.NATURE, Domain.TEMPEST };
-		else if (dice == 4)
-			domains = new Domain[] { Domain.NATURE, Domain.TRICKERY };
-		else if (dice == 5)
-			domains = new Domain[] { Domain.TEMPEST };
-		else if (dice == 6)
-			domains = new Domain[] { Domain.TRICKERY };
-
-		return new Prototype(entity, Lesser.JOTUNN, alignment, domains);
+		return new Prototype(entity, Lesser.JOTUNN, alignment, domainRandomizer());
 	}
 }
