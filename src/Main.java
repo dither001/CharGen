@@ -1,6 +1,8 @@
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 	private static int PCS_TO_ROLL = 50;
@@ -13,6 +15,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		immortalTypes();
+
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// Main.levelUpTestDisplayOnly(3, Class.DRUID);
 		//
@@ -23,11 +27,22 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-		Main.rollCharactersOfClass(Class.DRUID);
+//		Main.rollCharactersOfClass(Class.DRUID);
 		// rollCharactersOfArchetype(Class.Subclass.DEATH);
 		// levelUpTest(20, Class.CLERIC);
 		// levelUpTest(Class.Subclass.DEATH);
 
+	}
+
+	public static void immortalTypes() {
+		Set<Immortal.Greater> list2 = Immortal.greaterImmortalTypes();
+		System.out.println(list2);
+		System.out.println(list2.size());
+		System.out.println();
+
+		Set<Immortal.Lesser> list1 = Immortal.lesserImmortalTypes();
+		System.out.println(list1);
+		System.out.println(list1.size());
 	}
 
 	public static void levelUpTest(Class job) {
