@@ -1,8 +1,7 @@
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public abstract class Immortal implements Actor {
@@ -40,17 +39,9 @@ public abstract class Immortal implements Actor {
 
 	public enum Lesser {
 		/*
-		 * ANCESTOR
+		 * ANCESTOR, SAINT, DEMIGOD
 		 */
-		ANCESTOR,
-		/*
-		 * SAINT
-		 */
-		SAINT,
-		/*
-		 * DEMIGODS are explicitly "lesser gods" like elevated heroes and whatnot
-		 */
-		DEMIGOD,
+		ANCESTOR, SAINT, DEMIGOD,
 		/*
 		 * DEMIURGES include the majority of monotheistic deities, like ABRAXAS, ALLAH,
 		 * and YAHWEH who are almost always specifically associated with Creation
@@ -58,17 +49,12 @@ public abstract class Immortal implements Actor {
 		DEMIURGE,
 		/*
 		 * ANGELS are "lawful" servants of the gods, and they are led by a group of
-		 * powerful angels like a council of sorts
+		 * powerful angels like a council of sorts; DEMONS are "chaotic," they are led
+		 * by powerful "demon princes"; DEVILS may or may not be a higher order of
+		 * demons capable of independent thought and action
 		 */
-		ANGEL,
+		ANGEL, DEMON, DEVIL,
 		/*
-		 * DEMONS are "chaotic" beings, corrupted by evil and wholly destructive; they
-		 * are led by powerful "demon princes"; DEVILS may or may not be a higher order
-		 * of demons capable of independent thought and action
-		 */
-		DEMON, DEVIL,
-		/*
-		 * 
 		 * true DRAGONS are all unique, such as the Mesopotamian Bahamut and Tiamat,
 		 * Greek Python, Ladon, Hydra (et al), feathered serpents, the Japanese
 		 * Yamata-no-Orochi, Tolkein's Smaug, and most of the named dragons from various
@@ -88,13 +74,10 @@ public abstract class Immortal implements Actor {
 		WITCH,
 		/*
 		 * ABOMINATIONS are a bizarre class of "created" beings that lack a formal
-		 * definition or anything list consistent depiction
+		 * definition or anything list consistent depiction; ELEMENTALS include the
+		 * majority of beings called "primordials" in D&D 4e
 		 */
-		ABOMINATION,
-		/*
-		 * ELEMENTALS include the majority of beings called "primordials" in D&D 4e
-		 */
-		ELEMENTAL,
+		ABOMINATION, ELEMENTAL,
 		/*
 		 * India: DEVA/SURA, ASURA, YAKSHA/BHUTA, RAKSHASA
 		 */
@@ -205,6 +188,35 @@ public abstract class Immortal implements Actor {
 		public boolean lesser() {
 			return (lesser != null);
 		}
+
+		// static
+		public static Prototype jotunnRandomizer(Entity entity) {
+			Alignment[] alignment = null;
+			int dice = Dice.roll(4);
+			if (dice == 1 || dice == 2)
+				alignment = new Alignment[] { Alignment.CHAOTIC, Alignment.NEUTRAL };
+			else if (dice == 3)
+				alignment = new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL };
+			else if (dice == 4)
+				alignment = new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD };
+
+			Domain[] domains = null;
+			dice = Dice.roll(6);
+			if (dice == 1)
+				domains = new Domain[] { Domain.NATURE };
+			else if (dice == 2)
+				domains = new Domain[] { Domain.NATURE, Domain.DEATH };
+			else if (dice == 3)
+				domains = new Domain[] { Domain.NATURE, Domain.TEMPEST };
+			else if (dice == 4)
+				domains = new Domain[] { Domain.NATURE, Domain.TRICKERY };
+			else if (dice == 5)
+				domains = new Domain[] { Domain.TEMPEST };
+			else if (dice == 6)
+				domains = new Domain[] { Domain.TRICKERY };
+
+			return new Prototype(entity, Lesser.JOTUNN, alignment, domains);
+		}
 	}
 
 	/*
@@ -269,520 +281,267 @@ public abstract class Immortal implements Actor {
 				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.DEATH, Domain.TRICKERY }));
 
 		// JOTNAR
-		lesserImmortals.put(Entity.AEGIR, new Prototype(Entity.AEGIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ALFARIN, new Prototype(Entity.ALFARIN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ALSVART, new Prototype(Entity.ALSVART, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AM, new Prototype(Entity.AM, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AMA, new Prototype(Entity.AMA, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AMGERD, new Prototype(Entity.AMGERD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ANGEYJA, new Prototype(Entity.ANGEYJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ANGRBODA, new Prototype(Entity.ANGRBODA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ASVID, new Prototype(Entity.ASVID, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ATLA, new Prototype(Entity.ATLA, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AURBODA, new Prototype(Entity.AURBODA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AURGELMIR, new Prototype(Entity.AURGELMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AURGRIMNIR, new Prototype(Entity.AURGRIMNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AURNIR, new Prototype(Entity.AURNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.AURVANDIL, new Prototype(Entity.AURVANDIL, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BAKRAUF, new Prototype(Entity.BAKRAUF, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BARA, new Prototype(Entity.BARA, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BAUGI, new Prototype(Entity.BAUGI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BEINVID, new Prototype(Entity.BEINVID, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BELI, new Prototype(Entity.BELI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BERGELMIR, new Prototype(Entity.BERGELMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BESTLA, new Prototype(Entity.BESTLA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BILLINGR, new Prototype(Entity.BILLINGR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BJORGOLF, new Prototype(Entity.BJORGOLF, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BLAIN, new Prototype(Entity.BLAIN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BLAPTHVARI, new Prototype(Entity.BLAPTHVARI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BLODUGHADDA, new Prototype(Entity.BLODUGHADDA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BOLTHORN, new Prototype(Entity.BOLTHORN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BRANDINGI, new Prototype(Entity.BRANDINGI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BRIMIR, new Prototype(Entity.BRIMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BRYJA, new Prototype(Entity.BRYJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BUSEYRA, new Prototype(Entity.BUSEYRA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BYLEIPTR, new Prototype(Entity.BYLEIPTR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BYLEIST, new Prototype(Entity.BYLEIST, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.BYLGJA, new Prototype(Entity.BYLGJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.DOFRI, new Prototype(Entity.DOFRI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.DROFN, new Prototype(Entity.DROFN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.DUFA, new Prototype(Entity.DUFA, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.DUMBR, new Prototype(Entity.DUMBR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.DURNIR, new Prototype(Entity.DURNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.EGGTHER, new Prototype(Entity.EGGTHER, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.EIMGEITIR, new Prototype(Entity.EIMGEITIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.EISTLA, new Prototype(Entity.EISTLA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.EISURFALDA, new Prototype(Entity.EISURFALDA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ELD, new Prototype(Entity.ELD, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.EYRGJAFA, new Prototype(Entity.EYRGJAFA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FALA, new Prototype(Entity.FALA, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FARBAUTI, new Prototype(Entity.FARBAUTI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FENJA, new Prototype(Entity.FENJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MENJA, new Prototype(Entity.MENJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FENRIR, new Prototype(Entity.FENRIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FJOLVERK, new Prototype(Entity.FJOLVERK, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FJOLVOR, new Prototype(Entity.FJOLVOR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FLEGG, new Prototype(Entity.FLEGG, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FORAD, new Prototype(Entity.FORAD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FORNJOT, new Prototype(Entity.FORNJOT, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.FYRNIR, new Prototype(Entity.FYRNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GANGLATI, new Prototype(Entity.GANGLATI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GANGLOT, new Prototype(Entity.GANGLOT, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GANGR, new Prototype(Entity.GANGR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GEIRROD, new Prototype(Entity.GEIRROD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GEITIR, new Prototype(Entity.GEITIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GEITLA, new Prototype(Entity.GEITLA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GERD, new Prototype(Entity.GERD, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GESTILJA, new Prototype(Entity.GESTILJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GEYSA, new Prototype(Entity.GEYSA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GILLING, new Prototype(Entity.GILLING, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GJALP, new Prototype(Entity.GJALP, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GREIP, new Prototype(Entity.GREIP, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GLAM, new Prototype(Entity.GLAM, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GLAUM, new Prototype(Entity.GLAUM, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GLAUMAR, new Prototype(Entity.GLAUMAR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GLUMRA, new Prototype(Entity.GLUMRA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GNEIP, new Prototype(Entity.GNEIP, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GNEIPA, new Prototype(Entity.GNEIPA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GNISSA, new Prototype(Entity.GNISSA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GRID, new Prototype(Entity.GRID, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GRIMLING, new Prototype(Entity.GRIMLING, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GRIMNIR, new Prototype(Entity.GRIMNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GROTTINTANNA, new Prototype(Entity.GROTTINTANNA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GRYLA, new Prototype(Entity.GRYLA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GUNNLOD, new Prototype(Entity.GUNNLOD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GUSIR, new Prototype(Entity.GUSIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GYLLIR, new Prototype(Entity.GYLLIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GYMIR, new Prototype(Entity.GYMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HAERA, new Prototype(Entity.HAERA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HAFLI, new Prototype(Entity.HAFLI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HALA, new Prototype(Entity.HALA, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HARDGREIP, new Prototype(Entity.HARDGREIP, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HARDVERK, new Prototype(Entity.HARDVERK, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HASTIGI, new Prototype(Entity.HASTIGI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HATI, new Prototype(Entity.HATI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HEFRING, new Prototype(Entity.HEFRING, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HEIDREK, new Prototype(Entity.HEIDREK, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HEL, new Prototype(Entity.HEL, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HELBLINDI, new Prototype(Entity.HELBLINDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HELREGINN, new Prototype(Entity.HELREGINN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HENGIKEPTA, new Prototype(Entity.HENGIKEPTA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HENGJANKJAPTA, new Prototype(Entity.HENGJANKJAPTA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HERKIR, new Prototype(Entity.HERKIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HERKJA, new Prototype(Entity.HERKJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HIMINGLAEVA, new Prototype(Entity.HIMINGLAEVA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.GLOI, new Prototype(Entity.GLOI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HOLGABRUD, new Prototype(Entity.HOLGABRUD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HORN, new Prototype(Entity.HORN, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRAESVELGR, new Prototype(Entity.HRAESVELGR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRAUDNIR, new Prototype(Entity.HRAUDNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRAUDUNG, new Prototype(Entity.HRAUDUNG, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRIMGERD, new Prototype(Entity.HRIMGERD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRIMGRIMNIR, new Prototype(Entity.HRIMGRIMNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRIMNIR, new Prototype(Entity.HRIMNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRIMTHURS, new Prototype(Entity.HRIMTHURS, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRINGVOLNIR, new Prototype(Entity.HRINGVOLNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRIPSTOD, new Prototype(Entity.HRIPSTOD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HROAR, new Prototype(Entity.HROAR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRODR, new Prototype(Entity.HRODR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRODVITNIR, new Prototype(Entity.HRODVITNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HROKKVIR, new Prototype(Entity.HROKKVIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRONN, new Prototype(Entity.HRONN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HROSSTHJOF, new Prototype(Entity.HROSSTHJOF, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRUGA, new Prototype(Entity.HRUGA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRUNGNIR, new Prototype(Entity.HRUNGNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRYGGDA, new Prototype(Entity.HRYGGDA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HRYM, new Prototype(Entity.HRYM, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HUNDALF, new Prototype(Entity.HUNDALF, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HVAL, new Prototype(Entity.HVAL, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HVEDRA, new Prototype(Entity.HVEDRA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HVEDRUNG, new Prototype(Entity.HVEDRUNG, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HYMIR, new Prototype(Entity.HYMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HYNDLA, new Prototype(Entity.HYNDLA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.HYROKKIN, new Prototype(Entity.HYROKKIN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.IDI, new Prototype(Entity.IDI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.IM, new Prototype(Entity.IM, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.IMA, new Prototype(Entity.IMA, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.IMD, new Prototype(Entity.IMD, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.IMGERD, new Prototype(Entity.IMGERD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.IVIDJA, new Prototype(Entity.IVIDJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.JARNGLUMRA, new Prototype(Entity.JARNGLUMRA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.JARNSAXA, new Prototype(Entity.JARNSAXA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.JARNVIDJA, new Prototype(Entity.JARNVIDJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.JORMUNGAND, new Prototype(Entity.JORMUNGAND, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KALDGRANI, new Prototype(Entity.KALDGRANI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KARI, new Prototype(Entity.KARI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KEILA, new Prototype(Entity.KEILA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KJALLANDI, new Prototype(Entity.KJALLANDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KOLGA, new Prototype(Entity.KOLGA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KOTT, new Prototype(Entity.KOTT, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KRAKA, new Prototype(Entity.KRAKA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KYRMIR, new Prototype(Entity.KYRMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KRAKA, new Prototype(Entity.KRAKA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KYRMIR, new Prototype(Entity.KYRMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LAUFEY, new Prototype(Entity.LAUFEY, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LEIFI, new Prototype(Entity.LEIFI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LEIKN, new Prototype(Entity.LEIKN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LEIRVOR, new Prototype(Entity.LEIRVOR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LITR, new Prototype(Entity.LITR, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LJOTA, new Prototype(Entity.LJOTA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LODINFINGRA, new Prototype(Entity.LODINFINGRA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LOGI, new Prototype(Entity.LOGI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LOKI, new Prototype(Entity.LOKI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LOPTR, new Prototype(Entity.LOPTR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.LUT, new Prototype(Entity.LUT, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MANAGARM, new Prototype(Entity.MANAGARM, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MARGERD, new Prototype(Entity.MARGERD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MIDJUNG, new Prototype(Entity.MIDJUNG, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MIMIR, new Prototype(Entity.MIMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MODGUD, new Prototype(Entity.MODGUD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MOGTHRASIR, new Prototype(Entity.MOGTHRASIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MOKKURKALFI, new Prototype(Entity.MOKKURKALFI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MORN, new Prototype(Entity.MORN, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MUNNHARPA, new Prototype(Entity.MUNNHARPA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.MYRKRIDA, new Prototype(Entity.MYRKRIDA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.NAGLFARI, new Prototype(Entity.NAGLFARI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.NAL, new Prototype(Entity.NAL, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.NARFI, new Prototype(Entity.NARFI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.NARI, new Prototype(Entity.NARI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.NATI, new Prototype(Entity.NATI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.NORFI, new Prototype(Entity.NORFI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.NOTT, new Prototype(Entity.NOTT, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.OFLUGBARDA, new Prototype(Entity.OFLUGBARDA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.OFLUGBARDI, new Prototype(Entity.OFLUGBARDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.OFOTI, new Prototype(Entity.OFOTI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.OGLADNIR, new Prototype(Entity.OGLADNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.OLVALDI, new Prototype(Entity.OLVALDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ONDUD, new Prototype(Entity.ONDUD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.OSGRUI, new Prototype(Entity.OSGRUI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.OSKRUD, new Prototype(Entity.OSKRUD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.RANGBEIN, new Prototype(Entity.RANGBEIN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.RIFINGAFLA, new Prototype(Entity.RIFINGAFLA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.RINDR, new Prototype(Entity.RINDR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.RUNGNIR, new Prototype(Entity.RUNGNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.RYG, new Prototype(Entity.RYG, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SAEKARLSMULI, new Prototype(Entity.SAEKARLSMULI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SALFANG, new Prototype(Entity.SALFANG, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SAMENDIL, new Prototype(Entity.SAMENDIL, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SIGYN, new Prototype(Entity.SIGYN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SIMUL, new Prototype(Entity.SIMUL, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SIVOR, new Prototype(Entity.SIVOR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKADI, new Prototype(Entity.SKADI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKAERIR, new Prototype(Entity.SKAERIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKALLI, new Prototype(Entity.SKALLI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKERKIR, new Prototype(Entity.SKERKIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKOLL, new Prototype(Entity.SKOLL, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKRATI, new Prototype(Entity.SKRATI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKRIKJA, new Prototype(Entity.SKRIKJA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SKRYMIR, new Prototype(Entity.SKRYMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SOKKMIMIR, new Prototype(Entity.SOKKMIMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SOM, new Prototype(Entity.SOM, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SPRETTING, new Prototype(Entity.SPRETTING, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.STARKAD, new Prototype(Entity.STARKAD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.STIGANDI, new Prototype(Entity.STIGANDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.STORVERK, new Prototype(Entity.STORVERK, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.STUMI, new Prototype(Entity.STUMI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SURTR, new Prototype(Entity.SURTR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SUTTUNG, new Prototype(Entity.SUTTUNG, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SVARANG, new Prototype(Entity.SVARANG, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SVART, new Prototype(Entity.SVART, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SVASUD, new Prototype(Entity.SVASUD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SVEIPINFALDA, new Prototype(Entity.SVEIPINFALDA, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.SVIVOR, new Prototype(Entity.SVIVOR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THISTILBARDI, new Prototype(Entity.THISTILBARDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THJAZI, new Prototype(Entity.THJAZI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THORN, new Prototype(Entity.THORN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THRASIR, new Prototype(Entity.THRASIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THRIGEITIR, new Prototype(Entity.THRIGEITIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THRIVALDI, new Prototype(Entity.THRIVALDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THRUDGELMIR, new Prototype(Entity.THRUDGELMIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THRYM, new Prototype(Entity.THRYM, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.THURBORD, new Prototype(Entity.THURBORD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.ULFRUN, new Prototype(Entity.ULFRUN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.UNN, new Prototype(Entity.UNN, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.UTGARDA_LOKI, new Prototype(Entity.UTGARDA_LOKI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VAFTHRUDNIR, new Prototype(Entity.VAFTHRUDNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VAGNHOFDI, new Prototype(Entity.VAGNHOFDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VALI, new Prototype(Entity.VALI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VANARGAND, new Prototype(Entity.VANARGAND, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VANDIL, new Prototype(Entity.VANDIL, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VARDRUN, new Prototype(Entity.VARDRUN, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VASAD, new Prototype(Entity.VASAD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VER, new Prototype(Entity.VER, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VIDBLINDI, new Prototype(Entity.VIDBLINDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VIDDI, new Prototype(Entity.VIDDI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VIDGYMNIR, new Prototype(Entity.VIDGYMNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VIGGLOD, new Prototype(Entity.VIGGLOD, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VIND, new Prototype(Entity.VIND, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VINDLONI, new Prototype(Entity.VINDLONI, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VINDSVAL, new Prototype(Entity.VINDSVAL, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VINGNIR, new Prototype(Entity.VINGNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VINGRIP, new Prototype(Entity.VINGRIP, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VIPAR, new Prototype(Entity.VIPAR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.VORNIR, new Prototype(Entity.VORNIR, Greater.GOD,
-				new Alignment[] { Alignment.CHAOTIC }, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.YMIR, new Prototype(Entity.YMIR, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.YMSI, new Prototype(Entity.YMSI, Greater.GOD, new Alignment[] { Alignment.CHAOTIC },
-				new Domain[] { Domain.NATURE }));
+		lesserImmortals.put(Entity.AEGIR, Prototype.jotunnRandomizer(Entity.AEGIR));
+		lesserImmortals.put(Entity.ALFARIN, Prototype.jotunnRandomizer(Entity.ALFARIN));
+		lesserImmortals.put(Entity.ALSVART, Prototype.jotunnRandomizer(Entity.ALSVART));
+		lesserImmortals.put(Entity.AM, Prototype.jotunnRandomizer(Entity.AM));
+		lesserImmortals.put(Entity.AMA, Prototype.jotunnRandomizer(Entity.AMA));
+		lesserImmortals.put(Entity.AMGERD, Prototype.jotunnRandomizer(Entity.AMGERD));
+		lesserImmortals.put(Entity.ANGEYJA, Prototype.jotunnRandomizer(Entity.ANGEYJA));
+		lesserImmortals.put(Entity.ANGRBODA, Prototype.jotunnRandomizer(Entity.ANGRBODA));
+		lesserImmortals.put(Entity.ASVID, Prototype.jotunnRandomizer(Entity.ASVID));
+		lesserImmortals.put(Entity.ATLA, Prototype.jotunnRandomizer(Entity.ATLA));
+		lesserImmortals.put(Entity.AURBODA, Prototype.jotunnRandomizer(Entity.AURBODA));
+		lesserImmortals.put(Entity.AURGELMIR, Prototype.jotunnRandomizer(Entity.AURGELMIR));
+		lesserImmortals.put(Entity.AURGRIMNIR, Prototype.jotunnRandomizer(Entity.AURGRIMNIR));
+		lesserImmortals.put(Entity.AURNIR, Prototype.jotunnRandomizer(Entity.AURNIR));
+		lesserImmortals.put(Entity.AURVANDIL, Prototype.jotunnRandomizer(Entity.AURVANDIL));
+		lesserImmortals.put(Entity.BAKRAUF, Prototype.jotunnRandomizer(Entity.BAKRAUF));
+		lesserImmortals.put(Entity.BARA, Prototype.jotunnRandomizer(Entity.BARA));
+		lesserImmortals.put(Entity.BAUGI, Prototype.jotunnRandomizer(Entity.BAUGI));
+		lesserImmortals.put(Entity.BEINVID, Prototype.jotunnRandomizer(Entity.BEINVID));
+		lesserImmortals.put(Entity.BELI, Prototype.jotunnRandomizer(Entity.BELI));
+		lesserImmortals.put(Entity.BERGELMIR, Prototype.jotunnRandomizer(Entity.BERGELMIR));
+		lesserImmortals.put(Entity.BESTLA, Prototype.jotunnRandomizer(Entity.BESTLA));
+		lesserImmortals.put(Entity.BILLINGR, Prototype.jotunnRandomizer(Entity.BILLINGR));
+		lesserImmortals.put(Entity.BJORGOLF, Prototype.jotunnRandomizer(Entity.BJORGOLF));
+		lesserImmortals.put(Entity.BLAIN, Prototype.jotunnRandomizer(Entity.BLAIN));
+		lesserImmortals.put(Entity.BLAPTHVARI, Prototype.jotunnRandomizer(Entity.BLAPTHVARI));
+		lesserImmortals.put(Entity.BLODUGHADDA, Prototype.jotunnRandomizer(Entity.BLODUGHADDA));
+		lesserImmortals.put(Entity.BOLTHORN, Prototype.jotunnRandomizer(Entity.BOLTHORN));
+		lesserImmortals.put(Entity.BRANDINGI, Prototype.jotunnRandomizer(Entity.BRANDINGI));
+		lesserImmortals.put(Entity.BRIMIR, Prototype.jotunnRandomizer(Entity.BRIMIR));
+		lesserImmortals.put(Entity.BRYJA, Prototype.jotunnRandomizer(Entity.BRYJA));
+		lesserImmortals.put(Entity.BUSEYRA, Prototype.jotunnRandomizer(Entity.BUSEYRA));
+		lesserImmortals.put(Entity.BYLEIPTR, Prototype.jotunnRandomizer(Entity.BYLEIPTR));
+		lesserImmortals.put(Entity.BYLEIST, Prototype.jotunnRandomizer(Entity.BYLEIST));
+		lesserImmortals.put(Entity.BYLGJA, Prototype.jotunnRandomizer(Entity.BYLGJA));
+		lesserImmortals.put(Entity.DOFRI, Prototype.jotunnRandomizer(Entity.DOFRI));
+		lesserImmortals.put(Entity.DROFN, Prototype.jotunnRandomizer(Entity.DROFN));
+		lesserImmortals.put(Entity.DUFA, Prototype.jotunnRandomizer(Entity.DUFA));
+		lesserImmortals.put(Entity.DUMBR, Prototype.jotunnRandomizer(Entity.DUMBR));
+		lesserImmortals.put(Entity.DURNIR, Prototype.jotunnRandomizer(Entity.DURNIR));
+		lesserImmortals.put(Entity.EGGTHER, Prototype.jotunnRandomizer(Entity.EGGTHER));
+		lesserImmortals.put(Entity.EIMGEITIR, Prototype.jotunnRandomizer(Entity.EIMGEITIR));
+		lesserImmortals.put(Entity.EISTLA, Prototype.jotunnRandomizer(Entity.EISTLA));
+		lesserImmortals.put(Entity.EISURFALDA, Prototype.jotunnRandomizer(Entity.EISURFALDA));
+		lesserImmortals.put(Entity.ELD, Prototype.jotunnRandomizer(Entity.ELD));
+		lesserImmortals.put(Entity.EYRGJAFA, Prototype.jotunnRandomizer(Entity.EYRGJAFA));
+		lesserImmortals.put(Entity.FALA, Prototype.jotunnRandomizer(Entity.FALA));
+		lesserImmortals.put(Entity.FARBAUTI, Prototype.jotunnRandomizer(Entity.FARBAUTI));
+		lesserImmortals.put(Entity.FENJA, Prototype.jotunnRandomizer(Entity.FENJA));
+		lesserImmortals.put(Entity.MENJA, Prototype.jotunnRandomizer(Entity.MENJA));
+		lesserImmortals.put(Entity.FENRIR, Prototype.jotunnRandomizer(Entity.FENRIR));
+		lesserImmortals.put(Entity.FJOLVERK, Prototype.jotunnRandomizer(Entity.FJOLVERK));
+		lesserImmortals.put(Entity.FJOLVOR, Prototype.jotunnRandomizer(Entity.FJOLVOR));
+		lesserImmortals.put(Entity.FLEGG, Prototype.jotunnRandomizer(Entity.FLEGG));
+		lesserImmortals.put(Entity.FORAD, Prototype.jotunnRandomizer(Entity.FORAD));
+		lesserImmortals.put(Entity.FORNJOT, Prototype.jotunnRandomizer(Entity.FORNJOT));
+		lesserImmortals.put(Entity.FYRNIR, Prototype.jotunnRandomizer(Entity.FYRNIR));
+		lesserImmortals.put(Entity.GANGLATI, Prototype.jotunnRandomizer(Entity.GANGLATI));
+		lesserImmortals.put(Entity.GANGLOT, Prototype.jotunnRandomizer(Entity.GANGLOT));
+		lesserImmortals.put(Entity.GANGR, Prototype.jotunnRandomizer(Entity.GANGR));
+		lesserImmortals.put(Entity.GEIRROD, Prototype.jotunnRandomizer(Entity.GEIRROD));
+		lesserImmortals.put(Entity.GEITIR, Prototype.jotunnRandomizer(Entity.GEITIR));
+		lesserImmortals.put(Entity.GEITLA, Prototype.jotunnRandomizer(Entity.GEITLA));
+		lesserImmortals.put(Entity.GERD, Prototype.jotunnRandomizer(Entity.GERD));
+		lesserImmortals.put(Entity.GESTILJA, Prototype.jotunnRandomizer(Entity.GESTILJA));
+		lesserImmortals.put(Entity.GEYSA, Prototype.jotunnRandomizer(Entity.GEYSA));
+		lesserImmortals.put(Entity.GILLING, Prototype.jotunnRandomizer(Entity.GILLING));
+		lesserImmortals.put(Entity.GJALP, Prototype.jotunnRandomizer(Entity.GJALP));
+		lesserImmortals.put(Entity.GREIP, Prototype.jotunnRandomizer(Entity.GREIP));
+		lesserImmortals.put(Entity.GLAM, Prototype.jotunnRandomizer(Entity.GLAM));
+		lesserImmortals.put(Entity.GLAUM, Prototype.jotunnRandomizer(Entity.GLAUM));
+		lesserImmortals.put(Entity.GLAUMAR, Prototype.jotunnRandomizer(Entity.GLAUMAR));
+		lesserImmortals.put(Entity.GLUMRA, Prototype.jotunnRandomizer(Entity.GLUMRA));
+		lesserImmortals.put(Entity.GNEIP, Prototype.jotunnRandomizer(Entity.GNEIP));
+		lesserImmortals.put(Entity.GNEIPA, Prototype.jotunnRandomizer(Entity.GNEIPA));
+		lesserImmortals.put(Entity.GNISSA, Prototype.jotunnRandomizer(Entity.GNISSA));
+		lesserImmortals.put(Entity.GRID, Prototype.jotunnRandomizer(Entity.GRID));
+		lesserImmortals.put(Entity.GRIMLING, Prototype.jotunnRandomizer(Entity.GRIMLING));
+		lesserImmortals.put(Entity.GRIMNIR, Prototype.jotunnRandomizer(Entity.GRIMNIR));
+		lesserImmortals.put(Entity.GROTTINTANNA, Prototype.jotunnRandomizer(Entity.GROTTINTANNA));
+		lesserImmortals.put(Entity.GRYLA, Prototype.jotunnRandomizer(Entity.GRYLA));
+		lesserImmortals.put(Entity.GUNNLOD, Prototype.jotunnRandomizer(Entity.GUNNLOD));
+		lesserImmortals.put(Entity.GUSIR, Prototype.jotunnRandomizer(Entity.GUSIR));
+		lesserImmortals.put(Entity.GYLLIR, Prototype.jotunnRandomizer(Entity.GYLLIR));
+		lesserImmortals.put(Entity.GYMIR, Prototype.jotunnRandomizer(Entity.GYMIR));
+		lesserImmortals.put(Entity.HAERA, Prototype.jotunnRandomizer(Entity.HAERA));
+		lesserImmortals.put(Entity.HAFLI, Prototype.jotunnRandomizer(Entity.HAFLI));
+		lesserImmortals.put(Entity.HALA, Prototype.jotunnRandomizer(Entity.HALA));
+		lesserImmortals.put(Entity.HARDGREIP, Prototype.jotunnRandomizer(Entity.HARDGREIP));
+		lesserImmortals.put(Entity.HARDVERK, Prototype.jotunnRandomizer(Entity.HARDVERK));
+		lesserImmortals.put(Entity.HASTIGI, Prototype.jotunnRandomizer(Entity.HASTIGI));
+		lesserImmortals.put(Entity.HATI, Prototype.jotunnRandomizer(Entity.HATI));
+		lesserImmortals.put(Entity.HEFRING, Prototype.jotunnRandomizer(Entity.HEFRING));
+		lesserImmortals.put(Entity.HEIDREK, Prototype.jotunnRandomizer(Entity.HEIDREK));
+		lesserImmortals.put(Entity.HEL, Prototype.jotunnRandomizer(Entity.HEL));
+		lesserImmortals.put(Entity.HELBLINDI, Prototype.jotunnRandomizer(Entity.HELBLINDI));
+		lesserImmortals.put(Entity.HELREGINN, Prototype.jotunnRandomizer(Entity.HELREGINN));
+		lesserImmortals.put(Entity.HENGIKEPTA, Prototype.jotunnRandomizer(Entity.HENGIKEPTA));
+		lesserImmortals.put(Entity.HENGJANKJAPTA, Prototype.jotunnRandomizer(Entity.HENGJANKJAPTA));
+		lesserImmortals.put(Entity.HERKIR, Prototype.jotunnRandomizer(Entity.HERKIR));
+		lesserImmortals.put(Entity.HERKJA, Prototype.jotunnRandomizer(Entity.HERKJA));
+		lesserImmortals.put(Entity.HIMINGLAEVA, Prototype.jotunnRandomizer(Entity.HIMINGLAEVA));
+		lesserImmortals.put(Entity.GLOI, Prototype.jotunnRandomizer(Entity.GLOI));
+		lesserImmortals.put(Entity.HOLGABRUD, Prototype.jotunnRandomizer(Entity.HOLGABRUD));
+		lesserImmortals.put(Entity.HORN, Prototype.jotunnRandomizer(Entity.HORN));
+		lesserImmortals.put(Entity.HRAESVELGR, Prototype.jotunnRandomizer(Entity.HRAESVELGR));
+		lesserImmortals.put(Entity.HRAUDNIR, Prototype.jotunnRandomizer(Entity.HRAUDNIR));
+		lesserImmortals.put(Entity.HRAUDUNG, Prototype.jotunnRandomizer(Entity.HRAUDUNG));
+		lesserImmortals.put(Entity.HRIMGERD, Prototype.jotunnRandomizer(Entity.HRIMGERD));
+		lesserImmortals.put(Entity.HRIMGRIMNIR, Prototype.jotunnRandomizer(Entity.HRIMGRIMNIR));
+		lesserImmortals.put(Entity.HRIMNIR, Prototype.jotunnRandomizer(Entity.HRIMNIR));
+		lesserImmortals.put(Entity.HRIMTHURS, Prototype.jotunnRandomizer(Entity.HRIMTHURS));
+		lesserImmortals.put(Entity.HRINGVOLNIR, Prototype.jotunnRandomizer(Entity.HRINGVOLNIR));
+		lesserImmortals.put(Entity.HRIPSTOD, Prototype.jotunnRandomizer(Entity.HRIPSTOD));
+		lesserImmortals.put(Entity.HROAR, Prototype.jotunnRandomizer(Entity.HROAR));
+		lesserImmortals.put(Entity.HRODR, Prototype.jotunnRandomizer(Entity.HRODR));
+		lesserImmortals.put(Entity.HRODVITNIR, Prototype.jotunnRandomizer(Entity.HRODVITNIR));
+		lesserImmortals.put(Entity.HROKKVIR, Prototype.jotunnRandomizer(Entity.HROKKVIR));
+		lesserImmortals.put(Entity.HRONN, Prototype.jotunnRandomizer(Entity.HRONN));
+		lesserImmortals.put(Entity.HROSSTHJOF, Prototype.jotunnRandomizer(Entity.HROSSTHJOF));
+		lesserImmortals.put(Entity.HRUGA, Prototype.jotunnRandomizer(Entity.HRUGA));
+		lesserImmortals.put(Entity.HRUNGNIR, Prototype.jotunnRandomizer(Entity.HRUNGNIR));
+		lesserImmortals.put(Entity.HRYGGDA, Prototype.jotunnRandomizer(Entity.HRYGGDA));
+		lesserImmortals.put(Entity.HRYM, Prototype.jotunnRandomizer(Entity.HRYM));
+		lesserImmortals.put(Entity.HUNDALF, Prototype.jotunnRandomizer(Entity.HUNDALF));
+		lesserImmortals.put(Entity.HVAL, Prototype.jotunnRandomizer(Entity.HVAL));
+		lesserImmortals.put(Entity.HVEDRA, Prototype.jotunnRandomizer(Entity.HVEDRA));
+		lesserImmortals.put(Entity.HVEDRUNG, Prototype.jotunnRandomizer(Entity.HVEDRUNG));
+		lesserImmortals.put(Entity.HYMIR, Prototype.jotunnRandomizer(Entity.HYMIR));
+		lesserImmortals.put(Entity.HYNDLA, Prototype.jotunnRandomizer(Entity.HYNDLA));
+		lesserImmortals.put(Entity.HYROKKIN, Prototype.jotunnRandomizer(Entity.HYROKKIN));
+		lesserImmortals.put(Entity.IDI, Prototype.jotunnRandomizer(Entity.IDI));
+		lesserImmortals.put(Entity.IM, Prototype.jotunnRandomizer(Entity.IM));
+		lesserImmortals.put(Entity.IMA, Prototype.jotunnRandomizer(Entity.IMA));
+		lesserImmortals.put(Entity.IMD, Prototype.jotunnRandomizer(Entity.IMD));
+		lesserImmortals.put(Entity.IMGERD, Prototype.jotunnRandomizer(Entity.IMGERD));
+		lesserImmortals.put(Entity.IVIDJA, Prototype.jotunnRandomizer(Entity.IVIDJA));
+		lesserImmortals.put(Entity.JARNGLUMRA, Prototype.jotunnRandomizer(Entity.JARNGLUMRA));
+		lesserImmortals.put(Entity.JARNSAXA, Prototype.jotunnRandomizer(Entity.JARNSAXA));
+		lesserImmortals.put(Entity.JARNVIDJA, Prototype.jotunnRandomizer(Entity.JARNVIDJA));
+		lesserImmortals.put(Entity.JORMUNGAND, Prototype.jotunnRandomizer(Entity.JORMUNGAND));
+		lesserImmortals.put(Entity.KALDGRANI, Prototype.jotunnRandomizer(Entity.KALDGRANI));
+		lesserImmortals.put(Entity.KARI, Prototype.jotunnRandomizer(Entity.KARI));
+		lesserImmortals.put(Entity.KEILA, Prototype.jotunnRandomizer(Entity.KEILA));
+		lesserImmortals.put(Entity.KJALLANDI, Prototype.jotunnRandomizer(Entity.KJALLANDI));
+		lesserImmortals.put(Entity.KOLGA, Prototype.jotunnRandomizer(Entity.KOLGA));
+		lesserImmortals.put(Entity.KOTT, Prototype.jotunnRandomizer(Entity.KOTT));
+		lesserImmortals.put(Entity.KRAKA, Prototype.jotunnRandomizer(Entity.KRAKA));
+		lesserImmortals.put(Entity.KYRMIR, Prototype.jotunnRandomizer(Entity.KYRMIR));
+		lesserImmortals.put(Entity.KRAKA, Prototype.jotunnRandomizer(Entity.KRAKA));
+		lesserImmortals.put(Entity.KYRMIR, Prototype.jotunnRandomizer(Entity.KYRMIR));
+		lesserImmortals.put(Entity.LAUFEY, Prototype.jotunnRandomizer(Entity.LAUFEY));
+		lesserImmortals.put(Entity.LEIFI, Prototype.jotunnRandomizer(Entity.LEIFI));
+		lesserImmortals.put(Entity.LEIKN, Prototype.jotunnRandomizer(Entity.LEIKN));
+		lesserImmortals.put(Entity.LEIRVOR, Prototype.jotunnRandomizer(Entity.LEIRVOR));
+		lesserImmortals.put(Entity.LITR, Prototype.jotunnRandomizer(Entity.LITR));
+		lesserImmortals.put(Entity.LJOTA, Prototype.jotunnRandomizer(Entity.LJOTA));
+		lesserImmortals.put(Entity.LODINFINGRA, Prototype.jotunnRandomizer(Entity.LODINFINGRA));
+		lesserImmortals.put(Entity.LOGI, Prototype.jotunnRandomizer(Entity.LOGI));
+		lesserImmortals.put(Entity.LOKI, Prototype.jotunnRandomizer(Entity.LOKI));
+		lesserImmortals.put(Entity.LOPTR, Prototype.jotunnRandomizer(Entity.LOPTR));
+		lesserImmortals.put(Entity.LUT, Prototype.jotunnRandomizer(Entity.LUT));
+		lesserImmortals.put(Entity.MANAGARM, Prototype.jotunnRandomizer(Entity.MANAGARM));
+		lesserImmortals.put(Entity.MARGERD, Prototype.jotunnRandomizer(Entity.MARGERD));
+		lesserImmortals.put(Entity.MIDJUNG, Prototype.jotunnRandomizer(Entity.MIDJUNG));
+		lesserImmortals.put(Entity.MIMIR, Prototype.jotunnRandomizer(Entity.MIMIR));
+		lesserImmortals.put(Entity.MODGUD, Prototype.jotunnRandomizer(Entity.MODGUD));
+		lesserImmortals.put(Entity.MOGTHRASIR, Prototype.jotunnRandomizer(Entity.MOGTHRASIR));
+		lesserImmortals.put(Entity.MOKKURKALFI, Prototype.jotunnRandomizer(Entity.MOKKURKALFI));
+		lesserImmortals.put(Entity.MORN, Prototype.jotunnRandomizer(Entity.MORN));
+		lesserImmortals.put(Entity.MUNNHARPA, Prototype.jotunnRandomizer(Entity.MUNNHARPA));
+		lesserImmortals.put(Entity.MYRKRIDA, Prototype.jotunnRandomizer(Entity.MYRKRIDA));
+		lesserImmortals.put(Entity.NAGLFARI, Prototype.jotunnRandomizer(Entity.NAGLFARI));
+		lesserImmortals.put(Entity.NAL, Prototype.jotunnRandomizer(Entity.NAL));
+		lesserImmortals.put(Entity.NARFI, Prototype.jotunnRandomizer(Entity.NARFI));
+		lesserImmortals.put(Entity.NARI, Prototype.jotunnRandomizer(Entity.NARI));
+		lesserImmortals.put(Entity.NATI, Prototype.jotunnRandomizer(Entity.NATI));
+		lesserImmortals.put(Entity.NORFI, Prototype.jotunnRandomizer(Entity.NORFI));
+		lesserImmortals.put(Entity.NOTT, Prototype.jotunnRandomizer(Entity.NOTT));
+		lesserImmortals.put(Entity.OFLUGBARDA, Prototype.jotunnRandomizer(Entity.OFLUGBARDA));
+		lesserImmortals.put(Entity.OFLUGBARDI, Prototype.jotunnRandomizer(Entity.OFLUGBARDI));
+		lesserImmortals.put(Entity.OFOTI, Prototype.jotunnRandomizer(Entity.OFOTI));
+		lesserImmortals.put(Entity.OGLADNIR, Prototype.jotunnRandomizer(Entity.OGLADNIR));
+		lesserImmortals.put(Entity.OLVALDI, Prototype.jotunnRandomizer(Entity.OLVALDI));
+		lesserImmortals.put(Entity.ONDUD, Prototype.jotunnRandomizer(Entity.ONDUD));
+		lesserImmortals.put(Entity.OSGRUI, Prototype.jotunnRandomizer(Entity.OSGRUI));
+		lesserImmortals.put(Entity.OSKRUD, Prototype.jotunnRandomizer(Entity.OSKRUD));
+		lesserImmortals.put(Entity.RANGBEIN, Prototype.jotunnRandomizer(Entity.RANGBEIN));
+		lesserImmortals.put(Entity.RIFINGAFLA, Prototype.jotunnRandomizer(Entity.RIFINGAFLA));
+		lesserImmortals.put(Entity.RINDR, Prototype.jotunnRandomizer(Entity.RINDR));
+		lesserImmortals.put(Entity.RUNGNIR, Prototype.jotunnRandomizer(Entity.RUNGNIR));
+		lesserImmortals.put(Entity.RYG, Prototype.jotunnRandomizer(Entity.RYG));
+		lesserImmortals.put(Entity.SAEKARLSMULI, Prototype.jotunnRandomizer(Entity.SAEKARLSMULI));
+		lesserImmortals.put(Entity.SALFANG, Prototype.jotunnRandomizer(Entity.SALFANG));
+		lesserImmortals.put(Entity.SAMENDIL, Prototype.jotunnRandomizer(Entity.SAMENDIL));
+		lesserImmortals.put(Entity.SIGYN, Prototype.jotunnRandomizer(Entity.SIGYN));
+		lesserImmortals.put(Entity.SIMUL, Prototype.jotunnRandomizer(Entity.SIMUL));
+		lesserImmortals.put(Entity.SIVOR, Prototype.jotunnRandomizer(Entity.SIVOR));
+		lesserImmortals.put(Entity.SKADI, Prototype.jotunnRandomizer(Entity.SKADI));
+		lesserImmortals.put(Entity.SKAERIR, Prototype.jotunnRandomizer(Entity.SKAERIR));
+		lesserImmortals.put(Entity.SKALLI, Prototype.jotunnRandomizer(Entity.SKALLI));
+		lesserImmortals.put(Entity.SKERKIR, Prototype.jotunnRandomizer(Entity.SKERKIR));
+		lesserImmortals.put(Entity.SKOLL, Prototype.jotunnRandomizer(Entity.SKOLL));
+		lesserImmortals.put(Entity.SKRATI, Prototype.jotunnRandomizer(Entity.SKRATI));
+		lesserImmortals.put(Entity.SKRIKJA, Prototype.jotunnRandomizer(Entity.SKRIKJA));
+		lesserImmortals.put(Entity.SKRYMIR, Prototype.jotunnRandomizer(Entity.SKRYMIR));
+		lesserImmortals.put(Entity.SOKKMIMIR, Prototype.jotunnRandomizer(Entity.SOKKMIMIR));
+		lesserImmortals.put(Entity.SOM, Prototype.jotunnRandomizer(Entity.SOM));
+		lesserImmortals.put(Entity.SPRETTING, Prototype.jotunnRandomizer(Entity.SPRETTING));
+		lesserImmortals.put(Entity.STARKAD, Prototype.jotunnRandomizer(Entity.STARKAD));
+		lesserImmortals.put(Entity.STIGANDI, Prototype.jotunnRandomizer(Entity.STIGANDI));
+		lesserImmortals.put(Entity.STORVERK, Prototype.jotunnRandomizer(Entity.STORVERK));
+		lesserImmortals.put(Entity.STUMI, Prototype.jotunnRandomizer(Entity.STUMI));
+		lesserImmortals.put(Entity.SURTR, Prototype.jotunnRandomizer(Entity.SURTR));
+		lesserImmortals.put(Entity.SUTTUNG, Prototype.jotunnRandomizer(Entity.SUTTUNG));
+		lesserImmortals.put(Entity.SVARANG, Prototype.jotunnRandomizer(Entity.SVARANG));
+		lesserImmortals.put(Entity.SVART, Prototype.jotunnRandomizer(Entity.SVART));
+		lesserImmortals.put(Entity.SVASUD, Prototype.jotunnRandomizer(Entity.SVASUD));
+		lesserImmortals.put(Entity.SVEIPINFALDA, Prototype.jotunnRandomizer(Entity.SVEIPINFALDA));
+		lesserImmortals.put(Entity.SVIVOR, Prototype.jotunnRandomizer(Entity.SVIVOR));
+		lesserImmortals.put(Entity.THISTILBARDI, Prototype.jotunnRandomizer(Entity.THISTILBARDI));
+		lesserImmortals.put(Entity.THJAZI, Prototype.jotunnRandomizer(Entity.THJAZI));
+		lesserImmortals.put(Entity.THORN, Prototype.jotunnRandomizer(Entity.THORN));
+		lesserImmortals.put(Entity.THRASIR, Prototype.jotunnRandomizer(Entity.THRASIR));
+		lesserImmortals.put(Entity.THRIGEITIR, Prototype.jotunnRandomizer(Entity.THRIGEITIR));
+		lesserImmortals.put(Entity.THRIVALDI, Prototype.jotunnRandomizer(Entity.THRIVALDI));
+		lesserImmortals.put(Entity.THRUDGELMIR, Prototype.jotunnRandomizer(Entity.THRUDGELMIR));
+		lesserImmortals.put(Entity.THRYM, Prototype.jotunnRandomizer(Entity.THRYM));
+		lesserImmortals.put(Entity.THURBORD, Prototype.jotunnRandomizer(Entity.THURBORD));
+		lesserImmortals.put(Entity.ULFRUN, Prototype.jotunnRandomizer(Entity.ULFRUN));
+		lesserImmortals.put(Entity.UNN, Prototype.jotunnRandomizer(Entity.UNN));
+		lesserImmortals.put(Entity.UTGARDA_LOKI, Prototype.jotunnRandomizer(Entity.UTGARDA_LOKI));
+		lesserImmortals.put(Entity.VAFTHRUDNIR, Prototype.jotunnRandomizer(Entity.VAFTHRUDNIR));
+		lesserImmortals.put(Entity.VAGNHOFDI, Prototype.jotunnRandomizer(Entity.VAGNHOFDI));
+		lesserImmortals.put(Entity.VALI, Prototype.jotunnRandomizer(Entity.VALI));
+		lesserImmortals.put(Entity.VANARGAND, Prototype.jotunnRandomizer(Entity.VANARGAND));
+		lesserImmortals.put(Entity.VANDIL, Prototype.jotunnRandomizer(Entity.VANDIL));
+		lesserImmortals.put(Entity.VARDRUN, Prototype.jotunnRandomizer(Entity.VARDRUN));
+		lesserImmortals.put(Entity.VASAD, Prototype.jotunnRandomizer(Entity.VASAD));
+		lesserImmortals.put(Entity.VER, Prototype.jotunnRandomizer(Entity.VER));
+		lesserImmortals.put(Entity.VIDBLINDI, Prototype.jotunnRandomizer(Entity.VIDBLINDI));
+		lesserImmortals.put(Entity.VIDDI, Prototype.jotunnRandomizer(Entity.VIDDI));
+		lesserImmortals.put(Entity.VIDGYMNIR, Prototype.jotunnRandomizer(Entity.VIDGYMNIR));
+		lesserImmortals.put(Entity.VIGGLOD, Prototype.jotunnRandomizer(Entity.VIGGLOD));
+		lesserImmortals.put(Entity.VIND, Prototype.jotunnRandomizer(Entity.VIND));
+		lesserImmortals.put(Entity.VINDLONI, Prototype.jotunnRandomizer(Entity.VINDLONI));
+		lesserImmortals.put(Entity.VINDSVAL, Prototype.jotunnRandomizer(Entity.VINDSVAL));
+		lesserImmortals.put(Entity.VINGNIR, Prototype.jotunnRandomizer(Entity.VINGNIR));
+		lesserImmortals.put(Entity.VINGRIP, Prototype.jotunnRandomizer(Entity.VINGRIP));
+		lesserImmortals.put(Entity.VIPAR, Prototype.jotunnRandomizer(Entity.VIPAR));
+		lesserImmortals.put(Entity.VORNIR, Prototype.jotunnRandomizer(Entity.VORNIR));
+		lesserImmortals.put(Entity.YMIR, Prototype.jotunnRandomizer(Entity.YMIR));
+		lesserImmortals.put(Entity.YMSI, Prototype.jotunnRandomizer(Entity.YMSI));
 
 	}
 
 	/*
 	 * STATIC METHODS
 	 */
-	public static List<Entity> powersOfAlignment(Alignment alignment) {
-		List<Entity> list = new ArrayList<Entity>();
+	public static Set<Entity> powersOfAlignment(Alignment alignment) {
+		Set<Entity> set = new HashSet<Entity>();
 
 		Entity candidate;
 		Prototype prototype;
@@ -790,10 +549,18 @@ public abstract class Immortal implements Actor {
 			candidate = it.next();
 			prototype = greaterImmortals.get(candidate);
 			if (prototype.alignment.contains(alignment))
-				list.add(candidate);
+				set.add(candidate);
 		}
 
-		return list;
+		// for (Iterator<Entity> it = lesserImmortals.keySet().iterator();
+		// it.hasNext();) {
+		// candidate = it.next();
+		// prototype = lesserImmortals.get(candidate);
+		// if (prototype.alignment.contains(alignment))
+		// set.add(candidate);
+		// }
+
+		return set;
 	}
 
 	public static Set<Greater> greaterImmortalTypes() {

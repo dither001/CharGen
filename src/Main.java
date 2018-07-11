@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		immortalTypes();
+		powersByAlignment();
 
 		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
 		// Main.levelUpTestDisplayOnly(3, Class.DRUID);
@@ -27,10 +27,28 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-//		Main.rollCharactersOfClass(Class.DRUID);
+		// Main.rollCharactersOfClass(Class.DRUID);
 		// rollCharactersOfArchetype(Class.Subclass.DEATH);
 		// levelUpTest(20, Class.CLERIC);
 		// levelUpTest(Class.Subclass.DEATH);
+
+	}
+
+	public static void powersByAlignment() {
+		Actor.Alignment[] ali = new Actor.Alignment[] { Actor.Alignment.LAWFUL, Actor.Alignment.GOOD,
+				Actor.Alignment.NEUTRAL, Actor.Alignment.EVIL, Actor.Alignment.CHAOTIC };
+
+		for (int i = 0; i < ali.length; ++i) {
+			System.out.print(ali[i] + ": ");
+
+			for (Iterator<?> it = Immortal.powersOfAlignment(ali[i]).iterator(); it.hasNext();) {
+				System.out.print(it.next());
+				if (it.hasNext())
+					System.out.print(", ");
+			}
+			System.out.println();
+
+		}
 
 	}
 
