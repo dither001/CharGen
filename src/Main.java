@@ -15,10 +15,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		System.out.println(Immortal.alignmentGridStatsToString());
 		System.out.println(Immortal.beingsByGridToString());
-//		System.out.println(Immortal.alignmentGridStatsToString());
-//		System.out.println(Immortal.lesserBeingsDomainToString());
+		System.out.println(Immortal.alignmentGridStatsToString());
+		System.out.println(Immortal.lesserBeingsDomainToString());
 //		System.out.println(Immortal.lesserBeingsAlignmentToString());
 		System.out.println();
 //		lesserBeings();

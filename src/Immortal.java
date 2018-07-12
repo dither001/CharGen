@@ -96,7 +96,7 @@ public abstract class Immortal implements Actor {
 		/*
 		 * Greek/Hellenic: CYCLOPS/GIGANTES is distinct from giant
 		 */
-		TITAN, OLYMPIAN, CYCLOPS, CTHONIAN,
+		OLYMPIAN, CTHONIAN, TITAN, CYCLOPS, CANTAUR, ERIS,
 		/*
 		 * Norse/Germanic: JOTUNN, NORNS (include "fylgjas," "hamingjas," and valkyries)
 		 * are always female, known to control the fates of men and gods)
@@ -150,6 +150,10 @@ public abstract class Immortal implements Actor {
 		/*
 		 * HELLENIC
 		 */
+		// OLYMPIANS
+		APHRODITE, APOLLO, ARES, ARTEMIS, ATHENA, DEMETER, DIONYSUS, HEPHAESTUS, HERA, HERMES, HESTIA, ZEUS,
+		// TITANS
+		ARKE, ASTERIA, ASTRAEUS, ASTRAIOS, ATLAS, AURA, CLYMENE, COEUS, CRIUS, CRONUS, DIONE, EOS, EPIMETHEUS, EURYBIA, HELIOS, HYPERION, IAPETUS, LELANTOS, LETO, MENOETIUS, METIS, MNEMOSYNE, OCEANUS, PALLAS, PERSES, PHOEBE, PROMETHEUS, RHEA, SELENE, TETHYS, THEIA, THEMIS,
 		// Talos: Bronze Giant made by Hephaestus
 		TALOS,
 		// Greek cyclopes
@@ -273,6 +277,15 @@ public abstract class Immortal implements Actor {
 	/*
 	 * HELLENIC - GREEK/OLYMPIAN
 	 */
+	private static final Entity[] OLYMPIANS = { Entity.APHRODITE, Entity.APOLLO, Entity.ARES, Entity.ARTEMIS,
+			Entity.ATHENA, Entity.DEMETER, Entity.DIONYSUS, Entity.HEPHAESTUS, Entity.HERA, Entity.HERMES,
+			Entity.HESTIA, Entity.ZEUS };
+	private static final Entity[] TITANS = { Entity.ARKE, Entity.ASTERIA, Entity.ASTRAEUS, Entity.ASTRAIOS,
+			Entity.ATLAS, Entity.AURA, Entity.CLYMENE, Entity.COEUS, Entity.CRIUS, Entity.CRONUS, Entity.DIONE,
+			Entity.EOS, Entity.EPIMETHEUS, Entity.EURYBIA, Entity.HELIOS, Entity.HYPERION, Entity.IAPETUS,
+			Entity.LELANTOS, Entity.LETO, Entity.MENOETIUS, Entity.METIS, Entity.MNEMOSYNE, Entity.OCEANUS,
+			Entity.PALLAS, Entity.PERSES, Entity.PHOEBE, Entity.PROMETHEUS, Entity.RHEA, Entity.SELENE, Entity.TETHYS,
+			Entity.THEIA, Entity.THEMIS };
 	private static final Entity[] CYCLOPES = { Entity.AGRIUS, Entity.ALCYONEUS, Entity.ALOADAE, Entity.ALPOS,
 			Entity.ANAX, Entity.ANTAEUS, Entity.ANTIPHATES, Entity.ARGES, Entity.ARGOS_PANOPTES, Entity.ARISTAEUS,
 			Entity.AZEUS, Entity.BRIAREUS, Entity.BRONTES, Entity.CACUS, Entity.CHRYSAOR, Entity.COTTUS,
@@ -570,6 +583,93 @@ public abstract class Immortal implements Actor {
 		}
 
 		// HELLENIC - GREEK
+		lesserImmortals.put(Entity.APHRODITE, lesserBeing(Entity.APHRODITE, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.TRICKERY, Domain.WAR }));
+		lesserImmortals.put(Entity.APOLLO, lesserBeing(Entity.APOLLO, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.LIGHT }));
+		lesserImmortals.put(Entity.ARES,
+				lesserBeing(Entity.ARES, Lesser.OLYMPIAN, Alignment.LAWFUL, new Domain[] { Domain.DEATH, Domain.WAR }));
+		lesserImmortals.put(Entity.ARTEMIS, lesserBeing(Entity.ARTEMIS, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.NATURE, Domain.WAR }));
+		lesserImmortals.put(Entity.ATHENA, lesserBeing(Entity.ATHENA, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.WAR }));
+		lesserImmortals.put(Entity.DEMETER, lesserBeing(Entity.DEMETER, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.LIFE, Domain.NATURE }));
+		lesserImmortals.put(Entity.DIONYSUS, lesserBeing(Entity.DIONYSUS, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.NATURE, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.HEPHAESTUS, lesserBeing(Entity.HEPHAESTUS, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.NATURE }));
+		lesserImmortals.put(Entity.HERA, lesserBeing(Entity.HERA, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.LIFE, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.HERMES, lesserBeing(Entity.HERMES, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.HESTIA, lesserBeing(Entity.HESTIA, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.LIFE, Domain.LIGHT }));
+		lesserImmortals.put(Entity.ZEUS, lesserBeing(Entity.ZEUS, Lesser.OLYMPIAN, Alignment.LAWFUL,
+				new Domain[] { Domain.LIGHT, Domain.TEMPEST }));
+
+		/*
+		 * HELLENIC TITANS
+		 */
+		lesserImmortals.put(Entity.ARKE, lesserBeing(Entity.ARKE, Lesser.TITAN, Alignment.NEUTRAL));
+		lesserImmortals.put(Entity.ASTERIA, lesserBeing(Entity.ASTERIA, Lesser.TITAN, Alignment.NEUTRAL));
+		lesserImmortals.put(Entity.ASTRAEUS, lesserBeing(Entity.ASTRAEUS, Lesser.TITAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.ASTRAIOS, lesserBeing(Entity.ASTRAIOS, Lesser.TITAN, Alignment.NEUTRAL));
+		lesserImmortals.put(Entity.ATLAS, lesserBeing(Entity.ATLAS, Lesser.TITAN, Alignment.NEUTRAL));
+		lesserImmortals.put(Entity.AURA,
+				lesserBeing(Entity.AURA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.CLYMENE, lesserBeing(Entity.CLYMENE, Lesser.TITAN, Alignment.NEUTRAL));
+		lesserImmortals.put(Entity.COEUS,
+				lesserBeing(Entity.COEUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.CRIUS,
+				lesserBeing(Entity.CRIUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.CRONUS, lesserBeing(Entity.CRONUS, Lesser.TITAN, Alignment.NEUTRAL));
+		lesserImmortals.put(Entity.DIONE,
+				lesserBeing(Entity.DIONE, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.EOS,
+				lesserBeing(Entity.EOS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.EPIMETHEUS, lesserBeing(Entity.EPIMETHEUS, Lesser.TITAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.EURYBIA,
+				lesserBeing(Entity.EURYBIA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TEMPEST }));
+		lesserImmortals.put(Entity.HELIOS,
+				lesserBeing(Entity.HELIOS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.HYPERION,
+				lesserBeing(Entity.HYPERION, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.IAPETUS,
+				lesserBeing(Entity.IAPETUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.DEATH }));
+		lesserImmortals.put(Entity.LELANTOS,
+				lesserBeing(Entity.LELANTOS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TRICKERY }));
+		lesserImmortals.put(Entity.LETO,
+				lesserBeing(Entity.LETO, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.MENOETIUS, lesserBeing(Entity.MENOETIUS, Lesser.TITAN, Alignment.LAWFUL,
+				new Domain[] { Domain.DEATH, Domain.WAR }));
+		lesserImmortals.put(Entity.METIS,
+				lesserBeing(Entity.METIS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.MNEMOSYNE,
+				lesserBeing(Entity.MNEMOSYNE, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.OCEANUS,
+				lesserBeing(Entity.OCEANUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TEMPEST }));
+		lesserImmortals.put(Entity.PALLAS, lesserBeing(Entity.PALLAS, Lesser.TITAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.WAR }));
+		lesserImmortals.put(Entity.PERSES,
+				lesserBeing(Entity.PERSES, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.WAR }));
+		lesserImmortals.put(Entity.PHOEBE,
+				lesserBeing(Entity.PHOEBE, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.PROMETHEUS, lesserBeing(Entity.PROMETHEUS, Lesser.TITAN, Alignment.LAWFUL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.RHEA,
+				lesserBeing(Entity.RHEA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIFE, Domain.NATURE }));
+		lesserImmortals.put(Entity.SELENE,
+				lesserBeing(Entity.SELENE, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TRICKERY }));
+		lesserImmortals.put(Entity.TETHYS, lesserBeing(Entity.TETHYS, Lesser.TITAN, Alignment.LAWFUL,
+				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
+		lesserImmortals.put(Entity.THEIA,
+				lesserBeing(Entity.THEIA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.THEMIS, lesserBeing(Entity.THEMIS, Lesser.TITAN, Alignment.NEUTRAL));
+
+		// TALOS is a bronze giant built by Hephaestus to guard Crete
 		lesserImmortals.put(Entity.TALOS, lesserBeing(Entity.TALOS, Lesser.ABOMINATION, Alignment.NEUTRAL));
 
 		array = CYCLOPES;
@@ -605,9 +705,9 @@ public abstract class Immortal implements Actor {
 
 		// ENOCHIAN ANGELS
 		array = ENOCHIAN_ANGELS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
-		}
+//		for (int i = 0; i < array.length; ++i) {
+//			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
+//		}
 	}
 
 	/*
