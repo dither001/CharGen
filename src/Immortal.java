@@ -1,8 +1,10 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Immortal implements Actor {
@@ -138,10 +140,20 @@ public abstract class Immortal implements Actor {
 		ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR,
 		// Canaanite gods: Elohim, "sons of El"
 		ANAT, ASHERAH, ASTARTE, ATHIRAT, ATTAR, BETH_HORON, DAGON, ELYON, ERETZ, ESHMUN, HADAD, HAMMON, HERMON, ISHAT, KHIKHIBI, KOTHAR_WA_KHASIS, KOTHARAT, LOTAN, MARQOD, MELQART, MISOR, MOLOCH, MOT, NIKKAL_WA_IB, QADESHTU, RESHEPH, SHAHAR, SHALIM, SHAMAYIM, SHAPASH, SHEOL, SYDYK, TAAUTUS, TANIT, YAM, YARIKH,
+		/*
+		 * JUDAISM
+		 */
 		// Jewish angels
 		CAMAEL, CASSIEL, GABRIEL, MICHAEL, OPHANIEL, ABADDON, ADRIEL, ANAEL, HANIEL, ARARIEL, ARIEL, AZAZEL, BARAQIEL, CHERUBIEL, DANIEL, DUMAH, EREMIEL, GADREEL, HADRANIEL, HAHASIAH, HASMAL, HESEDIEL, ZADKIEL, HOFNIEL, IMAMIAH, JEHOEL, JEQUN, JERAHMEEL, JOPHIEL, KEPHAREL, KERUBIEL, KUSHIEL, LELIEL, HELEL, MEBAHIAH, METATRON, MIKAIL, NANAEL, NETZACH, NITHAEL, NURIEL, PHANUEL, POYEL, PRAVUIL, PURIEL, QAPHSIEL, RADUERIEL, RAGUEL, AZRAEL, RAPHAEL, RAZIEL, REMIEL, RIKBIEL, SACHIEL, SAHAQUIEL, SABRIEL, SANDALPHON, SARIEL, SCHEMHAMPHARAE, SERAPHIEL, SHAMSIEL, SIDRIEL, TEMELUCHUS, URIEL, UZIEL, VASIARIAH, VEHUEL, ZAPHKIEL, ZEPHANIEL, ZEPHON, ZOPHIEL,
 		// Jewish demons
 		ABEZETHIBOU, ABYZOU, AGALIAREPT, AGRAT_BAT_MAHLAT, AGRIEL, ARMAROS, ASB_EL, BALBERITH, BEELZEBUB, BEHEMOTH, BELIAL, DANJAL, EISHETH, GADER_EL, GRIGORI, KASADYA, LEVIATHAN, LILIN, MASTEMA, NAAMAH, ONOSKELIS, PENEMUE, RAHAB, SAMAEL, SEMYAZA, SHEDIM, TANNIN, YEQON,
+		/*
+		 * HELLENIC
+		 */
+		// Talos: Bronze Giant made by Hephaestus
+		TALOS,
+		// Greek cyclopes
+		AGRIUS, ALCYONEUS, ALOADAE, ALPOS, ANAX, ANTAEUS, ANTIPHATES, ARGES, ARGOS_PANOPTES, ARISTAEUS, AZEUS, BRIAREUS, BRONTES, CACUS, CHRYSAOR, COTTUS, CYMOPOLEIA, DAMASEN, DAMYSUS, ECHIDNADES, ELATREUS, ENCELADUS, EPHIALTES, EURYALUS, EURYMEDON, GERYON, GYES, HALIMEDES, HOPLODAMUS, HYLLUS, LEON, MYLINUS, OEOLYCA, OREUS, ORION, OTUS, PERIBOEA, POLYBOTES, POLYPHEMUS, PORPHYRION, STEROPES, SYCEUS, TITYUS, TRACHIUS,
 		// Christian angels
 		BARACHIEL, JEGUDIEL, LUCIFER, MURIEL, PAHALIAH, SARATHIEL, SELAPHIEL, WORMWOOD, ZACHARIEL,
 		// Christian demons
@@ -216,7 +228,7 @@ public abstract class Immortal implements Actor {
 
 			// string = String.format("%s %s %s", entity, alignment.toString(),
 			// domains.toString());
-			string = String.format("%-15s %s", entity, domains.toString());
+			string = String.format("%-20s %s", entity, domains.toString());
 
 			return string;
 		}
@@ -259,6 +271,18 @@ public abstract class Immortal implements Actor {
 			Entity.SHEOL, Entity.SYDYK, Entity.TAAUTUS, Entity.TANIT, Entity.YAM, Entity.YARIKH };
 
 	/*
+	 * HELLENIC - GREEK/OLYMPIAN
+	 */
+	private static final Entity[] CYCLOPES = { Entity.AGRIUS, Entity.ALCYONEUS, Entity.ALOADAE, Entity.ALPOS,
+			Entity.ANAX, Entity.ANTAEUS, Entity.ANTIPHATES, Entity.ARGES, Entity.ARGOS_PANOPTES, Entity.ARISTAEUS,
+			Entity.AZEUS, Entity.BRIAREUS, Entity.BRONTES, Entity.CACUS, Entity.CHRYSAOR, Entity.COTTUS,
+			Entity.CYMOPOLEIA, Entity.DAMASEN, Entity.DAMYSUS, Entity.ECHIDNADES, Entity.ELATREUS, Entity.ENCELADUS,
+			Entity.EPHIALTES, Entity.EURYALUS, Entity.EURYMEDON, Entity.GERYON, Entity.GYES, Entity.HALIMEDES,
+			Entity.HOPLODAMUS, Entity.HYLLUS, Entity.LEON, Entity.MYLINUS, Entity.OEOLYCA, Entity.OREUS, Entity.ORION,
+			Entity.OTUS, Entity.PERIBOEA, Entity.POLYBOTES, Entity.POLYPHEMUS, Entity.PORPHYRION, Entity.STEROPES,
+			Entity.SYCEUS, Entity.TITYUS, Entity.TRACHIUS };
+
+	/*
 	 * JUDAISM
 	 */
 	private static final Entity[] JEWISH_ANGELS = { Entity.CAMAEL, Entity.CASSIEL, Entity.GABRIEL, Entity.MICHAEL,
@@ -274,6 +298,17 @@ public abstract class Immortal implements Actor {
 			Entity.SARIEL, Entity.SCHEMHAMPHARAE, Entity.SERAPHIEL, Entity.SHAMSIEL, Entity.SIDRIEL, Entity.TEMELUCHUS,
 			Entity.URIEL, Entity.UZIEL, Entity.VASIARIAH, Entity.VEHUEL, Entity.ZAPHKIEL, Entity.ZEPHANIEL,
 			Entity.ZEPHON, Entity.ZOPHIEL };
+	private static final Entity[] JEWISH_DEMONS = { Entity.ABEZETHIBOU, Entity.ABYZOU, Entity.AGALIAREPT,
+			Entity.AGRAT_BAT_MAHLAT, Entity.AGRIEL, Entity.ARMAROS, Entity.ASB_EL, Entity.BALBERITH, Entity.BEELZEBUB,
+			Entity.BEHEMOTH, Entity.BELIAL, Entity.DANJAL, Entity.EISHETH, Entity.GADER_EL, Entity.GRIGORI,
+			Entity.KASADYA, Entity.LEVIATHAN, Entity.LILIN, Entity.MASTEMA, Entity.NAAMAH, Entity.ONOSKELIS,
+			Entity.PENEMUE, Entity.RAHAB, Entity.SAMAEL, Entity.SEMYAZA, Entity.SHEDIM, Entity.TANNIN, Entity.YEQON };
+
+	/*
+	 * CHRISTIANITY
+	 */
+	private static final Entity[] CHRISTIAN_ANGELS = { Entity.BARACHIEL, Entity.JEGUDIEL, Entity.LUCIFER, Entity.MURIEL,
+			Entity.PAHALIAH, Entity.SARATHIEL, Entity.SELAPHIEL, Entity.WORMWOOD, Entity.ZACHARIEL };
 	private static final Entity[] CHRISTIAN_DEMONS = { Entity.AGARES, Entity.HABORYM, Entity.ALASTOR, Entity.AMAYMON,
 			Entity.AMDUSIAS, Entity.ANCITIF, Entity.ANDREALPHUS, Entity.ANDROMALIUS, Entity.ASTAROTH, Entity.BAAL,
 			Entity.BALAM, Entity.BAPHOMET, Entity.BARBAS, Entity.BARBATOS, Entity.BATHIN, Entity.BELETH,
@@ -288,17 +323,6 @@ public abstract class Immortal implements Actor {
 			Entity.PRUFLAS, Entity.RAUM, Entity.RONOVE, Entity.SABNOCK, Entity.SALEOS, Entity.SEIR, Entity.SHAX,
 			Entity.SITRI, Entity.STOLAS, Entity.SUCCUBUS, Entity.SURGAT, Entity.UKOBACH, Entity.VALAC, Entity.VALEFAR,
 			Entity.VAPULA, Entity.VASSAGO, Entity.VEPAR, Entity.VINE, Entity.ZAGAN, Entity.ZEPAR, Entity.ZIMINIAR };
-
-	/*
-	 * CHRISTIANITY
-	 */
-	private static final Entity[] CHRISTIAN_ANGELS = { Entity.BARACHIEL, Entity.JEGUDIEL, Entity.LUCIFER, Entity.MURIEL,
-			Entity.PAHALIAH, Entity.SARATHIEL, Entity.SELAPHIEL, Entity.WORMWOOD, Entity.ZACHARIEL };
-	private static final Entity[] JEWISH_DEMONS = { Entity.ABEZETHIBOU, Entity.ABYZOU, Entity.AGALIAREPT,
-			Entity.AGRAT_BAT_MAHLAT, Entity.AGRIEL, Entity.ARMAROS, Entity.ASB_EL, Entity.BALBERITH, Entity.BEELZEBUB,
-			Entity.BEHEMOTH, Entity.BELIAL, Entity.DANJAL, Entity.EISHETH, Entity.GADER_EL, Entity.GRIGORI,
-			Entity.KASADYA, Entity.LEVIATHAN, Entity.LILIN, Entity.MASTEMA, Entity.NAAMAH, Entity.ONOSKELIS,
-			Entity.PENEMUE, Entity.RAHAB, Entity.SAMAEL, Entity.SEMYAZA, Entity.SHEDIM, Entity.TANNIN, Entity.YEQON };
 
 	/*
 	 * ISLAM
@@ -395,62 +419,145 @@ public abstract class Immortal implements Actor {
 			Entity.ZARNAAH, Entity.ZARZI, Entity.ZARZILG, Entity.ZAZI, Entity.ZDAXG, Entity.ZDXG, Entity.ZEDEKIEL,
 			Entity.ZINGGEN, Entity.ZIRACAH, Entity.ZIRZ, Entity.ZIZA, Entity.ZURCHOL };
 
+	/*
+	 * INITIALIZATION
+	 * 
+	 */
 	static {
 		greaterImmortals = new HashMap<Entity, Prototype>();
 		lesserImmortals = new HashMap<Entity, Prototype>();
+		Entity[] array = null;
 
-		greaterImmortals.put(Entity.ASMODEUS, new Prototype(Entity.ASMODEUS, Greater.GOD,
+		/*
+		 * DAWN WAR GODS
+		 * 
+		 */
+		lesserImmortals.put(Entity.ASMODEUS, new Prototype(Entity.ASMODEUS, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.AVANDRA, new Prototype(Entity.AVANDRA, Greater.GOD,
+		lesserImmortals.put(Entity.AVANDRA, new Prototype(Entity.AVANDRA, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.BAHAMUT, new Prototype(Entity.BAHAMUT, Greater.GOD,
+		lesserImmortals.put(Entity.BAHAMUT, new Prototype(Entity.BAHAMUT, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] { Domain.LIFE, Domain.WAR }));
-		greaterImmortals.put(Entity.BANE, new Prototype(Entity.BANE, Greater.GOD,
+		lesserImmortals.put(Entity.BANE, new Prototype(Entity.BANE, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.CORELLON, new Prototype(Entity.CORELLON, Greater.GOD,
+		lesserImmortals.put(Entity.CORELLON, new Prototype(Entity.CORELLON, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ERATHIS, new Prototype(Entity.ERATHIS, Greater.GOD,
+		lesserImmortals.put(Entity.ERATHIS, new Prototype(Entity.ERATHIS, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] { Domain.KNOWLEDGE }));
-		greaterImmortals.put(Entity.GRUUMSH, new Prototype(Entity.GRUUMSH, Greater.GOD,
+		lesserImmortals.put(Entity.GRUUMSH, new Prototype(Entity.GRUUMSH, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.TEMPEST, Domain.WAR }));
-		greaterImmortals.put(Entity.IOUN, new Prototype(Entity.IOUN, Greater.GOD, new Alignment[] { Alignment.NEUTRAL },
-				new Domain[] { Domain.KNOWLEDGE }));
-		greaterImmortals.put(Entity.KORD, new Prototype(Entity.KORD, Greater.GOD,
+		lesserImmortals.put(Entity.IOUN, new Prototype(Entity.IOUN, Lesser.DEMIURGE,
+				new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.KORD, new Prototype(Entity.KORD, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.NEUTRAL }, new Domain[] { Domain.TEMPEST }));
-		greaterImmortals.put(Entity.LOLTH, new Prototype(Entity.LOLTH, Greater.GOD,
+		lesserImmortals.put(Entity.LOLTH, new Prototype(Entity.LOLTH, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.MELORA, new Prototype(Entity.MELORA, Greater.GOD,
+		lesserImmortals.put(Entity.MELORA, new Prototype(Entity.MELORA, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		greaterImmortals.put(Entity.MORADIN, new Prototype(Entity.MORADIN, Greater.GOD,
+		lesserImmortals.put(Entity.MORADIN, new Prototype(Entity.MORADIN, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] { Domain.KNOWLEDGE, Domain.WAR }));
-		greaterImmortals.put(Entity.PELOR, new Prototype(Entity.PELOR, Greater.GOD,
+		lesserImmortals.put(Entity.PELOR, new Prototype(Entity.PELOR, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.NEUTRAL, Alignment.GOOD }, new Domain[] { Domain.LIFE, Domain.LIGHT }));
-		greaterImmortals.put(Entity.RAVEN_QUEEN, new Prototype(Entity.RAVEN_QUEEN, Greater.GOD,
+		lesserImmortals.put(Entity.RAVEN_QUEEN, new Prototype(Entity.RAVEN_QUEEN, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] { Domain.DEATH, Domain.LIFE }));
-		greaterImmortals.put(Entity.SEHANINE, new Prototype(Entity.SEHANINE, Greater.GOD,
+		lesserImmortals.put(Entity.SEHANINE, new Prototype(Entity.SEHANINE, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.THARIZDUN, new Prototype(Entity.THARIZDUN, Greater.GOD,
+		lesserImmortals.put(Entity.THARIZDUN, new Prototype(Entity.THARIZDUN, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.TIAMAT, new Prototype(Entity.TIAMAT, Greater.GOD,
+		lesserImmortals.put(Entity.TIAMAT, new Prototype(Entity.TIAMAT, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.TOROG, new Prototype(Entity.TOROG, Greater.GOD,
+		lesserImmortals.put(Entity.TOROG, new Prototype(Entity.TOROG, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.NEUTRAL, Alignment.EVIL }, new Domain[] { Domain.DEATH }));
-		greaterImmortals.put(Entity.VECNA,
-				new Prototype(Entity.VECNA, Greater.GOD, new Alignment[] { Alignment.NEUTRAL, Alignment.EVIL },
+		lesserImmortals.put(Entity.VECNA,
+				new Prototype(Entity.VECNA, Lesser.DEMIURGE, new Alignment[] { Alignment.NEUTRAL, Alignment.EVIL },
 						new Domain[] { Domain.DEATH, Domain.KNOWLEDGE }));
-		greaterImmortals.put(Entity.ZEHIR, new Prototype(Entity.ZEHIR, Greater.GOD,
+		lesserImmortals.put(Entity.ZEHIR, new Prototype(Entity.ZEHIR, Lesser.DEMIURGE,
 				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.DEATH, Domain.TRICKERY }));
 
 		/*
 		 * ADD LESSER BEINGS
 		 */
-		Entity[] array = null;
 
-		// CANAANITE - ELOHIM
-		array = ELOHIM;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ELOHIM, Alignment.NEUTRAL));
-		}
+		/*
+		 * CANAANITE - ELOHIM
+		 */
+		lesserImmortals.put(Entity.ANAT,
+				lesserBeing(Entity.ANAT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.WAR }));
+		lesserImmortals.put(Entity.ASHERAH,
+				lesserBeing(Entity.ASHERAH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.ASTARTE, lesserBeing(Entity.ASTARTE, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.LIFE, Domain.WAR }));
+		lesserImmortals.put(Entity.ATHIRAT,
+				lesserBeing(Entity.ATHIRAT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.ATTAR, lesserBeing(Entity.ATTAR, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.LIGHT, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.BETH_HORON,
+				lesserBeing(Entity.BETH_HORON, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.DEATH }));
+		lesserImmortals.put(Entity.DAGON, lesserBeing(Entity.DAGON, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.LIFE, Domain.NATURE }));
+		lesserImmortals.put(Entity.ELYON, lesserBeing(Entity.ELYON, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.LIGHT, Domain.NATURE }));
+		lesserImmortals.put(Entity.ERETZ, lesserBeing(Entity.ERETZ, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.LIFE, Domain.NATURE }));
+		lesserImmortals.put(Entity.ESHMUN, lesserBeing(Entity.ESHMUN, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.LIFE }));
+		lesserImmortals.put(Entity.HADAD,
+				lesserBeing(Entity.HADAD, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.TEMPEST }));
+		lesserImmortals.put(Entity.HAMMON, lesserBeing(Entity.HAMMON, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.LIFE, Domain.NATURE }));
+		lesserImmortals.put(Entity.HERMON,
+				lesserBeing(Entity.HERMON, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.ISHAT,
+				lesserBeing(Entity.ISHAT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.NATURE }));
+		lesserImmortals.put(Entity.KHIKHIBI,
+				lesserBeing(Entity.KHIKHIBI, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.KOTHAR_WA_KHASIS, lesserBeing(Entity.KOTHAR_WA_KHASIS, Lesser.ELOHIM,
+				Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.KOTHARAT, lesserBeing(Entity.KOTHARAT, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.NATURE, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.LOTAN,
+				lesserBeing(Entity.LOTAN, Lesser.DRAGON, Alignment.NEUTRAL, new Domain[] { Domain.TRICKERY }));
+		lesserImmortals.put(Entity.MARQOD,
+				lesserBeing(Entity.MARQOD, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.MELQART, lesserBeing(Entity.MELQART, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.KNOWLEDGE, Domain.LIGHT }));
+		lesserImmortals.put(Entity.MISOR,
+				lesserBeing(Entity.MISOR, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.MOLOCH,
+				lesserBeing(Entity.MOLOCH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.MOT, lesserBeing(Entity.MOT, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.NIKKAL_WA_IB,
+				lesserBeing(Entity.NIKKAL_WA_IB, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.QADESHTU,
+				lesserBeing(Entity.QADESHTU, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
+		lesserImmortals.put(Entity.RESHEPH, lesserBeing(Entity.RESHEPH, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.DEATH, Domain.NATURE }));
+		lesserImmortals.put(Entity.SHAHAR,
+				lesserBeing(Entity.SHAHAR, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.SHALIM, lesserBeing(Entity.SHALIM, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.SHAMAYIM, lesserBeing(Entity.SHAMAYIM, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.LIGHT, Domain.NATURE }));
+		lesserImmortals.put(Entity.SHAPASH,
+				lesserBeing(Entity.SHAPASH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
+		lesserImmortals.put(Entity.SHEOL, lesserBeing(Entity.SHEOL, Lesser.ELOHIM, Alignment.NEUTRAL,
+				new Domain[] { Domain.DEATH, Domain.NATURE }));
+		lesserImmortals.put(Entity.SYDYK,
+				lesserBeing(Entity.SYDYK, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.TAAUTUS,
+				lesserBeing(Entity.TAAUTUS, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
+		lesserImmortals.put(Entity.TANIT,
+				lesserBeing(Entity.TANIT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE, Domain.WAR }));
+		lesserImmortals.put(Entity.YAM, lesserBeing(Entity.YAM, Lesser.DRAGON, Alignment.NEUTRAL,
+				new Domain[] { Domain.TEMPEST, Domain.TRICKERY }));
+		lesserImmortals.put(Entity.YARIKH,
+				lesserBeing(Entity.YARIKH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.TRICKERY }));
+
+		/*
+		 * INITIALIZE COSMIC ENTITIES
+		 * 
+		 */
 
 		// JEWISH ANGELS
 		array = JEWISH_ANGELS;
@@ -459,13 +566,21 @@ public abstract class Immortal implements Actor {
 		}
 		array = JEWISH_DEMONS;
 		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.EVIL));
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.CHAOTIC));
 		}
 
-		// CHRISTIAN ANGELS
+		// HELLENIC - GREEK
+		lesserImmortals.put(Entity.TALOS, lesserBeing(Entity.TALOS, Lesser.ABOMINATION, Alignment.NEUTRAL));
+
+		array = CYCLOPES;
+		for (int i = 0; i < array.length; ++i) {
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.CYCLOPS, Alignment.NEUTRAL));
+		}
+
+		// CHRISTIAN
 		array = CHRISTIAN_ANGELS;
 		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.LAWFUL));
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
 		}
 		array = CHRISTIAN_DEMONS;
 		for (int i = 0; i < array.length; ++i) {
@@ -475,7 +590,7 @@ public abstract class Immortal implements Actor {
 		// ISLAMIC ANGELS
 		array = ISLAMIC_ANGELS;
 		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.LAWFUL));
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
 		}
 		array = ISLAMIC_DEMONS;
 		for (int i = 0; i < array.length; ++i) {
@@ -491,7 +606,7 @@ public abstract class Immortal implements Actor {
 		// ENOCHIAN ANGELS
 		array = ENOCHIAN_ANGELS;
 		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.LAWFUL));
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
 		}
 	}
 
@@ -510,13 +625,12 @@ public abstract class Immortal implements Actor {
 				set.add(candidate);
 		}
 
-		// for (Iterator<Entity> it = lesserImmortals.keySet().iterator();
-		// it.hasNext();) {
-		// candidate = it.next();
-		// prototype = lesserImmortals.get(candidate);
-		// if (prototype.alignment.contains(alignment))
-		// set.add(candidate);
-		// }
+		for (Iterator<Entity> it = lesserImmortals.keySet().iterator(); it.hasNext();) {
+			candidate = it.next();
+			prototype = lesserImmortals.get(candidate);
+			if (prototype.alignment.contains(alignment))
+				set.add(candidate);
+		}
 
 		return set;
 	}
@@ -546,8 +660,145 @@ public abstract class Immortal implements Actor {
 			if (prototype.alignment.contains(Alignment.CHAOTIC))
 				++array[4];
 		}
+
 		String string = String.format("  Lawful: %d %n    Good: %d %n Neutral: %d %n    Evil: %d %n Chaotic: %d ",
 				array[0], array[1], array[2], array[3], array[4]);
+		return string;
+	}
+
+	public static String alignmentGridStatsToString() {
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		double total = lesserImmortals.size();
+
+		Prototype prototype;
+		for (Iterator<Prototype> it = lesserImmortals.values().iterator(); it.hasNext();) {
+			prototype = it.next();
+
+			if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.GOOD))
+				++array[0];
+			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.NEUTRAL))
+				++array[1];
+			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.EVIL))
+				++array[2];
+			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.GOOD))
+				++array[3];
+			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.EVIL))
+				++array[5];
+			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.GOOD))
+				++array[6];
+			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.NEUTRAL))
+				++array[7];
+			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.EVIL))
+				++array[8];
+			else if (prototype.alignment.contains(Alignment.LAWFUL) != true
+					&& prototype.alignment.contains(Alignment.CHAOTIC) != true
+					&& prototype.alignment.contains(Alignment.GOOD) != true
+					&& prototype.alignment.contains(Alignment.EVIL) != true)
+				++array[4];
+		}
+
+		String[] ali = new String[] { "LG", "LN", "LE", "NG", "TN", "NE", "CG", "CN", "CE" };
+		String string = "";
+		for (int i = 0; i < array.length; ++i) {
+			string += String.format("%s: %5d (%5.1f %%)", ali[i], array[i], array[i] / total * 100);
+			if (i == 0 || i == 1 || i == 3 || i == 4 || i == 6 || i == 7)
+				string += " || ";
+
+			if (i == 2 || i == 5 || i == 8)
+				string += "\n";
+		}
+
+		return string;
+	}
+
+	public static String beingsByGridToString() {
+		List<Entity>[] array = (List<Entity>[]) new ArrayList[9];
+		for (int i = 0; i < array.length; ++i) {
+			array[i] = new ArrayList<Entity>();
+		}
+
+		Prototype prototype;
+		for (Iterator<Prototype> it = lesserImmortals.values().iterator(); it.hasNext();) {
+			prototype = it.next();
+
+			if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.GOOD))
+				array[0].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.NEUTRAL))
+				array[1].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.EVIL))
+				array[2].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.GOOD))
+				array[3].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.EVIL))
+				array[5].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.GOOD))
+				array[6].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.NEUTRAL))
+				array[7].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.EVIL))
+				array[8].add(prototype.entity);
+			else if (prototype.alignment.contains(Alignment.LAWFUL) != true
+					&& prototype.alignment.contains(Alignment.CHAOTIC) != true
+					&& prototype.alignment.contains(Alignment.GOOD) != true
+					&& prototype.alignment.contains(Alignment.EVIL) != true)
+				array[4].add(prototype.entity);
+		}
+
+		String[] ali = new String[] { "Lawful Good", "Lawful Neutral", "Lawful Evil", "Neutral Good", "True Neutral",
+				"Neutral Evil", "Chaotic Good", "Chaotic Neutral", "Chaotic Evil" };
+		String string = "";
+		for (int i = 0; i < array.length; ++i) {
+			string += String.format("%16s (%4d): %s%n", ali[i], array[i].size(), array[i].toString());
+		}
+
+		return string;
+	}
+
+	public static String lesserBeingsDomainToString() {
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		Prototype prototype;
+		for (Iterator<Prototype> it = lesserImmortals.values().iterator(); it.hasNext();) {
+			prototype = it.next();
+
+			if (prototype.domains.contains(Domain.DEATH))
+				++array[0];
+
+			if (prototype.domains.contains(Domain.KNOWLEDGE))
+				++array[1];
+
+			if (prototype.domains.contains(Domain.LIFE))
+				++array[2];
+
+			if (prototype.domains.contains(Domain.LIGHT))
+				++array[3];
+
+			if (prototype.domains.contains(Domain.NATURE))
+				++array[4];
+
+			if (prototype.domains.contains(Domain.TEMPEST))
+				++array[5];
+
+			if (prototype.domains.contains(Domain.TRICKERY))
+				++array[6];
+
+			if (prototype.domains.contains(Domain.WAR))
+				++array[7];
+		}
+		String[] domains = { "Death", "Knowledge", "Life", "Light", "Nature", "Tempest", "Trickery", "War" };
+		String string = "";
+
+		int total = lesserImmortals.size();
+		for (int i = 0; i < array.length; ++i) {
+			string += String.format("%10s: %4d%n", domains[i], array[i]);
+		}
+		string += String.format("%15s%n", "- - - ");
+		string += String.format("%10s: %4d%n", "Total", total);
+
+		// string = String.format("%10s: %4d %n%10s: %4d %n%10s: %4d %n%10s: %4d %n%10s:
+		// %4d %n%10s: %4d %n%10s: %4d %n%10s: %4d %n",
+		// "Death", array[0], "Knowledge", array[1], "Life", array[2], "Light",
+		// array[3], "Nature", array[4], "Tempest", array[5], "Trickery", array[6],
+		// "War", array[7]);
 		return string;
 	}
 
@@ -565,6 +816,44 @@ public abstract class Immortal implements Actor {
 			set.add(el);
 
 		return set;
+	}
+
+	private static Alignment[] alignmentRandomizer(Alignment axis) {
+		Alignment[][] axes = new Alignment[][] {
+				// LAWFUL
+				{ Alignment.LAWFUL, Alignment.NEUTRAL }, { Alignment.LAWFUL, Alignment.GOOD },
+				{ Alignment.LAWFUL, Alignment.EVIL },
+				// CHAOTIC
+				{ Alignment.CHAOTIC, Alignment.NEUTRAL }, { Alignment.CHAOTIC, Alignment.GOOD },
+				{ Alignment.CHAOTIC, Alignment.EVIL },
+				// GOOD
+				{ Alignment.GOOD, Alignment.NEUTRAL }, { Alignment.GOOD, Alignment.CHAOTIC },
+				{ Alignment.GOOD, Alignment.LAWFUL },
+				// EVIL
+				{ Alignment.EVIL, Alignment.NEUTRAL }, { Alignment.EVIL, Alignment.CHAOTIC },
+				{ Alignment.EVIL, Alignment.LAWFUL } };
+
+		Alignment[] corners = new Alignment[] { Alignment.LAWFUL, Alignment.CHAOTIC, Alignment.GOOD, Alignment.EVIL };
+
+		//
+		Alignment[] alignment = null;
+		int dice = Dice.roll(10);
+		if (axis.equals(Alignment.LAWFUL)) {
+			alignment = (dice < 5) ? axes[0] : (dice < 8) ? axes[1] : axes[2];
+		} else if (axis.equals(Alignment.CHAOTIC)) {
+			alignment = (dice < 5) ? axes[3] : (dice < 8) ? axes[4] : axes[5];
+		} else if (axis.equals(Alignment.GOOD)) {
+			alignment = (dice < 5) ? axes[6] : (dice < 8) ? axes[7] : axes[8];
+		} else if (axis.equals(Alignment.EVIL)) {
+			// System.out.println("Evil entity generated.");
+			alignment = (dice < 5) ? axes[9] : (dice < 8) ? axes[10] : axes[11];
+		} else if (dice < 5) {
+			alignment = new Alignment[] { Alignment.NEUTRAL };
+		} else {
+			alignment = new Alignment[] { Alignment.NEUTRAL, Dice.randomFromArray(corners) };
+		}
+
+		return alignment;
 	}
 
 	private static Domain[] domainRandomizer() {
@@ -605,41 +894,11 @@ public abstract class Immortal implements Actor {
 		return array;
 	}
 
+	private static Prototype lesserBeing(Entity entity, Lesser lesser, Alignment axis, Domain[] domains) {
+		return new Prototype(entity, lesser, alignmentRandomizer(axis), domains);
+	}
+
 	private static Prototype lesserBeing(Entity entity, Lesser lesser, Alignment axis) {
-		Alignment[][] axes = new Alignment[][] {
-				// LAWFUL
-				{ Alignment.LAWFUL, Alignment.NEUTRAL }, { Alignment.LAWFUL, Alignment.GOOD },
-				{ Alignment.LAWFUL, Alignment.EVIL },
-				// CHAOTIC
-				{ Alignment.CHAOTIC, Alignment.NEUTRAL }, { Alignment.CHAOTIC, Alignment.GOOD },
-				{ Alignment.CHAOTIC, Alignment.EVIL },
-				// GOOD
-				{ Alignment.GOOD, Alignment.NEUTRAL }, { Alignment.GOOD, Alignment.CHAOTIC },
-				{ Alignment.GOOD, Alignment.LAWFUL },
-				// EVIL
-				{ Alignment.EVIL, Alignment.NEUTRAL }, { Alignment.EVIL, Alignment.CHAOTIC },
-				{ Alignment.EVIL, Alignment.LAWFUL } };
-
-		Alignment[] corners = new Alignment[] { Alignment.LAWFUL, Alignment.CHAOTIC, Alignment.GOOD, Alignment.EVIL };
-
-		//
-		Alignment[] alignment = null;
-		int dice = Dice.roll(10);
-		if (axis.equals(Alignment.LAWFUL)) {
-			alignment = (dice < 5) ? axes[0] : (dice < 8) ? axes[1] : axes[2];
-		} else if (axis.equals(Alignment.CHAOTIC)) {
-			alignment = (dice < 5) ? axes[3] : (dice < 8) ? axes[4] : axes[5];
-		} else if (axis.equals(Alignment.GOOD)) {
-			alignment = (dice < 5) ? axes[6] : (dice < 8) ? axes[7] : axes[8];
-		} else if (axis.equals(Alignment.EVIL)) {
-			// System.out.println("Evil entity generated.");
-			alignment = (dice < 5) ? axes[9] : (dice < 8) ? axes[10] : axes[11];
-		} else if (dice < 5) {
-			alignment = new Alignment[] { Alignment.NEUTRAL };
-		} else {
-			alignment = new Alignment[] { Alignment.NEUTRAL, Dice.randomFromArray(corners) };
-		}
-
-		return new Prototype(entity, lesser, alignment, domainRandomizer());
+		return new Prototype(entity, lesser, alignmentRandomizer(axis), domainRandomizer());
 	}
 }
