@@ -17,7 +17,7 @@ public class Main {
 
 		System.out.println(Immortal.beingsByGridToString());
 		System.out.println(Immortal.alignmentGridStatsToString());
-		System.out.println(Immortal.lesserBeingsDomainToString());
+		System.out.println(Immortal.domainStatsToString());
 //		System.out.println(Immortal.lesserBeingsAlignmentToString());
 		System.out.println();
 //		lesserBeings();
@@ -65,17 +65,6 @@ public class Main {
 
 		}
 
-	}
-
-	public static void immortalTypes() {
-		Set<Immortal.Greater> list2 = Immortal.greaterImmortalTypes();
-		System.out.println(list2);
-		System.out.println(list2.size());
-		System.out.println();
-
-		Set<Immortal.Lesser> list1 = Immortal.lesserImmortalTypes();
-		System.out.println(list1);
-		System.out.println(list1.size());
 	}
 
 	public static void levelUpTest(Class job) {
