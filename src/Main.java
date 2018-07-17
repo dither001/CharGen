@@ -15,11 +15,18 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		System.out.println(Immortal.beingsByGridToString());
-		System.out.println(Immortal.alignmentGridStatsToString());
-		System.out.println(Immortal.domainStatsToString());
+		for (int i = 0; i < 50; ++i) {
+			trinarySystem();
+//			unavailableZones();
+//			starsOfColor();
+//			starsOfColor('F');
+		}
+		
+//		System.out.println(Immortal.beingsByGridToString());
+//		System.out.println(Immortal.alignmentGridStatsToString());
+//		System.out.println(Immortal.domainStatsToString());
 //		System.out.println(Immortal.lesserBeingsAlignmentToString());
-		System.out.println();
+//		System.out.println();
 //		lesserBeings();
 
 		// powersByAlignment();
@@ -39,6 +46,41 @@ public class Main {
 		// levelUpTest(20, Class.CLERIC);
 		// levelUpTest(Class.Subclass.DEATH);
 
+	}
+
+	public static void starsOfColor() {
+		System.out.println(new Group().toStringDetailed());
+		System.out.println();
+	}
+
+	public static void starsOfColor(char color) {
+		Group group = new Group();
+		while (group.getPrimaryStarColor() != color) {
+			group = new Group();
+		}
+		
+		System.out.println(group.toStringDetailed());
+		System.out.println();
+	}
+
+	public static void unavailableZones() {
+		Group group = new Group();
+		while (group.getUnavailableZones() < 1) {
+			group = new Group();
+		}
+		
+		System.out.println(group.toStringDetailed());
+		System.out.println();
+	}
+
+	public static void trinarySystem() {
+		Group group = new Group();
+		while (group.isTrinary() != true) {
+			group = new Group();
+		}
+		
+		System.out.println(group.toStringDetailed());
+//		System.out.println();
 	}
 
 	public static void lesserBeings() {
