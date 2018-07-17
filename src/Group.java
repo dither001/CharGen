@@ -1,10 +1,21 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class Group {
 	private Star[] stars;
 
 	private byte maxOrbits;
-	private int habitableZone, unavailableZones;
-	private byte[] orbits;
+	private int habitableZone, unavailableZones, innerZone;
+	private List<Planetoid> planets;
+
+	// orbits is a temporary variable; localize to constructor when finished
+	byte[] orbits;
+	int outerMostOrbit;
+	List<Integer> available;
+	int capturedPlanets;
+	// int gasGiants;
 
 	public Group() {
 		int dice = Dice.roll(2, 6);
@@ -26,7 +37,7 @@ public class Group {
 
 		// verify that third star is farther from primary than second star
 		if (stars.length > 2 && stars[2].orbit <= stars[1].orbit)
-			stars[2].orbit = (byte) (stars[1].orbit + 1);
+			stars[2].orbit = (byte) (stars[1].orbit * 2);
 
 		// determine maximum orbits
 		maxOrbits = (byte) Dice.roll(2, 6);
@@ -60,14 +71,188 @@ public class Group {
 
 		int orbitNumber = unavailableZones;
 		for (int i = 0; i < orbits.length; ++i) {
-			if (companionA > 0 && orbitNumber < companionA)
+			if (orbitNumber < companionA) {
 				orbits[i] = (byte) orbitNumber++;
 
+			} else if (orbitNumber == companionA && orbits.length > 1) {
+				orbitNumber = companionB;
+				orbits[i] = (byte) orbitNumber++;
+
+			} else if (companion2A > 0 && orbitNumber < companion2A) {
+				orbits[i] = (byte) orbitNumber++;
+
+			} else if (companion2A > 0 && orbitNumber == companion2A) {
+				orbitNumber = companion2B;
+				orbits[i] = (byte) orbitNumber++;
+
+			} else {
+				orbits[i] = (byte) orbitNumber++;
+
+			}
+
 		}
+		outerMostOrbit = orbitNumber - 1;
+
+		// determine start of inner zone (if applicable)
+		innerZone = innerZone();
 
 		// determine number of empty orbits
-		int emptyOrbits = Dice.roll(3);
+		int emptyOrbits = Dice.roll(6);
+		if (primary.color == 'B' || primary.color == 'A')
+			++emptyOrbits;
 
+		if (emptyOrbits > 4) {
+			emptyOrbits = Dice.roll(6);
+			if (primary.color == 'B' || primary.color == 'A')
+				++emptyOrbits;
+
+			emptyOrbits = (emptyOrbits < 3) ? 1 : (emptyOrbits > 3) ? 3 : 2;
+
+		} else {
+			emptyOrbits = 0;
+		}
+
+		if (emptyOrbits > maxOrbits)
+			emptyOrbits = maxOrbits;
+
+		// determine number of captured planets
+		capturedPlanets = Dice.roll(6);
+		if (primary.color == 'B' || primary.color == 'A')
+			++capturedPlanets;
+
+		if (capturedPlanets > 4) {
+			if (primary.color == 'B' || primary.color == 'A')
+				++capturedPlanets;
+
+			capturedPlanets = (capturedPlanets < 3) ? 1 : (capturedPlanets > 4) ? 3 : 2;
+
+		} else {
+			capturedPlanets = 0;
+		}
+
+		// determine number of gas giants
+		int gasGiants = Dice.roll(2, 6);
+
+		if (gasGiants < 10) {
+			gasGiants = Dice.roll(2, 6);
+
+			if (gasGiants < 4)
+				gasGiants = 1;
+			else if (gasGiants < 6)
+				gasGiants = 2;
+			else if (gasGiants < 8)
+				gasGiants = 3;
+			else if (gasGiants < 11)
+				gasGiants = 4;
+			else
+				gasGiants = 5;
+
+		} else {
+			gasGiants = 0;
+		}
+
+		if (gasGiants > maxOrbits - emptyOrbits)
+			gasGiants = maxOrbits - emptyOrbits;
+
+		// determine number of asteroid belts
+		int asteroids = Dice.roll(2, 6) - gasGiants;
+
+		if (asteroids < 7) {
+			asteroids = Dice.roll(2, 6) - gasGiants;
+
+			if (asteroids < 1)
+				asteroids = 3;
+			else if (asteroids < 7)
+				asteroids = 2;
+			else
+				asteroids = 1;
+
+		} else {
+			asteroids = 0;
+		}
+
+		available = new ArrayList<Integer>(orbits.length);
+		for (int i = 0; i < orbits.length; ++i) {
+			available.add(new Integer(orbits[i]));
+		}
+		Collections.shuffle(available);
+
+		/*
+		 * KNOWN OBJECT PLACEMENT
+		 */
+		planets = new ArrayList<Planetoid>();
+		World.Type planet;
+		boolean contains = Dice.containsIntegerOrGreater(habitableZone, available);
+
+		// empty orbit placement
+		planet = World.Type.EMPTY;
+		while (emptyOrbits > 0) {
+			planets.add(new Planetoid(planet, available.remove(0), this));
+			--emptyOrbits;
+		}
+
+		// gas giant placement
+		while (gasGiants > 0) {
+			contains = Dice.containsIntegerOrGreater(habitableZone, available);
+			planet = (Dice.roll(2) == 1) ? World.Type.LARGE_GIANT : World.Type.SMALL_GIANT;
+
+			if (contains && available.get(0) >= habitableZone) {
+				planets.add(new Planetoid(planet, available.remove(0), this));
+				--gasGiants;
+			} else if (contains && available.get(0) < habitableZone) {
+				Collections.rotate(available, 1);
+
+			} else {
+				planets.add(new Planetoid(planet, ++outerMostOrbit, this));
+				--gasGiants;
+			}
+		}
+
+		// asteroid placement
+		List<Planetoid> giants = getGasGiants();
+		Collections.shuffle(giants);
+
+		int candidate;
+		planet = World.Type.ASTEROID;
+
+		Iterator<Planetoid> it = giants.iterator();
+		while (available.size() > 0 && asteroids > 0) {
+			Planetoid prospective;
+			while (it.hasNext()) {
+				prospective = it.next();
+				// System.out.println("Gas giant orbit: " + prospective.getOrbit());
+				candidate = prospective.getOrbit() - 1;
+				// System.out.println("Prospective orbit: " + candidate);
+				contains = available.contains(candidate);
+				// System.out.println("Contains candidate: " + contains);
+
+				if (contains) {
+					int index = available.indexOf(candidate);
+					planets.add(new Planetoid(planet, available.remove(index), this));
+					// System.out.println("Placed asteroid at: " + candidate);
+					--asteroids;
+				}
+			}
+
+			if (available.size() > 0 && asteroids > 0) {
+				planets.add(new Planetoid(planet, available.remove(0), this));
+				--asteroids;
+
+			}
+			// END
+		}
+
+		
+		
+		
+		
+		
+		
+		/*
+		 * END OF CONSTRUCTOR
+		 */
+		Planetoid.OrbitAscending sortMethod = new Planetoid.OrbitAscending();
+		Collections.sort(planets, sortMethod);
 	}
 
 	/*
@@ -82,17 +267,94 @@ public class Group {
 		return stars.length == 3;
 	}
 
+	public boolean hasInnerZone() {
+		return innerZone != -1;
+	}
+
+	public int emptyOrbits() {
+		int counter = 0;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			if (it.next().isEmpty())
+				++counter;
+		}
+
+		return counter;
+	}
+
+	public int gasGiants() {
+		int counter = 0;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			if (it.next().isGasGiant())
+				++counter;
+		}
+
+		return counter;
+	}
+
+	public List<Planetoid> getGasGiants() {
+		List<Planetoid> list = new ArrayList<Planetoid>();
+
+		Planetoid candidate;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (candidate.isGasGiant())
+				list.add(candidate);
+		}
+
+		return list;
+	}
+
+	public int asteroids() {
+		int counter = 0;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			if (it.next().isAsteroidBelt())
+				++counter;
+		}
+
+		return counter;
+	}
+
+	public int capturedPlanets() {
+		int counter = 0;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			if (it.next().isCaptured())
+				++counter;
+		}
+
+		return counter;
+	}
+
 	public char getPrimaryStarColor() {
 		return stars[0].color;
 	}
 
-	public int getUnavailableZones() {
+	public int getNumberOfOrbits() {
+		/*
+		 * FIXME - "orbits" is temporarily global and will be localized to the
+		 * constructor once completed; thereafter this method should be
+		 * "number of planetary objects" or something like that
+		 */
+		return orbits.length;
+	}
+
+	public int numberOfUnavailableZones() {
 		return unavailableZones;
+	}
+
+	public int innerZone() {
+		int innerZoneStart = unavailableZones;
+
+		if (habitableZone <= 0)
+			innerZoneStart = -1;
+
+		return innerZoneStart;
 	}
 
 	public String toStringDetailed() {
 		String star = "" + stars[0].color + stars[0].size;
-		String string = String.format("%s (%2d || U: %2d >> H:%2d)", star, maxOrbits, unavailableZones, habitableZone);
+		String string = String.format("%s (U: %2d || I: %2d >> H:%2d)", star, unavailableZones, this.innerZone,
+				habitableZone);
 
 		for (int i = 1; i < stars.length; ++i) {
 			star = "" + stars[i].color + stars[i].size;
@@ -100,15 +362,13 @@ public class Group {
 
 		}
 
-		String orbitals = "\n[ ";
-		for (int i = 0; i < orbits.length; ++i) {
-			orbitals += orbits[i];
-			if (i < orbits.length - 1)
-				orbitals += ", ";
-		}
-		orbitals += " ]";
+		int maxOrbits = orbits.length;
+		int gasGiants = gasGiants();
+		int asteroids = asteroids();
 
-		return string; // + orbitals;
+		String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d || Captured: %d", maxOrbits, gasGiants,
+				asteroids, capturedPlanets);
+		return string + etc + "\n" + available.toString() + "\n" + planets.toString();
 	}
 
 	/*
@@ -148,6 +408,9 @@ public class Group {
 			habitableZone -= (sizeMod > 3) ? (2 * sizeMod) + 2 : sizeMod + 1;
 		else if (star.color == 'M')
 			habitableZone -= (sizeMod > 3) ? (2 * sizeMod) + 2 : sizeMod;
+
+		if (habitableZone < 0)
+			habitableZone = -1;
 
 		return habitableZone;
 	}
@@ -273,7 +536,7 @@ public class Group {
 				else if (dice < 12)
 					orbit = (byte) (dice - 3 + Dice.roll(6));
 				else
-					orbit = 99;
+					orbit = 49;
 
 			}
 

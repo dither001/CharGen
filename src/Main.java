@@ -65,7 +65,7 @@ public class Main {
 
 	public static void unavailableZones() {
 		Group group = new Group();
-		while (group.getUnavailableZones() < 1) {
+		while (group.numberOfUnavailableZones() < 1) {
 			group = new Group();
 		}
 		
@@ -75,12 +75,12 @@ public class Main {
 
 	public static void trinarySystem() {
 		Group group = new Group();
-		while (group.isTrinary() != true) {
+		while (group.isTrinary() != true || group.getNumberOfOrbits() < 4) {
 			group = new Group();
 		}
 		
 		System.out.println(group.toStringDetailed());
-//		System.out.println();
+		System.out.println();
 	}
 
 	public static void lesserBeings() {
