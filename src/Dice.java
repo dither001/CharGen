@@ -181,6 +181,32 @@ public final class Dice {
 		return set;
 	}
 
+	public static boolean containsIntegerOrGreater(int integer, List<Integer> list) {
+		boolean contains = false;
+
+		for (Iterator<Integer> it = list.iterator(); it.hasNext();) {
+			if (it.next() >= integer) {
+				contains = true;
+				break;
+			}
+		}
+
+		return contains;
+	}
+
+	public static boolean containsLessThanInteger(int integer, List<Integer> list) {
+		boolean contains = false;
+
+		for (Iterator<Integer> it = list.iterator(); it.hasNext();) {
+			if (it.next() < integer) {
+				contains = true;
+				break;
+			}
+		}
+
+		return contains;
+	}
+
 	/*
 	 * STATIC CLASS
 	 * 
