@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		trinarySystem();
+		testMainWorld();
 		// unavailableZones();
 		// starsOfColor();
 		// starsOfColor('F');
@@ -73,7 +73,7 @@ public class Main {
 
 	public static void testMainWorld() {
 		Group group = new Group();
-		while (group.getMainWorld() == null) {
+		while (group.populousWorlds() < 1) {
 			group = new Group();
 		}
 

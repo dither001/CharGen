@@ -1,14 +1,17 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class Group {
 	private Star[] stars;
 
 	private byte maxOrbits;
 	private int habitableZone, unavailableZones, innerZone;
-	private List<Planetoid> planets;
+	private Set<Planetoid> planets;
+	private Set<Planetoid> spaceObjects;
 	private Planetoid mainWorld;
 
 	// orbits is a temporary variable; localize to constructor when finished
@@ -17,6 +20,7 @@ public class Group {
 	List<Integer> available;
 	int capturedPlanets;
 	// int gasGiants;
+	List<Planetoid> populousWorlds;
 
 	public Group() {
 		int dice = Dice.roll(2, 6);
@@ -181,7 +185,7 @@ public class Group {
 		/*
 		 * KNOWN OBJECT PLACEMENT
 		 */
-		planets = new ArrayList<Planetoid>();
+		planets = new HashSet<Planetoid>();
 		World.Type planet;
 		boolean contains = Dice.containsIntegerOrGreater(habitableZone, available);
 
@@ -210,13 +214,13 @@ public class Group {
 		}
 
 		// asteroid placement
-		List<Planetoid> worldList = getGasGiants();
-		Collections.shuffle(worldList);
+		List<Planetoid> worldlist = Dice.setToList(filterForGasGiants(planets));
+		Collections.shuffle(worldlist);
 
 		int candidate;
 		planet = World.Type.ASTEROID;
 
-		Iterator<Planetoid> it = worldList.iterator();
+		Iterator<Planetoid> it = worldlist.iterator();
 		Planetoid prospective;
 		while (available.size() > 0 && asteroids > 0) {
 			while (it.hasNext()) {
@@ -249,33 +253,18 @@ public class Group {
 			planets.add(new Planetoid(planet, available.remove(0), this));
 		}
 
-		// main world designation
-		worldList = new ArrayList<Planetoid>();
-		for (it = planets.iterator(); it.hasNext();) {
-			prospective = it.next();
-			if (prospective.isWorld() && prospective.getPopulation() > 0)
-				worldList.add(prospective);
-
-			if (prospective.hasMoons()) {
-				for (Iterator<Planetoid> its = prospective.getMoons().iterator(); its.hasNext();) {
-					prospective = its.next();
-
-					if (prospective.isWorld() && prospective.getPopulation() > 0)
-						worldList.add(prospective);
-				}
-			}
-		}
-
+		/*
+		 * MAIN WORLD DESIGNATION
+		 */
+		// spaceObjects
+		spaceObjects = spaceObjectSet(planets);
+		populousWorlds = Dice.setToList(worldSet());
 		Planetoid.MainWorldSort mainSort = new Planetoid.MainWorldSort();
-		Collections.sort(worldList, mainSort);
-
-		mainWorld = (worldList.size() > 0) ? worldList.get(0) : null;
+		Collections.sort(populousWorlds, mainSort);
 
 		/*
 		 * END OF CONSTRUCTOR
 		 */
-		Planetoid.OrbitAscending orbitSort = new Planetoid.OrbitAscending();
-		Collections.sort(planets, orbitSort);
 	}
 
 	/*
@@ -298,6 +287,29 @@ public class Group {
 		return innerZone != -1;
 	}
 
+	public Set<Planetoid> spaceObjectSet() {
+		return spaceObjects;
+	}
+
+	public Set<Planetoid> gasGiantSet() {
+		Set<Planetoid> workingSet;
+		workingSet = filterForGasGiants(spaceObjectSet());
+
+		return workingSet;
+	}
+
+	public Set<Planetoid> worldSet() {
+		Set<Planetoid> workingSet;
+		workingSet = filterForWorlds(spaceObjectSet());
+
+		return workingSet;
+	}
+
+	/*
+	 * FIXME - BELOW ARE METHODS TO REFACTOR
+	 * 
+	 */
+
 	public int emptyOrbits() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
@@ -318,18 +330,18 @@ public class Group {
 		return counter;
 	}
 
-	public List<Planetoid> getGasGiants() {
-		List<Planetoid> list = new ArrayList<Planetoid>();
+	public Set<Planetoid> getGasGiants() {
+		Set<Planetoid> set = new HashSet<Planetoid>();
 
 		Planetoid candidate;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
 			if (candidate.isGasGiant())
-				list.add(candidate);
+				set.add(candidate);
 		}
 
-		return list;
+		return set;
 	}
 
 	public int asteroids() {
@@ -350,6 +362,10 @@ public class Group {
 		}
 
 		return counter;
+	}
+
+	public int populousWorlds() {
+		return populousWorlds.size();
 	}
 
 	public char getPrimaryStarColor() {
@@ -383,9 +399,9 @@ public class Group {
 	}
 
 	public String toStringDetailed() {
-		String star = String.format("Main world: %s%n- - -", mainWorld);
+		String star; // = String.format("Main world: %n%s %n- - -", mainWorld);
 
-		star += "\n" + stars[0].color + stars[0].size;
+		star = "\n" + stars[0].color + stars[0].size;
 		// String string = String.format("%s (U: %2d || I: %2d >> H:%2d)", star,
 		// unavailableZones, this.innerZone,
 		// habitableZone);
@@ -401,16 +417,29 @@ public class Group {
 		int gasGiants = gasGiants();
 		int asteroids = asteroids();
 
+		/*
+		 * PLANET LIST & SORT BY ORBIT ASCENDING
+		 */
 		String worlds = "";
-		if (planets.size() > 0) {
-			for (Planetoid el : planets)
-				worlds += "\n" + el.toString();
+		List<Planetoid> planetList = Dice.setToList(planets);
+		Planetoid.OrbitAscending orbitSort = new Planetoid.OrbitAscending();
+		Collections.sort(planetList, orbitSort);
+		if (planetList.size() > 0) {
+			for (Planetoid el : planetList)
+				worlds += "\n" + el.toStringDetailed();
+		}
+
+		String populous = String.format("%n- - - %nPopulous Worlds: %d / %d", populousWorlds.size(),
+				spaceObjects.size());
+		if (populousWorlds.size() > 0) {
+			for (Planetoid el : populousWorlds)
+				populous += "\n" + el.toString();
 		}
 
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,
 		// asteroids, capturedPlanets);
-		return string + worlds;
+		return string + worlds + populous;
 	}
 
 	/*
@@ -487,6 +516,67 @@ public class Group {
 			unavailableZones = 0;
 
 		return unavailableZones;
+	}
+
+	private static Set<Planetoid> spaceObjectSet(Set<Planetoid> planets) {
+		Set<Planetoid> workingSet = new HashSet<Planetoid>();
+
+		Planetoid candidate;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+
+			candidate = it.next();
+			workingSet.add(candidate);
+			if (candidate.hasMoons()) {
+				for (Iterator<Planetoid> its = candidate.getMoons().iterator(); its.hasNext();) {
+
+					workingSet.add(its.next());
+				}
+			}
+		}
+
+		return workingSet;
+	}
+
+	private static Set<Planetoid> filterForGasGiants(Set<Planetoid> planets) {
+		Set<Planetoid> workingSet = new HashSet<Planetoid>();
+
+		Planetoid candidate;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (candidate.isGasGiant())
+				workingSet.add(candidate);
+		}
+
+		return workingSet;
+	}
+
+	private static Set<Planetoid> filterForWorlds(Set<Planetoid> planets) {
+		Set<Planetoid> workingSet = new HashSet<Planetoid>();
+
+		Planetoid candidate;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (candidate.isWorld())
+				workingSet.add(candidate);
+		}
+
+		return workingSet;
+	}
+
+	private static Set<Planetoid> filterForPopulous(Set<Planetoid> planets) {
+		Set<Planetoid> workingSet = new HashSet<Planetoid>();
+
+		Planetoid candidate;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (candidate.isWorld() && candidate.getPopulation() > 0)
+				workingSet.add(candidate);
+		}
+
+		return workingSet;
 	}
 
 	/*

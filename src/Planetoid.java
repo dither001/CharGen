@@ -178,6 +178,27 @@ public class Planetoid implements World {
 				string = String.format("%-18s %s", string, world);
 		}
 
+		if (orbit == group.getHabitableZone())
+			string += " ...in habitable zone";
+		
+		return string;
+	}
+	
+	public String toStringDetailed() {
+		String string = String.format("%s (%d)", type, orbit);
+
+		if (isWorld()) {
+			int size = scores[0], atmo = scores[1];
+			int hydro = scores[2], pop = scores[3];
+
+			String world = String.format("[%2d, %2d, %2d, %2d]", size, atmo, hydro, pop);
+
+			if (isMoon())
+				string = String.format("%18s %s", "* " + string, world);
+			else
+				string = String.format("%-18s %s", string, world);
+		}
+
 		if (hasMoons()) {
 			String satellites = "";
 			for (Planetoid el : moons)
@@ -188,6 +209,9 @@ public class Planetoid implements World {
 			string += " (no natural satellites)";
 		}
 
+		if (orbit == group.getHabitableZone())
+			string += " ...in habitable zone";
+		
 		return string;
 	}
 
