@@ -73,7 +73,7 @@ public class Main {
 
 	public static void testMainWorld() {
 		Group group = new Group();
-		while (group.populousWorlds() < 1) {
+		while (group.getMainWorld() == null) {
 			group = new Group();
 		}
 

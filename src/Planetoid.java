@@ -9,12 +9,16 @@ public class Planetoid implements World {
 	 * 
 	 */
 	private EnumSet<TradeCodes> tradeCodes;
+	private EnumSet<Tag> worldTags;
+	private EnumSet<Base> worldFacilities;
+
 	private Group group;
 	private Planetoid home;
 	private Type type;
 	private int orbit;
 
 	private byte[] scores;
+	private byte techLevel;
 	private List<Planetoid> moons;
 
 	/*
@@ -64,11 +68,11 @@ public class Planetoid implements World {
 				scores[0] = (byte) (home.getSize() - Dice.roll(6));
 
 			// validation step
-			if (isMoon() && scores[0] == 0)
-				type = Type.RING;
+			if (type.equals(Type.SATELLITE) && scores[0] == 0)
+				this.type = Type.RING;
 
-			if (scores[0] < 1)
-				scores[0] = 1;
+			if (scores[0] < 0)
+				scores[0] = 0;
 
 			/*
 			 * ATMOSPHERE
@@ -169,35 +173,48 @@ public class Planetoid implements World {
 		if (isWorld()) {
 			int size = scores[0], atmo = scores[1];
 			int hydro = scores[2], pop = scores[3];
+			int gov = scores[4], law = scores[5];
 
-			String world = String.format("[%2d, %2d, %2d, %2d]", size, atmo, hydro, pop);
+			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
 
-			if (isMoon())
+			if (type.equals(Type.SATELLITE))
 				string = String.format("%18s %s", "* " + string, world);
 			else
 				string = String.format("%-18s %s", string, world);
+		} else if (isRing()) {
+
+			string = String.format("   * %s", string);
 		}
 
-		if (orbit == group.getHabitableZone())
-			string += " ...in habitable zone";
-		
+		// habitable zone
+		// if (isWorld() && orbit == group.getHabitableZone())
+		// string += " ...in habitable zone";
+
 		return string;
 	}
-	
+
 	public String toStringDetailed() {
 		String string = String.format("%s (%d)", type, orbit);
 
 		if (isWorld()) {
 			int size = scores[0], atmo = scores[1];
 			int hydro = scores[2], pop = scores[3];
+			int gov = scores[4], law = scores[5];
 
-			String world = String.format("[%2d, %2d, %2d, %2d]", size, atmo, hydro, pop);
+			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
 
-			if (isMoon())
+			if (type.equals(Type.SATELLITE))
 				string = String.format("%18s %s", "* " + string, world);
 			else
 				string = String.format("%-18s %s", string, world);
+		} else if (isRing()) {
+
+			string = String.format("   * %s", string);
 		}
+
+		// habitable zone
+		// if (isWorld() && orbit == group.getHabitableZone())
+		// string += " ...in habitable zone";
 
 		if (hasMoons()) {
 			String satellites = "";
@@ -205,13 +222,10 @@ public class Planetoid implements World {
 				satellites += "\n" + el.toString();
 
 			string += satellites;
-		} else if (notMoon() && (isWorld() || isGasGiant())) {
-			string += " (no natural satellites)";
+			// } else if (notMoon() && (isWorld() || isGasGiant())) {
+			// string += " (no natural satellites)";
 		}
 
-		if (orbit == group.getHabitableZone())
-			string += " ...in habitable zone";
-		
 		return string;
 	}
 
@@ -281,6 +295,26 @@ public class Planetoid implements World {
 	}
 
 	@Override
+	public EnumSet<Tag> getWorldTags() {
+		return worldTags;
+	}
+
+	@Override
+	public void setWorldTags(EnumSet<Tag> set) {
+		this.worldTags = set;
+	}
+
+	@Override
+	public EnumSet<Base> getWorldFacilities() {
+		return worldFacilities;
+	}
+
+	@Override
+	public void setWorldFacilities(EnumSet<Base> set) {
+		this.worldFacilities = set;
+	}
+
+	@Override
 	public Group getGroup() {
 		return group;
 	}
@@ -296,8 +330,23 @@ public class Planetoid implements World {
 	}
 
 	@Override
+	public int getTechLevel() {
+		return techLevel;
+	}
+
+	@Override
+	public void setTechLevel(int techLevel) {
+		this.techLevel = (byte) techLevel;
+	}
+
+	@Override
 	public byte[] getAttributes() {
 		return scores;
+	}
+
+	@Override
+	public void setAttribute(int index, int value) {
+		this.scores[index] = (byte) value;
 	}
 
 	@Override

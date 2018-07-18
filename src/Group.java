@@ -12,6 +12,8 @@ public class Group {
 	private int habitableZone, unavailableZones, innerZone;
 	private Set<Planetoid> planets;
 	private Set<Planetoid> spaceObjects;
+
+	private char starport;
 	private Planetoid mainWorld;
 
 	// orbits is a temporary variable; localize to constructor when finished
@@ -196,6 +198,13 @@ public class Group {
 			--emptyOrbits;
 		}
 
+		// captured world placement
+		planet = World.Type.CAPTURED;
+		while (capturedPlanets > 0) {
+			planets.add(new Planetoid(planet, Dice.roll(2, 6), this));
+			--capturedPlanets;
+		}
+
 		// gas giant placement
 		while (gasGiants > 0) {
 			contains = Dice.containsIntegerOrGreater(habitableZone, available);
@@ -244,7 +253,6 @@ public class Group {
 				--asteroids;
 
 			}
-			// END
 		}
 
 		// remaining available orbits
@@ -254,14 +262,19 @@ public class Group {
 		}
 
 		/*
-		 * MAIN WORLD DESIGNATION
+		 * MAIN WORLD & GOVERNMENT DESIGNATION
 		 */
-		// spaceObjects
+		// space objects
 		spaceObjects = spaceObjectSet(planets);
+
 		populousWorlds = Dice.setToList(worldSet());
 		Planetoid.MainWorldSort mainSort = new Planetoid.MainWorldSort();
 		Collections.sort(populousWorlds, mainSort);
 
+		if (populousWorlds.size() > 0) {
+			mainWorld = populousWorlds.get(0);
+			mainWorld.setupGovernment();
+		}
 		/*
 		 * END OF CONSTRUCTOR
 		 */
@@ -271,6 +284,14 @@ public class Group {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public char getStarport() {
+		return starport;
+	}
+
+	public void setStarPort(char starPort) {
+		this.starport = starPort;
+	}
+
 	public Planetoid getMainWorld() {
 		return mainWorld;
 	}
@@ -399,9 +420,15 @@ public class Group {
 	}
 
 	public String toStringDetailed() {
-		String star; // = String.format("Main world: %n%s %n- - -", mainWorld);
+		String star = "";
+		star += String.format("Main world: %s", "Default Name");
+		star += String.format("%nStarport: %s || Tech Level: %d", starport, mainWorld.getTechLevel());
+		star += String.format("%nGovernment: %s", mainWorld.governmentType());
+		star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
+		star += String.format("%n%s", mainWorld);
+		star += "\n- - -";
 
-		star = "\n" + stars[0].color + stars[0].size;
+		star += "\n" + stars[0].color + stars[0].size;
 		// String string = String.format("%s (U: %2d || I: %2d >> H:%2d)", star,
 		// unavailableZones, this.innerZone,
 		// habitableZone);
