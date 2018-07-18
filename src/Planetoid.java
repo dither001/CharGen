@@ -40,7 +40,7 @@ public class Planetoid implements World {
 		 */
 		if (isWorld()) {
 			int habitableZone = group.getHabitableZone();
-			this.scores = new byte[6];
+			this.scores = new byte[] { 0, 0, 0, 0, 0, 0 };
 
 			/*
 			 * SIZE
@@ -200,6 +200,44 @@ public class Planetoid implements World {
 		@Override
 		public int compare(Planetoid left, Planetoid right) {
 			return left.orbit - right.orbit;
+		}
+
+	}
+
+	public static class PopulationDescending implements Comparator<Planetoid> {
+
+		@Override
+		public int compare(Planetoid left, Planetoid right) {
+			return right.getPopulation() - left.getPopulation();
+		}
+
+	}
+
+	public static class MainWorldSort implements Comparator<Planetoid> {
+
+		@Override
+		public int compare(Planetoid left, Planetoid right) {
+			// first sort by population
+			int compare = right.getPopulation() - left.getPopulation();
+
+			// next try habitable zone
+			if (compare == 0) {
+				int habitable = right.group.getHabitableZone();
+
+				if (left.orbit == right.orbit)
+					compare = 0;
+				else if (left.orbit == habitable)
+					compare = -1;
+				else if (right.orbit == habitable)
+					compare = 1;
+
+			}
+
+			// then try proximity to primary star
+			if (compare == 0)
+				compare = left.orbit - right.orbit;
+
+			return compare;
 		}
 
 	}

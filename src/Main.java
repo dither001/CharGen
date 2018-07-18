@@ -71,6 +71,16 @@ public class Main {
 		System.out.println();
 	}
 
+	public static void testMainWorld() {
+		Group group = new Group();
+		while (group.getMainWorld() == null) {
+			group = new Group();
+		}
+
+		System.out.println(group.toStringDetailed());
+		System.out.println();
+	}
+
 	public static void trinarySystem() {
 		Group group = new Group();
 		while (group.isTrinary() != true || group.getNumberOfOrbits() < 4) {

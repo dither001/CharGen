@@ -9,6 +9,7 @@ public class Group {
 	private byte maxOrbits;
 	private int habitableZone, unavailableZones, innerZone;
 	private List<Planetoid> planets;
+	private Planetoid mainWorld;
 
 	// orbits is a temporary variable; localize to constructor when finished
 	byte[] orbits;
@@ -209,15 +210,15 @@ public class Group {
 		}
 
 		// asteroid placement
-		List<Planetoid> giants = getGasGiants();
-		Collections.shuffle(giants);
+		List<Planetoid> worldList = getGasGiants();
+		Collections.shuffle(worldList);
 
 		int candidate;
 		planet = World.Type.ASTEROID;
 
-		Iterator<Planetoid> it = giants.iterator();
+		Iterator<Planetoid> it = worldList.iterator();
+		Planetoid prospective;
 		while (available.size() > 0 && asteroids > 0) {
-			Planetoid prospective;
 			while (it.hasNext()) {
 				prospective = it.next();
 				// System.out.println("Gas giant orbit: " + prospective.getOrbit());
@@ -248,17 +249,43 @@ public class Group {
 			planets.add(new Planetoid(planet, available.remove(0), this));
 		}
 
+		// main world designation
+		worldList = new ArrayList<Planetoid>();
+		for (it = planets.iterator(); it.hasNext();) {
+			prospective = it.next();
+			if (prospective.isWorld() && prospective.getPopulation() > 0)
+				worldList.add(prospective);
+
+			if (prospective.hasMoons()) {
+				for (Iterator<Planetoid> its = prospective.getMoons().iterator(); its.hasNext();) {
+					prospective = its.next();
+
+					if (prospective.isWorld() && prospective.getPopulation() > 0)
+						worldList.add(prospective);
+				}
+			}
+		}
+
+		Planetoid.MainWorldSort mainSort = new Planetoid.MainWorldSort();
+		Collections.sort(worldList, mainSort);
+
+		mainWorld = (worldList.size() > 0) ? worldList.get(0) : null;
+
 		/*
 		 * END OF CONSTRUCTOR
 		 */
-		Planetoid.OrbitAscending sortMethod = new Planetoid.OrbitAscending();
-		Collections.sort(planets, sortMethod);
+		Planetoid.OrbitAscending orbitSort = new Planetoid.OrbitAscending();
+		Collections.sort(planets, orbitSort);
 	}
 
 	/*
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public Planetoid getMainWorld() {
+		return mainWorld;
+	}
+
 	public boolean isBinary() {
 		return stars.length == 2;
 	}
@@ -356,11 +383,13 @@ public class Group {
 	}
 
 	public String toStringDetailed() {
-		String star = "" + stars[0].color + stars[0].size;
+		String star = String.format("Main world: %s%n- - -", mainWorld);
+
+		star += "\n" + stars[0].color + stars[0].size;
 		// String string = String.format("%s (U: %2d || I: %2d >> H:%2d)", star,
 		// unavailableZones, this.innerZone,
 		// habitableZone);
-		String string = String.format("%s", star);
+		String string = String.format("%s (H: %d)", star, habitableZone);
 
 		for (int i = 1; i < stars.length; ++i) {
 			star = "" + stars[i].color + stars[i].size;

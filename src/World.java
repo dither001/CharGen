@@ -87,6 +87,10 @@ public interface World {
 		return getType().equals(Type.RING);
 	}
 
+	public default boolean notRing() {
+		return getType().equals(Type.RING) != true;
+	}
+
 	public default boolean isAsteroidBelt() {
 		return getType().equals(Type.ASTEROID);
 	}
