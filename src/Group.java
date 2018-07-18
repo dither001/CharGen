@@ -273,7 +273,10 @@ public class Group {
 
 		if (populousWorlds.size() > 0) {
 			mainWorld = populousWorlds.get(0);
-			mainWorld.setupGovernment();
+			
+			for (it = populousWorlds.iterator(); it.hasNext();) {
+				it.next().setupGovernment();
+			}
 		}
 		/*
 		 * END OF CONSTRUCTOR
@@ -439,10 +442,6 @@ public class Group {
 			string += String.format(", %s (%2d)", star, stars[i].orbit);
 
 		}
-
-		int maxOrbits = orbits.length;
-		int gasGiants = gasGiants();
-		int asteroids = asteroids();
 
 		/*
 		 * PLANET LIST & SORT BY ORBIT ASCENDING

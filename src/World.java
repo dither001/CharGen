@@ -69,99 +69,142 @@ public interface World {
 		int hydro = getHydrosphere();
 		int pop = getPopulation();
 
+		int dice;
+
 		/*
-		 * GOVERNMENT
+		 * GOVERNMENT, LAW LEVEL
 		 */
-		int dice = Dice.roll(2, 6) - 7 + pop;
+		int gov, law;
+		if (isMainWorld()) {
+			/*
+			 * GOVERNMENT
+			 */
+			dice = Dice.roll(2, 6) - 7 + pop;
 
-		// validation step
-		if (dice < 0)
-			dice = 0;
+			// validation step
+			if (dice < 0)
+				dice = 0;
 
-		int gov = dice;
+			gov = dice;
+
+			/*
+			 * LAW LEVEL
+			 */
+			dice = Dice.roll(2, 6) - 7 + gov;
+
+			// validation step
+			if (dice < 0)
+				dice = 0;
+
+			law = dice;
+		} else {
+			Planetoid main = getMainWorld();
+			int mainGov = main.getGovernment(), mainLaw = main.getLawLevel();
+
+			/*
+			 * GOVERNMENT
+			 */
+			gov = (mainGov == 6) ? 6 : Dice.roll(6);
+
+			if (mainGov >= 7)
+				gov += 2;
+
+			// validation step
+			if (pop == 0)
+				gov = 0;
+
+			/*
+			 * LAW LEVEL
+			 */
+			law = Dice.roll(6) - 3 + mainLaw;
+
+			// validation step
+			if (gov == 0 || law < 0)
+				law = 0;
+
+		}
+
 		setGovernment(gov);
-
-		/*
-		 * LAW LEVEL
-		 */
-		dice = Dice.roll(2, 6) - 7 + gov;
-
-		// validation step
-		if (dice < 0)
-			dice = 0;
-
-		int law = dice;
 		setLawLevel(law);
 
 		/*
-		 * STAR PORT
+		 * STARPORT / SPACEPORT
 		 */
-		dice = Dice.roll(2, 6);
+		char starport = 'X';
+		if (isMainWorld()) {
+			dice = Dice.roll(2, 6);
 
-		char starport;
-		if (dice >= 10)
-			starport = 'A';
-		else if (dice == 8 || dice == 9)
-			starport = 'B';
-		else if (dice == 6 || dice == 7)
-			starport = 'C';
-		else if (dice == 5)
-			starport = 'D';
-		else if (dice == 3 || dice == 4)
-			starport = 'E';
-		else
-			starport = 'X';
+			if (dice >= 10)
+				starport = 'A';
+			else if (dice == 8 || dice == 9)
+				starport = 'B';
+			else if (dice == 6 || dice == 7)
+				starport = 'C';
+			else if (dice == 5)
+				starport = 'D';
+			else if (dice == 3 || dice == 4)
+				starport = 'E';
+			else
+				starport = 'X';
 
-		getGroup().setStarPort(starport);
+			getGroup().setStarPort(starport);
+		} else {
+
+		}
 
 		/*
 		 * TECH LEVEL
 		 */
-		int techLevel = Dice.roll(6);
+		int techLevel;
+		if (isMainWorld()) {
+			techLevel = Dice.roll(6);
 
-		// starport bonus
-		if (starport == 'A')
-			techLevel += 6;
-		else if (starport == 'B')
-			techLevel += 4;
-		else if (starport == 'C')
-			techLevel += 2;
-		else if (starport == 'X')
-			techLevel -= 4;
+			// starport bonus
+			if (starport == 'A')
+				techLevel += 6;
+			else if (starport == 'B')
+				techLevel += 4;
+			else if (starport == 'C')
+				techLevel += 2;
+			else if (starport == 'X')
+				techLevel -= 4;
 
-		// size bonus
-		if (size == 0 || size == 1)
-			techLevel += 2;
-		else if (size == 2 || size == 3 || size == 4)
-			techLevel += 1;
+			// size bonus
+			if (size == 0 || size == 1)
+				techLevel += 2;
+			else if (size == 2 || size == 3 || size == 4)
+				techLevel += 1;
 
-		// atmosphere bonus
-		if (atmo >= 0 && atmo <= 3)
-			techLevel += 1;
-		else if (atmo >= 10 && atmo <= 14)
-			techLevel += 1;
+			// atmosphere bonus
+			if (atmo >= 0 && atmo <= 3)
+				techLevel += 1;
+			else if (atmo >= 10 && atmo <= 14)
+				techLevel += 1;
 
-		// hydrosphere bonus
-		if (hydro == 9)
-			techLevel += 1;
-		else if (hydro == 10)
-			techLevel += 2;
+			// hydrosphere bonus
+			if (hydro == 9)
+				techLevel += 1;
+			else if (hydro == 10)
+				techLevel += 2;
 
-		// population bonus
-		if (pop >= 1 && pop <= 5)
-			techLevel += 1;
-		else if (pop == 9)
-			techLevel += 2;
-		else if (pop == 10)
-			techLevel += 4;
+			// population bonus
+			if (pop >= 1 && pop <= 5)
+				techLevel += 1;
+			else if (pop == 9)
+				techLevel += 2;
+			else if (pop == 10)
+				techLevel += 4;
 
-		// government bonus
-		if (gov == 0 || gov == 5)
-			techLevel += 1;
-		else if (gov == 13)
-			techLevel -= 2;
+			// government bonus
+			if (gov == 0 || gov == 5)
+				techLevel += 1;
+			else if (gov == 13)
+				techLevel -= 2;
 
-		setTechLevel(techLevel);
+			setTechLevel(techLevel);
+		} else {
+
+		}
 
 		/*
 		 * TRADE CODES
@@ -169,13 +212,76 @@ public interface World {
 		TradeCodes.setupTradeCodes(this);
 
 		/*
+		 * WORLD FACILITIES
+		 */
+		EnumSet<Base> facilities = EnumSet.noneOf(Base.class);
+
+		if (isMainWorld()) {
+			// NAVAL BASE
+			dice = Dice.roll(2, 6);
+			if (starport != 'A' && starport != 'B')
+				dice -= 12;
+
+			if (dice > 7)
+				facilities.add(Base.NAVY);
+
+			// SCOUT BASE
+			dice = Dice.roll(2, 6);
+
+			if (starport == 'A')
+				dice -= 3;
+			else if (starport == 'B')
+				dice -= 2;
+			else if (starport == 'C')
+				dice -= 1;
+			else if (starport == 'E' || starport == 'X')
+				dice -= 12;
+
+			if (dice > 6)
+				facilities.add(Base.SCOUT);
+
+		} else {
+			/*
+			 * FARM
+			 */
+			boolean idealAtmo = false, idealHydro = false, idealPop = false;
+
+			if (atmo >= 4 && atmo <= 9)
+				idealAtmo = true;
+
+			if (hydro >= 4 && hydro <= 8)
+				idealHydro = true;
+
+			if (pop >= 2)
+				idealPop = true;
+
+			if (idealAtmo && idealHydro && idealPop && getOrbit() == getHabitableZone())
+				facilities.add(Base.FARM);
+
+			/*
+			 * MINE
+			 */
+			boolean mainIndustrial = getMainWorld().getTradeCodes().contains(TradeCodes.IN);
+
+			idealPop = false;
+			if (pop >= 2)
+				idealPop = true;
+
+			if (mainIndustrial && idealPop)
+				facilities.add(Base.MINE);
+		}
+
+		setWorldFacilities(facilities);
+
+		/*
 		 * FIXME - WORLD TAGS
 		 */
-		EnumSet<Tag> worldTags = EnumSet.noneOf(Tag.class);
+		EnumSet<Tag> tags = EnumSet.noneOf(Tag.class);
 		// FIXME - there should be some logic behind this; not just random
-		while (worldTags.size() < 2) {
-			worldTags.add(Dice.randomFromArray(ALL_TAGS));
+		while (tags.size() < 2) {
+			tags.add(Dice.randomFromArray(ALL_TAGS));
 		}
+		setWorldTags(tags);
 
 		/*
 		 * END SETUP
@@ -199,6 +305,23 @@ public interface World {
 			isWorld = false;
 
 		return isWorld;
+	}
+
+	public default boolean isMainWorld() {
+		boolean isMainWorld = false;
+		Planetoid mainWorld = getGroup().getMainWorld();
+		if (this.equals(mainWorld))
+			isMainWorld = true;
+
+		return isMainWorld;
+	}
+
+	public default Planetoid getMainWorld() {
+		return getGroup().getMainWorld();
+	}
+
+	public default int getHabitableZone() {
+		return getGroup().getHabitableZone();
 	}
 
 	public default boolean isEmpty() {

@@ -186,6 +186,10 @@ public class Planetoid implements World {
 			string = String.format("   * %s", string);
 		}
 
+		// facilities
+		string += String.format(" %s", worldFacilities);
+		// world tags
+		string += String.format(" %s", worldTags);
 		// habitable zone
 		// if (isWorld() && orbit == group.getHabitableZone())
 		// string += " ...in habitable zone";
@@ -212,6 +216,10 @@ public class Planetoid implements World {
 			string = String.format("   * %s", string);
 		}
 
+		// facilities
+		string += String.format(" %s", worldFacilities);
+		// world tags
+		string += String.format(" %s", worldTags);
 		// habitable zone
 		// if (isWorld() && orbit == group.getHabitableZone())
 		// string += " ...in habitable zone";
