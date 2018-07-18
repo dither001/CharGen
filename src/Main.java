@@ -15,19 +15,17 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		for (int i = 0; i < 50; ++i) {
-			trinarySystem();
-//			unavailableZones();
-//			starsOfColor();
-//			starsOfColor('F');
-		}
-		
-//		System.out.println(Immortal.beingsByGridToString());
-//		System.out.println(Immortal.alignmentGridStatsToString());
-//		System.out.println(Immortal.domainStatsToString());
-//		System.out.println(Immortal.lesserBeingsAlignmentToString());
-//		System.out.println();
-//		lesserBeings();
+		trinarySystem();
+		// unavailableZones();
+		// starsOfColor();
+		// starsOfColor('F');
+
+		// System.out.println(Immortal.beingsByGridToString());
+		// System.out.println(Immortal.alignmentGridStatsToString());
+		// System.out.println(Immortal.domainStatsToString());
+		// System.out.println(Immortal.lesserBeingsAlignmentToString());
+		// System.out.println();
+		// lesserBeings();
 
 		// powersByAlignment();
 
@@ -58,7 +56,7 @@ public class Main {
 		while (group.getPrimaryStarColor() != color) {
 			group = new Group();
 		}
-		
+
 		System.out.println(group.toStringDetailed());
 		System.out.println();
 	}
@@ -68,7 +66,7 @@ public class Main {
 		while (group.numberOfUnavailableZones() < 1) {
 			group = new Group();
 		}
-		
+
 		System.out.println(group.toStringDetailed());
 		System.out.println();
 	}
@@ -78,7 +76,7 @@ public class Main {
 		while (group.isTrinary() != true || group.getNumberOfOrbits() < 4) {
 			group = new Group();
 		}
-		
+
 		System.out.println(group.toStringDetailed());
 		System.out.println();
 	}

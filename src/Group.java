@@ -242,12 +242,12 @@ public class Group {
 			// END
 		}
 
-		
-		
-		
-		
-		
-		
+		// remaining available orbits
+		planet = World.Type.STANDARD;
+		while (available.size() > 0) {
+			planets.add(new Planetoid(planet, available.remove(0), this));
+		}
+
 		/*
 		 * END OF CONSTRUCTOR
 		 */
@@ -342,6 +342,10 @@ public class Group {
 		return unavailableZones;
 	}
 
+	public int getHabitableZone() {
+		return habitableZone;
+	}
+
 	public int innerZone() {
 		int innerZoneStart = unavailableZones;
 
@@ -353,8 +357,10 @@ public class Group {
 
 	public String toStringDetailed() {
 		String star = "" + stars[0].color + stars[0].size;
-		String string = String.format("%s (U: %2d || I: %2d >> H:%2d)", star, unavailableZones, this.innerZone,
-				habitableZone);
+		// String string = String.format("%s (U: %2d || I: %2d >> H:%2d)", star,
+		// unavailableZones, this.innerZone,
+		// habitableZone);
+		String string = String.format("%s", star);
 
 		for (int i = 1; i < stars.length; ++i) {
 			star = "" + stars[i].color + stars[i].size;
@@ -366,9 +372,16 @@ public class Group {
 		int gasGiants = gasGiants();
 		int asteroids = asteroids();
 
-		String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d || Captured: %d", maxOrbits, gasGiants,
-				asteroids, capturedPlanets);
-		return string + etc + "\n" + available.toString() + "\n" + planets.toString();
+		String worlds = "";
+		if (planets.size() > 0) {
+			for (Planetoid el : planets)
+				worlds += "\n" + el.toString();
+		}
+
+		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
+		// Captured: %d", maxOrbits, gasGiants,
+		// asteroids, capturedPlanets);
+		return string + worlds;
 	}
 
 	/*
