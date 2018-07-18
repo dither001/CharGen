@@ -203,6 +203,8 @@ public interface World {
 
 			setTechLevel(techLevel);
 		} else {
+			int mainTechLevel = getMainWorld().getTechLevel();
+			setTechLevel(mainTechLevel - 1);
 
 		}
 
@@ -241,6 +243,8 @@ public interface World {
 				facilities.add(Base.SCOUT);
 
 		} else {
+			Planetoid main = getMainWorld();
+
 			/*
 			 * FARM
 			 */
@@ -261,7 +265,7 @@ public interface World {
 			/*
 			 * MINE
 			 */
-			boolean mainIndustrial = getMainWorld().getTradeCodes().contains(TradeCodes.IN);
+			boolean mainIndustrial = main.getTradeCodes().contains(TradeCodes.IN);
 
 			idealPop = false;
 			if (pop >= 2)
@@ -269,6 +273,44 @@ public interface World {
 
 			if (mainIndustrial && idealPop)
 				facilities.add(Base.MINE);
+
+			/*
+			 * COLONY
+			 */
+			if (gov == 6 && pop >= 5)
+				facilities.add(Base.COLONY);
+
+			/*
+			 * LABORATORY
+			 */
+			int mainTechLevel = main.getTechLevel();
+
+			dice = Dice.roll(2, 6);
+			if (main.getTechLevel() >= 10)
+				dice += 2;
+			else if (mainTechLevel <= 8)
+				dice -= 12;
+
+			if (dice >= 11) {
+				facilities.add(Base.LAB);
+				setTechLevel(mainTechLevel);
+			}
+
+			/*
+			 * MILITARY
+			 */
+			boolean mainPoor = main.getTradeCodes().contains(TradeCodes.PO);
+
+			dice = Dice.roll(2, 6);
+			if (main.getPopulation() >= 8)
+				dice += 1;
+
+			if (atmo == main.getAtmosphere())
+				dice += 2;
+
+			if (mainPoor != true && dice >= 12)
+				facilities.add(Base.MILITARY);
+
 		}
 
 		setWorldFacilities(facilities);
