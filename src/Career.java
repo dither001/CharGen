@@ -1096,10 +1096,9 @@ public enum Career {
 
 	public static String randomMotive() {
 		// TODO - additional selection methods
-		String candidate;
-		candidate = traits.get(ALL_SCHEMES[Dice.roll(ALL_SCHEMES.length) - 1]);
+		// String candidate = traits.get(Dice.randomFromArray(ALL_SCHEMES));
 
-		return "Motive: " + candidate;
+		return "Motive: " + traits.get(Dice.randomFromArray(ALL_SCHEMES));
 	}
 
 	public static String randomMeans() {

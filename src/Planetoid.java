@@ -18,6 +18,7 @@ public class Planetoid implements World {
 	private int orbit;
 
 	private byte[] scores;
+	private char spaceport;
 	private byte techLevel;
 	private List<Planetoid> moons;
 
@@ -187,15 +188,13 @@ public class Planetoid implements World {
 		}
 
 		// facilities
-		String facilities = String.format(" %s", worldFacilities);
+		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
 		// world tags
-		// string += String.format(" %s", worldTags);
+		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
 		// habitable zone
 		// if (isWorld() && orbit == group.getHabitableZone())
 		// string += " ...in habitable zone";
-
-		if (isMainWorld() != true)
-			string += String.format("%-20s %s", facilities, governmentType());
+		string += String.format("%-20s %s", facilities, tags);
 
 		return string;
 	}
@@ -220,12 +219,13 @@ public class Planetoid implements World {
 		}
 
 		// facilities
-		string += String.format(" %s", worldFacilities);
+		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
 		// world tags
-		// string += String.format(" %s", worldTags);
+		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
 		// habitable zone
 		// if (isWorld() && orbit == group.getHabitableZone())
 		// string += " ...in habitable zone";
+		string += String.format("%-20s %s", facilities, tags);
 
 		if (hasMoons()) {
 			String satellites = "";
@@ -338,6 +338,16 @@ public class Planetoid implements World {
 	@Override
 	public Type getType() {
 		return type;
+	}
+
+	@Override
+	public char getSpaceport() {
+		return spaceport;
+	}
+
+	@Override
+	public void setSpaceport(char c) {
+		this.spaceport = c;
 	}
 
 	@Override

@@ -49,6 +49,10 @@ public interface World {
 
 	public Type getType();
 
+	public char getSpaceport();
+
+	public void setSpaceport(char c);
+
 	public int getTechLevel();
 
 	public void setTechLevel(int techLevel);
@@ -104,10 +108,23 @@ public interface World {
 			/*
 			 * GOVERNMENT
 			 */
-			gov = (mainGov == 6) ? 6 : Dice.roll(6);
+			gov = Dice.roll(6);
 
-			if (mainGov >= 7)
-				gov += 2;
+			if (mainGov == 6)
+				gov += pop;
+			else if (mainGov >= 7)
+				gov += 1;
+
+			if (gov == 1)
+				gov = 0;
+			else if (gov == 2)
+				gov = 1;
+			else if (gov == 3)
+				gov = 2;
+			else if (gov == 4)
+				gov = 3;
+			else if (gov >= 5)
+				gov = 6;
 
 			// validation step
 			if (pop == 0)
@@ -147,9 +164,30 @@ public interface World {
 			else
 				starport = 'X';
 
+			setSpaceport(starport);
 			getGroup().setStarPort(starport);
 		} else {
+			dice = Dice.roll(6);
 
+			if (pop >= 6)
+				dice += 2;
+			else if (pop <= 1)
+				dice -= 2;
+
+			if (dice >= 10)
+				starport = 'A';
+			else if (dice == 8 || dice == 9)
+				starport = 'B';
+			else if (dice == 6 || dice == 7)
+				starport = 'C';
+			else if (dice == 5)
+				starport = 'D';
+			else if (dice == 3 || dice == 4)
+				starport = 'E';
+			else
+				starport = 'X';
+
+			setSpaceport(starport);
 		}
 
 		/*
@@ -318,12 +356,7 @@ public interface World {
 		/*
 		 * FIXME - WORLD TAGS
 		 */
-		EnumSet<Tag> tags = EnumSet.noneOf(Tag.class);
-		// FIXME - there should be some logic behind this; not just random
-		while (tags.size() < 2) {
-			tags.add(Dice.randomFromArray(ALL_TAGS));
-		}
-		setWorldTags(tags);
+		setupWorldTags(this);
 
 		/*
 		 * END SETUP
@@ -477,7 +510,213 @@ public interface World {
 		setAttribute(index, value);
 	}
 
-	public default void setupTags() {
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
+	public static void setupWorldTags(World world) {
+		if (world.isWorld() != true)
+			return;
 
+		EnumSet<Tag> set;
+		if (world.getWorldTags() != null)
+			set = EnumSet.copyOf(world.getWorldTags());
+		else
+			set = EnumSet.noneOf(Tag.class);
+
+		int dice;
+		/*
+		 * 
+		 */
+		int size = world.getSize(), atmo = world.getAtmosphere();
+		int hydro = world.getHydrosphere(), pop = world.getPopulation();
+		int gov = world.getGovernment(), law = world.getLawLevel();
+		int orbit = world.getOrbit(), habitableZone = world.getHabitableZone();
+
+		char spaceport = world.getSpaceport();
+		int techLevel = world.getTechLevel();
+		EnumSet<TradeCodes> tradeCodes = world.getTradeCodes();
+		EnumSet<Base> bases = world.getWorldFacilities();
+
+		// ABANDONED_COLONY
+		if (pop == 0)
+			set.add(Tag.ABANDONED_COLONY);
+
+		// ALIEN_RUINS
+		// ALTERED_HUMANITY
+		// TODO
+
+		// AREA_51
+		if (gov == 10 && law >= 9)
+			set.add(Tag.AREA_51);
+
+		// HOSTILE_SPACE
+		if (gov == 0 || gov == 7 || gov == 10)
+			set.add(Tag.HOSTILE_SPACE);
+		else if (law == 0 || law >= 9)
+			set.add(Tag.HOSTILE_SPACE);
+
+		// POLICE_STATE
+		// RESTRICTIVE_LAWS
+		dice = Dice.roll(3);
+		if (law >= 9 && dice == 1)
+			set.add(Tag.POLICE_STATE);
+		else if (law >= 9 && dice == 1)
+			set.add(Tag.RESTRICTIVE_LAWS);
+
+		// BADLANDS_WORLD
+		// DESERT_WORLD
+		dice = Dice.roll(3);
+		if (dice == 1 && (atmo >= 2 && hydro == 0))
+			set.add(Tag.BADLANDS_WORLD);
+		else if (dice == 2 && (atmo >= 2 && hydro == 0))
+			set.add(Tag.DESERT_WORLD);
+
+		// BUBBLE_CITIES
+		if (pop > 0 && (atmo == 0 || hydro == 10))
+			set.add(Tag.BUBBLE_CITIES);
+
+		// CIVIL_WAR
+		// COLD_WAR
+		dice = Dice.roll(3);
+		if (gov == 7 && dice == 1)
+			set.add(Tag.CIVIL_WAR);
+		else if (gov == 7 && dice == 2)
+			set.add(Tag.COLD_WAR);
+
+		// COLONIZED_POPULATION
+		if (gov == 6)
+			set.add(Tag.COLONIZED_POPULATION);
+
+		// EUGENIC_CULT
+		if (techLevel >= 13)
+			set.add(Tag.EUGENIC_CULT);
+
+		// EXCHANGE_CONSULATE
+		if (pop >= 9 && techLevel >= 11)
+			set.add(Tag.EXCHANGE_CONSULATE);
+
+		// FERAL_WORLD
+		if (pop <= 7 && techLevel < 2)
+			set.add(Tag.FERAL_WORLD);
+
+		// FLYING_CITIES
+		// FORBIDDEN_TECH
+		// TODO
+
+		// FREAK_GEOLOGY
+		dice = Dice.roll(2, 6);
+		if (size != 8 && dice == 12)
+			set.add(Tag.FREAK_GEOLOGY);
+
+		// FREAK_WEATHER
+		dice = Dice.roll(2, 6);
+		if (atmo != 6 && dice == 12)
+			set.add(Tag.FREAK_WEATHER);
+
+		// FRIENDLY_FOE
+		// TODO
+
+		// GOLD_RUSH
+		dice = Dice.roll(2, 6);
+		if (dice == 12)
+			set.add(Tag.GOLD_RUSH);
+
+		// HATRED
+		// TODO
+
+		// HEAVY_INDUSTRY
+		if (tradeCodes.contains(TradeCodes.IN))
+			set.add(Tag.HEAVY_INDUSTRY);
+
+		// HEAVY_MINING
+		if (bases.contains(Base.MINE))
+			set.add(Tag.DESERT_WORLD);
+
+		// HOSTILE_BIOSPHERE
+		// TODO
+
+		// LOCAL_SPECIALTY
+		dice = Dice.roll(2, 6);
+		if (dice == 12)
+			set.add(Tag.LOCAL_SPECIALTY);
+
+		// LOCAL_TECH
+		dice = Dice.roll(2, 6);
+		if (techLevel >= 13 && dice == 12)
+			set.add(Tag.LOCAL_TECH);
+
+		// MAJOR_SPACEYARD
+		dice = Dice.roll(2, 6);
+		if (spaceport == 'A' && dice == 12)
+			set.add(Tag.MAJOR_SPACEYARD);
+
+		// MINIMAL_CONTACT
+		// RADICAL_SEXISM
+		// TODO
+
+		// OCEANIC_WORLD
+		// SEAGOING_CITIES
+		dice = Dice.roll(3);
+		if (hydro >= 8 && dice == 1)
+			set.add(Tag.OCEANIC_WORLD);
+		else if (hydro >= 8 && dice == 2)
+			set.add(Tag.SEAGOING_CITIES);
+
+		// OUT_OF_CONTACT
+		// TODO
+
+		// OUTPOST_WORLD
+		if (pop <= 2)
+			set.add(Tag.OUTPOST_WORLD);
+
+		// PERIMETER_AGENCY
+		// PILGRIMAGE_SITE
+		// TODO
+
+		// PRECEPTOR_ARCHIVE
+		// PRETECH_CULTISTS
+		// PRIMITIVE_ALIENS
+		// PSIONICS_FEAR
+		// PSIONICS_WORSHIP
+		// PSIONICS_ACADEMY
+		// QUARANTINE_WORLD
+		// TODO
+
+		// RADIOACTIVE_WORLD
+		if (orbit < habitableZone && atmo < 4)
+			set.add(Tag.RADIOACTIVE_WORLD);
+		
+		// REGIONAL_HEGEMON
+		// RIGID_CULTURE
+		// SEALED_MENACE
+		// SECTARIANS
+		// SECRET_MASTERS
+		// TODO
+
+		// SEISMIC_INSTABILITY
+		dice = Dice.roll(2, 6);
+		if (size != 8 && dice == 12)
+			set.add(Tag.SEISMIC_INSTABILITY);
+
+		// THEOCRACY
+		if (gov == 13)
+			set.add(Tag.THEOCRACY);
+
+		// TOMB_WORLD
+		// TRADE_HUB
+		// TYRANNY
+		// UNBRAKED_AI
+		// WARLORDS
+		// XENOPHILES
+		// XENOPHOBES
+		// ZOMBIES
+		// TODO
+
+		// while (set.size() < 2) {
+		// set.add(Dice.randomFromArray(ALL_TAGS));
+		// }
+
+		world.setWorldTags(set);
 	}
 }

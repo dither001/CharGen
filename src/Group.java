@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +17,7 @@ public class Group {
 
 	private char starport;
 	private Planetoid mainWorld;
+	private Set<World.Tag> commonTags;
 
 	// orbits is a temporary variable; localize to constructor when finished
 	byte[] orbits;
@@ -273,11 +276,53 @@ public class Group {
 
 		if (populousWorlds.size() > 0) {
 			mainWorld = populousWorlds.get(0);
-			
+
 			for (it = populousWorlds.iterator(); it.hasNext();) {
 				it.next().setupGovernment();
 			}
 		}
+
+		/*
+		 * CULL WORLD TAGS
+		 */
+		// count world tags
+		HashMap<World.Tag, Integer> tagCount = new HashMap<World.Tag, Integer>();
+		Set<World.Tag> tags;
+		World.Tag tag;
+		int value;
+		for (it = populousWorlds.iterator(); it.hasNext();) {
+			prospective = it.next();
+			tags = prospective.getWorldTags();
+
+			for (Iterator<World.Tag> its = tags.iterator(); its.hasNext();) {
+				tag = its.next();
+
+				if (tagCount.containsKey(tag)) {
+					value = tagCount.get(tag);
+					tagCount.replace(tag, value + 1);
+				} else {
+					tagCount.put(tag, 1);
+				}
+			}
+		}
+
+		// establish common tags
+		commonTags = EnumSet.noneOf(World.Tag.class);
+		double percent = populousWorlds.size();
+		double threshold = (percent < 11) ? 0.4 : (percent < 21) ? 0.34 : 0.2; 
+		for (Iterator<World.Tag> its = tagCount.keySet().iterator(); its.hasNext();) {
+			tag = its.next();
+
+			value = tagCount.get(tag);
+			if (value >= 3 && value / percent < threshold != true)
+				commonTags.add(tag);
+		}
+
+		// remove all common tags
+		for (it = populousWorlds.iterator(); it.hasNext();) {
+			it.next().getWorldTags().removeAll(commonTags);
+		}
+
 		/*
 		 * END OF CONSTRUCTOR
 		 */
@@ -425,6 +470,7 @@ public class Group {
 	public String toStringDetailed() {
 		String star = "";
 		star += String.format("Main world: %s", "Default Name");
+		star += String.format("%n%s", commonTags);
 		star += String.format("%nStarport: %s || Tech Level: %d", starport, mainWorld.getTechLevel());
 		star += String.format("%nGovernment: %s", mainWorld.governmentType());
 		star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
@@ -465,7 +511,7 @@ public class Group {
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,
 		// asteroids, capturedPlanets);
-		return string + worlds + populous;
+		return string + worlds; // + populous;
 	}
 
 	/*
