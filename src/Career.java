@@ -1094,6 +1094,16 @@ public enum Career {
 		return trait;
 	}
 
+	public static String meansMotiveOpportunity() {
+		String string = "Dramatic Conflict";
+		
+		string += String.format("%n%s", randomMotive());
+		string += String.format("%n%s", randomMeans());
+		string += String.format("%n%s", randomOpportunity());
+		
+		return string;
+	}
+
 	public static String randomMotive() {
 		// TODO - additional selection methods
 		// String candidate = traits.get(Dice.randomFromArray(ALL_SCHEMES));

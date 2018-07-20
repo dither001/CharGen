@@ -16,9 +16,16 @@ public class Main {
 		// TODO
 
 //		System.out.println(Faction.completeConflict());
+
+		
+		for (Iterator<Asset.Prototype> it = Asset.Prototype.iterator(); it.hasNext();) {
+			System.out.println(it.next());
+		}
 		
 		
-		testMainWorld();
+//		System.out.println(Career.meansMotiveOpportunity());
+		
+//		testMainWorld();
 		// unavailableZones();
 		// starsOfColor();
 		// starsOfColor('F');
