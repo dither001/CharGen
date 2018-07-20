@@ -335,6 +335,13 @@ public interface Faction {
 			"Weaponry is strictly restricted to members of the military and security forces." };
 
 	/*
+	 * INSTANCE METHODS
+	 */
+	public World getHomeworld();
+	
+	public void setHomeworld(World homeworld);
+	
+	/*
 	 * STATIC METHODS
 	 * 
 	 */
