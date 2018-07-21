@@ -32,14 +32,18 @@ public interface World {
 	 * 
 	 * 
 	 */
+	public String getName();
+	
+	public void setName(String name);
+	
 	public EnumSet<TradeCodes> getTradeCodes();
 
 	public void setTradeCodes(EnumSet<TradeCodes> set);
 
 	public Set<Faction> getFactions();
-	
+
 	public void setFactions(Set<Faction> factions);
-	
+
 	public EnumSet<Tag> getWorldTags();
 
 	public void setWorldTags(EnumSet<Tag> set);
@@ -94,9 +98,8 @@ public interface World {
 			dice = Dice.roll(2, 6) - 7 + pop;
 
 			// validation step
-			if (dice < 0)
-				dice = 0;
-
+			dice = (dice < 0) ? 0 : (dice > 14) ? 14 : dice;
+			
 			gov = dice;
 
 			/*
@@ -367,19 +370,17 @@ public interface World {
 		World.setupWorldTags(this);
 
 	}
-	
+
 	public default void factionSetup() {
+		// TODO
 		HashSet<Faction> factions = new HashSet<Faction>();
-		
 		int pop = getPopulation();
-		
+
 		for (int i = 0; i < pop; ++i) {
 			factions.add(new Society(this));
-			
+
 		}
-		
-		
-		
+
 		setFactions(factions);
 	}
 

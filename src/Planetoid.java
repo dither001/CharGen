@@ -1,6 +1,7 @@
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Planetoid implements World {
@@ -8,6 +9,8 @@ public class Planetoid implements World {
 	 * INSTANCE FIELDS
 	 * 
 	 */
+	private String name;
+	
 	private EnumSet<TradeCodes> tradeCodes;
 	public HashSet<Faction> factions;
 	private EnumSet<Tag> worldTags;
@@ -22,7 +25,7 @@ public class Planetoid implements World {
 	private char spaceport;
 	private byte techLevel;
 	private Set<Planetoid> moons;
-	
+
 	/*
 	 * CONSTRUCTORS
 	 * 
@@ -36,6 +39,7 @@ public class Planetoid implements World {
 	}
 
 	public Planetoid(Type type, int orbit, Group group, Planetoid home) {
+		this.name = "Default";
 		this.group = group;
 		this.home = home;
 		this.type = type;
@@ -296,6 +300,16 @@ public class Planetoid implements World {
 	 * FIXME - INTERFACE MATHODS (move later)
 	 * 
 	 */
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public EnumSet<TradeCodes> getTradeCodes() {
 		return tradeCodes;

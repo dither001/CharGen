@@ -79,14 +79,14 @@ public enum Asset {
 			/*
 			 * FORCE ASSET PROTOTYPES
 			 */
+			prototypes.put(BASE_FORCE,
+					new Prototype(Asset.BASE_FORCE, Type.FORCE, Type.SPECIAL, 0, 0, 0, 0, null, null));
 			prototypes.put(SECURITY_PERSONNEL, new Prototype(Asset.SECURITY_PERSONNEL, Type.FORCE, Type.MILITARY, 1, 3,
 					2, 0, new Attack(Type.FORCE, Type.FORCE, 1, 3, 1), new Attack(1, 4, 0)));
 			prototypes.put(HITMEN, new Prototype(Asset.HITMEN, Type.FORCE, Type.EXPERT, 1, 1, 2, 0,
 					new Attack(Type.FORCE, Type.CUNNING, 1, 6, 0), null));
 			prototypes.put(MILITIA_UNIT, new Prototype(Asset.MILITIA_UNIT, Type.FORCE, Type.MILITARY, 1, 4, 4, 3,
 					new Attack(Type.FORCE, Type.FORCE, 1, 6, 0), new Attack(1, 4, 1)));
-			prototypes.put(BASE_FORCE,
-					new Prototype(Asset.BASE_FORCE, Type.FORCE, Type.SPECIAL, 1, 0, 0, 0, null, null));
 			prototypes.put(HEAVY_DROP_ASSETS,
 					new Prototype(Asset.HEAVY_DROP_ASSETS, Type.FORCE, Type.FACILITY, 2, 6, 4, 4, null, null));
 			prototypes.put(ELITE_SKIRMISHERS, new Prototype(Asset.ELITE_SKIRMISHERS, Type.FORCE, Type.MILITARY, 2, 5, 5,
@@ -133,107 +133,107 @@ public enum Asset {
 			/*
 			 * CUNNING ASSET PROTOTYPES
 			 */
-			prototypes.put(SMUGGLERS, new Prototype(Asset.SMUGGLERS, Type.FORCE, Type.STARSHIP, 1, 4, 2, 4,
+			prototypes.put(BASE_CUNNING,
+					new Prototype(Asset.BASE_CUNNING, Type.CUNNING, Type.SPECIAL, 0, 0, 0, 0, null, null));
+			prototypes.put(SMUGGLERS, new Prototype(Asset.SMUGGLERS, Type.CUNNING, Type.STARSHIP, 1, 4, 2, 4,
 					new Attack(Type.CUNNING, Type.WEALTH, 1, 4, 0), null));
-			prototypes.put(INFORMERS, new Prototype(Asset.INFORMERS, Type.FORCE, Type.EXPERT, 1, 3, 2, 0,
+			prototypes.put(INFORMERS, new Prototype(Asset.INFORMERS, Type.CUNNING, Type.EXPERT, 1, 3, 2, 0,
 					new Attack(Type.CUNNING, Type.CUNNING), null));
 			prototypes.put(FALSE_FRONT,
-					new Prototype(Asset.FALSE_FRONT, Type.FORCE, Type.FACILITY, 1, 2, 1, 0, null, null));
-			prototypes.put(BASE_CUNNING,
-					new Prototype(Asset.BASE_CUNNING, Type.FORCE, Type.SPECIAL, 1, 0, 0, 0, null, null));
-			prototypes.put(LOBBYISTS, new Prototype(Asset.LOBBYISTS, Type.FORCE, Type.EXPERT, 2, 4, 4, 0,
+					new Prototype(Asset.FALSE_FRONT, Type.CUNNING, Type.FACILITY, 1, 2, 1, 0, null, null));
+			prototypes.put(LOBBYISTS, new Prototype(Asset.LOBBYISTS, Type.CUNNING, Type.EXPERT, 2, 4, 4, 0,
 					new Attack(Type.CUNNING, Type.CUNNING), null));
-			prototypes.put(SABOTEURS, new Prototype(Asset.SABOTEURS, Type.FORCE, Type.EXPERT, 2, 6, 5, 0,
+			prototypes.put(SABOTEURS, new Prototype(Asset.SABOTEURS, Type.CUNNING, Type.EXPERT, 2, 6, 5, 0,
 					new Attack(Type.CUNNING, Type.CUNNING, 2, 4, 0), null));
-			prototypes.put(BLACKMAIL, new Prototype(Asset.BLACKMAIL, Type.FORCE, Type.TACTIC, 2, 4, 4, 0,
+			prototypes.put(BLACKMAIL, new Prototype(Asset.BLACKMAIL, Type.CUNNING, Type.TACTIC, 2, 4, 4, 0,
 					new Attack(Type.CUNNING, Type.CUNNING, 1, 4, 1), null));
-			prototypes.put(SEDUCTRESS, new Prototype(Asset.SEDUCTRESS, Type.FORCE, Type.EXPERT, 2, 4, 4, 0,
+			prototypes.put(SEDUCTRESS, new Prototype(Asset.SEDUCTRESS, Type.CUNNING, Type.EXPERT, 2, 4, 4, 0,
 					new Attack(Type.CUNNING, Type.CUNNING), null));
-			prototypes.put(CYBERNINJAS, new Prototype(Asset.CYBERNINJAS, Type.FORCE, Type.EXPERT, 3, 4, 6, 4,
+			prototypes.put(CYBERNINJAS, new Prototype(Asset.CYBERNINJAS, Type.CUNNING, Type.EXPERT, 3, 4, 6, 4,
 					new Attack(Type.CUNNING, Type.CUNNING, 2, 6, 0), null));
-			prototypes.put(STEALTH, new Prototype(Asset.STEALTH, Type.FORCE, Type.TACTIC, 3, 0, 3, 0, null, null));
+			prototypes.put(STEALTH, new Prototype(Asset.STEALTH, Type.CUNNING, Type.TACTIC, 3, 0, 3, 0, null, null));
 			prototypes.put(COVERT_SHIPPING,
-					new Prototype(Asset.COVERT_SHIPPING, Type.FORCE, Type.FACILITY, 3, 4, 8, 4, null, null));
-			prototypes.put(PARTY_MACHINE, new Prototype(Asset.PARTY_MACHINE, Type.FORCE, Type.FACILITY, 4, 10, 10, 0,
+					new Prototype(Asset.COVERT_SHIPPING, Type.CUNNING, Type.FACILITY, 3, 4, 8, 4, null, null));
+			prototypes.put(PARTY_MACHINE, new Prototype(Asset.PARTY_MACHINE, Type.CUNNING, Type.FACILITY, 4, 10, 10, 0,
 					new Attack(Type.CUNNING, Type.CUNNING, 2, 6, 0), new Attack(1, 6, 0)));
-			prototypes.put(VANGUARD_CADRES, new Prototype(Asset.VANGUARD_CADRES, Type.FORCE, Type.MILITARY, 4, 12, 8, 3,
-					new Attack(Type.CUNNING, Type.CUNNING, 1, 6, 0), new Attack(1, 6, 0)));
-			prototypes.put(TRIPWIRE_CELLS, new Prototype(Asset.TRIPWIRE_CELLS, Type.FORCE, Type.EXPERT, 4, 8, 12, 4,
+			prototypes.put(VANGUARD_CADRES, new Prototype(Asset.VANGUARD_CADRES, Type.CUNNING, Type.MILITARY, 4, 12, 8,
+					3, new Attack(Type.CUNNING, Type.CUNNING, 1, 6, 0), new Attack(1, 6, 0)));
+			prototypes.put(TRIPWIRE_CELLS, new Prototype(Asset.TRIPWIRE_CELLS, Type.CUNNING, Type.EXPERT, 4, 8, 12, 4,
 					null, new Attack(1, 4, 0)));
 			prototypes.put(SEDITIONISTS,
-					new Prototype(Asset.SEDITIONISTS, Type.FORCE, Type.EXPERT, 4, 8, 12, 0, null, null));
-			prototypes.put(ORGANIZATION_MOLES, new Prototype(Asset.ORGANIZATION_MOLES, Type.FORCE, Type.TACTIC, 5, 8,
+					new Prototype(Asset.SEDITIONISTS, Type.CUNNING, Type.EXPERT, 4, 8, 12, 0, null, null));
+			prototypes.put(ORGANIZATION_MOLES, new Prototype(Asset.ORGANIZATION_MOLES, Type.CUNNING, Type.TACTIC, 5, 8,
 					10, 0, new Attack(Type.CUNNING, Type.CUNNING, 2, 6, 0), null));
 			prototypes.put(CRACKED_COMMS,
-					new Prototype(Asset.CRACKED_COMMS, Type.FORCE, Type.TACTIC, 5, 6, 14, 0, null, null));
-			prototypes.put(BOLTHOLES,
-					new Prototype(Asset.BOLTHOLES, Type.FORCE, Type.FACILITY, 5, 6, 12, 4, null, new Attack(2, 6, 0)));
-			prototypes.put(TRANSPORT_LOCKDOWN, new Prototype(Asset.TRANSPORT_LOCKDOWN, Type.FORCE, Type.TACTIC, 6, 10,
+					new Prototype(Asset.CRACKED_COMMS, Type.CUNNING, Type.TACTIC, 5, 6, 14, 0, null, null));
+			prototypes.put(BOLTHOLES, new Prototype(Asset.BOLTHOLES, Type.CUNNING, Type.FACILITY, 5, 6, 12, 4, null,
+					new Attack(2, 6, 0)));
+			prototypes.put(TRANSPORT_LOCKDOWN, new Prototype(Asset.TRANSPORT_LOCKDOWN, Type.CUNNING, Type.TACTIC, 6, 10,
 					20, 4, new Attack(Type.CUNNING, Type.CUNNING), null));
 			prototypes.put(COVERT_TRANSIT_NET,
-					new Prototype(Asset.COVERT_TRANSIT_NET, Type.FORCE, Type.FACILITY, 6, 15, 18, 4, null, null));
-			prototypes.put(DEMAGOGUE, new Prototype(Asset.DEMAGOGUE, Type.FORCE, Type.EXPERT, 6, 10, 20, 0,
+					new Prototype(Asset.COVERT_TRANSIT_NET, Type.CUNNING, Type.FACILITY, 6, 15, 18, 4, null, null));
+			prototypes.put(DEMAGOGUE, new Prototype(Asset.DEMAGOGUE, Type.CUNNING, Type.EXPERT, 6, 10, 20, 0,
 					new Attack(Type.CUNNING, Type.CUNNING, 2, 8, 0), new Attack(1, 8, 0)));
-			prototypes.put(POPULAR_MOVEMENT, new Prototype(Asset.POPULAR_MOVEMENT, Type.FORCE, Type.TACTIC, 7, 16, 25,
+			prototypes.put(POPULAR_MOVEMENT, new Prototype(Asset.POPULAR_MOVEMENT, Type.CUNNING, Type.TACTIC, 7, 16, 25,
 					4, new Attack(Type.CUNNING, Type.CUNNING, 2, 6, 0), new Attack(1, 6, 0)));
-			prototypes.put(BOOK_OF_SECRETS, new Prototype(Asset.BOOK_OF_SECRETS, Type.FORCE, Type.TACTIC, 7, 10, 20, 4,
-					null, new Attack(2, 8, 0)));
-			prototypes.put(TREACHERY, new Prototype(Asset.TREACHERY, Type.FORCE, Type.TACTIC, 7, 5, 10, 0,
+			prototypes.put(BOOK_OF_SECRETS, new Prototype(Asset.BOOK_OF_SECRETS, Type.CUNNING, Type.TACTIC, 7, 10, 20,
+					4, null, new Attack(2, 8, 0)));
+			prototypes.put(TREACHERY, new Prototype(Asset.TREACHERY, Type.CUNNING, Type.TACTIC, 7, 5, 10, 0,
 					new Attack(Type.CUNNING, Type.CUNNING), null));
-			prototypes.put(PANOPTICON_MATRIX, new Prototype(Asset.PANOPTICON_MATRIX, Type.FORCE, Type.FACILITY, 8, 20,
+			prototypes.put(PANOPTICON_MATRIX, new Prototype(Asset.PANOPTICON_MATRIX, Type.CUNNING, Type.FACILITY, 8, 20,
 					30, 5, null, new Attack(1, 6, 0)));
 
 			/*
 			 * WEALTH ASSET PROTOTYPES
 			 */
-			prototypes.put(FRANCHISE, new Prototype(Asset.FRANCHISE, Type.FORCE, Type.FACILITY, 1, 3, 2, 2,
+			prototypes.put(BASE_WEALTH,
+					new Prototype(Asset.BASE_WEALTH, Type.WEALTH, Type.SPECIAL, 0, 0, 0, 0, null, null));
+			prototypes.put(FRANCHISE, new Prototype(Asset.FRANCHISE, Type.WEALTH, Type.FACILITY, 1, 3, 2, 2,
 					new Attack(Type.WEALTH, Type.WEALTH, 1, 4, 0), new Attack(1, 4, -1)));
 			prototypes.put(HARVESTERS,
-					new Prototype(Asset.HARVESTERS, Type.FORCE, Type.FACILITY, 1, 4, 2, 0, null, new Attack(1, 4, 0)));
-			prototypes.put(LOCAL_INVESTMENTS, new Prototype(Asset.LOCAL_INVESTMENTS, Type.FORCE, Type.FACILITY, 1, 2, 1,
-					2, new Attack(Type.WEALTH, Type.WEALTH, 1, 4, -1), null));
-			prototypes.put(BASE_WEALTH,
-					new Prototype(Asset.BASE_WEALTH, Type.FORCE, Type.SPECIAL, 1, 0, 0, 0, null, null));
-			prototypes.put(FREIGHTER_CONTRACT, new Prototype(Asset.FREIGHTER_CONTRACT, Type.FORCE, Type.STARSHIP, 2, 4,
+					new Prototype(Asset.HARVESTERS, Type.WEALTH, Type.FACILITY, 1, 4, 2, 0, null, new Attack(1, 4, 0)));
+			prototypes.put(LOCAL_INVESTMENTS, new Prototype(Asset.LOCAL_INVESTMENTS, Type.WEALTH, Type.FACILITY, 0, 2,
+					1, 2, new Attack(Type.WEALTH, Type.WEALTH, 1, 4, -1), null));
+			prototypes.put(FREIGHTER_CONTRACT, new Prototype(Asset.FREIGHTER_CONTRACT, Type.WEALTH, Type.STARSHIP, 2, 4,
 					5, 4, new Attack(Type.WEALTH, Type.WEALTH, 1, 4, 0), null));
-			prototypes.put(LAWYERS, new Prototype(Asset.LAWYERS, Type.FORCE, Type.EXPERT, 2, 4, 6, 0,
+			prototypes.put(LAWYERS, new Prototype(Asset.LAWYERS, Type.WEALTH, Type.EXPERT, 2, 4, 6, 0,
 					new Attack(Type.CUNNING, Type.WEALTH, 2, 4, 0), new Attack(1, 6, 0)));
-			prototypes.put(UNION_TOUGHS, new Prototype(Asset.UNION_TOUGHS, Type.FORCE, Type.MILITARY, 2, 6, 4, 0,
+			prototypes.put(UNION_TOUGHS, new Prototype(Asset.UNION_TOUGHS, Type.WEALTH, Type.MILITARY, 2, 6, 4, 0,
 					new Attack(Type.WEALTH, Type.FORCE, 1, 4, 1), new Attack(1, 4, 0)));
 			prototypes.put(SURVEYORS,
-					new Prototype(Asset.SURVEYORS, Type.FORCE, Type.EXPERT, 2, 4, 4, 4, null, new Attack(1, 4, 0)));
-			prototypes.put(POSTECH_INDUSTRY, new Prototype(Asset.POSTECH_INDUSTRY, Type.FORCE, Type.FACILITY, 3, 4, 8,
+					new Prototype(Asset.SURVEYORS, Type.WEALTH, Type.EXPERT, 2, 4, 4, 4, null, new Attack(1, 4, 0)));
+			prototypes.put(POSTECH_INDUSTRY, new Prototype(Asset.POSTECH_INDUSTRY, Type.WEALTH, Type.FACILITY, 3, 4, 8,
 					4, null, new Attack(1, 4, 0)));
 			prototypes.put(LABORATORY,
-					new Prototype(Asset.LABORATORY, Type.FORCE, Type.FACILITY, 3, 4, 6, 0, null, null));
-			prototypes.put(MERCENARIES, new Prototype(Asset.MERCENARIES, Type.FORCE, Type.MILITARY, 3, 6, 8, 4,
+					new Prototype(Asset.LABORATORY, Type.WEALTH, Type.FACILITY, 3, 4, 6, 0, null, null));
+			prototypes.put(MERCENARIES, new Prototype(Asset.MERCENARIES, Type.WEALTH, Type.MILITARY, 3, 6, 8, 4,
 					new Attack(Type.WEALTH, Type.FORCE, 2, 4, 2), new Attack(1, 6, 0)));
-			prototypes.put(SHIPPING_COMBINE, new Prototype(Asset.SHIPPING_COMBINE, Type.FORCE, Type.FACILITY, 4, 10, 10,
-					4, null, new Attack(1, 6, 0)));
-			prototypes.put(MONOPOLY, new Prototype(Asset.MONOPOLY, Type.FORCE, Type.FACILITY, 4, 12, 8, 3,
+			prototypes.put(SHIPPING_COMBINE, new Prototype(Asset.SHIPPING_COMBINE, Type.WEALTH, Type.FACILITY, 4, 10,
+					10, 4, null, new Attack(1, 6, 0)));
+			prototypes.put(MONOPOLY, new Prototype(Asset.MONOPOLY, Type.WEALTH, Type.FACILITY, 4, 12, 8, 3,
 					new Attack(Type.WEALTH, Type.WEALTH, 1, 6, 0), new Attack(1, 6, 0)));
 			prototypes.put(MEDICAL_CENTER,
-					new Prototype(Asset.MEDICAL_CENTER, Type.FORCE, Type.FACILITY, 4, 8, 12, 4, null, null));
-			prototypes.put(BANK, new Prototype(Asset.BANK, Type.FORCE, Type.FACILITY, 4, 8, 12, 3, null, null));
-			prototypes.put(MARKETERS, new Prototype(Asset.MARKETERS, Type.FORCE, Type.TACTIC, 5, 8, 10, 0,
+					new Prototype(Asset.MEDICAL_CENTER, Type.WEALTH, Type.FACILITY, 4, 8, 12, 4, null, null));
+			prototypes.put(BANK, new Prototype(Asset.BANK, Type.WEALTH, Type.FACILITY, 4, 8, 12, 3, null, null));
+			prototypes.put(MARKETERS, new Prototype(Asset.MARKETERS, Type.WEALTH, Type.TACTIC, 5, 8, 10, 0,
 					new Attack(Type.CUNNING, Type.WEALTH, 1, 6, 0), null));
 			prototypes.put(PRETECH_RESEARCHERS,
-					new Prototype(Asset.PRETECH_RESEARCHERS, Type.FORCE, Type.EXPERT, 5, 6, 14, 4, null, null));
-			prototypes.put(BLOCKADE_RUNNERS, new Prototype(Asset.BLOCKADE_RUNNERS, Type.FORCE, Type.STARSHIP, 5, 6, 12,
+					new Prototype(Asset.PRETECH_RESEARCHERS, Type.WEALTH, Type.EXPERT, 5, 6, 14, 4, null, null));
+			prototypes.put(BLOCKADE_RUNNERS, new Prototype(Asset.BLOCKADE_RUNNERS, Type.WEALTH, Type.STARSHIP, 5, 6, 12,
 					4, null, new Attack(2, 4, 0)));
-			prototypes.put(VENTURE_CAPITAL, new Prototype(Asset.VENTURE_CAPITAL, Type.FORCE, Type.FACILITY, 6, 10, 15,
+			prototypes.put(VENTURE_CAPITAL, new Prototype(Asset.VENTURE_CAPITAL, Type.WEALTH, Type.FACILITY, 6, 10, 15,
 					4, new Attack(Type.WEALTH, Type.WEALTH, 2, 6, 0), new Attack(1, 6, 0)));
 			prototypes.put(RND_DEPARTMENT,
-					new Prototype(Asset.RND_DEPARTMENT, Type.FORCE, Type.FACILITY, 6, 15, 18, 4, null, null));
-			prototypes.put(COMMODITIES_BROKER, new Prototype(Asset.COMMODITIES_BROKER, Type.FORCE, Type.EXPERT, 6, 10,
+					new Prototype(Asset.RND_DEPARTMENT, Type.WEALTH, Type.FACILITY, 6, 15, 18, 4, null, null));
+			prototypes.put(COMMODITIES_BROKER, new Prototype(Asset.COMMODITIES_BROKER, Type.WEALTH, Type.EXPERT, 6, 10,
 					20, 0, new Attack(Type.WEALTH, Type.WEALTH, 2, 8, 0), new Attack(1, 8, 0)));
 			prototypes.put(PRETECH_MANUFACTORY,
-					new Prototype(Asset.PRETECH_MANUFACTORY, Type.FORCE, Type.FACILITY, 7, 16, 25, 5, null, null));
-			prototypes.put(HOSTILE_TAKEOVER, new Prototype(Asset.HOSTILE_TAKEOVER, Type.FORCE, Type.TACTIC, 7, 10, 20,
+					new Prototype(Asset.PRETECH_MANUFACTORY, Type.WEALTH, Type.FACILITY, 7, 16, 25, 5, null, null));
+			prototypes.put(HOSTILE_TAKEOVER, new Prototype(Asset.HOSTILE_TAKEOVER, Type.WEALTH, Type.TACTIC, 7, 10, 20,
 					4, new Attack(Type.WEALTH, Type.WEALTH, 2, 10, 0), new Attack(2, 8, 0)));
-			prototypes.put(TRANSIT_WEB, new Prototype(Asset.TRANSIT_WEB, Type.FORCE, Type.FACILITY, 7, 5, 15, 5,
+			prototypes.put(TRANSIT_WEB, new Prototype(Asset.TRANSIT_WEB, Type.WEALTH, Type.FACILITY, 7, 5, 15, 5,
 					new Attack(Type.CUNNING, Type.CUNNING), null));
-			prototypes.put(SCAVENGER_FLEET, new Prototype(Asset.SCAVENGER_FLEET, Type.FORCE, Type.STARSHIP, 8, 20, 30,
+			prototypes.put(SCAVENGER_FLEET, new Prototype(Asset.SCAVENGER_FLEET, Type.WEALTH, Type.STARSHIP, 8, 20, 30,
 					5, new Attack(Type.WEALTH, Type.WEALTH, 2, 10, 4), new Attack(2, 10, 0)));
 
 		}
@@ -271,6 +271,32 @@ public enum Asset {
 			for (Iterator<Prototype> it = iterator(); it.hasNext();) {
 				candidate = it.next();
 				if (candidate.category.equals(type))
+					set.add(candidate);
+			}
+
+			return set;
+		}
+
+		public static Set<Prototype> getAssetsOfTier(int tier) {
+			Set<Prototype> set = new HashSet<Prototype>();
+
+			Prototype candidate;
+			for (Iterator<Prototype> it = iterator(); it.hasNext();) {
+				candidate = it.next();
+				if (candidate.tier == tier)
+					set.add(candidate);
+			}
+
+			return set;
+		}
+
+		public static Set<Prototype> getCategoryOfTier(Type type, int tier) {
+			Set<Prototype> set = new HashSet<Prototype>();
+
+			Prototype candidate;
+			for (Iterator<Prototype> it = iterator(); it.hasNext();) {
+				candidate = it.next();
+				if (candidate.tier == tier && candidate.category.equals(type))
 					set.add(candidate);
 			}
 
@@ -360,23 +386,22 @@ public enum Asset {
 	 * STATIC METHODS
 	 * 
 	 */
-	// public static Instance randomAsset(int tier, Type type, Faction faction,
-	// World world) {
-	// Asset[] array = null;
-	// if (type.equals(Type.FORCE))
-	// array = FORCE_ASSETS;
-	// else if (type.equals(Type.CUNNING))
-	// array = CUNNING_ASSETS;
-	// else if (type.equals(Type.WEALTH))
-	// array = WEALTH_ASSETS;
-	//
-	// Set<Instance> set = new HashSet<Instance>();
-	// Instance candidate;
-	// for (int i = 0; i < array.length; ++i) {
-	// candidate = new Instance(array[i], faction, world);
-	// }
-	//
-	// return Dice.randomFromSet(set);
-	// }
+	public static Instance baseOfInfluence(Type type, Faction faction, World world) {
+		Prototype prototype = null;
+		if (type.equals(Type.FORCE))
+			prototype = Prototype.prototypes.get(Asset.BASE_FORCE);
+		else if (type.equals(Type.CUNNING))
+			prototype = Prototype.prototypes.get(Asset.BASE_CUNNING);
+		else if (type.equals(Type.WEALTH))
+			prototype = Prototype.prototypes.get(Asset.BASE_WEALTH);
+
+		return new Instance(prototype, faction, world);
+	}
+
+	public static Instance randomAsset(int tier, Type type, Faction faction, World world) {
+		Set<Prototype> set = new HashSet<Prototype>(Prototype.getCategoryOfTier(type, tier));
+
+		return new Instance(Dice.randomFromSet(set), faction, world);
+	}
 
 }

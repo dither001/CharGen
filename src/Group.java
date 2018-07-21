@@ -8,25 +8,26 @@ import java.util.List;
 import java.util.Set;
 
 public class Group {
+	/*
+	 * INSTANCE FIELDS
+	 * 
+	 */
 	private Star[] stars;
 
 	private byte maxOrbits;
 	private int habitableZone, unavailableZones, innerZone;
 	private Set<Planetoid> planets;
 	private Set<Planetoid> spaceObjects;
+	private int populousWorlds;
 
 	private char starport;
 	private Planetoid mainWorld;
 	private Set<World.Tag> commonTags;
 
-	// orbits is a temporary variable; localize to constructor when finished
-//	byte[] orbits;
-	int outerMostOrbit;
-	List<Integer> available;
-	int capturedPlanets;
-	// int gasGiants;
-	List<Planetoid> populousWorlds;
-
+	/*
+	 * CONSTRUCTOR
+	 * 
+	 */
 	public Group() {
 		int dice = Dice.roll(2, 6);
 
@@ -101,7 +102,7 @@ public class Group {
 			}
 
 		}
-		outerMostOrbit = orbitNumber - 1;
+		int outerMostOrbit = orbitNumber - 1;
 
 		// determine start of inner zone (if applicable)
 		innerZone = innerZone();
@@ -126,7 +127,7 @@ public class Group {
 			emptyOrbits = maxOrbits;
 
 		// determine number of captured planets
-		capturedPlanets = Dice.roll(6);
+		int capturedPlanets = Dice.roll(6);
 		if (primary.color == 'B' || primary.color == 'A')
 			++capturedPlanets;
 
@@ -181,7 +182,7 @@ public class Group {
 			asteroids = 0;
 		}
 
-		available = new ArrayList<Integer>(orbits.length);
+		List<Integer> available = new ArrayList<Integer>(orbits.length);
 		for (int i = 0; i < orbits.length; ++i) {
 			available.add(new Integer(orbits[i]));
 		}
@@ -270,14 +271,15 @@ public class Group {
 		// space objects
 		spaceObjects = spaceObjectSet(planets);
 
-		populousWorlds = Dice.setToList(worldSet());
+		List<Planetoid> pops = Dice.setToList(worldSet());
 		Planetoid.MainWorldSort mainSort = new Planetoid.MainWorldSort();
-		Collections.sort(populousWorlds, mainSort);
+		Collections.sort(pops, mainSort);
+		this.populousWorlds = pops.size();
 
-		if (populousWorlds.size() > 0) {
-			mainWorld = populousWorlds.get(0);
+		if (populousWorlds > 0) {
+			mainWorld = pops.get(0);
 
-			for (it = populousWorlds.iterator(); it.hasNext();) {
+			for (it = pops.iterator(); it.hasNext();) {
 				it.next().governmentSetup();
 			}
 		}
@@ -290,7 +292,7 @@ public class Group {
 		Set<World.Tag> tags;
 		World.Tag tag;
 		int value;
-		for (it = populousWorlds.iterator(); it.hasNext();) {
+		for (it = pops.iterator(); it.hasNext();) {
 			prospective = it.next();
 			tags = prospective.getWorldTags();
 
@@ -308,7 +310,7 @@ public class Group {
 
 		// establish common tags
 		commonTags = EnumSet.noneOf(World.Tag.class);
-		double percent = populousWorlds.size();
+		double percent = pops.size();
 		double threshold = (percent < 11) ? 0.4 : (percent < 21) ? 0.34 : 0.2; 
 		for (Iterator<World.Tag> its = tagCount.keySet().iterator(); its.hasNext();) {
 			tag = its.next();
@@ -319,18 +321,18 @@ public class Group {
 		}
 
 		// remove all common tags
-		for (it = populousWorlds.iterator(); it.hasNext();) {
+		for (it = pops.iterator(); it.hasNext();) {
 			it.next().getWorldTags().removeAll(commonTags);
 		}
 
 		/*
-		 * 
+		 * FACTION SETUP
 		 * 
 		 */
 		
-//		for (it = populousWorlds.iterator(); it.hasNext();) {
-//			
-//		}
+		for (it = pops.iterator(); it.hasNext();) {
+			it.next().factionSetup();
+		}
 		
 		
 		
@@ -381,6 +383,13 @@ public class Group {
 	public Set<Planetoid> worldSet() {
 		Set<Planetoid> workingSet;
 		workingSet = filterForWorlds(spaceObjectSet());
+
+		return workingSet;
+	}
+
+	public Set<Planetoid> populatedSet() {
+		Set<Planetoid> workingSet;
+		workingSet = filterForPopulous(spaceObjectSet());
 
 		return workingSet;
 	}
@@ -445,7 +454,8 @@ public class Group {
 	}
 
 	public int populousWorlds() {
-		return populousWorlds.size();
+		// FIXME - not sure if working
+		return populatedSet().size();
 	}
 
 	public char getPrimaryStarColor() {
@@ -471,7 +481,7 @@ public class Group {
 
 	public String toStringDetailed() {
 		String star = "";
-		star += String.format("Main world: %s", "Default Name");
+		star += String.format("Main world: %s", mainWorld.getName());
 		star += String.format("%n%s", commonTags);
 		star += String.format("%nStarport: %s || Tech Level: %d", starport, mainWorld.getTechLevel());
 		star += String.format("%nGovernment: %s", mainWorld.governmentType());
@@ -503,17 +513,10 @@ public class Group {
 				worlds += "\n" + el.toStringDetailed();
 		}
 
-		String populous = String.format("%n- - - %nPopulous Worlds: %d / %d", populousWorlds.size(),
-				spaceObjects.size());
-		if (populousWorlds.size() > 0) {
-			for (Planetoid el : populousWorlds)
-				populous += "\n" + el.toString();
-		}
-
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,
 		// asteroids, capturedPlanets);
-		return string + worlds; // + populous;
+		return string + worlds;
 	}
 
 	/*
