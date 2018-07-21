@@ -1,3 +1,6 @@
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 public interface Faction {
 	public enum Tag {
@@ -336,15 +339,24 @@ public interface Faction {
 
 	/*
 	 * INSTANCE METHODS
+	 * 
 	 */
 	public World getHomeworld();
-	
+
 	public void setHomeworld(World homeworld);
-	
+
+	public Set<Tag> getFactionTags();
+
+	public void SetFactionTags(EnumSet<Tag> tags);
+
 	/*
 	 * STATIC METHODS
 	 * 
 	 */
+	public static Tag randomTag() {
+		return Dice.randomFromArray(Faction.TAGS);
+	}
+
 	public static Conflict randomConflict() {
 		return Dice.randomFromArray(CONFLICTS);
 	}

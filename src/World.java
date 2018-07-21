@@ -1,5 +1,6 @@
 import java.util.EnumSet;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public interface World {
 	public enum Type {
@@ -35,6 +36,10 @@ public interface World {
 
 	public void setTradeCodes(EnumSet<TradeCodes> set);
 
+	public Set<Faction> getFactions();
+	
+	public void setFactions(Set<Faction> factions);
+	
 	public EnumSet<Tag> getWorldTags();
 
 	public void setWorldTags(EnumSet<Tag> set);
@@ -61,13 +66,16 @@ public interface World {
 
 	public void setAttribute(int index, int value);
 
-	public List<Planetoid> getMoons();
+	public Set<Planetoid> getMoons();
 
 	/*
-	 * 
+	 * TODO - this is the first big automated initialization of a world after it has
+	 * been generated; there will probably have to be another step afterward, which
+	 * creates the factions. I'm not actually sure why this is here and not in the
+	 * Planetoid object because it represents "implementation"
 	 * 
 	 */
-	public default void setupGovernment() {
+	public default void governmentSetup() {
 		int size = getSize();
 		int atmo = getAtmosphere();
 		int hydro = getHydrosphere();
@@ -356,11 +364,23 @@ public interface World {
 		/*
 		 * FIXME - WORLD TAGS
 		 */
-		setupWorldTags(this);
+		World.setupWorldTags(this);
 
-		/*
-		 * END SETUP
-		 */
+	}
+	
+	public default void factionSetup() {
+		HashSet<Faction> factions = new HashSet<Faction>();
+		
+		int pop = getPopulation();
+		
+		for (int i = 0; i < pop; ++i) {
+			factions.add(new Society(this));
+			
+		}
+		
+		
+		
+		setFactions(factions);
 	}
 
 	public default boolean isWorld() {
@@ -686,7 +706,7 @@ public interface World {
 		// RADIOACTIVE_WORLD
 		if (orbit < habitableZone && atmo < 4)
 			set.add(Tag.RADIOACTIVE_WORLD);
-		
+
 		// REGIONAL_HEGEMON
 		// RIGID_CULTURE
 		// SEALED_MENACE

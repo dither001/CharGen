@@ -20,7 +20,7 @@ public class Group {
 	private Set<World.Tag> commonTags;
 
 	// orbits is a temporary variable; localize to constructor when finished
-	byte[] orbits;
+//	byte[] orbits;
 	int outerMostOrbit;
 	List<Integer> available;
 	int capturedPlanets;
@@ -62,7 +62,7 @@ public class Group {
 			maxOrbits -= 4;
 
 		maxOrbits = (maxOrbits < 0) ? 0 : maxOrbits;
-		orbits = new byte[maxOrbits];
+		byte[] orbits = new byte[maxOrbits];
 
 		// determine "location" of available orbits
 		habitableZone = habitableZone(primary);
@@ -278,7 +278,7 @@ public class Group {
 			mainWorld = populousWorlds.get(0);
 
 			for (it = populousWorlds.iterator(); it.hasNext();) {
-				it.next().setupGovernment();
+				it.next().governmentSetup();
 			}
 		}
 
@@ -323,6 +323,17 @@ public class Group {
 			it.next().getWorldTags().removeAll(commonTags);
 		}
 
+		/*
+		 * 
+		 * 
+		 */
+		
+//		for (it = populousWorlds.iterator(); it.hasNext();) {
+//			
+//		}
+		
+		
+		
 		/*
 		 * END OF CONSTRUCTOR
 		 */
@@ -439,15 +450,6 @@ public class Group {
 
 	public char getPrimaryStarColor() {
 		return stars[0].color;
-	}
-
-	public int getNumberOfOrbits() {
-		/*
-		 * FIXME - "orbits" is temporarily global and will be localized to the
-		 * constructor once completed; thereafter this method should be
-		 * "number of planetary objects" or something like that
-		 */
-		return orbits.length;
 	}
 
 	public int numberOfUnavailableZones() {

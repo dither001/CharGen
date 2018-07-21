@@ -1,7 +1,7 @@
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Planetoid implements World {
 	/*
@@ -9,6 +9,7 @@ public class Planetoid implements World {
 	 * 
 	 */
 	private EnumSet<TradeCodes> tradeCodes;
+	public HashSet<Faction> factions;
 	private EnumSet<Tag> worldTags;
 	private EnumSet<Base> worldFacilities;
 
@@ -20,8 +21,8 @@ public class Planetoid implements World {
 	private byte[] scores;
 	private char spaceport;
 	private byte techLevel;
-	private List<Planetoid> moons;
-
+	private Set<Planetoid> moons;
+	
 	/*
 	 * CONSTRUCTORS
 	 * 
@@ -137,10 +138,10 @@ public class Planetoid implements World {
 		 * SATELLITES
 		 */
 		if (type.equals(Type.SATELLITE)) {
-			moons = new ArrayList<Planetoid>();
+			moons = new HashSet<Planetoid>();
 
 		} else {
-			moons = new ArrayList<Planetoid>();
+			moons = new HashSet<Planetoid>();
 
 			int satellites = 0;
 			if (type.equals(Type.LARGE_GIANT))
@@ -306,6 +307,16 @@ public class Planetoid implements World {
 	}
 
 	@Override
+	public Set<Faction> getFactions() {
+		return factions;
+	}
+
+	@Override
+	public void setFactions(Set<Faction> factions) {
+		this.factions = (HashSet<Faction>) factions;
+	}
+
+	@Override
 	public EnumSet<Tag> getWorldTags() {
 		return worldTags;
 	}
@@ -371,7 +382,7 @@ public class Planetoid implements World {
 	}
 
 	@Override
-	public List<Planetoid> getMoons() {
+	public Set<Planetoid> getMoons() {
 		return moons;
 	}
 

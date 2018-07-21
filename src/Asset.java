@@ -1,5 +1,7 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public enum Asset {
 	// FORCE
@@ -17,6 +19,23 @@ public enum Asset {
 		//
 		MILITARY, EXPERT, SPECIAL, FACILITY, TACTIC, STARSHIP
 	}
+
+	private static final Asset[] FORCE_ASSETS = { SECURITY_PERSONNEL, HITMEN, MILITIA_UNIT, BASE_FORCE,
+			HEAVY_DROP_ASSETS, ELITE_SKIRMISHERS, HARDENED_PERSONNEL, GUERILLA_POPULACE, ZEALOTS, CUNNING_TRAP,
+			COUNTERINTEL_UNIT, BEACHHEAD_LANDERS, EXTENDED_THEATER, STRIKE_FLEET, POSTECH_INFANTRY, BLOCKADE_FLEET,
+			PRETECH_LOGISTICS, PSYCHIC_ASSASSINS, PRETECH_INFANTRY, PLANETARY_DEFENSES, GRAVTANK_FORMATION,
+			DEEP_STRIKE_LANDERS, INTEGRAL_PROTOCOLS, SPACE_MARINES, CAPITAL_FLEET };
+
+	private static final Asset[] CUNNING_ASSETS = { SMUGGLERS, INFORMERS, FALSE_FRONT, BASE_CUNNING, LOBBYISTS,
+			SABOTEURS, BLACKMAIL, SEDUCTRESS, CYBERNINJAS, STEALTH, COVERT_SHIPPING, PARTY_MACHINE, VANGUARD_CADRES,
+			TRIPWIRE_CELLS, SEDITIONISTS, ORGANIZATION_MOLES, CRACKED_COMMS, BOLTHOLES, TRANSPORT_LOCKDOWN,
+			COVERT_TRANSIT_NET, DEMAGOGUE, POPULAR_MOVEMENT, BOOK_OF_SECRETS, TREACHERY, PANOPTICON_MATRIX };
+
+	private static final Asset[] WEALTH_ASSETS = { FRANCHISE, HARVESTERS, LOCAL_INVESTMENTS, BASE_WEALTH,
+			FREIGHTER_CONTRACT, LAWYERS, UNION_TOUGHS, SURVEYORS, POSTECH_INDUSTRY, LABORATORY, MERCENARIES,
+			SHIPPING_COMBINE, MONOPOLY, MEDICAL_CENTER, BANK, MARKETERS, PRETECH_RESEARCHERS, BLOCKADE_RUNNERS,
+			VENTURE_CAPITAL, RND_DEPARTMENT, COMMODITIES_BROKER, PRETECH_MANUFACTORY, HOSTILE_TAKEOVER, TRANSIT_WEB,
+			SCAVENGER_FLEET };
 
 	public static class Prototype {
 		private static HashMap<Asset, Prototype> prototypes;
@@ -233,6 +252,31 @@ public enum Asset {
 			return prototypes.values().iterator();
 		}
 
+		public static Set<Prototype> getForceAssets() {
+			return getAssetsOfCategory(Type.FORCE);
+		}
+
+		public static Set<Prototype> getCunningAssets() {
+			return getAssetsOfCategory(Type.CUNNING);
+		}
+
+		public static Set<Prototype> getWealthAssets() {
+			return getAssetsOfCategory(Type.WEALTH);
+		}
+
+		public static Set<Prototype> getAssetsOfCategory(Type type) {
+			Set<Prototype> set = new HashSet<Prototype>();
+
+			Prototype candidate;
+			for (Iterator<Prototype> it = iterator(); it.hasNext();) {
+				candidate = it.next();
+				if (candidate.category.equals(type))
+					set.add(candidate);
+			}
+
+			return set;
+		}
+
 	}
 
 	public static class Attack {
@@ -273,16 +317,66 @@ public enum Asset {
 		}
 	}
 
-	/*
-	 * STATIC FIELDS
-	 */
+	public static class Instance {
+		private Prototype prototype;
+		private Faction owner;
+		private World location;
 
-	/*
-	 * INITIALIZATION
-	 */
+		private int hitPoints;
+
+		// constructors
+		public Instance(Prototype prototype, Faction owner, World location) {
+			this.prototype = prototype;
+			this.owner = owner;
+			this.location = location;
+
+			//
+			this.hitPoints = prototype.hitPoints;
+		}
+
+		// methods
+		public Prototype getPrototype() {
+			return prototype;
+		}
+
+		public Faction getOwner() {
+			return owner;
+		}
+
+		public void setOwner(Faction owner) {
+			this.owner = owner;
+		}
+
+		public World getLocation() {
+			return location;
+		}
+
+		public void setLocation(World location) {
+			this.location = location;
+		}
+	}
 
 	/*
 	 * STATIC METHODS
 	 * 
 	 */
+	// public static Instance randomAsset(int tier, Type type, Faction faction,
+	// World world) {
+	// Asset[] array = null;
+	// if (type.equals(Type.FORCE))
+	// array = FORCE_ASSETS;
+	// else if (type.equals(Type.CUNNING))
+	// array = CUNNING_ASSETS;
+	// else if (type.equals(Type.WEALTH))
+	// array = WEALTH_ASSETS;
+	//
+	// Set<Instance> set = new HashSet<Instance>();
+	// Instance candidate;
+	// for (int i = 0; i < array.length; ++i) {
+	// candidate = new Instance(array[i], faction, world);
+	// }
+	//
+	// return Dice.randomFromSet(set);
+	// }
+
 }

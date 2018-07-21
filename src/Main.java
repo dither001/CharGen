@@ -15,34 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-//		System.out.println(Faction.completeConflict());
-
-		
-		for (Iterator<Asset.Prototype> it = Asset.Prototype.iterator(); it.hasNext();) {
-			System.out.println(it.next());
-		}
-		
-		
-//		System.out.println(Career.meansMotiveOpportunity());
-		
-//		testMainWorld();
-		// unavailableZones();
-		// starsOfColor();
-		// starsOfColor('F');
-
-		// System.out.println(Immortal.beingsByGridToString());
-		// System.out.println(Immortal.alignmentGridStatsToString());
-		// System.out.println(Immortal.domainStatsToString());
-		// System.out.println(Immortal.lesserBeingsAlignmentToString());
-		// System.out.println();
-		// lesserBeings();
-
-		// powersByAlignment();
-
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// Main.levelUpTestDisplayOnly(3, Class.DRUID);
-		//
-		// }
+		testMainWorld();
 
 		// jobProportions();
 		// raceProportions();
@@ -93,7 +66,7 @@ public class Main {
 
 	public static void trinarySystem() {
 		Group group = new Group();
-		while (group.isTrinary() != true || group.getNumberOfOrbits() < 4) {
+		while (group.isTrinary() != true) {
 			group = new Group();
 		}
 
