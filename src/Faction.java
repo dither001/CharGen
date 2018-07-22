@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -349,6 +350,14 @@ public interface Faction {
 	public Set<Tag> getFactionTags();
 
 	public void SetFactionTags(EnumSet<Tag> tags);
+	
+	public Set<Actor> getMembers();
+	
+	public boolean addMember(Actor actor);
+	
+	public boolean addAllMembers(Collection<Actor> actors);
+	
+	public void setMembers(Set<Actor> members);
 
 	/*
 	 * STATIC METHODS

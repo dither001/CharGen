@@ -15,7 +15,11 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		testMainWorld();
+		System.out.println(Immortal.beingsByGridToString());
+		System.out.println(Immortal.alignmentGridStatsToString());
+		
+		
+//		testMainWorld();
 
 		// jobProportions();
 		// raceProportions();

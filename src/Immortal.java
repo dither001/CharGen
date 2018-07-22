@@ -192,7 +192,7 @@ public abstract class Immortal implements Actor {
 		private Greater greater;
 		private Lesser lesser;
 		private EnumSet<Domain> domains;
-		private EnumSet<Alignment> alignment;
+		private EnumSet<Actor.Alignment> alignment;
 
 		public Prototype(Entity entity, Greater greater, Alignment[] alignment, Domain[] domains) {
 			this.greater = greater;
@@ -249,6 +249,32 @@ public abstract class Immortal implements Actor {
 			string = String.format("%-20s %s", entity, domains.toString());
 
 			return string;
+		}
+	}
+
+	public static class Instance {
+		private Prototype prototype;
+
+		//
+		private Entity entity;
+		private Greater greater;
+		private Lesser lesser;
+		private EnumSet<Domain> domains;
+		private EnumSet<Alignment> alignment;
+
+		public Instance(Prototype prototype) {
+			this.prototype = prototype;
+
+			//
+			this.entity = prototype.entity;
+			if (prototype.greater())
+				this.greater = prototype.greater;
+			else
+				this.lesser = prototype.lesser;
+
+			this.domains = EnumSet.copyOf(prototype.domains);
+			this.alignment = EnumSet.copyOf(prototype.alignment);
+
 		}
 	}
 
@@ -343,6 +369,18 @@ public abstract class Immortal implements Actor {
 			Entity.LELANTOS, Entity.LETO, Entity.MENOETIUS, Entity.METIS, Entity.MNEMOSYNE, Entity.OCEANUS,
 			Entity.PALLAS, Entity.PERSES, Entity.PROMETHEUS, Entity.RHEA, Entity.SELENE, Entity.TETHYS, Entity.THEIA,
 			Entity.THEMIS };
+	private static final Entity[] ERIS = { Entity.ACHLYS, Entity.ACHOS, Entity.ADEPHAGIA, Entity.ADIKA, Entity.AERGIA,
+			Entity.AGON, Entity.ALALA, Entity.ALASTOR, Entity.ALECTO, Entity.ALGEA, Entity.ALGOS, Entity.AMECHANIA,
+			Entity.ANAIDEIA, Entity.ANAPLEKTE, Entity.ANDROKTASIAI, Entity.ANIA, Entity.ANTEROS, Entity.APORIA,
+			Entity.ARAE, Entity.ATE, Entity.CORUS, Entity.DEIMOS, Entity.DYSNOMIA, Entity.DYSSEBEIA, Entity.EIRENE,
+			Entity.EKECHEIRIA, Entity.ELEOS, Entity.ELPHIS, Entity.EPIPHRON, Entity.GERAS, Entity.HEDYLOGOS,
+			Entity.HERMAPHRODITUS, Entity.HOMADOS, Entity.HORKOS, Entity.HYSIMNAI, Entity.IOKE, Entity.KAKIA,
+			Entity.KER, Entity.KOALEMOS, Entity.KYDOIMOS, Entity.LIMOS, Entity.LOGOI, Entity.LUPE, Entity.LYSSA,
+			Entity.MAKHAI, Entity.MANIA, Entity.MEGAERA, Entity.MOMUS, Entity.MOROS, Entity.NEIKEA, Entity.NOSOS,
+			Entity.OIZYS, Entity.PALIOXIS, Entity.PALIXIS, Entity.PENIA, Entity.PHEME, Entity.PHOBOS, Entity.PHONOI,
+			Entity.PHRIKE, Entity.PHTHONUS, Entity.PONOS, Entity.PROIOXIS, Entity.PROPHASIS, Entity.PSEUDEA,
+			Entity.PTOCHEIA, Entity.STYGERE, Entity.TISIPHONE, Entity.SYNTRIBOS, Entity.SMARAGOS, Entity.ASBETOS,
+			Entity.SABAKTES, Entity.OMODAMOS, Entity.ENYALIUS, Entity.ENYO, Entity.GLYCON, Entity.TARAXIPPUS };
 	private static final Entity[] AMAZONS = { Entity.AELLA, Entity.AGAVE, Entity.ALCIBIE, Entity.ALCIPPE,
 			Entity.ANTANDRE, Entity.ANTIANIRA, Entity.ANTIBROTE, Entity.ANTIOCHE, Entity.ANTIOPE, Entity.BREMUSA,
 			Entity.CLONIE, Entity.DEIANIRA, Entity.DERIMACHEIA, Entity.DERINOE, Entity.DIXUPPE, Entity.ERIBOEA,
@@ -725,9 +763,10 @@ public abstract class Immortal implements Actor {
 		for (int i = 0; i < array.length; ++i) {
 			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.LAWFUL));
 		}
+
 		array = JEWISH_DEMONS;
 		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.CHAOTIC));
+			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.EVIL));
 		}
 
 		// HELLENIC - GREEK
@@ -998,655 +1037,33 @@ public abstract class Immortal implements Actor {
 		// TALOS is a bronze giant built by Hephaestus to guard Crete
 		lesserImmortals.put(Entity.TALOS, lesserBeing(Entity.TALOS, Lesser.ABOMINATION, Alignment.NEUTRAL));
 
-		/*
-		 * HELLENIC SPIRITS - miscellaneous
-		 * 
-		 */
-		greaterImmortals.put(Entity.ACAMANTIS, greaterBeing(Entity.ACAMANTIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ACESO, greaterBeing(Entity.ACESO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ACHELOIS,
-				greaterBeing(Entity.ACHELOIS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ACRATOPOTES, greaterBeing(Entity.ACRATOPOTES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ACTAEA, greaterBeing(Entity.ACTAEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ADIANTE, greaterBeing(Entity.ADIANTE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ADITE, greaterBeing(Entity.ADITE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ADONIS, greaterBeing(Entity.ADONIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ADRASTEA, greaterBeing(Entity.ADRASTEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AEGIUS, greaterBeing(Entity.AEGIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AEGLE,
-				greaterBeing(Entity.AEGLE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.AEGYPTUS, greaterBeing(Entity.AEGYPTUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AEOLUS,
-				greaterBeing(Entity.AEOLUS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.AESA, greaterBeing(Entity.AESA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AGAPTOLEMUS, greaterBeing(Entity.AGAPTOLEMUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AGATHOS,
-				greaterBeing(Entity.AGATHOS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		greaterImmortals.put(Entity.AGDISTIS, greaterBeing(Entity.AGDISTIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AGENOR, greaterBeing(Entity.AGENOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AIDOS, greaterBeing(Entity.AIDOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AIOPIS,
-				greaterBeing(Entity.AIOPIS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.AKMON, greaterBeing(Entity.AKMON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ALCES, greaterBeing(Entity.ALCES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ALCMENOR, greaterBeing(Entity.ALCMENOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ALCYONE,
-				greaterBeing(Entity.ALCYONE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ALECTRONA,
-				greaterBeing(Entity.ALECTRONA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ALETHEIA, greaterBeing(Entity.ALETHEIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ALEXIARES, greaterBeing(Entity.ALEXIARES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ALKE, greaterBeing(Entity.ALKE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AMPHICOMONE, greaterBeing(Entity.AMPHICOMONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AMPHICTYONIS, greaterBeing(Entity.AMPHICTYONIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AMYMONE, greaterBeing(Entity.AMYMONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AMYNTOR, greaterBeing(Entity.AMYNTOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANATOLE, greaterBeing(Entity.ANATOLE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANAXIBIA, greaterBeing(Entity.ANAXIBIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANDROMACHUS, greaterBeing(Entity.ANDROMACHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANGELEIA, greaterBeing(Entity.ANGELEIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANICETUS, greaterBeing(Entity.ANICETUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANTHEIA,
-				greaterBeing(Entity.ANTHEIA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ANTHELIA, greaterBeing(Entity.ANTHELIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANTHOUSAI, greaterBeing(Entity.ANTHOUSAI, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANTIMACHUS, greaterBeing(Entity.ANTIMACHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANTIOCHUS, greaterBeing(Entity.ANTIOCHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ANTIPAPHUS, greaterBeing(Entity.ANTIPAPHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.APARCTIAS,
-				greaterBeing(Entity.APARCTIAS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.APHAEA, greaterBeing(Entity.APHAEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.APHELIOTES,
-				greaterBeing(Entity.APHELIOTES, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.APHRODITUS, greaterBeing(Entity.APHRODITUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARBELUS, greaterBeing(Entity.ARBELUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARCADIA, greaterBeing(Entity.ARCADIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARCHELAUS, greaterBeing(Entity.ARCHELAUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARETE, greaterBeing(Entity.ARETE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARETHUSA,
-				greaterBeing(Entity.ARETHUSA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ARGESTES,
-				greaterBeing(Entity.ARGESTES, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ARGIUS, greaterBeing(Entity.ARGIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARIADNE, greaterBeing(Entity.ARIADNE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARISTONOOS, greaterBeing(Entity.ARISTONOOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARKTOS, greaterBeing(Entity.ARKTOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARMOASBUS, greaterBeing(Entity.ARMOASBUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ARSALTE, greaterBeing(Entity.ARSALTE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ASCLEPIUS, greaterBeing(Entity.ASCLEPIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ASTERIDES, greaterBeing(Entity.ASTERIDES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ASTEROPE,
-				greaterBeing(Entity.ASTEROPE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ATHALIDES, greaterBeing(Entity.ATHALIDES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ATHAMAS, greaterBeing(Entity.ATHAMAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ATHLETES, greaterBeing(Entity.ATHLETES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ATTIS, greaterBeing(Entity.ATTIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AUGE, greaterBeing(Entity.AUGE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AUTODICE, greaterBeing(Entity.AUTODICE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AUTOMATE, greaterBeing(Entity.AUTOMATE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AUTONOE, greaterBeing(Entity.AUTONOE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AUXESIA, greaterBeing(Entity.AUXESIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.AUXO, greaterBeing(Entity.AUXO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.BIA, greaterBeing(Entity.BIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.BOREAS,
-				greaterBeing(Entity.BOREAS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.BRITOMARTIS, greaterBeing(Entity.BRITOMARTIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.BROMIUS, greaterBeing(Entity.BROMIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.BRYCE, greaterBeing(Entity.BRYCE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.BUSIRIS, greaterBeing(Entity.BUSIRIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CAERUS, greaterBeing(Entity.CAERUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CAICIAS,
-				greaterBeing(Entity.CAICIAS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.CALLIDICE, greaterBeing(Entity.CALLIDICE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CANTHUS, greaterBeing(Entity.CANTHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CARMANOR, greaterBeing(Entity.CARMANOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CARME, greaterBeing(Entity.CARME, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CASSUS, greaterBeing(Entity.CASSUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CELAENO,
-				greaterBeing(Entity.CELAENO, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.CERAON, greaterBeing(Entity.CERAON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CERCETES, greaterBeing(Entity.CERCETES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHAETUS, greaterBeing(Entity.CHAETUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHALCODON, greaterBeing(Entity.CHALCODON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHEIMON, greaterBeing(Entity.CHEIMON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHLORIS, greaterBeing(Entity.CHLORIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHOINE,
-				greaterBeing(Entity.CHOINE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.CHRYSIPPE, greaterBeing(Entity.CHRYSIPPE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHRYSIPPUS, greaterBeing(Entity.CHRYSIPPUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHRYSOTHEMIS,
-				greaterBeing(Entity.CHRYSOTHEMIS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.CHRYSUS, greaterBeing(Entity.CHRYSUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CHTHONIUS, greaterBeing(Entity.CHTHONIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CIRCIOS,
-				greaterBeing(Entity.CIRCIOS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.CISSEUS, greaterBeing(Entity.CISSEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CLEODORA, greaterBeing(Entity.CLEODORA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CLEOPATRA, greaterBeing(Entity.CLEOPATRA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CLITE, greaterBeing(Entity.CLITE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CLITUS, greaterBeing(Entity.CLITUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CLYTUS, greaterBeing(Entity.CLYTUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.COMUS, greaterBeing(Entity.COMUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.COPREUS, greaterBeing(Entity.COPREUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CORYMBUS, greaterBeing(Entity.CORYMBUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CRITOMEDIA, greaterBeing(Entity.CRITOMEDIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CYAMITES, greaterBeing(Entity.CYAMITES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.CYBELE, greaterBeing(Entity.CYBELE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DAIPHRON, greaterBeing(Entity.DAIPHRON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DAMNEUS, greaterBeing(Entity.DAMNEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DAMONE, greaterBeing(Entity.DAMONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DAPLIDICE, greaterBeing(Entity.DAPLIDICE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DEIKAIOSYNE, greaterBeing(Entity.DEIKAIOSYNE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DEIPNEUS, greaterBeing(Entity.DEIPNEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DEMARCHUS, greaterBeing(Entity.DEMARCHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DEMODITAS, greaterBeing(Entity.DEMODITAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DEMOPHILE, greaterBeing(Entity.DEMOPHILE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DESPOINA, greaterBeing(Entity.DESPOINA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DIKE, greaterBeing(Entity.DIKE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DINDYMENE, greaterBeing(Entity.DINDYMENE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DIOCORYSTES, greaterBeing(Entity.DIOCORYSTES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DIOXIPPE, greaterBeing(Entity.DIOXIPPE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DIPPODICE, greaterBeing(Entity.DIPPODICE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DOLICHUS, greaterBeing(Entity.DOLICHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DOLOS,
-				greaterBeing(Entity.DOLOS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.DONAKIS,
-				greaterBeing(Entity.DONAKIS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.DORIUM, greaterBeing(Entity.DORIUM, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DRYAS, greaterBeing(Entity.DRYAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.DYSIS, greaterBeing(Entity.DYSIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ECNOMINUS, greaterBeing(Entity.ECNOMINUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EIAR, greaterBeing(Entity.EIAR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EILEITHYIA,
-				greaterBeing(Entity.EILEITHYIA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		greaterImmortals.put(Entity.EIRESIONE, greaterBeing(Entity.EIRESIONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ELECTRA,
-				greaterBeing(Entity.ELECTRA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ELETE, greaterBeing(Entity.ELETE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EOSPHORUS,
-				greaterBeing(Entity.EOSPHORUS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.EPIALES, greaterBeing(Entity.EPIALES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EPIONE, greaterBeing(Entity.EPIONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ERSA,
-				greaterBeing(Entity.ERSA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ERYTHEA,
-				greaterBeing(Entity.ERYTHEA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.EUBULE, greaterBeing(Entity.EUBULE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUCHENOR, greaterBeing(Entity.EUCHENOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUCLEIA, greaterBeing(Entity.EUCLEIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUDAEMON, greaterBeing(Entity.EUDAEMON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EULABEIA, greaterBeing(Entity.EULABEIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUMELUS, greaterBeing(Entity.EUMELUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUMONIA, greaterBeing(Entity.EUMONIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUNOMIA, greaterBeing(Entity.EUNOMIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUNOSTUS, greaterBeing(Entity.EUNOSTUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUPHEME, greaterBeing(Entity.EUPHEME, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUPORIE, greaterBeing(Entity.EUPORIE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUPRAXIA, greaterBeing(Entity.EUPRAXIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EURONOTUS,
-				greaterBeing(Entity.EURONOTUS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.EUROPOME, greaterBeing(Entity.EUROPOME, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EURUS,
-				greaterBeing(Entity.EURUS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.EURYBATES, greaterBeing(Entity.EURYBATES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EURYDAMAS, greaterBeing(Entity.EURYDAMAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EURYLOCHUS, greaterBeing(Entity.EURYLOCHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EURYSTHENES, greaterBeing(Entity.EURYSTHENES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUSEBEIA, greaterBeing(Entity.EUSEBEIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EUTHENIA, greaterBeing(Entity.EUTHENIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EVIDEA, greaterBeing(Entity.EVIDEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.EVIPPE, greaterBeing(Entity.EVIPPE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.GELOS, greaterBeing(Entity.GELOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.GLAUCIPPE, greaterBeing(Entity.GLAUCIPPE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.GORGE, greaterBeing(Entity.GORGE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.GORGOPHONE, greaterBeing(Entity.GORGOPHONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.GYMNASTIKA, greaterBeing(Entity.GYMNASTIKA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HARMONIA, greaterBeing(Entity.HARMONIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HARPOCRATES, greaterBeing(Entity.HARPOCRATES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HEBE, greaterBeing(Entity.HEBE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HECABE, greaterBeing(Entity.HECABE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HECATERUS, greaterBeing(Entity.HECATERUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HEDONE, greaterBeing(Entity.HEDONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HEIMARMENE, greaterBeing(Entity.HEIMARMENE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HELICTA, greaterBeing(Entity.HELICTA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HERMUS, greaterBeing(Entity.HERMUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HERO, greaterBeing(Entity.HERO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HESPERA,
-				greaterBeing(Entity.HESPERA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.HESPEREIA,
-				greaterBeing(Entity.HESPEREIA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.HESPERUS,
-				greaterBeing(Entity.HESPERUS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.HESPERUSA,
-				greaterBeing(Entity.HESPERUSA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.HIPPARTE, greaterBeing(Entity.HIPPARTE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HIPPODAMIA, greaterBeing(Entity.HIPPODAMIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HIPPOLYTUS, greaterBeing(Entity.HIPPOLYTUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HIPPOMEDUSA, greaterBeing(Entity.HIPPOMEDUSA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HIPPOTHOUS, greaterBeing(Entity.HIPPOTHOUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HOMONOIA, greaterBeing(Entity.HOMONOIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HORME, greaterBeing(Entity.HORME, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HYGIEIA,
-				greaterBeing(Entity.HYGIEIA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.HYMENAEUS, greaterBeing(Entity.HYMENAEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HYPERANTUS, greaterBeing(Entity.HYPERANTUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HYPERBIUS, greaterBeing(Entity.HYPERBIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HYPERIPPE, greaterBeing(Entity.HYPERIPPE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HYPERIUS, greaterBeing(Entity.HYPERIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.HYPERMNESTRA, greaterBeing(Entity.HYPERMNESTRA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IASO, greaterBeing(Entity.IASO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ICHNAEA, greaterBeing(Entity.ICHNAEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IDAIOS, greaterBeing(Entity.IDAIOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IDAS, greaterBeing(Entity.IDAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IDMON, greaterBeing(Entity.IDMON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ILTONOMUS, greaterBeing(Entity.ILTONOMUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IMBRUS, greaterBeing(Entity.IMBRUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IPHIMEDUSA, greaterBeing(Entity.IPHIMEDUSA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IRIS,
-				greaterBeing(Entity.IRIS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.ISTRUS, greaterBeing(Entity.ISTRUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ITEA, greaterBeing(Entity.ITEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.IYNX, greaterBeing(Entity.IYNX, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.KALOKAGATHIA, greaterBeing(Entity.KALOKAGATHIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.KALYPSO,
-				greaterBeing(Entity.KALYPSO, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.KARPO, greaterBeing(Entity.KARPO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.KRATOS, greaterBeing(Entity.KRATOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.KROTOS, greaterBeing(Entity.KROTOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.KYRBAS, greaterBeing(Entity.KYRBAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.LAMPUS, greaterBeing(Entity.LAMPUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.LEOS, greaterBeing(Entity.LEOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.LICHAS, greaterBeing(Entity.LICHAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.LIPARA,
-				greaterBeing(Entity.LIPARA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.LIPS,
-				greaterBeing(Entity.LIPS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.LITAE, greaterBeing(Entity.LITAE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.LIXUS, greaterBeing(Entity.LIXUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.LYNCEUS, greaterBeing(Entity.LYNCEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MAIA,
-				greaterBeing(Entity.MAIA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.MAPSAURA,
-				greaterBeing(Entity.MAPSAURA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.MATTON, greaterBeing(Entity.MATTON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MEDON, greaterBeing(Entity.MEDON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MENALCAS, greaterBeing(Entity.MENALCAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MENEMACHUS, greaterBeing(Entity.MENEMACHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MERMESA,
-				greaterBeing(Entity.MERMESA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.MEROPE,
-				greaterBeing(Entity.MEROPE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.MESEMBRIA, greaterBeing(Entity.MESEMBRIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.METALCES, greaterBeing(Entity.METALCES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MIDANUS, greaterBeing(Entity.MIDANUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MIDEA, greaterBeing(Entity.MIDEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MINEUS, greaterBeing(Entity.MINEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MNESTRA, greaterBeing(Entity.MNESTRA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MONUSTE, greaterBeing(Entity.MONUSTE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MORPHEUS, greaterBeing(Entity.MORPHEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MOUSIKA, greaterBeing(Entity.MOUSIKA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.MYRMIDONE, greaterBeing(Entity.MYRMIDONE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.NELISA,
-				greaterBeing(Entity.NELISA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.NELO, greaterBeing(Entity.NELO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.NEPHELE,
-				greaterBeing(Entity.NEPHELE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.NIAUIUS, greaterBeing(Entity.NIAUIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.NIKE, greaterBeing(Entity.NIKE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.NOMOS, greaterBeing(Entity.NOMOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.NOTUS,
-				greaterBeing(Entity.NOTUS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.NYMPHE, greaterBeing(Entity.NYMPHE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.OBRIMUS, greaterBeing(Entity.OBRIMUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.OCYPETE, greaterBeing(Entity.OCYPETE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ODIUS, greaterBeing(Entity.ODIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.OEME, greaterBeing(Entity.OEME, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.OENEUS, greaterBeing(Entity.OENEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.OKYTHOOS, greaterBeing(Entity.OKYTHOOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ORTHOSIE, greaterBeing(Entity.ORTHOSIE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PAEAN, greaterBeing(Entity.PAEAN, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PALAESTRA, greaterBeing(Entity.PALAESTRA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PAMPHILUS, greaterBeing(Entity.PAMPHILUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PAN, greaterBeing(Entity.PAN, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PANACEA, greaterBeing(Entity.PANACEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PANDIA,
-				greaterBeing(Entity.PANDIA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.PANDION, greaterBeing(Entity.PANDION, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PANTHIUS, greaterBeing(Entity.PANTHIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PASSALOS, greaterBeing(Entity.PASSALOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PEITHARCHIA, greaterBeing(Entity.PEITHARCHIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PEITHO, greaterBeing(Entity.PEITHO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PENTHUS, greaterBeing(Entity.PENTHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PEPROMENE, greaterBeing(Entity.PEPROMENE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PERIPHAS, greaterBeing(Entity.PERIPHAS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PERISTHENES, greaterBeing(Entity.PERISTHENES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PERIUS, greaterBeing(Entity.PERIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHAENON,
-				greaterBeing(Entity.PHAENON, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.PHAETHON,
-				greaterBeing(Entity.PHAETHON, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.PHANTASOS, greaterBeing(Entity.PHANTASOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHANTES, greaterBeing(Entity.PHANTES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHARTIS, greaterBeing(Entity.PHARTIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHERESPONDUS, greaterBeing(Entity.PHERESPONDUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHEROUSA, greaterBeing(Entity.PHEROUSA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHILINUS, greaterBeing(Entity.PHILINUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHILOMELUS, greaterBeing(Entity.PHILOMELUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHILOPHROSYNE,
-				greaterBeing(Entity.PHILOPHROSYNE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHILOTES, greaterBeing(Entity.PHILOTES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PHOBETOR, greaterBeing(Entity.PHOBETOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PIRENE, greaterBeing(Entity.PIRENE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PISENOR, greaterBeing(Entity.PISENOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PISTIS, greaterBeing(Entity.PISTIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PLEXIPPUS, greaterBeing(Entity.PLEXIPPUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PLUTUS, greaterBeing(Entity.PLUTUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PODARCE, greaterBeing(Entity.PODARCE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PODASIMUS, greaterBeing(Entity.PODASIMUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POINE, greaterBeing(Entity.POINE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POLEMOS, greaterBeing(Entity.POLEMOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POLYBE, greaterBeing(Entity.POLYBE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POLYCTOR, greaterBeing(Entity.POLYCTOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POLYDECTOR, greaterBeing(Entity.POLYDECTOR, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POLYPHONTES, greaterBeing(Entity.POLYPHONTES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POLYXENA, greaterBeing(Entity.POLYXENA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POROS, greaterBeing(Entity.POROS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POTAMON, greaterBeing(Entity.POTAMON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.POTHOS, greaterBeing(Entity.POTHOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PRAXIDIKE, greaterBeing(Entity.PRAXIDIKE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PRIAPUS, greaterBeing(Entity.PRIAPUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PROTHEON, greaterBeing(Entity.PROTHEON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PRYMNEUS, greaterBeing(Entity.PRYMNEUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PTHINOPORON, greaterBeing(Entity.PTHINOPORON, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PUGNO, greaterBeing(Entity.PUGNO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PYLARGE, greaterBeing(Entity.PYLARGE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PYRANTE, greaterBeing(Entity.PYRANTE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PYRANTIS, greaterBeing(Entity.PYRANTIS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.PYROEIS,
-				greaterBeing(Entity.PYROEIS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.PYRRHICHOS, greaterBeing(Entity.PYRRHICHOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.SABAZIOS,
-				greaterBeing(Entity.SABAZIOS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.SCAEA, greaterBeing(Entity.SCAEA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.SCYLLA, greaterBeing(Entity.SCYLLA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.SKEIRON,
-				greaterBeing(Entity.SKEIRON, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.SOPHROSYNE, greaterBeing(Entity.SOPHROSYNE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.SOTER, greaterBeing(Entity.SOTER, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.SOTERIA, greaterBeing(Entity.SOTERIA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.SPONDE, greaterBeing(Entity.SPONDE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.STEROPE,
-				greaterBeing(Entity.STEROPE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.STHENELE, greaterBeing(Entity.STHENELE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.STHENELUS, greaterBeing(Entity.STHENELUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.STILBON,
-				greaterBeing(Entity.STILBON, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.STYGNE, greaterBeing(Entity.STYGNE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.TALTHYBIUS, greaterBeing(Entity.TALTHYBIUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.TARA,
-				greaterBeing(Entity.TARA, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.TAYGETE,
-				greaterBeing(Entity.TAYGETE, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.TECHNE, greaterBeing(Entity.TECHNE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.TELESPHORUS, greaterBeing(Entity.TELESPHORUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.TELETE, greaterBeing(Entity.TELETE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.THALLO, greaterBeing(Entity.THALLO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.THEANO, greaterBeing(Entity.THEANO, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.THEMISTAGORA, greaterBeing(Entity.THEMISTAGORA, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.THEROS, greaterBeing(Entity.THEROS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.THOOTES, greaterBeing(Entity.THOOTES, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.THRASOS, greaterBeing(Entity.THRASOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.TRIPTOLEMUS, greaterBeing(Entity.TRIPTOLEMUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.TRITE, greaterBeing(Entity.TRITE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.TYCHE, greaterBeing(Entity.TYCHE, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.XANTHUS, greaterBeing(Entity.XANTHUS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ZELOS, greaterBeing(Entity.ZELOS, Greater.SPIRIT, Alignment.NEUTRAL));
-		greaterImmortals.put(Entity.ZEPHYRUS,
-				greaterBeing(Entity.ZEPHYRUS, Greater.SPIRIT, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
+		// HELLENIC - Miscellaneous SPIRITS
+		Immortal.Greater greater = Immortal.Greater.SPIRIT;
+		array = Immortal.HELLENIC_SPIRITS;
+		for (int i = 0; i < array.length; ++i) {
+			greaterImmortals.put(array[i],
+					greaterBeing(array[i], greater, Alignment.NEUTRAL, domainRandomizer()));
+		}
 
-		/*
-		 * HELLENIC SPIRITS - AMAZONS (war) spirits
-		 * 
-		 */
-		greaterImmortals.put(Entity.AELLA,
-				greaterBeing(Entity.AELLA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.AGAVE,
-				greaterBeing(Entity.AGAVE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ALCIBIE,
-				greaterBeing(Entity.ALCIBIE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ALCIPPE,
-				greaterBeing(Entity.ALCIPPE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ANTANDRE,
-				greaterBeing(Entity.ANTANDRE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ANTIANIRA,
-				greaterBeing(Entity.ANTIANIRA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ANTIBROTE,
-				greaterBeing(Entity.ANTIBROTE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ANTIOCHE,
-				greaterBeing(Entity.ANTIOCHE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ANTIOPE,
-				greaterBeing(Entity.ANTIOPE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.BREMUSA,
-				greaterBeing(Entity.BREMUSA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.CLONIE,
-				greaterBeing(Entity.CLONIE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.DEIANIRA,
-				greaterBeing(Entity.DEIANIRA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.DERIMACHEIA,
-				greaterBeing(Entity.DERIMACHEIA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.DERINOE,
-				greaterBeing(Entity.DERINOE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.DIXUPPE,
-				greaterBeing(Entity.DIXUPPE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.ERIBOEA,
-				greaterBeing(Entity.ERIBOEA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.EURYALE,
-				greaterBeing(Entity.EURYALE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.EVANDRE,
-				greaterBeing(Entity.EVANDRE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.HARMOTHOE,
-				greaterBeing(Entity.HARMOTHOE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.HARPE,
-				greaterBeing(Entity.HARPE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.HIPPOLYTE,
-				greaterBeing(Entity.HIPPOLYTE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.HIPPOTHOE,
-				greaterBeing(Entity.HIPPOTHOE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.IPHINOME,
-				greaterBeing(Entity.IPHINOME, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.LAOMACHE,
-				greaterBeing(Entity.LAOMACHE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.LYCE,
-				greaterBeing(Entity.LYCE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.MARPE,
-				greaterBeing(Entity.MARPE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.MELANIPPE,
-				greaterBeing(Entity.MELANIPPE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.MENIPPE,
-				greaterBeing(Entity.MENIPPE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.MOLPADIA,
-				greaterBeing(Entity.MOLPADIA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.MYRINA,
-				greaterBeing(Entity.MYRINA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.OCYALE,
-				greaterBeing(Entity.OCYALE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.OTRERE,
-				greaterBeing(Entity.OTRERE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.PENTHESILIA,
-				greaterBeing(Entity.PENTHESILIA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.PHILLIPPIS,
-				greaterBeing(Entity.PHILLIPPIS, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.POLEMUSA,
-				greaterBeing(Entity.POLEMUSA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.TECMESSA,
-				greaterBeing(Entity.TECMESSA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.THERMODOSA,
-				greaterBeing(Entity.THERMODOSA, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.THOE,
-				greaterBeing(Entity.THOE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.WAR }));
+		// HELLENIC - AMAZONS (war spirits)
+		array = Immortal.AMAZONS;
+		for (int i = 0; i < array.length; ++i) {
+			greaterImmortals.put(array[i], greaterBeing(array[i], greater, Alignment.EVIL, domainRandomizer()));
+		}
 
-		/*
-		 * HELLENIC SPIRITS - ERIS (conflict) spirits
-		 * 
-		 */
-		greaterImmortals.put(Entity.ACHLYS, greaterBeing(Entity.ACHLYS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ACHOS, greaterBeing(Entity.ACHOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ADEPHAGIA, greaterBeing(Entity.ADEPHAGIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ADIKA, greaterBeing(Entity.ADIKA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.AERGIA, greaterBeing(Entity.AERGIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.AGON, greaterBeing(Entity.AGON, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ALALA, greaterBeing(Entity.ALALA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ALASTOR, greaterBeing(Entity.ALASTOR, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ALECTO, greaterBeing(Entity.ALECTO, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ALGEA, greaterBeing(Entity.ALGEA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ALGOS, greaterBeing(Entity.ALGOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.AMECHANIA, greaterBeing(Entity.AMECHANIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ANAIDEIA, greaterBeing(Entity.ANAIDEIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ANAPLEKTE, greaterBeing(Entity.ANAPLEKTE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ANDROKTASIAI, greaterBeing(Entity.ANDROKTASIAI, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ANIA, greaterBeing(Entity.ANIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ANTEROS, greaterBeing(Entity.ANTEROS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.APORIA, greaterBeing(Entity.APORIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ARAE, greaterBeing(Entity.ARAE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ATE,
-				greaterBeing(Entity.ATE, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.CORUS, greaterBeing(Entity.CORUS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.DEIMOS, greaterBeing(Entity.DEIMOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.DYSNOMIA, greaterBeing(Entity.DYSNOMIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.DYSSEBEIA, greaterBeing(Entity.DYSSEBEIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.EIRENE, greaterBeing(Entity.EIRENE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.EKECHEIRIA, greaterBeing(Entity.EKECHEIRIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ELEOS, greaterBeing(Entity.ELEOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ELPHIS, greaterBeing(Entity.ELPHIS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.EPIPHRON, greaterBeing(Entity.EPIPHRON, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.GERAS, greaterBeing(Entity.GERAS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.HEDYLOGOS, greaterBeing(Entity.HEDYLOGOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.HERMAPHRODITUS, greaterBeing(Entity.HERMAPHRODITUS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.HOMADOS, greaterBeing(Entity.HOMADOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.HORKOS, greaterBeing(Entity.HORKOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.HYSIMNAI, greaterBeing(Entity.HYSIMNAI, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.IOKE, greaterBeing(Entity.IOKE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.KAKIA, greaterBeing(Entity.KAKIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.KER,
-				greaterBeing(Entity.KER, Greater.SPIRIT, Alignment.EVIL, new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.KOALEMOS, greaterBeing(Entity.KOALEMOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.KYDOIMOS, greaterBeing(Entity.KYDOIMOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.LIMOS, greaterBeing(Entity.LIMOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.LOGOI, greaterBeing(Entity.LOGOI, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.LUPE, greaterBeing(Entity.LUPE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.LYSSA, greaterBeing(Entity.LYSSA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.MAKHAI, greaterBeing(Entity.MAKHAI, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.MANIA, greaterBeing(Entity.MANIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.MEGAERA, greaterBeing(Entity.MEGAERA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.MOMUS, greaterBeing(Entity.MOMUS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.MOROS, greaterBeing(Entity.MOROS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.NEIKEA, greaterBeing(Entity.NEIKEA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.NOSOS, greaterBeing(Entity.NOSOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.OIZYS, greaterBeing(Entity.OIZYS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PALIOXIS, greaterBeing(Entity.PALIOXIS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PALIXIS, greaterBeing(Entity.PALIXIS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PENIA, greaterBeing(Entity.PENIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PHEME, greaterBeing(Entity.PHEME, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PHOBOS, greaterBeing(Entity.PHOBOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PHONOI, greaterBeing(Entity.PHONOI, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PHRIKE, greaterBeing(Entity.PHRIKE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PHTHONUS, greaterBeing(Entity.PHTHONUS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PONOS, greaterBeing(Entity.PONOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PROIOXIS, greaterBeing(Entity.PROIOXIS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PROPHASIS, greaterBeing(Entity.PROPHASIS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PSEUDEA, greaterBeing(Entity.PSEUDEA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.PTOCHEIA, greaterBeing(Entity.PTOCHEIA, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.STYGERE, greaterBeing(Entity.STYGERE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.TISIPHONE, greaterBeing(Entity.TISIPHONE, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.SYNTRIBOS, greaterBeing(Entity.SYNTRIBOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.SMARAGOS, greaterBeing(Entity.SMARAGOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ASBETOS, greaterBeing(Entity.ASBETOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.SABAKTES, greaterBeing(Entity.SABAKTES, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.OMODAMOS, greaterBeing(Entity.OMODAMOS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ENYALIUS, greaterBeing(Entity.ENYALIUS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.ENYO, greaterBeing(Entity.ENYO, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.GLYCON, greaterBeing(Entity.GLYCON, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.TARAXIPPUS, greaterBeing(Entity.TARAXIPPUS, Greater.SPIRIT, Alignment.EVIL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
+		// HELLENIC - ERIC (conflict spirits)
+		array = Immortal.ERIS;
+		for (int i = 0; i < array.length; ++i) {
+			greaterImmortals.put(array[i], greaterBeing(array[i], greater, Alignment.EVIL, domainRandomizer()));
+		}
 
+		// HELLENIC - NYMPHS (nature spirits)
 		array = NYMPHS;
 		for (int i = 0; i < array.length; ++i) {
 			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.NYMPH, Alignment.NEUTRAL));
 		}
 
+		// HELLENIC - CYCLOPES
 		array = CYCLOPES;
 		for (int i = 0; i < array.length; ++i) {
 			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.CYCLOPS, Alignment.NEUTRAL));
@@ -2017,7 +1434,23 @@ public abstract class Immortal implements Actor {
 	}
 
 	private static Domain[] domainRandomizer() {
+		return domainRandomizer(Domain.NATURE);
+	}
+
+	private static Domain[] domainRandomizer(Domain domain) {
+		Domain[] skyDomains = new Domain[] { Domain.LIGHT, Domain.TEMPEST, Domain.KNOWLEDGE };
+		Domain[] earthDomains = new Domain[] { Domain.TRICKERY, Domain.WAR, Domain.DEATH };
+		Domain[] seaDomains = new Domain[] { Domain.TEMPEST, Domain.LIFE, Domain.WAR };
+
 		Domain[] array = null;
+		Domain[] domains = null;
+
+		if (domain.equals(Domain.NATURE))
+			domains = earthDomains;
+		else if (domain.equals(Domain.TEMPEST))
+			domains = seaDomains;
+		else if (domain.equals(Domain.LIGHT))
+			domains = skyDomains;
 
 		int dice = Dice.roll(10);
 		if (dice < 5)
@@ -2033,9 +1466,9 @@ public abstract class Immortal implements Actor {
 		if (array.length == 1 && dice < 5) {
 			array[0] = Domain.NATURE;
 		} else if (array.length == 1 && (dice == 5 || dice == 6 || dice == 7)) {
-			array[0] = (Dice.roll(2) == 1) ? Domain.LIFE : Domain.LIGHT;
+			array[0] = (Dice.roll(2) == 1) ? domains[0] : domains[1];
 		} else if (array.length == 1 && (dice == 8 || dice == 9)) {
-			array[0] = (Dice.roll(2) == 1) ? Domain.TRICKERY : Domain.WAR;
+			array[0] = (Dice.roll(2) == 1) ? domains[1] : domains[2];
 		} else if (array.length == 1) {
 			array[0] = Dice.randomFromArray(DOMAINS);
 		} else {
