@@ -82,7 +82,7 @@ public final class Dice {
 
 		return fortune;
 	}
-	
+
 	public static <T> T randomFromArray(T[] array) {
 		T choice = array[Dice.roll(array.length) - 1];
 
@@ -205,6 +205,148 @@ public final class Dice {
 		}
 
 		return contains;
+	}
+
+	public static String stringToName(String string) {
+		String name = "";
+
+		char current, previous = ' ';
+		char[] array = string.toCharArray();
+		for (int i = 0; i < array.length; ++i) {
+			current = array[i];
+
+			if (i == 0 || previous == ' ') {
+				current = Character.toUpperCase(current);
+
+			} else if (current == ' ') {
+				current = ' ';
+
+			} else {
+				current = Character.toLowerCase(current);
+
+			}
+
+			name += current;
+			previous = current;
+		}
+
+		return name;
+	}
+
+	public static String romanNumeral(int integer) {
+		String numeral = "";
+
+		int next;
+		while (integer > 0) {
+			if (integer < 10) {
+				next = integer % 10;
+				integer -= next;
+
+				if (next == 9)
+					numeral += "IX";
+				else if (next == 8)
+					numeral += "VIII";
+				else if (next == 7)
+					numeral += "VII";
+				else if (next == 6)
+					numeral += "VI";
+				else if (next == 5)
+					numeral += "V";
+				else if (next == 4)
+					numeral += "IV";
+				else if (next == 3)
+					numeral += "III";
+				else if (next == 2)
+					numeral += "II";
+				else if (next == 1)
+					numeral += "I";
+
+			} else if (integer < 100) {
+				next = integer % 100;
+
+				if (next >= 90) {
+					numeral += "XC";
+					integer -= 90;
+
+				} else if (next >= 80) {
+					numeral += "LXXX";
+					integer -= 80;
+
+				} else if (next >= 70) {
+					numeral += "LXX";
+					integer -= 70;
+
+				} else if (next >= 60) {
+					numeral += "LX";
+					integer -= 60;
+
+				} else if (next >= 50) {
+					numeral += "L";
+					integer -= 50;
+
+				} else if (next >= 40) {
+					numeral += "XL";
+					integer -= 40;
+
+				} else if (next >= 30) {
+					numeral += "XXX";
+					integer -= 30;
+
+				} else if (next >= 20) {
+					numeral += "XX";
+					integer -= 20;
+
+				} else if (next >= 10) {
+					numeral += "X";
+					integer -= 10;
+
+				}
+
+			} else if (integer < 1000) {
+				next = integer % 1000;
+
+				if (next >= 900) {
+					numeral += "CM";
+					integer -= 900;
+
+				} else if (next >= 800) {
+					numeral += "DCCC";
+					integer -= 800;
+
+				} else if (next >= 700) {
+					numeral += "DCC";
+					integer -= 700;
+
+				} else if (next >= 600) {
+					numeral += "DC";
+					integer -= 600;
+
+				} else if (next >= 500) {
+					numeral += "D";
+					integer -= 500;
+
+				} else if (next >= 400) {
+					numeral += "CD";
+					integer -= 400;
+
+				} else if (next >= 300) {
+					numeral += "CCC";
+					integer -= 300;
+
+				} else if (next >= 200) {
+					numeral += "CC";
+					integer -= 200;
+
+				} else if (next >= 100) {
+					numeral += "C";
+					integer -= 100;
+
+				}
+			}
+
+		}
+
+		return numeral;
 	}
 
 	/*
