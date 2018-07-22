@@ -17,6 +17,7 @@ public class Pantheon implements Faction {
 	/*
 	 * INSTANCE FIELDS
 	 */
+	private Immortal.Lesser affiliation;
 	private String name;
 	private Actor leader;
 
@@ -25,12 +26,19 @@ public class Pantheon implements Faction {
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Pantheon(String name) {
+	public Pantheon(Immortal.Lesser affiliation) {
 		this.members = new HashSet<Actor>();
 
 		//
-		this.name = name;
+		this.name = Dice.stringToName(affiliation.toString());
 
+//		Set<Actor> set = Immortal.filterByPantheon(affiliation);
+//		Immortal.Instance instance;
+//		for (Iterator<Actor> it = set.iterator(); it.hasNext();) {
+//			instance = it.next();
+//			
+//			add(instance);
+//		}
 	}
 
 	/*
@@ -47,6 +55,17 @@ public class Pantheon implements Faction {
 		return added;
 	}
 
+	@Override
+	public String toString() {
+		String string = name;
+
+		return string;
+	}
+
+	/*
+	 * INTERFACE METHODS
+	 * 
+	 */
 	@Override
 	public World getHomeworld() {
 		// TODO Auto-generated method stub

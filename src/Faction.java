@@ -1,7 +1,6 @@
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 
 public interface Faction {

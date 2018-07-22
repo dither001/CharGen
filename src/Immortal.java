@@ -1,14 +1,11 @@
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Immortal implements Actor {
+public abstract class Immortal {
 	/*
 	 * Many, many gods exist, and comparatively few classed "primordials." It's my
 	 * intent to class the majority of entities that are either abstract, elemental
@@ -202,6 +199,7 @@ public abstract class Immortal implements Actor {
 			prototypes = new HashMap<Entity, Prototype>();
 
 			Entity[] array = null;
+			Entity entity = null;
 			Lesser lesser = null;
 			Actor.Alignment ali = null;
 			Domain domain = null;
@@ -243,7 +241,7 @@ public abstract class Immortal implements Actor {
 			// TALOS is a bronze giant built by Hephaestus to guard Crete
 			domain = Domain.DEATH;
 			Prototype.prototypes.put(Entity.TALOS,
-					new Prototype(Entity.TALOS, Lesser.ABOMINATION, Alignment.NEUTRAL, domain));
+					new Prototype(Entity.TALOS, Lesser.ABOMINATION, Actor.Alignment.NEUTRAL, domain));
 
 			// HELLENIC - PRIMORDIALS (Uranus et al.)
 			array = Immortal.GREEK_PRIMORDIALS;
@@ -426,14 +424,14 @@ public abstract class Immortal implements Actor {
 		/*
 		 * CONSTRUCTOR
 		 */
-		public Prototype(Entity entity, Lesser affiliation, Alignment alignment, Domain domain) {
+		public Prototype(Entity entity, Lesser affiliation, Actor.Alignment alignment, Domain domain) {
 			this.entity = entity;
 			this.affiliation = affiliation;
 
-			Alignment[] ali = alignmentRandomizer(alignment);
-			this.alignment = EnumSet.noneOf(Alignment.class);
+			Actor.Alignment[] ali = alignmentRandomizer(alignment);
+			this.alignment = EnumSet.noneOf(Actor.Alignment.class);
 			if (ali.length > 0) {
-				for (Alignment el : ali) {
+				for (Actor.Alignment el : ali) {
 					this.alignment.add(el);
 				}
 			}
@@ -448,7 +446,7 @@ public abstract class Immortal implements Actor {
 
 	}
 
-	public static class Instance {
+	public static class Instance implements Actor {
 		private static Set<Instance> instances;
 
 		static {
@@ -499,6 +497,264 @@ public abstract class Immortal implements Actor {
 			String string = String.format("%s", name);
 
 			return string;
+		}
+
+		@Override
+		public String toStringDetailed() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean polymorphed() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean magicUser() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean weaponUser() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean armorUser() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public Size getSize() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Creature getCreatureType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Alignment getAlignment() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Deity getDeity() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public byte[] getHitDice() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Option.Feature> getFeatures() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setFeatures(EnumSet<Option.Feature> features) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Class getJob() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Class.Subclass getArchetype() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Race getRace() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Spell> getSpellsKnown() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setSpellsKnown(EnumSet<Spell> spellsKnown) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Career.Profile getCareer() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public int getLevel() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void setLevel(int level) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public int getExperience() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void setExp(int exp) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public EnumSet<Speed> getSpeed() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public byte[] getAbilityScores() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public byte[] getAbilityCeiling() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public byte[] getSavingThrows() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Skill> getSkills() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setSkills(EnumSet<Skill> skills) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public EnumSet<Armor> getArmorProficiency() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setArmorProficiency(EnumSet<Armor> armor) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public EnumSet<Weapon> getWeaponProficiency() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setWeaponProficiency(EnumSet<Weapon> weapons) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public EnumSet<Energy> getResistance() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Energy> getImmunity() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Condition> getConditionImmunity() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Condition> getConditions() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Sense> getSenses() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public EnumSet<Language> getLanguages() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setLanguages(EnumSet<Language> languages) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public CombatBlock getCombatBlock() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setCombatBlock(CombatBlock combat) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Inventory getInventory() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setInventory(Inventory inventory) {
+			// TODO Auto-generated method stub
+			
 		}
 
 	}
@@ -870,100 +1126,6 @@ public abstract class Immortal implements Actor {
 			Entity.ZINGGEN, Entity.ZIRACAH, Entity.ZIRZ, Entity.ZIZA, Entity.ZURCHOL };
 
 	/*
-	 * INITIALIZATION
-	 * 
-	 */
-	static {
-		// greaterImmortals = new HashMap<Entity, Prototype>();
-		// lesserImmortals = new HashMap<Entity, Prototype>();
-
-		/*
-		 * DAWN WAR GODS
-		 * 
-		 */
-		// lesserImmortals.put(Entity.ASMODEUS, new Prototype(Entity.ASMODEUS,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] {
-		// Domain.TRICKERY }));
-		// lesserImmortals.put(Entity.AVANDRA, new Prototype(Entity.AVANDRA,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] {
-		// Domain.TRICKERY }));
-		// lesserImmortals.put(Entity.BAHAMUT, new Prototype(Entity.BAHAMUT,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] {
-		// Domain.LIFE, Domain.WAR }));
-		// lesserImmortals.put(Entity.BANE, new Prototype(Entity.BANE, Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] {
-		// Domain.WAR }));
-		// lesserImmortals.put(Entity.CORELLON, new Prototype(Entity.CORELLON,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] {
-		// Domain.LIGHT }));
-		// lesserImmortals.put(Entity.ERATHIS, new Prototype(Entity.ERATHIS,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] {
-		// Domain.KNOWLEDGE }));
-		// lesserImmortals.put(Entity.GRUUMSH, new Prototype(Entity.GRUUMSH,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
-		// Domain.TEMPEST, Domain.WAR }));
-		// lesserImmortals.put(Entity.IOUN, new Prototype(Entity.IOUN, Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.KNOWLEDGE }));
-		// lesserImmortals.put(Entity.KORD, new Prototype(Entity.KORD, Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.NEUTRAL }, new Domain[] {
-		// Domain.TEMPEST }));
-		// lesserImmortals.put(Entity.LOLTH, new Prototype(Entity.LOLTH,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
-		// Domain.TRICKERY }));
-		// lesserImmortals.put(Entity.MELORA, new Prototype(Entity.MELORA,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.NATURE,
-		// Domain.TEMPEST }));
-		// lesserImmortals.put(Entity.MORADIN, new Prototype(Entity.MORADIN,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] {
-		// Domain.KNOWLEDGE, Domain.WAR }));
-		// lesserImmortals.put(Entity.PELOR, new Prototype(Entity.PELOR,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.NEUTRAL, Alignment.GOOD }, new Domain[] {
-		// Domain.LIFE, Domain.LIGHT }));
-		// lesserImmortals.put(Entity.RAVEN_QUEEN, new Prototype(Entity.RAVEN_QUEEN,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] {
-		// Domain.DEATH, Domain.LIFE }));
-		// lesserImmortals.put(Entity.SEHANINE, new Prototype(Entity.SEHANINE,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] {
-		// Domain.TRICKERY }));
-		// lesserImmortals.put(Entity.THARIZDUN, new Prototype(Entity.THARIZDUN,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
-		// Domain.TRICKERY }));
-		// lesserImmortals.put(Entity.TIAMAT, new Prototype(Entity.TIAMAT,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] {
-		// Domain.TRICKERY, Domain.WAR }));
-		// lesserImmortals.put(Entity.TOROG, new Prototype(Entity.TOROG,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.NEUTRAL, Alignment.EVIL }, new Domain[] {
-		// Domain.DEATH }));
-		// lesserImmortals.put(Entity.VECNA,
-		// new Prototype(Entity.VECNA, Lesser.DEMIURGE, new Alignment[] {
-		// Alignment.NEUTRAL, Alignment.EVIL },
-		// new Domain[] { Domain.DEATH, Domain.KNOWLEDGE }));
-		// lesserImmortals.put(Entity.ZEHIR, new Prototype(Entity.ZEHIR,
-		// Lesser.DEMIURGE,
-		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
-		// Domain.DEATH, Domain.TRICKERY }));
-
-		/*
-		 * 
-		 */
-	}
-
-	/*
 	 * STATIC METHODS
 	 */
 	public static Set<Instance> filterByPantheon(Lesser lesser) {
@@ -981,7 +1143,11 @@ public abstract class Immortal implements Actor {
 		return workingSet;
 	}
 
-	public static Set<Instance> powersOfAlignment(Alignment alignment) {
+	public static Lesser randomCosmicAffiliation() {
+		return Dice.randomFromArray(PANTHEONS);
+	}
+
+	public static Set<Instance> powersOfAlignment(Actor.Alignment alignment) {
 		Set<Instance> set = new HashSet<Instance>();
 
 		Instance instance;
@@ -1001,19 +1167,19 @@ public abstract class Immortal implements Actor {
 		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
-			if (instance.alignment.contains(Alignment.LAWFUL))
+			if (instance.alignment.contains(Actor.Alignment.LAWFUL))
 				++array[0];
 
-			if (instance.alignment.contains(Alignment.GOOD))
+			if (instance.alignment.contains(Actor.Alignment.GOOD))
 				++array[1];
 
-			if (instance.alignment.contains(Alignment.NEUTRAL))
+			if (instance.alignment.contains(Actor.Alignment.NEUTRAL))
 				++array[2];
 
-			if (instance.alignment.contains(Alignment.EVIL))
+			if (instance.alignment.contains(Actor.Alignment.EVIL))
 				++array[3];
 
-			if (instance.alignment.contains(Alignment.CHAOTIC))
+			if (instance.alignment.contains(Actor.Alignment.CHAOTIC))
 				++array[4];
 		}
 
@@ -1030,26 +1196,26 @@ public abstract class Immortal implements Actor {
 		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
-			if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.GOOD))
+			if (instance.alignment.contains(Actor.Alignment.LAWFUL) && instance.alignment.contains(Actor.Alignment.GOOD))
 				++array[0];
-			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) && instance.alignment.contains(Actor.Alignment.NEUTRAL))
 				++array[1];
-			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) && instance.alignment.contains(Actor.Alignment.EVIL))
 				++array[2];
-			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.GOOD))
+			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL) && instance.alignment.contains(Actor.Alignment.GOOD))
 				++array[3];
-			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL) && instance.alignment.contains(Actor.Alignment.EVIL))
 				++array[5];
-			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.GOOD))
+			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC) && instance.alignment.contains(Actor.Alignment.GOOD))
 				++array[6];
-			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC) && instance.alignment.contains(Actor.Alignment.NEUTRAL))
 				++array[7];
-			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC) && instance.alignment.contains(Actor.Alignment.EVIL))
 				++array[8];
-			else if (instance.alignment.contains(Alignment.LAWFUL) != true
-					&& instance.alignment.contains(Alignment.CHAOTIC) != true
-					&& instance.alignment.contains(Alignment.GOOD) != true
-					&& instance.alignment.contains(Alignment.EVIL) != true)
+			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) != true
+					&& instance.alignment.contains(Actor.Alignment.CHAOTIC) != true
+					&& instance.alignment.contains(Actor.Alignment.GOOD) != true
+					&& instance.alignment.contains(Actor.Alignment.EVIL) != true)
 				++array[4];
 		}
 
@@ -1069,35 +1235,35 @@ public abstract class Immortal implements Actor {
 
 	@SuppressWarnings("unchecked")
 	public static String beingsByGridToString() {
-		List<Instance>[] array = (List<Instance>[]) new ArrayList[9];
+		Set<Instance>[] array = (Set<Instance>[]) new HashSet[9];
 		for (int i = 0; i < array.length; ++i) {
-			array[i] = new ArrayList<Instance>();
+			array[i] = new HashSet<Instance>();
 		}
 
 		Instance instance;
 		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
-			if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.GOOD))
+			if (instance.alignment.contains(Actor.Alignment.LAWFUL) && instance.alignment.contains(Actor.Alignment.GOOD))
 				array[0].add(instance);
-			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) && instance.alignment.contains(Actor.Alignment.NEUTRAL))
 				array[1].add(instance);
-			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) && instance.alignment.contains(Actor.Alignment.EVIL))
 				array[2].add(instance);
-			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.GOOD))
+			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL) && instance.alignment.contains(Actor.Alignment.GOOD))
 				array[3].add(instance);
-			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL) && instance.alignment.contains(Actor.Alignment.EVIL))
 				array[5].add(instance);
-			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.GOOD))
+			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC) && instance.alignment.contains(Actor.Alignment.GOOD))
 				array[6].add(instance);
-			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC) && instance.alignment.contains(Actor.Alignment.NEUTRAL))
 				array[7].add(instance);
-			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC) && instance.alignment.contains(Actor.Alignment.EVIL))
 				array[8].add(instance);
-			else if (instance.alignment.contains(Alignment.LAWFUL) != true
-					&& instance.alignment.contains(Alignment.CHAOTIC) != true
-					&& instance.alignment.contains(Alignment.GOOD) != true
-					&& instance.alignment.contains(Alignment.EVIL) != true)
+			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) != true
+					&& instance.alignment.contains(Actor.Alignment.CHAOTIC) != true
+					&& instance.alignment.contains(Actor.Alignment.GOOD) != true
+					&& instance.alignment.contains(Actor.Alignment.EVIL) != true)
 				array[4].add(instance);
 		}
 
@@ -1160,39 +1326,39 @@ public abstract class Immortal implements Actor {
 		return string;
 	}
 
-	private static Alignment[] alignmentRandomizer(Alignment axis) {
-		Alignment[][] axes = new Alignment[][] {
+	private static Actor.Alignment[] alignmentRandomizer(Actor.Alignment axis) {
+		Actor.Alignment[][] axes = new Actor.Alignment[][] {
 				// LAWFUL
-				{ Alignment.LAWFUL, Alignment.NEUTRAL }, { Alignment.LAWFUL, Alignment.GOOD },
-				{ Alignment.LAWFUL, Alignment.EVIL },
+				{ Actor.Alignment.LAWFUL, Actor.Alignment.NEUTRAL }, { Actor.Alignment.LAWFUL, Actor.Alignment.GOOD },
+				{ Actor.Alignment.LAWFUL, Actor.Alignment.EVIL },
 				// CHAOTIC
-				{ Alignment.CHAOTIC, Alignment.NEUTRAL }, { Alignment.CHAOTIC, Alignment.GOOD },
-				{ Alignment.CHAOTIC, Alignment.EVIL },
+				{ Actor.Alignment.CHAOTIC, Actor.Alignment.NEUTRAL }, { Actor.Alignment.CHAOTIC, Actor.Alignment.GOOD },
+				{ Actor.Alignment.CHAOTIC, Actor.Alignment.EVIL },
 				// GOOD
-				{ Alignment.GOOD, Alignment.NEUTRAL }, { Alignment.GOOD, Alignment.CHAOTIC },
-				{ Alignment.GOOD, Alignment.LAWFUL },
+				{ Actor.Alignment.GOOD, Actor.Alignment.NEUTRAL }, { Actor.Alignment.GOOD, Actor.Alignment.CHAOTIC },
+				{ Actor.Alignment.GOOD, Actor.Alignment.LAWFUL },
 				// EVIL
-				{ Alignment.EVIL, Alignment.NEUTRAL }, { Alignment.EVIL, Alignment.CHAOTIC },
-				{ Alignment.EVIL, Alignment.LAWFUL } };
+				{ Actor.Alignment.EVIL, Actor.Alignment.NEUTRAL }, { Actor.Alignment.EVIL, Actor.Alignment.CHAOTIC },
+				{ Actor.Alignment.EVIL, Actor.Alignment.LAWFUL } };
 
-		Alignment[] corners = new Alignment[] { Alignment.LAWFUL, Alignment.CHAOTIC, Alignment.GOOD, Alignment.EVIL };
+				Actor.Alignment[] corners = new Actor.Alignment[] { Actor.Alignment.LAWFUL, Actor.Alignment.CHAOTIC, Actor.Alignment.GOOD, Actor.Alignment.EVIL };
 
 		//
-		Alignment[] alignment = null;
+				Actor.Alignment[] alignment = null;
 		int dice = Dice.roll(10);
-		if (axis.equals(Alignment.LAWFUL)) {
+		if (axis.equals(Actor.Alignment.LAWFUL)) {
 			alignment = (dice < 5) ? axes[0] : (dice < 8) ? axes[1] : axes[2];
-		} else if (axis.equals(Alignment.CHAOTIC)) {
+		} else if (axis.equals(Actor.Alignment.CHAOTIC)) {
 			alignment = (dice < 5) ? axes[3] : (dice < 8) ? axes[4] : axes[5];
-		} else if (axis.equals(Alignment.GOOD)) {
+		} else if (axis.equals(Actor.Alignment.GOOD)) {
 			alignment = (dice < 5) ? axes[6] : (dice < 8) ? axes[7] : axes[8];
-		} else if (axis.equals(Alignment.EVIL)) {
+		} else if (axis.equals(Actor.Alignment.EVIL)) {
 			// System.out.println("Evil entity generated.");
 			alignment = (dice < 5) ? axes[9] : (dice < 8) ? axes[10] : axes[11];
 		} else if (dice < 5) {
-			alignment = new Alignment[] { Alignment.NEUTRAL };
+			alignment = new Actor.Alignment[] { Actor.Alignment.NEUTRAL };
 		} else {
-			alignment = new Alignment[] { Alignment.NEUTRAL, Dice.randomFromArray(corners) };
+			alignment = new Actor.Alignment[] { Actor.Alignment.NEUTRAL, Dice.randomFromArray(corners) };
 		}
 
 		return alignment;
