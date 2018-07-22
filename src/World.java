@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +30,37 @@ public interface World {
 			Tag.UNBRAKED_AI, Tag.WARLORDS, Tag.XENOPHILES, Tag.XENOPHOBES, Tag.ZOMBIES };
 
 	/*
+	 * COMPARATOR CLASSES
+	 * 
+	 */
+	public static class OrbitAscending implements Comparator<Planetoid> {
+
+		@Override
+		public int compare(Planetoid left, Planetoid right) {
+			return left.getOrbit() - right.getOrbit();
+		}
+
+	}
+
+	public static class SubOrbitAscending implements Comparator<Planetoid> {
+
+		@Override
+		public int compare(Planetoid left, Planetoid right) {
+			return left.getSubOrbit() - right.getSubOrbit();
+		}
+
+	}
+
+	public static class PopulationDescending implements Comparator<Planetoid> {
+
+		@Override
+		public int compare(Planetoid left, Planetoid right) {
+			return right.getPopulation() - left.getPopulation();
+		}
+
+	}
+	
+	/*
 	 * 
 	 * 
 	 */
@@ -55,6 +87,8 @@ public interface World {
 	public Group getGroup();
 
 	public int getOrbit();
+
+	public int getSubOrbit();
 
 	public Type getType();
 

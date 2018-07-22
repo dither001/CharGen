@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -454,6 +455,18 @@ public interface Faction {
 			string = WAR_CHANGES;
 
 		return Dice.randomFromArray(string);
+	}
+
+	/*
+	 * 
+	 */
+	public static class OrbitAscending implements Comparator<Faction> {
+
+		@Override
+		public int compare(Faction left, Faction right) {
+			return left.getHomeworld().getOrbit() - right.getHomeworld().getOrbit();
+		}
+
 	}
 
 }

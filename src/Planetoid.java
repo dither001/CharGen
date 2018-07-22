@@ -1,7 +1,9 @@
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Planetoid implements World {
@@ -10,9 +12,9 @@ public class Planetoid implements World {
 	 * 
 	 */
 	private String name;
-	
+
 	private EnumSet<TradeCodes> tradeCodes;
-	public HashSet<Faction> factions;
+	private HashSet<Faction> factions;
 	private EnumSet<Tag> worldTags;
 	private EnumSet<Base> worldFacilities;
 
@@ -20,6 +22,7 @@ public class Planetoid implements World {
 	private Planetoid home;
 	private Type type;
 	private int orbit;
+	private int subOrbit;
 
 	private byte[] scores;
 	private char spaceport;
@@ -39,11 +42,12 @@ public class Planetoid implements World {
 	}
 
 	public Planetoid(Type type, int orbit, Group group, Planetoid home) {
-		this.name = "Default";
+		this.name = String.format("%s (%s)", type, orbit);
 		this.group = group;
 		this.home = home;
 		this.type = type;
 		this.orbit = orbit;
+		this.subOrbit = orbit;
 
 		/*
 		 * INITIALIZE NEW WORLD
@@ -164,6 +168,53 @@ public class Planetoid implements World {
 				--satellites;
 
 			}
+
+			int dice;
+			Planetoid moon;
+			Set<Integer> orbits = new HashSet<Integer>();
+			for (Iterator<Planetoid> it = moons.iterator(); it.hasNext();) {
+				moon = it.next();
+
+				if (moon.isRing()) {
+					dice = Dice.roll(6);
+					if (dice < 4 && orbits.contains(1) != true)
+						orbits.add(moon.subOrbit = 1);
+					else if ((dice == 4 || dice == 5) && orbits.contains(2) != true)
+						orbits.add(moon.subOrbit = 2);
+					else if ((dice == 6) && orbits.contains(3) != true)
+						orbits.add(moon.subOrbit = 3);
+					else {
+						int i = 1;
+						while (orbits.contains(i)) {
+							++i;
+						}
+
+						orbits.add(moon.subOrbit = i);
+					}
+
+				} else {
+					dice = Dice.roll(2, 6);
+
+					if (dice < 8) {
+						dice = Dice.roll(2, 6) + 1;
+						while (orbits.contains(dice)) {
+							dice = Dice.roll(2, 6) + 1;
+						}
+
+						orbits.add(moon.subOrbit = dice);
+					} else {
+						dice = (Dice.roll(2, 6) + 1) * 5;
+						while (orbits.contains(dice)) {
+							dice = (Dice.roll(2, 6) + 1) * 5;
+						}
+
+						orbits.add(moon.subOrbit = dice);
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -174,7 +225,7 @@ public class Planetoid implements World {
 	 */
 	@Override
 	public String toString() {
-		String string = String.format("%s (%d)", type, orbit);
+		String string = String.format("%s (%s)", type, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
 
 		if (isWorld()) {
 			int size = scores[0], atmo = scores[1];
@@ -184,28 +235,26 @@ public class Planetoid implements World {
 			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
 
 			if (type.equals(Type.SATELLITE))
-				string = String.format("%18s %s", "* " + string, world);
+				string = String.format("%25s %s", "* " + string, world);
 			else
-				string = String.format("%-18s %s", string, world);
+				string = String.format("%-25s %s", string, world);
 		} else if (isRing()) {
 
 			string = String.format("   * %s", string);
 		}
 
 		// facilities
-		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
+		// String facilities = (worldFacilities != null) ? String.format(" %s",
+		// worldFacilities) : "";
 		// world tags
-		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
-		// habitable zone
-		// if (isWorld() && orbit == group.getHabitableZone())
-		// string += " ...in habitable zone";
-		string += String.format("%-20s %s", facilities, tags);
+		// String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
+		// string += String.format("%-20s %s", facilities, tags);
 
 		return string;
 	}
 
 	public String toStringDetailed() {
-		String string = String.format("%s (%d)", type, orbit);
+		String string = String.format("%s (%s)", type, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
 
 		if (isWorld()) {
 			int size = scores[0], atmo = scores[1];
@@ -215,27 +264,31 @@ public class Planetoid implements World {
 			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
 
 			if (type.equals(Type.SATELLITE))
-				string = String.format("%18s %s", "* " + string, world);
+				string = String.format("%25s %s", "* " + string, world);
 			else
-				string = String.format("%-18s %s", string, world);
+				string = String.format("%-25s %s", string, world);
 		} else if (isRing()) {
 
 			string = String.format("   * %s", string);
 		}
 
 		// facilities
-		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
+		// String facilities = (worldFacilities != null) ? String.format(" %s",
+		// worldFacilities) : "";
 		// world tags
-		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
-		// habitable zone
-		// if (isWorld() && orbit == group.getHabitableZone())
-		// string += " ...in habitable zone";
-		string += String.format("%-20s %s", facilities, tags);
+		// String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
+		// string += String.format("%-20s %s", facilities, tags);
 
 		if (hasMoons()) {
+			List<Planetoid> moonList = Dice.setToList(moons);
+			World.SubOrbitAscending moonSort = new World.SubOrbitAscending();
+			Collections.sort(moonList, moonSort);
+
 			String satellites = "";
-			for (Planetoid el : moons)
-				satellites += "\n" + el.toString();
+			for (Planetoid el : moonList) {
+				satellites += String.format("%n%s", el);
+				
+			}
 
 			string += satellites;
 			// } else if (notMoon() && (isWorld() || isGasGiant())) {
@@ -249,24 +302,6 @@ public class Planetoid implements World {
 	 * COMPARATOR CLASSES
 	 * 
 	 */
-	public static class OrbitAscending implements Comparator<Planetoid> {
-
-		@Override
-		public int compare(Planetoid left, Planetoid right) {
-			return left.orbit - right.orbit;
-		}
-
-	}
-
-	public static class PopulationDescending implements Comparator<Planetoid> {
-
-		@Override
-		public int compare(Planetoid left, Planetoid right) {
-			return right.getPopulation() - left.getPopulation();
-		}
-
-	}
-
 	public static class MainWorldSort implements Comparator<Planetoid> {
 
 		@Override
@@ -358,6 +393,11 @@ public class Planetoid implements World {
 	@Override
 	public int getOrbit() {
 		return orbit;
+	}
+
+	@Override
+	public int getSubOrbit() {
+		return subOrbit;
 	}
 
 	@Override

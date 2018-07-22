@@ -22,6 +22,8 @@ public class Group {
 
 	private char starport;
 	private Planetoid mainWorld;
+	private Set<Faction> factions;
+
 	private Set<World.Tag> commonTags;
 
 	/*
@@ -311,7 +313,7 @@ public class Group {
 		// establish common tags
 		commonTags = EnumSet.noneOf(World.Tag.class);
 		double percent = pops.size();
-		double threshold = (percent < 11) ? 0.4 : (percent < 21) ? 0.34 : 0.2; 
+		double threshold = (percent < 11) ? 0.4 : (percent < 21) ? 0.34 : 0.2;
 		for (Iterator<World.Tag> its = tagCount.keySet().iterator(); its.hasNext();) {
 			tag = its.next();
 
@@ -329,13 +331,16 @@ public class Group {
 		 * FACTION SETUP
 		 * 
 		 */
-		
+		factions = new HashSet<Faction>();
+
 		for (it = pops.iterator(); it.hasNext();) {
 			it.next().factionSetup();
 		}
-		
-		
-		
+
+		for (it = pops.iterator(); it.hasNext();) {
+			factions.addAll(it.next().getFactions());
+		}
+
 		/*
 		 * END OF CONSTRUCTOR
 		 */
@@ -506,17 +511,27 @@ public class Group {
 		 */
 		String worlds = "";
 		List<Planetoid> planetList = Dice.setToList(planets);
-		Planetoid.OrbitAscending orbitSort = new Planetoid.OrbitAscending();
-		Collections.sort(planetList, orbitSort);
+		World.OrbitAscending worldSort = new World.OrbitAscending();
+		Collections.sort(planetList, worldSort);
 		if (planetList.size() > 0) {
 			for (Planetoid el : planetList)
 				worlds += "\n" + el.toStringDetailed();
 		}
 
+		String pops = "";
+		List<Faction> factionList = Dice.setToList(factions);
+		Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
+		Collections.sort(factionList, factionSort);
+		if (factionList.size() > 0) {
+			pops += "\n- - -";
+			for (Faction el : factionList)
+				pops += "\n" + el.toString();
+		}
+		
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,
 		// asteroids, capturedPlanets);
-		return string + worlds;
+		return string + worlds + pops;
 	}
 
 	/*
