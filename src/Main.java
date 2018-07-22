@@ -17,6 +17,7 @@ public class Main {
 
 		System.out.println(Immortal.beingsByGridToString());
 		System.out.println(Immortal.alignmentGridStatsToString());
+		System.out.println(Immortal.domainStatsToString());
 
 		// testMainWorld();
 
@@ -75,14 +76,6 @@ public class Main {
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();
-	}
-
-	public static void lesserBeings() {
-		for (Iterator<?> it = Immortal.getLesserBeings().iterator(); it.hasNext();) {
-			System.out.println(it.next());
-		}
-
-		System.out.println(Immortal.getLesserBeings().size());
 	}
 
 	public static void powersByAlignment() {

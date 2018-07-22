@@ -140,7 +140,7 @@ public abstract class Immortal implements Actor {
 		// DAWN WAR GODS (4e D&D)
 		ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR,
 		// Canaanite gods: Elohim, "sons of El"
-		ANAT, ASHERAH, ASTARTE, ATHIRAT, ATTAR, BETH_HORON, DAGON, ELYON, ERETZ, ESHMUN, HADAD, HAMMON, HERMON, ISHAT, KHIKHIBI, KOTHAR_WA_KHASIS, KOTHARAT, LOTAN, MARQOD, MELQART, MISOR, MOLOCH, MOT, NIKKAL_WA_IB, QADESHTU, RESHEPH, SHAHAR, SHALIM, SHAMAYIM, SHAPASH, SHEOL, SYDYK, TAAUTUS, TANIT, YAM, YARIKH,
+		ANAT, ASHERAH, ASTARTE, ATHIRAT, ATTAR, BETH_HORON, DAGAN, ELYON, ERETZ, ESHMUN, HADAD, HAMMON, HERMON, ISHAT, KHIKHIBI, KOTHAR_WA_KHASIS, KOTHARAT, LOTAN, MARQOD, MELQART, MISOR, MOLOCH, MOT, NIKKAL_WA_IB, QADESHTU, RESHEPH, SHAHAR, SHALIM, SHAMAYIM, SHAPASH, SHEOL, SYDYK, TAAUTUS, TANIT, YAM, YARIKH,
 		/*
 		 * JUDAISM
 		 */
@@ -167,12 +167,16 @@ public abstract class Immortal implements Actor {
 		ACAMANTIS, ACESO, ACHELOIS, ACRATOPOTES, ACTAEA, ADIANTE, ADITE, ADONIS, ADRASTEA, AEGIUS, AEGLE, AEGYPTUS, AEOLUS, AESA, AGAPTOLEMUS, AGATHOS, AGDISTIS, AGENOR, AIDOS, AIOPIS, AKMON, ALCES, ALCMENOR, ALCYONE, ALECTRONA, ALETHEIA, ALEXIARES, ALKE, AMPHICOMONE, AMPHICTYONIS, AMYMONE, AMYNTOR, ANATOLE, ANAXIBIA, ANDROMACHUS, ANGELEIA, ANICETUS, ANTHEIA, ANTHELIA, ANTHOUSAI, ANTIMACHUS, ANTIOCHUS, ANTIPAPHUS, APARCTIAS, APHAEA, APHELIOTES, APHRODITUS, ARBELUS, ARCADIA, ARCHELAUS, ARETE, ARETHUSA, ARGESTES, ARGIUS, ARIADNE, ARISTONOOS, ARKTOS, ARMOASBUS, ARSALTE, ASCLEPIUS, ASTERIDES, ASTEROPE, ATHALIDES, ATHAMAS, ATHLETES, ATTIS, AUGE, AUTODICE, AUTOMATE, AUTONOE, AUXESIA, AUXO, BIA, BOREAS, BRITOMARTIS, BROMIUS, BRYCE, BUSIRIS, CAERUS, CAICIAS, CALLIDICE, CANTHUS, CARMANOR, CARME, CASSUS, CELAENO, CERAON, CERCETES, CHAETUS, CHALCODON, CHEIMON, CHLORIS, CHOINE, CHRYSIPPE, CHRYSIPPUS, CHRYSOTHEMIS, CHRYSUS, CHTHONIUS, CIRCIOS, CISSEUS, CLEODORA, CLEOPATRA, CLITE, CLITUS, CLYTUS, COMUS, COPREUS, CORYMBUS, CRITOMEDIA, CYAMITES, CYBELE, DAIPHRON, DAMNEUS, DAMONE, DAPLIDICE, DEIKAIOSYNE, DEIPNEUS, DEMARCHUS, DEMODITAS, DEMOPHILE, DESPOINA, DIKE, DINDYMENE, DIOCORYSTES, DIOXIPPE, DIPPODICE, DOLICHUS, DOLOS, DONAKIS, DORIUM, DRYAS, DYSIS, ECNOMINUS, EIAR, EILEITHYIA, EIRESIONE, ELECTRA, ELETE, EOSPHORUS, EPIALES, EPIONE, ERSA, ERYTHEA, EUBULE, EUCHENOR, EUCLEIA, EUDAEMON, EULABEIA, EUMELUS, EUMONIA, EUNOMIA, EUNOSTUS, EUPHEME, EUPORIE, EUPRAXIA, EURONOTUS, EUROPOME, EURUS, EURYBATES, EURYDAMAS, EURYLOCHUS, EURYSTHENES, EUSEBEIA, EUTHENIA, EVIDEA, EVIPPE, GELOS, GLAUCIPPE, GORGE, GORGOPHONE, GYMNASTIKA, HARMONIA, HARPOCRATES, HEBE, HECABE, HECATERUS, HEDONE, HEIMARMENE, HELICTA, HERMUS, HERO, HESPERA, HESPEREIA, HESPERUS, HESPERUSA, HIPPARTE, HIPPODAMIA, HIPPOLYTUS, HIPPOMEDUSA, HIPPOTHOUS, HOMONOIA, HORME, HYGIEIA, HYMENAEUS, HYPERANTUS, HYPERBIUS, HYPERIPPE, HYPERIUS, HYPERMNESTRA, IASO, ICHNAEA, IDAIOS, IDAS, IDMON, ILTONOMUS, IMBRUS, IPHIMEDUSA, IRIS, ISTRUS, ITEA, IYNX, KALOKAGATHIA, KALYPSO, KARPO, KRATOS, KROTOS, KYRBAS, LAMPUS, LEOS, LICHAS, LIPARA, LIPS, LITAE, LIXUS, LYNCEUS, MAIA, MAPSAURA, MATTON, MEDON, MENALCAS, MENEMACHUS, MERMESA, MEROPE, MESEMBRIA, METALCES, MIDANUS, MIDEA, MINEUS, MNESTRA, MONUSTE, MORPHEUS, MOUSIKA, MYRMIDONE, NELISA, NELO, NEPHELE, NIAUIUS, NIKE, NOMOS, NOTUS, NYMPHE, OBRIMUS, OCYPETE, ODIUS, OEME, OENEUS, OKYTHOOS, ORTHOSIE, PAEAN, PALAESTRA, PAMPHILUS, PAN, PANACEA, PANDIA, PANDION, PANTHIUS, PASSALOS, PEITHARCHIA, PEITHO, PENTHUS, PEPROMENE, PERIPHAS, PERISTHENES, PERIUS, PHAENON, PHAETHON, PHANTASOS, PHANTES, PHARTIS, PHERESPONDUS, PHEROUSA, PHILINUS, PHILOMELUS, PHILOPHROSYNE, PHILOTES, PHOBETOR, PIRENE, PISENOR, PISTIS, PLEXIPPUS, PLUTUS, PODARCE, PODASIMUS, POINE, POLEMOS, POLYBE, POLYCTOR, POLYDECTOR, POLYPHONTES, POLYXENA, POROS, POTAMON, POTHOS, PRAXIDIKE, PRIAPUS, PROTHEON, PRYMNEUS, PTHINOPORON, PUGNO, PYLARGE, PYRANTE, PYRANTIS, PYROEIS, PYRRHICHOS, SABAZIOS, SCAEA, SCYLLA, SKEIRON, SOPHROSYNE, SOTER, SOTERIA, SPONDE, STEROPE, STHENELE, STHENELUS, STILBON, STYGNE, TALTHYBIUS, TARA, TAYGETE, TECHNE, TELESPHORUS, TELETE, THALLO, THEANO, THEMISTAGORA, THEROS, THOOTES, THRASOS, TRIPTOLEMUS, TRITE, TYCHE, XANTHUS, ZELOS, ZEPHYRUS,
 		// NYMPHS
 		ABARBAREA, ACASTE, ACRETE, ADMETE, ADRASTEIA, ADRASTIA, AETHRA, AETNA, AGANIPPE, AGAUE, AGLAEA, AGLAIA, ALCINOE, AMALTHEA, AMATHEIA, AMBROSIA, AMPHINOME, AMPHIRHO, AMPHITHOE, ANCHIALE, ANCHIROE, ANNA_PERENNA, ANTHEDON, ANTHRACIA, AOIDE, APOLLONIS, APSEUDES, ARCHE, ARGIA, ARGIOPE, ARGYRA, ARNE, ASIA, ASTACIA, ASTERODIA, ATLANTIA, BATIA, BEROE, BORYSTHENIS, BRYUSA, BYBLIS, CALIADNE, CALLEIS, CALLIANASSA, CALLIANEIRA, CALLICHORE, CALLIOPE, CALLIPHAEIA, CALLIRHOE, CALYBE, CALYCE, CALYPSO, CAMARINA, CAMENTIS, CAPHEIRA, CARTHAGO, CASSOTIS, CEPHISSO, CERCEIS, CHARICLO, CHRLORIS, CHRYSE, CHRYSEIS, CHRYSOPELIA, CLEOCHARIA, CLETA, CLIO, CLITEMNESTE, CLONIA, CLYTIE, CNOSSIA, CORONIS, CORYCIA, CORYPHE, CRANAE, CRANTO, CRENEIS, CREUSA, CROCALE, CYANE, CYDIPPE, CYLLENE, CYMATOLEGE, CYMO, CYMODOCE, CYMOTHOE, CYNOSURA, CYRENE, DAEIRA, DANAIS, DAPHNIS, DAULIS, DEIOPEA, DEIOPOE, DERCETIS, DERO, DEXAMENE, DIOPATRA, DODONE, DORIS, DOTO, DROSERA, DRYMO, DRYOPE, DYNAMENE, ECHENAIS, ECHO, EGERIA, EIDYIA, EIONE, EPHYRA, EPIMELIA, ERATO, EREUTHO, ETHEMEA, EUAGORE, EUAGOREIS, EUARNE, EUCRANTE, EUDAIMONIA, EUDORA, EUDORE, EULIMENE, EUMOLPE, EUNICE, EUPETALE, EUPHROSYNE, EUPOMPE, EUROPA, EURYDICE, EURYTE, EUTERPE, EUTHYMIA, GALATEA, GALAXAURA, GALENE, GLAUCE, GLAUCONOME, HAGNO, HALIE, HALIMEDE, HECAERGE, HEGEMONE, HEGETORIA, HELICE, HESIONE, HESTYAEA, HIEROMNEME, HIMALIA, HIPPO, HIPPONOE, HORA, HYADES, HYALE, IACHE, IAERA, IANIRA, IANTHE, IASIS, IDA, IDAEA, IDE, IONE, IPHIANASSA, ISMENIS, ITHOME, LAOMEDEIA, LARA, LEIAGORE, LEUCIPPE, LEUCOTHOE, LIBYE, LIGEA, LIMNAEE, LIMNOREIA, LIRIOPE, LOTIS, LOXO, LYCASTE, LYCORIAS, LYGEA, LYRIS, LYSIANASSA, MACRIS, MAERA, MARICA, MELETE, MELIA, MELIBOEA, MELIE, MELITE, MELOBOSIS, MELPOMENE, MENESTHO, MENODICE, MENTHIS, MESE, MIDEIA, MNEME, MOPSOPIA, MORIA, MYRTOESSA, NAUSITHOE, NEDA, NEMERTES, NEOMERIS, NEREA, NESAEA, NESO, NETE, NICAEA, NOMIA, OCYNOE, OCYRHOE, OCYRRHOE, OENOE, OENONE, OINANTHE, OPIS, OREITHYIA, ORITHYIA, ORSEIS, OTHRIS, PAIDIA, PANDAISIA, PANNYCHIS, PANOPE, PANOPEA, PARIA, PASIPHAE, PASITHEA, PEGAEA, PENELOPE, PERSEIS, PETRAEA, PHAENNA, PHAENO, PHERUSA, PHIALE, PHIGALIA, PHILYRA, PHOEBE, PHRIXA, PHYLLODCE, PITYS, PLEIONE, PLEXAURA, PLEXAURE, PLOTO, POLYDORA, POLYHYMNIA, POLYMATHEIA, POLYNOME, POLYPHE, POLYXO, POMONA, PONTOMEDUSA, PONTOPOREIA, POULYNOE, PRAXITHEA, PRONOE, PROTHOE, PROTO, PROTOMEDEIA, PRYMNO, PSECAS, RHANIS, RHAPSO, RHENE, RHODEIA, RHODOPE, SAGARITIS, SALMACIS, SALMONIS, SAO, SEBETHIS, SILENE, SINOE, SITHNIDES, SOSE, SPEIO, SPHRAGITIDE, STESICHORE, STILBO, SYLLIS, SYNALLASIS, SYRINX, TELEDICE, TELESTO, TELPHUSA, TERPSICHORE, THALEIA, THALIA, THEISOA, THELXINOE, THEMISTO, THETIS, THISBE, THRAIKE, TITHOREA, TRYGIE, URANIA, UREA, VENILIA, XANTHO, ZEUXO,
+		// CENTAURS
+		ABAS, ACTOR, AGAMEDIDAS, AGELAUS, AGRAEUS, AGRON, ALCAEUS, ALETES, AMPHICTYON, AMPHION, AMPYX, AMYCUS, ANAXANDRA, ANCHIUS, APHAREUS, APHIDAS, ARAS, ARCTUS, AREOS, ARISTODEMUS, ASBOLUS, BELUS, BIENOR, BOEUS, BROTEAS, CASTALIUS, CECROPS, CELADON, CERYNES, CHARAXUS, CHIRON, CHROMIS, CISSUS, CISUS, CLANIS, CLEODAEUS, COMETES, CORESUS, CORYTHUS, CRANAUS, CRANTOR, CRENAEUS, CRESPHONTES, CTESIPPUS, CYLLARUS, DEIPHONTES, DEMOLEON, DICTYS, DORYLAS, DOUPON, DRYALUS, ECHECLUS, ELATUS, ELYMUS, ERICHTHONIUS, EUAGRUS, EURYNOMUS, EURYPYLUS, EURYTION, EURYTUS, EVENOR, EXADIUS, GEMON, GRYNEUS, HALESUS, HELOPS, HIPPASUS, HIPPOTES, HIPPOTION, HODITES, HOMADUS, HOPLEUS, HYLAEUS, HYLES, HYLONOME, HYPSICERUS, HYRNETHO, IMBREUS, INDUS, IOBACCHUS, IPHINOUS, ISOPLES, ISTHMIUS, LACESTADES, LAMIS, LATHRIA, LATREUS, LELEX, LENEUS, LENOBIUS, LYCABAS, LYCAON, LYCIDAS, LYCON, LYCOPES, LYCUS, MACAREUS, MARON, MARSYAS, MELANCHAETES, MELANEUS, MERMERUS, MIMAS, MONYCHUS, MOPSUS, NAPAEUS, NEDYMNUS, NESSUS, NESTOR, NINUS, OESTRUS, ONTHYRIUS, ORESTES, ORIUS, ORNEUS, PALAECHTHON, PEAUCEUS, PELASGUS, PELATES, PELEUS, PERIMEDES, PETRAEUS, PHAECOMES, PHAESTUS, PHALCES, PHEREUS, PHIGALUS, PHLEGRAEUS, PHLEGYAS, PHOLUS, PHORBAS, PHRIXUS, PHYLAS, PIRITHOUS, PITHOS, POEMENIUS, PROCLES, PROLOCHUS, PRONOMUS, PYLAIEUS, PYLENOR, PYRACMUS, PYRAETHUS, RHOECUS, RHOETUS, RHOPADLUS, RIPHEUS, ROMUS, SCIRTUS, SILENUS, STYPHELUS, TECTAPHUS, TELEBOAS, TEMENUS, THEREUS, THERSANDER, THIASUS, THRASYANOR, TYLLUS, UREUS,
 		// AMAZONS - spirits of battle
 		AELLA, AGAVE, ALCIBIE, ALCIPPE, ANTANDRE, ANTIANIRA, ANTIBROTE, ANTIOCHE, ANTIOPE, BREMUSA, CLONIE, DEIANIRA, DERIMACHEIA, DERINOE, DIXUPPE, ERIBOEA, EURYALE, EVANDRE, HARMOTHOE, HARPE, HIPPOLYTE, HIPPOTHOE, IPHINOME, LAOMACHE, LYCE, MARPE, MELANIPPE, MENIPPE, MOLPADIA, MYRINA, OCYALE, OTRERE, PENTHESILIA, PHILLIPPIS, POLEMUSA, TECMESSA, THERMODOSA, THOE,
 		// ERIS - spirits of conflict
 		ACHLYS, ACHOS, ADEPHAGIA, ADIKA, AERGIA, AGON, ALALA, ALASTOR, ALECTO, ALGEA, ALGOS, AMECHANIA, ANAIDEIA, ANAPLEKTE, ANDROKTASIAI, ANIA, ANTEROS, APORIA, ARAE, ATE, CORUS, DEIMOS, DYSNOMIA, DYSSEBEIA, EIRENE, EKECHEIRIA, ELEOS, ELPHIS, EPIPHRON, GERAS, HEDYLOGOS, HERMAPHRODITUS, HOMADOS, HORKOS, HYSIMNAI, IOKE, KAKIA, KER, KOALEMOS, KYDOIMOS, LIMOS, LOGOI, LUPE, LYSSA, MAKHAI, MANIA, MEGAERA, MOMUS, MOROS, NEIKEA, NOSOS, OIZYS, PALIOXIS, PALIXIS, PENIA, PHEME, PHOBOS, PHONOI, PHRIKE, PHTHONUS, PONOS, PROIOXIS, PROPHASIS, PSEUDEA, PTOCHEIA, STYGERE, TISIPHONE, SYNTRIBOS, SMARAGOS, ASBETOS, SABAKTES, OMODAMOS, ENYALIUS, ENYO, GLYCON, TARAXIPPUS,
 		// Greek cyclopes
 		AGRIUS, ALCYONEUS, ALOADAE, ALPOS, ANAX, ANTAEUS, ANTIPHATES, ARGES, ARGOS_PANOPTES, ARISTAEUS, AZEUS, BRIAREUS, BRONTES, CACUS, CHRYSAOR, COTTUS, DAMASEN, DAMYSUS, ECHIDNADES, ELATREUS, ENCELADUS, EPHIALTES, EURYALUS, EURYMEDON, GERYON, GYES, HALIMEDES, HOPLODAMUS, HYLLUS, LEON, MYLINUS, OEOLYCA, OREUS, ORION, OTUS, PERIBOEA, POLYBOTES, POLYPHEMUS, PORPHYRION, STEROPES, SYCEUS, TITYUS, TRACHIUS,
+		// Greek witches
+		ACESIDAS, ACMON, ACTAEUS, AELLOPE, AGLAOPE, AITNAIOS, ALKON, ARGYRON, ATABYRIUS, CELMIS, CHALCON, CHRYSON, CIRCE, CYLLENUS, CYRBAS, DAMNAMENEUS, DEINO, DELAS, DEMONAX, DEXITHEA, EMPUSA, EPIMEDES, HECATE, HIMEROPE, IASIUS, LAMIA, LEUCOSIA, LIGEIA, LYKTOS, LYSAGORA, MAKELO, MEDUSA, MEGALESIUS, MOLPE, MORMO, MYLAS, NICOTHOE, NIKON, ONNES, ORMENOS, PAEONAEUS, PARTHENOPE, PEISINOE, PEMPHREDO, PODARKE, PYRRHICHUS, RAIDNE, SIMON, SKELMIS, STHENO, TELES, THELCHETEREIA, THELXIOPE, TITIAS, TONNES,
 		// Christian angels
 		BARACHIEL, JEGUDIEL, LUCIFER, MURIEL, PAHALIAH, SARATHIEL, SELAPHIEL, WORMWOOD, ZACHARIEL,
 		// Christian demons
@@ -189,39 +193,252 @@ public abstract class Immortal implements Actor {
 	}
 
 	public static class Prototype {
+		/*
+		 * STATIC FIELDS
+		 */
 		private static Map<Entity, Prototype> prototypes;
-		
+
 		static {
 			prototypes = new HashMap<Entity, Prototype>();
-			
-			
-			
+
+			Entity[] array = null;
+			Lesser lesser = null;
+			Actor.Alignment ali = null;
+			Domain domain = null;
+
+			/*
+			 * CANAANITE - ELOHIM
+			 */
+			array = ELOHIM;
+			lesser = Lesser.ELOHIM;
+			ali = Actor.Alignment.LAWFUL;
+			domain = Domain.LIFE;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			/*
+			 * JEWISH ANGELS & DEMONS
+			 */
+			array = JEWISH_ANGELS;
+			lesser = Lesser.ANGEL;
+			ali = Actor.Alignment.LAWFUL;
+			domain = Domain.LIGHT;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			array = JEWISH_DEMONS;
+			lesser = Lesser.DEMON;
+			ali = Actor.Alignment.EVIL;
+			domain = Domain.DEATH;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			/*
+			 * HELLENIC GODS & SPIRITS
+			 */
+
+			// TALOS is a bronze giant built by Hephaestus to guard Crete
+			domain = Domain.DEATH;
+			Prototype.prototypes.put(Entity.TALOS,
+					new Prototype(Entity.TALOS, Lesser.ABOMINATION, Alignment.NEUTRAL, domain));
+
+			// HELLENIC - PRIMORDIALS (Uranus et al.)
+			array = Immortal.GREEK_PRIMORDIALS;
+			lesser = Lesser.ELEMENTAL;
+			ali = Actor.Alignment.CHAOTIC;
+			domain = Domain.DEATH;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - TITANS (Cronus et al.)
+			array = Immortal.TITANS;
+			lesser = Lesser.TITAN;
+			ali = Actor.Alignment.CHAOTIC;
+			domain = Domain.KNOWLEDGE;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - OLYMPIANS (Zeus et al.)
+			array = Immortal.OLYMPIANS;
+			lesser = Lesser.OLYMPIAN;
+			ali = Actor.Alignment.LAWFUL;
+			domain = Domain.LIGHT;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - CHTHONIANS (Hades et al.)
+			array = Immortal.CHTHONIANS;
+			lesser = Lesser.CHTHONIAN;
+			ali = Actor.Alignment.EVIL;
+			domain = Domain.DEATH;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - OCEANIC (Poseidon et al.)
+			array = Immortal.OCEANIC;
+			lesser = Lesser.OCEANIC;
+			ali = Actor.Alignment.CHAOTIC;
+			domain = Domain.TEMPEST;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - Miscellaneous SPIRITS
+			array = Immortal.HELLENIC_SPIRITS;
+			lesser = Lesser.ELEMENTAL;
+			ali = Actor.Alignment.NEUTRAL;
+			domain = Domain.TRICKERY;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - AMAZONS (war spirits)
+			array = Immortal.AMAZONS;
+			lesser = Lesser.ELEMENTAL;
+			ali = Actor.Alignment.CHAOTIC;
+			domain = Domain.WAR;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - ERIC (conflict spirits)
+			array = Immortal.ERIS;
+			lesser = Lesser.ELEMENTAL;
+			ali = Actor.Alignment.EVIL;
+			domain = Domain.WAR;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - NYMPHS (nature spirits)
+			array = NYMPHS;
+			lesser = Lesser.NYMPH;
+			ali = Actor.Alignment.GOOD;
+			domain = Domain.LIFE;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - NYMPHS (nature spirits)
+			array = CENTAURS;
+			lesser = Lesser.CENTAUR;
+			ali = Actor.Alignment.CHAOTIC;
+			domain = Domain.NATURE;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - CYCLOPES
+			array = CYCLOPES;
+			lesser = Lesser.CYCLOPS;
+			ali = Actor.Alignment.CHAOTIC;
+			domain = Domain.KNOWLEDGE;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			// HELLENIC - NYMPHS (nature spirits)
+			array = GREEK_WITCHES;
+			lesser = Lesser.WITCH;
+			ali = Actor.Alignment.EVIL;
+			domain = Domain.TRICKERY;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			/*
+			 * CHRISTIAN ANGELS & DEMONS
+			 */
+			array = CHRISTIAN_ANGELS;
+			lesser = Lesser.ANGEL;
+			ali = Actor.Alignment.GOOD;
+			domain = Domain.LIGHT;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			array = CHRISTIAN_DEMONS;
+			lesser = Lesser.DEMON;
+			ali = Actor.Alignment.EVIL;
+			domain = Domain.DEATH;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			/*
+			 * ISLAMIC ANGELS & DEMONS
+			 */
+			array = ISLAMIC_ANGELS;
+			lesser = Lesser.ANGEL;
+			ali = Actor.Alignment.GOOD;
+			domain = Domain.LIGHT;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			array = ISLAMIC_DEMONS;
+			lesser = Lesser.DEMON;
+			ali = Actor.Alignment.EVIL;
+			domain = Domain.DEATH;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			/*
+			 * NORSE - GODS & JOTNAR
+			 */
+			array = JOTNAR;
+			lesser = Lesser.JOTUNN;
+			ali = Actor.Alignment.CHAOTIC;
+			domain = Domain.KNOWLEDGE;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
+			/*
+			 * ENOCHIAN ANGELS
+			 */
+			array = ENOCHIAN_ANGELS;
+			lesser = Lesser.ANGEL;
+			ali = Actor.Alignment.LAWFUL;
+			domain = Domain.LIGHT;
+			for (int i = 0; i < array.length; ++i) {
+				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+			}
+
 		}
-		
+
 		/*
 		 * INSTANCE FIELDS
 		 */
-		private Lesser affiliation;
-		
-		
 		private Entity entity;
-		private Greater greater;
-		private Lesser lesser;
+		private Lesser affiliation;
 		private EnumSet<Domain> domains;
 		private EnumSet<Actor.Alignment> alignment;
 
-		public Prototype(Entity entity, Greater greater, Alignment[] alignment, Domain[] domains) {
-			this.greater = greater;
-
-			// ditto
+		/*
+		 * CONSTRUCTOR
+		 */
+		public Prototype(Entity entity, Lesser affiliation, Alignment alignment, Domain domain) {
 			this.entity = entity;
+			this.affiliation = affiliation;
+
+			Alignment[] ali = alignmentRandomizer(alignment);
 			this.alignment = EnumSet.noneOf(Alignment.class);
-			if (alignment.length > 0) {
-				for (Alignment el : alignment) {
+			if (ali.length > 0) {
+				for (Alignment el : ali) {
 					this.alignment.add(el);
 				}
 			}
 
+			Domain[] domains = domainRandomizer(domain);
 			this.domains = EnumSet.noneOf(Domain.class);
 			if (domains.length > 0) {
 				for (Domain el : domains)
@@ -229,23 +446,44 @@ public abstract class Immortal implements Actor {
 			}
 		}
 
-		public Prototype(Entity entity, Lesser lesser, Alignment[] alignment, Domain[] domains) {
-			this.lesser = lesser;
+	}
 
-			// ditto
-			this.entity = entity;
-			this.alignment = EnumSet.noneOf(Alignment.class);
-			if (alignment.length > 0) {
-				for (Alignment el : alignment) {
-					this.alignment.add(el);
-				}
-			}
+	public static class Instance {
+		private static Set<Instance> instances;
 
-			this.domains = EnumSet.noneOf(Domain.class);
-			if (domains.length > 0) {
-				for (Domain el : domains)
-					this.domains.add(el);
+		static {
+			instances = new HashSet<Instance>();
+
+			for (Iterator<Prototype> it = Prototype.prototypes.values().iterator(); it.hasNext();) {
+				instances.add(new Instance(it.next()));
 			}
+		}
+
+		private Prototype prototype;
+		//
+		private String name;
+		private Entity entity;
+		private Lesser affiliation;
+
+		private Greater greater;
+		private EnumSet<Domain> domains;
+		private EnumSet<Alignment> alignment;
+
+		public Instance(Prototype prototype) {
+			this.prototype = prototype;
+			//
+			this.name = Dice.stringToName(prototype.entity.toString());
+			this.entity = prototype.entity;
+			this.affiliation = prototype.affiliation;
+
+			//
+			this.domains = EnumSet.copyOf(prototype.domains);
+			this.alignment = EnumSet.copyOf(prototype.alignment);
+
+		}
+
+		public String getName() {
+			return name;
 		}
 
 		public boolean greater() {
@@ -253,77 +491,27 @@ public abstract class Immortal implements Actor {
 		}
 
 		public boolean lesser() {
-			return (lesser != null);
+			return (greater == null);
 		}
 
 		@Override
 		public String toString() {
-			String string;
-
-			// string = String.format("%s %s %s", entity, alignment.toString(),
-			// domains.toString());
-			string = String.format("%-20s %s", entity, domains.toString());
+			String string = String.format("%s", name);
 
 			return string;
 		}
-	}
 
-	public static class Instance {
-		private Prototype prototype;
-
-		//
-		private String name;
-		private Entity entity;
-
-		private Greater greater;
-		private Lesser lesser;
-		private EnumSet<Domain> domains;
-		private EnumSet<Alignment> alignment;
-
-		public Instance(Prototype prototype) {
-			this.prototype = prototype;
-			this.name = Dice.stringToName(prototype.entity.toString());
-
-			//
-			this.entity = prototype.entity;
-			if (prototype.greater())
-				this.greater = prototype.greater;
-			else
-				this.lesser = prototype.lesser;
-
-			this.domains = EnumSet.copyOf(prototype.domains);
-			this.alignment = EnumSet.copyOf(prototype.alignment);
-
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
 	}
 
 	/*
 	 * STATIC FIELDS
 	 */
-	private static HashMap<Entity, Prototype> greaterImmortals;
-	private static HashMap<Entity, Prototype> lesserImmortals;
+	private static final Domain[] DOMAINS = { Domain.DEATH, Domain.KNOWLEDGE, Domain.LIFE, Domain.LIGHT, Domain.NATURE,
+			Domain.TEMPEST, Domain.TRICKERY, Domain.WAR };
 
-	private static final Domain[] DOMAINS = new Domain[] { Domain.DEATH, Domain.KNOWLEDGE, Domain.LIFE, Domain.LIGHT,
-			Domain.NATURE, Domain.TEMPEST, Domain.TRICKERY, Domain.WAR };
-
-	private static final Greater[] GREATER_IMMORTALS = { Greater.GOD, Greater.PRIMORDIAL, Greater.SPIRIT,
-			Greater.VESTIGE, Greater.HORROR };
-	// private static final Lesser[] LESSER_IMMORTALS = { Lesser.ANCESTOR,
-	// Lesser.SAINT, Lesser.DEMIGOD, Lesser.DEMIURGE,
-	// Lesser.ANGEL, Lesser.DEMON, Lesser.DRAGON, Lesser.UNDEAD, Lesser.WITCH,
-	// Lesser.ABOMINATION,
-	// Lesser.ELEMENTAL, Lesser.ASURA, Lesser.DEVA, Lesser.YAKSHA, Lesser.RAKSHASA,
-	// Lesser.JINNI, Lesser.TITAN,
-	// Lesser.OLYMPIAN, Lesser.CYCLOPS, Lesser.CHTHONIAN, Lesser.AESIR,
-	// Lesser.VANIR, Lesser.JOTUNN, Lesser.NORN,
-	// Lesser.SIDHE, Lesser.FOMORIAN, Lesser.LOA, Lesser.MAMI_WATA, Lesser.KAMI,
-	// Lesser.MONONOKE, Lesser.SHINIGAMI,
-	// Lesser.YOKAI };
+	private static final Lesser[] PANTHEONS = { Lesser.ELOHIM, Lesser.ANGEL, Lesser.DEMON, Lesser.ELEMENTAL,
+			Lesser.TITAN, Lesser.OLYMPIAN, Lesser.CHTHONIAN, Lesser.OCEANIC, Lesser.NYMPH, Lesser.CYCLOPS,
+			Lesser.JOTUNN, Lesser.WITCH, Lesser.CENTAUR };
 
 	/*
 	 * DAWN WAR
@@ -337,7 +525,7 @@ public abstract class Immortal implements Actor {
 	 * CANAANITE - ELOHIM
 	 */
 	private static final Entity[] ELOHIM = { Entity.ANAT, Entity.ASHERAH, Entity.ASTARTE, Entity.ATHIRAT, Entity.ATTAR,
-			Entity.BETH_HORON, Entity.DAGON, Entity.ELYON, Entity.ERETZ, Entity.ESHMUN, Entity.HADAD, Entity.HAMMON,
+			Entity.BETH_HORON, Entity.DAGAN, Entity.ELYON, Entity.ERETZ, Entity.ESHMUN, Entity.HADAD, Entity.HAMMON,
 			Entity.HERMON, Entity.ISHAT, Entity.KHIKHIBI, Entity.KOTHAR_WA_KHASIS, Entity.KOTHARAT, Entity.LOTAN,
 			Entity.MARQOD, Entity.MELQART, Entity.MISOR, Entity.MOLOCH, Entity.MOT, Entity.NIKKAL_WA_IB,
 			Entity.QADESHTU, Entity.RESHEPH, Entity.SHAHAR, Entity.SHALIM, Entity.SHAMAYIM, Entity.SHAPASH,
@@ -374,6 +562,12 @@ public abstract class Immortal implements Actor {
 			Entity.HYPNOS, Entity.KITAIRON, Entity.LACHESIS, Entity.NEMESIS, Entity.NYSOS, Entity.NYX, Entity.OLYMPUS,
 			Entity.OPHION, Entity.OREIOS, Entity.PARNES, Entity.PHANES, Entity.PHYSIS, Entity.PONTUS, Entity.TARTARUS,
 			Entity.THALASSA, Entity.THANATOS, Entity.TMOLUS, Entity.TYPHON, Entity.URANUS };
+	private static final Entity[] TITANS = { Entity.ARKE, Entity.ASTERIA, Entity.ASTRAEUS, Entity.ASTRAIOS,
+			Entity.ATLAS, Entity.AURA, Entity.CLYMENE, Entity.COEUS, Entity.CRIUS, Entity.CRONUS, Entity.DIONE,
+			Entity.EOS, Entity.EPIMETHEUS, Entity.EURYBIA, Entity.HELIOS, Entity.HYPERION, Entity.IAPETUS,
+			Entity.LELANTOS, Entity.LETO, Entity.MENOETIUS, Entity.METIS, Entity.MNEMOSYNE, Entity.OCEANUS,
+			Entity.PALLAS, Entity.PERSES, Entity.PROMETHEUS, Entity.RHEA, Entity.SELENE, Entity.TETHYS, Entity.THEIA,
+			Entity.THEMIS };
 	private static final Entity[] OLYMPIANS = { Entity.APHRODITE, Entity.APOLLO, Entity.ARES, Entity.ARTEMIS,
 			Entity.ATHENA, Entity.DEMETER, Entity.DIONYSUS, Entity.HEPHAESTUS, Entity.HERA, Entity.HERMES,
 			Entity.HESTIA, Entity.ZEUS };
@@ -387,12 +581,6 @@ public abstract class Immortal implements Actor {
 			Entity.PALAEMON, Entity.SANGARIUS, Entity.THETHYS, Entity.THAUMAS, Entity.THOOSA, Entity.TRITEIA,
 			Entity.TRITON, Entity.ACIS, Entity.ALPHEUS, Entity.ASOPUS, Entity.CLADEUS, Entity.COCYTUS, Entity.EUROTAS,
 			Entity.NILUS, Entity.PENEUS, Entity.SCAMANDER };
-	private static final Entity[] TITANS = { Entity.ARKE, Entity.ASTERIA, Entity.ASTRAEUS, Entity.ASTRAIOS,
-			Entity.ATLAS, Entity.AURA, Entity.CLYMENE, Entity.COEUS, Entity.CRIUS, Entity.CRONUS, Entity.DIONE,
-			Entity.EOS, Entity.EPIMETHEUS, Entity.EURYBIA, Entity.HELIOS, Entity.HYPERION, Entity.IAPETUS,
-			Entity.LELANTOS, Entity.LETO, Entity.MENOETIUS, Entity.METIS, Entity.MNEMOSYNE, Entity.OCEANUS,
-			Entity.PALLAS, Entity.PERSES, Entity.PROMETHEUS, Entity.RHEA, Entity.SELENE, Entity.TETHYS, Entity.THEIA,
-			Entity.THEMIS };
 	private static final Entity[] ERIS = { Entity.ACHLYS, Entity.ACHOS, Entity.ADEPHAGIA, Entity.ADIKA, Entity.AERGIA,
 			Entity.AGON, Entity.ALALA, Entity.ALASTOR, Entity.ALECTO, Entity.ALGEA, Entity.ALGOS, Entity.AMECHANIA,
 			Entity.ANAIDEIA, Entity.ANAPLEKTE, Entity.ANDROKTASIAI, Entity.ANIA, Entity.ANTEROS, Entity.APORIA,
@@ -518,6 +706,33 @@ public abstract class Immortal implements Actor {
 			Entity.TELEDICE, Entity.TELESTO, Entity.TELPHUSA, Entity.TERPSICHORE, Entity.THALEIA, Entity.THALIA,
 			Entity.THEISOA, Entity.THELXINOE, Entity.THEMISTO, Entity.THETIS, Entity.THISBE, Entity.THRAIKE,
 			Entity.TITHOREA, Entity.TRYGIE, Entity.URANIA, Entity.UREA, Entity.VENILIA, Entity.XANTHO, Entity.ZEUXO };
+	private static final Entity[] CENTAURS = { Entity.ABAS, Entity.ACTOR, Entity.AGAMEDIDAS, Entity.AGELAUS,
+			Entity.AGRAEUS, Entity.AGRON, Entity.ALCAEUS, Entity.ALETES, Entity.AMPHICTYON, Entity.AMPHION,
+			Entity.AMPYX, Entity.AMYCUS, Entity.ANAXANDRA, Entity.ANCHIUS, Entity.APHAREUS, Entity.APHIDAS, Entity.ARAS,
+			Entity.ARCTUS, Entity.AREOS, Entity.ARISTODEMUS, Entity.ASBOLUS, Entity.BELUS, Entity.BIENOR, Entity.BOEUS,
+			Entity.BROTEAS, Entity.CASTALIUS, Entity.CECROPS, Entity.CELADON, Entity.CERYNES, Entity.CHARAXUS,
+			Entity.CHIRON, Entity.CHROMIS, Entity.CISSUS, Entity.CISUS, Entity.CLANIS, Entity.CLEODAEUS, Entity.COMETES,
+			Entity.CORESUS, Entity.CORYTHUS, Entity.CRANAUS, Entity.CRANTOR, Entity.CRENAEUS, Entity.CRESPHONTES,
+			Entity.CTESIPPUS, Entity.CYLLARUS, Entity.DEIPHONTES, Entity.DEMOLEON, Entity.DICTYS, Entity.DORYLAS,
+			Entity.DOUPON, Entity.DRYALUS, Entity.ECHECLUS, Entity.ELATUS, Entity.ELYMUS, Entity.ERICHTHONIUS,
+			Entity.EUAGRUS, Entity.EURYNOMUS, Entity.EURYPYLUS, Entity.EURYTION, Entity.EURYTUS, Entity.EVENOR,
+			Entity.EXADIUS, Entity.GEMON, Entity.GRYNEUS, Entity.HALESUS, Entity.HELOPS, Entity.HIPPASUS,
+			Entity.HIPPOTES, Entity.HIPPOTION, Entity.HODITES, Entity.HOMADUS, Entity.HOPLEUS, Entity.HYLAEUS,
+			Entity.HYLES, Entity.HYLONOME, Entity.HYPSICERUS, Entity.HYRNETHO, Entity.IMBREUS, Entity.INDUS,
+			Entity.IOBACCHUS, Entity.IPHINOUS, Entity.ISOPLES, Entity.ISTHMIUS, Entity.LACESTADES, Entity.LAMIS,
+			Entity.LATHRIA, Entity.LATREUS, Entity.LELEX, Entity.LENEUS, Entity.LENOBIUS, Entity.LYCABAS, Entity.LYCAON,
+			Entity.LYCIDAS, Entity.LYCON, Entity.LYCOPES, Entity.LYCUS, Entity.MACAREUS, Entity.MARON, Entity.MARSYAS,
+			Entity.MELANCHAETES, Entity.MELANEUS, Entity.MERMERUS, Entity.MIMAS, Entity.MONYCHUS, Entity.MOPSUS,
+			Entity.NAPAEUS, Entity.NEDYMNUS, Entity.NESSUS, Entity.NESTOR, Entity.NINUS, Entity.OESTRUS,
+			Entity.ONTHYRIUS, Entity.ORESTES, Entity.ORIUS, Entity.ORNEUS, Entity.PALAECHTHON, Entity.PEAUCEUS,
+			Entity.PELASGUS, Entity.PELATES, Entity.PELEUS, Entity.PERIMEDES, Entity.PETRAEUS, Entity.PHAECOMES,
+			Entity.PHAESTUS, Entity.PHALCES, Entity.PHEREUS, Entity.PHIGALUS, Entity.PHLEGRAEUS, Entity.PHLEGYAS,
+			Entity.PHOLUS, Entity.PHORBAS, Entity.PHRIXUS, Entity.PHYLAS, Entity.PIRITHOUS, Entity.PITHOS,
+			Entity.POEMENIUS, Entity.PROCLES, Entity.PROLOCHUS, Entity.PRONOMUS, Entity.PYLAIEUS, Entity.PYLENOR,
+			Entity.PYRACMUS, Entity.PYRAETHUS, Entity.RHOECUS, Entity.RHOETUS, Entity.RHOPADLUS, Entity.RIPHEUS,
+			Entity.ROMUS, Entity.SCIRTUS, Entity.SILENUS, Entity.STYPHELUS, Entity.TECTAPHUS, Entity.TELEBOAS,
+			Entity.TEMENUS, Entity.THEREUS, Entity.THERSANDER, Entity.THIASUS, Entity.THRASYANOR, Entity.TYLLUS,
+			Entity.UREUS, };
 	private static final Entity[] CYCLOPES = { Entity.AGRIUS, Entity.ALCYONEUS, Entity.ALOADAE, Entity.ALPOS,
 			Entity.ANAX, Entity.ANTAEUS, Entity.ANTIPHATES, Entity.ARGES, Entity.ARGOS_PANOPTES, Entity.ARISTAEUS,
 			Entity.AZEUS, Entity.BRIAREUS, Entity.BRONTES, Entity.CACUS, Entity.CHRYSAOR, Entity.COTTUS,
@@ -526,6 +741,18 @@ public abstract class Immortal implements Actor {
 			Entity.HOPLODAMUS, Entity.HYLLUS, Entity.LEON, Entity.MYLINUS, Entity.OEOLYCA, Entity.OREUS, Entity.ORION,
 			Entity.OTUS, Entity.PERIBOEA, Entity.POLYBOTES, Entity.POLYPHEMUS, Entity.PORPHYRION, Entity.STEROPES,
 			Entity.SYCEUS, Entity.TITYUS, Entity.TRACHIUS };
+	private static final Entity[] GREEK_WITCHES = { Entity.ACESIDAS, Entity.ACMON, Entity.ACTAEUS, Entity.AELLOPE,
+			Entity.AGLAOPE, Entity.AITNAIOS, Entity.ALKON, Entity.ARGYRON, Entity.ATABYRIUS, Entity.CELMIS,
+			Entity.CHALCON, Entity.CHRYSON, Entity.CIRCE, Entity.CYLLENUS, Entity.CYRBAS, Entity.DAMNAMENEUS,
+			Entity.DEINO, Entity.DELAS, Entity.DEMONAX, Entity.DEXITHEA, Entity.EMPUSA, Entity.EPIMEDES, Entity.HECATE,
+			Entity.HIMEROPE, Entity.IASIUS, Entity.LAMIA, Entity.LEUCOSIA, Entity.LIGEIA, Entity.LYKTOS,
+			Entity.LYSAGORA, Entity.MAKELO, Entity.MEDUSA, Entity.MEGALESIUS, Entity.MOLPE, Entity.MORMO, Entity.MYLAS,
+			Entity.NICOTHOE, Entity.NIKON, Entity.ONNES, Entity.ORMENOS, Entity.PAEONAEUS, Entity.PARTHENOPE,
+			Entity.PEISINOE, Entity.PEMPHREDO, Entity.PODARKE, Entity.PYRRHICHUS, Entity.RAIDNE, Entity.SIMON,
+			Entity.SKELMIS, Entity.STHENO, Entity.TELES, Entity.THELCHETEREIA, Entity.THELXIOPE, Entity.TITIAS,
+			Entity.TONNES
+
+	};
 
 	/*
 	 * CHRISTIANITY
@@ -647,553 +874,146 @@ public abstract class Immortal implements Actor {
 	 * 
 	 */
 	static {
-		greaterImmortals = new HashMap<Entity, Prototype>();
-		lesserImmortals = new HashMap<Entity, Prototype>();
-		Entity[] array = null;
+		// greaterImmortals = new HashMap<Entity, Prototype>();
+		// lesserImmortals = new HashMap<Entity, Prototype>();
 
 		/*
 		 * DAWN WAR GODS
 		 * 
 		 */
-		lesserImmortals.put(Entity.ASMODEUS, new Prototype(Entity.ASMODEUS, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.AVANDRA, new Prototype(Entity.AVANDRA, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.BAHAMUT, new Prototype(Entity.BAHAMUT, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] { Domain.LIFE, Domain.WAR }));
-		lesserImmortals.put(Entity.BANE, new Prototype(Entity.BANE, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] { Domain.WAR }));
-		lesserImmortals.put(Entity.CORELLON, new Prototype(Entity.CORELLON, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.ERATHIS, new Prototype(Entity.ERATHIS, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.GRUUMSH, new Prototype(Entity.GRUUMSH, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.TEMPEST, Domain.WAR }));
-		lesserImmortals.put(Entity.IOUN, new Prototype(Entity.IOUN, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.KORD, new Prototype(Entity.KORD, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.NEUTRAL }, new Domain[] { Domain.TEMPEST }));
-		lesserImmortals.put(Entity.LOLTH, new Prototype(Entity.LOLTH, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.MELORA, new Prototype(Entity.MELORA, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.MORADIN, new Prototype(Entity.MORADIN, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] { Domain.KNOWLEDGE, Domain.WAR }));
-		lesserImmortals.put(Entity.PELOR, new Prototype(Entity.PELOR, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.NEUTRAL, Alignment.GOOD }, new Domain[] { Domain.LIFE, Domain.LIGHT }));
-		lesserImmortals.put(Entity.RAVEN_QUEEN, new Prototype(Entity.RAVEN_QUEEN, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] { Domain.DEATH, Domain.LIFE }));
-		lesserImmortals.put(Entity.SEHANINE, new Prototype(Entity.SEHANINE, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.THARIZDUN, new Prototype(Entity.THARIZDUN, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.TIAMAT, new Prototype(Entity.TIAMAT, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		lesserImmortals.put(Entity.TOROG, new Prototype(Entity.TOROG, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.NEUTRAL, Alignment.EVIL }, new Domain[] { Domain.DEATH }));
-		lesserImmortals.put(Entity.VECNA,
-				new Prototype(Entity.VECNA, Lesser.DEMIURGE, new Alignment[] { Alignment.NEUTRAL, Alignment.EVIL },
-						new Domain[] { Domain.DEATH, Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.ZEHIR, new Prototype(Entity.ZEHIR, Lesser.DEMIURGE,
-				new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] { Domain.DEATH, Domain.TRICKERY }));
+		// lesserImmortals.put(Entity.ASMODEUS, new Prototype(Entity.ASMODEUS,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] {
+		// Domain.TRICKERY }));
+		// lesserImmortals.put(Entity.AVANDRA, new Prototype(Entity.AVANDRA,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] {
+		// Domain.TRICKERY }));
+		// lesserImmortals.put(Entity.BAHAMUT, new Prototype(Entity.BAHAMUT,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] {
+		// Domain.LIFE, Domain.WAR }));
+		// lesserImmortals.put(Entity.BANE, new Prototype(Entity.BANE, Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] {
+		// Domain.WAR }));
+		// lesserImmortals.put(Entity.CORELLON, new Prototype(Entity.CORELLON,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] {
+		// Domain.LIGHT }));
+		// lesserImmortals.put(Entity.ERATHIS, new Prototype(Entity.ERATHIS,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] {
+		// Domain.KNOWLEDGE }));
+		// lesserImmortals.put(Entity.GRUUMSH, new Prototype(Entity.GRUUMSH,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
+		// Domain.TEMPEST, Domain.WAR }));
+		// lesserImmortals.put(Entity.IOUN, new Prototype(Entity.IOUN, Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.KNOWLEDGE }));
+		// lesserImmortals.put(Entity.KORD, new Prototype(Entity.KORD, Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.NEUTRAL }, new Domain[] {
+		// Domain.TEMPEST }));
+		// lesserImmortals.put(Entity.LOLTH, new Prototype(Entity.LOLTH,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
+		// Domain.TRICKERY }));
+		// lesserImmortals.put(Entity.MELORA, new Prototype(Entity.MELORA,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.NEUTRAL }, new Domain[] { Domain.NATURE,
+		// Domain.TEMPEST }));
+		// lesserImmortals.put(Entity.MORADIN, new Prototype(Entity.MORADIN,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.LAWFUL, Alignment.GOOD }, new Domain[] {
+		// Domain.KNOWLEDGE, Domain.WAR }));
+		// lesserImmortals.put(Entity.PELOR, new Prototype(Entity.PELOR,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.NEUTRAL, Alignment.GOOD }, new Domain[] {
+		// Domain.LIFE, Domain.LIGHT }));
+		// lesserImmortals.put(Entity.RAVEN_QUEEN, new Prototype(Entity.RAVEN_QUEEN,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.LAWFUL, Alignment.NEUTRAL }, new Domain[] {
+		// Domain.DEATH, Domain.LIFE }));
+		// lesserImmortals.put(Entity.SEHANINE, new Prototype(Entity.SEHANINE,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.GOOD }, new Domain[] {
+		// Domain.TRICKERY }));
+		// lesserImmortals.put(Entity.THARIZDUN, new Prototype(Entity.THARIZDUN,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
+		// Domain.TRICKERY }));
+		// lesserImmortals.put(Entity.TIAMAT, new Prototype(Entity.TIAMAT,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.LAWFUL, Alignment.EVIL }, new Domain[] {
+		// Domain.TRICKERY, Domain.WAR }));
+		// lesserImmortals.put(Entity.TOROG, new Prototype(Entity.TOROG,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.NEUTRAL, Alignment.EVIL }, new Domain[] {
+		// Domain.DEATH }));
+		// lesserImmortals.put(Entity.VECNA,
+		// new Prototype(Entity.VECNA, Lesser.DEMIURGE, new Alignment[] {
+		// Alignment.NEUTRAL, Alignment.EVIL },
+		// new Domain[] { Domain.DEATH, Domain.KNOWLEDGE }));
+		// lesserImmortals.put(Entity.ZEHIR, new Prototype(Entity.ZEHIR,
+		// Lesser.DEMIURGE,
+		// new Alignment[] { Alignment.CHAOTIC, Alignment.EVIL }, new Domain[] {
+		// Domain.DEATH, Domain.TRICKERY }));
 
 		/*
-		 * ADD LESSER BEINGS
-		 */
-
-		/*
-		 * CANAANITE - ELOHIM
-		 */
-		lesserImmortals.put(Entity.ANAT,
-				lesserBeing(Entity.ANAT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.WAR }));
-		lesserImmortals.put(Entity.ASHERAH,
-				lesserBeing(Entity.ASHERAH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.ASTARTE, lesserBeing(Entity.ASTARTE, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.LIFE, Domain.WAR }));
-		lesserImmortals.put(Entity.ATHIRAT,
-				lesserBeing(Entity.ATHIRAT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.ATTAR, lesserBeing(Entity.ATTAR, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.LIGHT, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.BETH_HORON,
-				lesserBeing(Entity.BETH_HORON, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.DEATH }));
-		lesserImmortals.put(Entity.DAGON, lesserBeing(Entity.DAGON, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.LIFE, Domain.NATURE }));
-		lesserImmortals.put(Entity.ELYON, lesserBeing(Entity.ELYON, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.LIGHT, Domain.NATURE }));
-		lesserImmortals.put(Entity.ERETZ, lesserBeing(Entity.ERETZ, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.LIFE, Domain.NATURE }));
-		lesserImmortals.put(Entity.ESHMUN, lesserBeing(Entity.ESHMUN, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.LIFE }));
-		lesserImmortals.put(Entity.HADAD,
-				lesserBeing(Entity.HADAD, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.TEMPEST }));
-		lesserImmortals.put(Entity.HAMMON, lesserBeing(Entity.HAMMON, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.LIFE, Domain.NATURE }));
-		lesserImmortals.put(Entity.HERMON,
-				lesserBeing(Entity.HERMON, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.ISHAT,
-				lesserBeing(Entity.ISHAT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.NATURE }));
-		lesserImmortals.put(Entity.KHIKHIBI,
-				lesserBeing(Entity.KHIKHIBI, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.KOTHAR_WA_KHASIS, lesserBeing(Entity.KOTHAR_WA_KHASIS, Lesser.ELOHIM,
-				Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.KOTHARAT, lesserBeing(Entity.KOTHARAT, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.NATURE, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.LOTAN,
-				lesserBeing(Entity.LOTAN, Lesser.DRAGON, Alignment.NEUTRAL, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.MARQOD,
-				lesserBeing(Entity.MARQOD, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.MELQART, lesserBeing(Entity.MELQART, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.LIGHT }));
-		lesserImmortals.put(Entity.MISOR,
-				lesserBeing(Entity.MISOR, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.MOLOCH,
-				lesserBeing(Entity.MOLOCH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.MOT, lesserBeing(Entity.MOT, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.NIKKAL_WA_IB,
-				lesserBeing(Entity.NIKKAL_WA_IB, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.QADESHTU,
-				lesserBeing(Entity.QADESHTU, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.RESHEPH, lesserBeing(Entity.RESHEPH, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.DEATH, Domain.NATURE }));
-		lesserImmortals.put(Entity.SHAHAR,
-				lesserBeing(Entity.SHAHAR, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.SHALIM, lesserBeing(Entity.SHALIM, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.SHAMAYIM, lesserBeing(Entity.SHAMAYIM, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.LIGHT, Domain.NATURE }));
-		lesserImmortals.put(Entity.SHAPASH,
-				lesserBeing(Entity.SHAPASH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.SHEOL, lesserBeing(Entity.SHEOL, Lesser.ELOHIM, Alignment.NEUTRAL,
-				new Domain[] { Domain.DEATH, Domain.NATURE }));
-		lesserImmortals.put(Entity.SYDYK,
-				lesserBeing(Entity.SYDYK, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.TAAUTUS,
-				lesserBeing(Entity.TAAUTUS, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.TANIT,
-				lesserBeing(Entity.TANIT, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.LIFE, Domain.WAR }));
-		lesserImmortals.put(Entity.YAM, lesserBeing(Entity.YAM, Lesser.DRAGON, Alignment.NEUTRAL,
-				new Domain[] { Domain.TEMPEST, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.YARIKH,
-				lesserBeing(Entity.YARIKH, Lesser.ELOHIM, Alignment.NEUTRAL, new Domain[] { Domain.TRICKERY }));
-
-		/*
-		 * INITIALIZE COSMIC ENTITIES
 		 * 
 		 */
-
-		// JEWISH ANGELS
-		array = JEWISH_ANGELS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.LAWFUL));
-		}
-
-		array = JEWISH_DEMONS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.EVIL));
-		}
-
-		// HELLENIC - GREEK
-		lesserImmortals.put(Entity.APHRODITE, lesserBeing(Entity.APHRODITE, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		lesserImmortals.put(Entity.APOLLO, lesserBeing(Entity.APOLLO, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.LIGHT }));
-		lesserImmortals.put(Entity.ARES,
-				lesserBeing(Entity.ARES, Lesser.OLYMPIAN, Alignment.LAWFUL, new Domain[] { Domain.DEATH, Domain.WAR }));
-		lesserImmortals.put(Entity.ARTEMIS, lesserBeing(Entity.ARTEMIS, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.NATURE, Domain.WAR }));
-		lesserImmortals.put(Entity.ATHENA, lesserBeing(Entity.ATHENA, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.WAR }));
-		lesserImmortals.put(Entity.DEMETER, lesserBeing(Entity.DEMETER, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.LIFE, Domain.NATURE }));
-		lesserImmortals.put(Entity.DIONYSUS, lesserBeing(Entity.DIONYSUS, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.NATURE, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.HEPHAESTUS, lesserBeing(Entity.HEPHAESTUS, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.NATURE }));
-		lesserImmortals.put(Entity.HERA, lesserBeing(Entity.HERA, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.LIFE, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.HERMES, lesserBeing(Entity.HERMES, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.HESTIA, lesserBeing(Entity.HESTIA, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.LIFE, Domain.LIGHT }));
-		lesserImmortals.put(Entity.ZEUS, lesserBeing(Entity.ZEUS, Lesser.OLYMPIAN, Alignment.LAWFUL,
-				new Domain[] { Domain.LIGHT, Domain.TEMPEST }));
-
-		/*
-		 * HELLENIC PRIMORDIALS
-		 */
-		greaterImmortals.put(Entity.AETHER,
-				greaterBeing(Entity.AETHER, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.AION, greaterBeing(Entity.AION, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.AITNA,
-				greaterBeing(Entity.AITNA, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.ANANKE, greaterBeing(Entity.ANANKE, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.ATHOS,
-				greaterBeing(Entity.ATHOS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.ATROPOS, greaterBeing(Entity.ATROPOS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.CHAOS, greaterBeing(Entity.CHAOS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.CHRONOS, greaterBeing(Entity.CHRONOS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.CLOTHO, greaterBeing(Entity.CLOTHO, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.ECHIDNA, greaterBeing(Entity.ECHIDNA, Greater.PRIMORDIAL, Alignment.CHAOTIC,
-				new Domain[] { Domain.LIFE, Domain.TRICKERY }));
-		greaterImmortals.put(Entity.EREBUS,
-				greaterBeing(Entity.EREBUS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.ERIS,
-				greaterBeing(Entity.ERIS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.WAR }));
-		greaterImmortals.put(Entity.EROS,
-				greaterBeing(Entity.EROS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.EURYNOME, greaterBeing(Entity.EURYNOME, Greater.PRIMORDIAL, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.LIFE }));
-		greaterImmortals.put(Entity.GAIA,
-				greaterBeing(Entity.GAIA, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.LIFE }));
-		greaterImmortals.put(Entity.HELIKON,
-				greaterBeing(Entity.HELIKON, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.HEMERA,
-				greaterBeing(Entity.HEMERA, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.LIGHT }));
-		greaterImmortals.put(Entity.HIMEROS, greaterBeing(Entity.HIMEROS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.HYPNOS,
-				greaterBeing(Entity.HYPNOS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.KITAIRON,
-				greaterBeing(Entity.KITAIRON, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.LACHESIS, greaterBeing(Entity.LACHESIS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.NEMESIS, greaterBeing(Entity.NEMESIS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.NYSOS,
-				greaterBeing(Entity.NYSOS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.NYX,
-				greaterBeing(Entity.NYX, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.TRICKERY }));
-		greaterImmortals.put(Entity.OLYMPUS,
-				greaterBeing(Entity.OLYMPUS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.OPHION, greaterBeing(Entity.OPHION, Greater.PRIMORDIAL, Alignment.CHAOTIC,
-				new Domain[] { Domain.LIGHT, Domain.TRICKERY }));
-		greaterImmortals.put(Entity.OREIOS,
-				greaterBeing(Entity.OREIOS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.PARNES,
-				greaterBeing(Entity.PARNES, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.PHANES, greaterBeing(Entity.PHANES, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.PHYSIS, greaterBeing(Entity.PHYSIS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.PONTUS, greaterBeing(Entity.PONTUS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.TARTARUS, greaterBeing(Entity.TARTARUS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.THALASSA, greaterBeing(Entity.THALASSA, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.THANATOS, greaterBeing(Entity.THANATOS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-		greaterImmortals.put(Entity.TMOLUS,
-				greaterBeing(Entity.TMOLUS, Greater.PRIMORDIAL, Alignment.CHAOTIC, new Domain[] { Domain.NATURE }));
-		greaterImmortals.put(Entity.TYPHON, greaterBeing(Entity.TYPHON, Greater.PRIMORDIAL, Alignment.CHAOTIC,
-				new Domain[] { Domain.TRICKERY, Domain.WAR }));
-		greaterImmortals.put(Entity.URANUS, greaterBeing(Entity.URANUS, Greater.PRIMORDIAL, Alignment.CHAOTIC));
-
-		/*
-		 * HELLENIC TITANS
-		 */
-		lesserImmortals.put(Entity.ARKE, lesserBeing(Entity.ARKE, Lesser.TITAN, Alignment.NEUTRAL));
-		lesserImmortals.put(Entity.ASTERIA, lesserBeing(Entity.ASTERIA, Lesser.TITAN, Alignment.NEUTRAL));
-		lesserImmortals.put(Entity.ASTRAEUS, lesserBeing(Entity.ASTRAEUS, Lesser.TITAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.ASTRAIOS, lesserBeing(Entity.ASTRAIOS, Lesser.TITAN, Alignment.NEUTRAL));
-		lesserImmortals.put(Entity.ATLAS, lesserBeing(Entity.ATLAS, Lesser.TITAN, Alignment.NEUTRAL));
-		lesserImmortals.put(Entity.AURA,
-				lesserBeing(Entity.AURA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.CLYMENE, lesserBeing(Entity.CLYMENE, Lesser.TITAN, Alignment.NEUTRAL));
-		lesserImmortals.put(Entity.COEUS,
-				lesserBeing(Entity.COEUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.CRIUS,
-				lesserBeing(Entity.CRIUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.CRONUS, lesserBeing(Entity.CRONUS, Lesser.TITAN, Alignment.NEUTRAL));
-		lesserImmortals.put(Entity.DIONE,
-				lesserBeing(Entity.DIONE, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.EOS,
-				lesserBeing(Entity.EOS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.EPIMETHEUS, lesserBeing(Entity.EPIMETHEUS, Lesser.TITAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.EURYBIA,
-				lesserBeing(Entity.EURYBIA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TEMPEST }));
-		lesserImmortals.put(Entity.HELIOS,
-				lesserBeing(Entity.HELIOS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.HYPERION,
-				lesserBeing(Entity.HYPERION, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.IAPETUS,
-				lesserBeing(Entity.IAPETUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.DEATH }));
-		lesserImmortals.put(Entity.LELANTOS,
-				lesserBeing(Entity.LELANTOS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.LETO,
-				lesserBeing(Entity.LETO, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIFE }));
-		lesserImmortals.put(Entity.MENOETIUS, lesserBeing(Entity.MENOETIUS, Lesser.TITAN, Alignment.LAWFUL,
-				new Domain[] { Domain.DEATH, Domain.WAR }));
-		lesserImmortals.put(Entity.METIS,
-				lesserBeing(Entity.METIS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.MNEMOSYNE,
-				lesserBeing(Entity.MNEMOSYNE, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.KNOWLEDGE }));
-		lesserImmortals.put(Entity.OCEANUS,
-				lesserBeing(Entity.OCEANUS, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TEMPEST }));
-		lesserImmortals.put(Entity.PALLAS, lesserBeing(Entity.PALLAS, Lesser.TITAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.WAR }));
-		lesserImmortals.put(Entity.PERSES,
-				lesserBeing(Entity.PERSES, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.WAR }));
-		lesserImmortals.put(Entity.PROMETHEUS, lesserBeing(Entity.PROMETHEUS, Lesser.TITAN, Alignment.LAWFUL,
-				new Domain[] { Domain.KNOWLEDGE, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.RHEA,
-				lesserBeing(Entity.RHEA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIFE, Domain.NATURE }));
-		lesserImmortals.put(Entity.SELENE,
-				lesserBeing(Entity.SELENE, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.TRICKERY }));
-		lesserImmortals.put(Entity.TETHYS, lesserBeing(Entity.TETHYS, Lesser.TITAN, Alignment.LAWFUL,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.THEIA,
-				lesserBeing(Entity.THEIA, Lesser.TITAN, Alignment.LAWFUL, new Domain[] { Domain.LIGHT }));
-		lesserImmortals.put(Entity.THEMIS, lesserBeing(Entity.THEMIS, Lesser.TITAN, Alignment.NEUTRAL));
-
-		/*
-		 * HELLENIC CHTHONIANS
-		 * 
-		 */
-		lesserImmortals.put(Entity.ACHERON, lesserBeing(Entity.ACHERON, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.AIAKOS, lesserBeing(Entity.AIAKOS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.AMPHIARAUS, lesserBeing(Entity.AMPHIARAUS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.ANGELOS, lesserBeing(Entity.ANGELOS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.ASKALAPHOS, lesserBeing(Entity.ASKALAPHOS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.CERBERUS, lesserBeing(Entity.CERBERUS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.CHARON, lesserBeing(Entity.CHARON, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.GORGYRA, lesserBeing(Entity.GORGYRA, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.HADES, lesserBeing(Entity.HADES, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.KEUTHONYMOS, lesserBeing(Entity.KEUTHONYMOS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.KOKYTOS, lesserBeing(Entity.KOKYTOS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.LETHE, lesserBeing(Entity.LETHE, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.MACARIA, lesserBeing(Entity.MACARIA, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.MELINOE, lesserBeing(Entity.MELINOE, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.MENOETES, lesserBeing(Entity.MENOETES, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.MINOS, lesserBeing(Entity.MINOS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.ORPHNE, lesserBeing(Entity.ORPHNE, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.PERSEPHONE, lesserBeing(Entity.PERSEPHONE, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.PHLEGETHON, lesserBeing(Entity.PHLEGETHON, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.STYX, lesserBeing(Entity.STYX, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.THADAMANTHYS, lesserBeing(Entity.THADAMANTHYS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-		lesserImmortals.put(Entity.ZAGREUS, lesserBeing(Entity.ZAGREUS, Lesser.CHTHONIAN, Alignment.EVIL,
-				new Domain[] { Domain.DEATH, Domain.TRICKERY }));
-
-		/*
-		 * HELLENIC OCEANIC GODS
-		 * 
-		 */
-		lesserImmortals.put(Entity.POSEIDON, lesserBeing(Entity.POSEIDON, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.AEGAEON, lesserBeing(Entity.AEGAEON, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.ACHELOUS, lesserBeing(Entity.ACHELOUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.AMPHITRITE, lesserBeing(Entity.AMPHITRITE, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.BENTHESIKYME, lesserBeing(Entity.BENTHESIKYME, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.BRIZO, lesserBeing(Entity.BRIZO, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.CETO, lesserBeing(Entity.CETO, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.CHARYBDIS, lesserBeing(Entity.CHARYBDIS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.CYMOPOLEIA, lesserBeing(Entity.CYMOPOLEIA, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.DELPHIN, lesserBeing(Entity.DELPHIN, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.EIDOTHEA, lesserBeing(Entity.EIDOTHEA, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.GLAUCUS, lesserBeing(Entity.GLAUCUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.LEUCOTHEA, lesserBeing(Entity.LEUCOTHEA, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.PSAMATHE, lesserBeing(Entity.PSAMATHE, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.NEREUS, lesserBeing(Entity.NEREUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.NERITES, lesserBeing(Entity.NERITES, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.PALAEMON, lesserBeing(Entity.PALAEMON, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.SANGARIUS, lesserBeing(Entity.SANGARIUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.THETHYS, lesserBeing(Entity.THETHYS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.THAUMAS, lesserBeing(Entity.THAUMAS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.THOOSA, lesserBeing(Entity.THOOSA, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.TRITEIA, lesserBeing(Entity.TRITEIA, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.TRITON, lesserBeing(Entity.TRITON, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.ACIS, lesserBeing(Entity.ACIS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.ALPHEUS, lesserBeing(Entity.ALPHEUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.ASOPUS, lesserBeing(Entity.ASOPUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.CLADEUS, lesserBeing(Entity.CLADEUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.COCYTUS, lesserBeing(Entity.COCYTUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.EUROTAS, lesserBeing(Entity.EUROTAS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.NILUS, lesserBeing(Entity.NILUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.PENEUS, lesserBeing(Entity.PENEUS, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-		lesserImmortals.put(Entity.SCAMANDER, lesserBeing(Entity.SCAMANDER, Lesser.OCEANIC, Alignment.CHAOTIC,
-				new Domain[] { Domain.NATURE, Domain.TEMPEST }));
-
-		// TALOS is a bronze giant built by Hephaestus to guard Crete
-		lesserImmortals.put(Entity.TALOS, lesserBeing(Entity.TALOS, Lesser.ABOMINATION, Alignment.NEUTRAL));
-
-		// HELLENIC - Miscellaneous SPIRITS
-		Immortal.Greater greater = Immortal.Greater.SPIRIT;
-		array = Immortal.HELLENIC_SPIRITS;
-		for (int i = 0; i < array.length; ++i) {
-			greaterImmortals.put(array[i],
-					greaterBeing(array[i], greater, Alignment.NEUTRAL, domainRandomizer()));
-		}
-
-		// HELLENIC - AMAZONS (war spirits)
-		array = Immortal.AMAZONS;
-		for (int i = 0; i < array.length; ++i) {
-			greaterImmortals.put(array[i], greaterBeing(array[i], greater, Alignment.EVIL, domainRandomizer()));
-		}
-
-		// HELLENIC - ERIC (conflict spirits)
-		array = Immortal.ERIS;
-		for (int i = 0; i < array.length; ++i) {
-			greaterImmortals.put(array[i], greaterBeing(array[i], greater, Alignment.EVIL, domainRandomizer()));
-		}
-
-		// HELLENIC - NYMPHS (nature spirits)
-		array = NYMPHS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.NYMPH, Alignment.NEUTRAL));
-		}
-
-		// HELLENIC - CYCLOPES
-		array = CYCLOPES;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.CYCLOPS, Alignment.NEUTRAL));
-		}
-
-		// CHRISTIAN
-		array = CHRISTIAN_ANGELS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
-		}
-		array = CHRISTIAN_DEMONS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.EVIL));
-		}
-
-		// ISLAMIC ANGELS
-		array = ISLAMIC_ANGELS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
-		}
-		array = ISLAMIC_DEMONS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.DEMON, Alignment.EVIL));
-		}
-
-		// JOTNAR
-		array = JOTNAR;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.JOTUNN, Alignment.CHAOTIC));
-		}
-
-		// ENOCHIAN ANGELS
-		array = ENOCHIAN_ANGELS;
-		for (int i = 0; i < array.length; ++i) {
-			lesserImmortals.put(array[i], lesserBeing(array[i], Lesser.ANGEL, Alignment.GOOD));
-		}
 	}
 
 	/*
 	 * STATIC METHODS
 	 */
-	public static Set<Entity> powersOfAlignment(Alignment alignment) {
-		Set<Entity> set = new HashSet<Entity>();
+	public static Set<Instance> filterByPantheon(Lesser lesser) {
+		Set<Instance> workingSet = new HashSet<Instance>();
 
-		Entity candidate;
-		Prototype prototype;
-		for (Iterator<Entity> it = greaterImmortals.keySet().iterator(); it.hasNext();) {
+		Instance candidate;
+		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
 			candidate = it.next();
-			prototype = greaterImmortals.get(candidate);
-			if (prototype.alignment.contains(alignment))
-				set.add(candidate);
+
+			if (candidate.affiliation.equals(lesser))
+				workingSet.add(candidate);
+
 		}
 
-		for (Iterator<Entity> it = lesserImmortals.keySet().iterator(); it.hasNext();) {
-			candidate = it.next();
-			prototype = lesserImmortals.get(candidate);
-			if (prototype.alignment.contains(alignment))
-				set.add(candidate);
+		return workingSet;
+	}
+
+	public static Set<Instance> powersOfAlignment(Alignment alignment) {
+		Set<Instance> set = new HashSet<Instance>();
+
+		Instance instance;
+		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+			instance = it.next();
+			if (instance.alignment.contains(alignment))
+				set.add(instance);
 		}
 
 		return set;
 	}
 
-	public static Collection<Prototype> getLesserBeings() {
-		return lesserImmortals.values();
-	}
-
-	public static String lesserBeingsAlignmentToString() {
+	public static String alignmentToString() {
 		int[] array = new int[] { 0, 0, 0, 0, 0 };
-		Prototype prototype;
 
-		for (Iterator<Prototype> it = greaterImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
+		Instance instance;
+		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+			instance = it.next();
 
-			if (prototype.alignment.contains(Alignment.LAWFUL))
+			if (instance.alignment.contains(Alignment.LAWFUL))
 				++array[0];
 
-			if (prototype.alignment.contains(Alignment.GOOD))
+			if (instance.alignment.contains(Alignment.GOOD))
 				++array[1];
 
-			if (prototype.alignment.contains(Alignment.NEUTRAL))
+			if (instance.alignment.contains(Alignment.NEUTRAL))
 				++array[2];
 
-			if (prototype.alignment.contains(Alignment.EVIL))
+			if (instance.alignment.contains(Alignment.EVIL))
 				++array[3];
 
-			if (prototype.alignment.contains(Alignment.CHAOTIC))
-				++array[4];
-		}
-
-		for (Iterator<Prototype> it = lesserImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
-
-			if (prototype.alignment.contains(Alignment.LAWFUL))
-				++array[0];
-
-			if (prototype.alignment.contains(Alignment.GOOD))
-				++array[1];
-
-			if (prototype.alignment.contains(Alignment.NEUTRAL))
-				++array[2];
-
-			if (prototype.alignment.contains(Alignment.EVIL))
-				++array[3];
-
-			if (prototype.alignment.contains(Alignment.CHAOTIC))
+			if (instance.alignment.contains(Alignment.CHAOTIC))
 				++array[4];
 		}
 
@@ -1204,58 +1024,32 @@ public abstract class Immortal implements Actor {
 
 	public static String alignmentGridStatsToString() {
 		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		double total = lesserImmortals.size() + greaterImmortals.size();
+		double total = Instance.instances.size();
 
-		Prototype prototype;
-		for (Iterator<Prototype> it = greaterImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
+		Instance instance;
+		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+			instance = it.next();
 
-			if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.GOOD))
+			if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.GOOD))
 				++array[0];
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.NEUTRAL))
 				++array[1];
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.EVIL))
 				++array[2];
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.GOOD))
+			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.GOOD))
 				++array[3];
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.EVIL))
 				++array[5];
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.GOOD))
+			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.GOOD))
 				++array[6];
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.NEUTRAL))
 				++array[7];
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.EVIL))
 				++array[8];
-			else if (prototype.alignment.contains(Alignment.LAWFUL) != true
-					&& prototype.alignment.contains(Alignment.CHAOTIC) != true
-					&& prototype.alignment.contains(Alignment.GOOD) != true
-					&& prototype.alignment.contains(Alignment.EVIL) != true)
-				++array[4];
-		}
-
-		for (Iterator<Prototype> it = lesserImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
-
-			if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.GOOD))
-				++array[0];
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.NEUTRAL))
-				++array[1];
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.EVIL))
-				++array[2];
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.GOOD))
-				++array[3];
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.EVIL))
-				++array[5];
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.GOOD))
-				++array[6];
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.NEUTRAL))
-				++array[7];
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.EVIL))
-				++array[8];
-			else if (prototype.alignment.contains(Alignment.LAWFUL) != true
-					&& prototype.alignment.contains(Alignment.CHAOTIC) != true
-					&& prototype.alignment.contains(Alignment.GOOD) != true
-					&& prototype.alignment.contains(Alignment.EVIL) != true)
+			else if (instance.alignment.contains(Alignment.LAWFUL) != true
+					&& instance.alignment.contains(Alignment.CHAOTIC) != true
+					&& instance.alignment.contains(Alignment.GOOD) != true
+					&& instance.alignment.contains(Alignment.EVIL) != true)
 				++array[4];
 		}
 
@@ -1273,63 +1067,38 @@ public abstract class Immortal implements Actor {
 		return string;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static String beingsByGridToString() {
-		List<Entity>[] array = (List<Entity>[]) new ArrayList[9];
+		List<Instance>[] array = (List<Instance>[]) new ArrayList[9];
 		for (int i = 0; i < array.length; ++i) {
-			array[i] = new ArrayList<Entity>();
+			array[i] = new ArrayList<Instance>();
 		}
 
-		Prototype prototype;
-		for (Iterator<Prototype> it = greaterImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
+		Instance instance;
+		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+			instance = it.next();
 
-			if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.GOOD))
-				array[0].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.NEUTRAL))
-				array[1].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.EVIL))
-				array[2].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.GOOD))
-				array[3].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.EVIL))
-				array[5].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.GOOD))
-				array[6].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.NEUTRAL))
-				array[7].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.EVIL))
-				array[8].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.LAWFUL) != true
-					&& prototype.alignment.contains(Alignment.CHAOTIC) != true
-					&& prototype.alignment.contains(Alignment.GOOD) != true
-					&& prototype.alignment.contains(Alignment.EVIL) != true)
-				array[4].add(prototype.entity);
-		}
-
-		for (Iterator<Prototype> it = lesserImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
-
-			if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.GOOD))
-				array[0].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.NEUTRAL))
-				array[1].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.LAWFUL) && prototype.alignment.contains(Alignment.EVIL))
-				array[2].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.GOOD))
-				array[3].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.NEUTRAL) && prototype.alignment.contains(Alignment.EVIL))
-				array[5].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.GOOD))
-				array[6].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.NEUTRAL))
-				array[7].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.CHAOTIC) && prototype.alignment.contains(Alignment.EVIL))
-				array[8].add(prototype.entity);
-			else if (prototype.alignment.contains(Alignment.LAWFUL) != true
-					&& prototype.alignment.contains(Alignment.CHAOTIC) != true
-					&& prototype.alignment.contains(Alignment.GOOD) != true
-					&& prototype.alignment.contains(Alignment.EVIL) != true)
-				array[4].add(prototype.entity);
+			if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.GOOD))
+				array[0].add(instance);
+			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.NEUTRAL))
+				array[1].add(instance);
+			else if (instance.alignment.contains(Alignment.LAWFUL) && instance.alignment.contains(Alignment.EVIL))
+				array[2].add(instance);
+			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.GOOD))
+				array[3].add(instance);
+			else if (instance.alignment.contains(Alignment.NEUTRAL) && instance.alignment.contains(Alignment.EVIL))
+				array[5].add(instance);
+			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.GOOD))
+				array[6].add(instance);
+			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.NEUTRAL))
+				array[7].add(instance);
+			else if (instance.alignment.contains(Alignment.CHAOTIC) && instance.alignment.contains(Alignment.EVIL))
+				array[8].add(instance);
+			else if (instance.alignment.contains(Alignment.LAWFUL) != true
+					&& instance.alignment.contains(Alignment.CHAOTIC) != true
+					&& instance.alignment.contains(Alignment.GOOD) != true
+					&& instance.alignment.contains(Alignment.EVIL) != true)
+				array[4].add(instance);
 		}
 
 		String[] ali = new String[] { "Lawful Good", "Lawful Neutral", "Lawful Evil", "Neutral Good", "True Neutral",
@@ -1344,67 +1113,39 @@ public abstract class Immortal implements Actor {
 
 	public static String domainStatsToString() {
 		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		Prototype prototype;
-		for (Iterator<Prototype> it = greaterImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
+		Instance instance;
+		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+			instance = it.next();
 
-			if (prototype.domains.contains(Domain.DEATH))
+			if (instance.domains.contains(Domain.DEATH))
 				++array[0];
 
-			if (prototype.domains.contains(Domain.KNOWLEDGE))
+			if (instance.domains.contains(Domain.KNOWLEDGE))
 				++array[1];
 
-			if (prototype.domains.contains(Domain.LIFE))
+			if (instance.domains.contains(Domain.LIFE))
 				++array[2];
 
-			if (prototype.domains.contains(Domain.LIGHT))
+			if (instance.domains.contains(Domain.LIGHT))
 				++array[3];
 
-			if (prototype.domains.contains(Domain.NATURE))
+			if (instance.domains.contains(Domain.NATURE))
 				++array[4];
 
-			if (prototype.domains.contains(Domain.TEMPEST))
+			if (instance.domains.contains(Domain.TEMPEST))
 				++array[5];
 
-			if (prototype.domains.contains(Domain.TRICKERY))
+			if (instance.domains.contains(Domain.TRICKERY))
 				++array[6];
 
-			if (prototype.domains.contains(Domain.WAR))
-				++array[7];
-		}
-
-		for (Iterator<Prototype> it = lesserImmortals.values().iterator(); it.hasNext();) {
-			prototype = it.next();
-
-			if (prototype.domains.contains(Domain.DEATH))
-				++array[0];
-
-			if (prototype.domains.contains(Domain.KNOWLEDGE))
-				++array[1];
-
-			if (prototype.domains.contains(Domain.LIFE))
-				++array[2];
-
-			if (prototype.domains.contains(Domain.LIGHT))
-				++array[3];
-
-			if (prototype.domains.contains(Domain.NATURE))
-				++array[4];
-
-			if (prototype.domains.contains(Domain.TEMPEST))
-				++array[5];
-
-			if (prototype.domains.contains(Domain.TRICKERY))
-				++array[6];
-
-			if (prototype.domains.contains(Domain.WAR))
+			if (instance.domains.contains(Domain.WAR))
 				++array[7];
 		}
 
 		String[] domains = { "Death", "Knowledge", "Life", "Light", "Nature", "Tempest", "Trickery", "War" };
 		String string = "";
 
-		int total = lesserImmortals.size() + greaterImmortals.size();
+		int total = Instance.instances.size();
 		for (int i = 0; i < array.length; ++i) {
 			string += String.format("%10s: %4d%n", domains[i], array[i]);
 		}
@@ -1457,24 +1198,44 @@ public abstract class Immortal implements Actor {
 		return alignment;
 	}
 
-	private static Domain[] domainRandomizer() {
-		return domainRandomizer(Domain.NATURE);
-	}
-
 	private static Domain[] domainRandomizer(Domain domain) {
-		Domain[] skyDomains = new Domain[] { Domain.LIGHT, Domain.TEMPEST, Domain.KNOWLEDGE };
-		Domain[] earthDomains = new Domain[] { Domain.TRICKERY, Domain.WAR, Domain.DEATH };
-		Domain[] seaDomains = new Domain[] { Domain.TEMPEST, Domain.LIFE, Domain.WAR };
+		// nature
+		Domain[] earthDomains = new Domain[] { Domain.LIFE, Domain.TRICKERY, Domain.DEATH };
+		// tempest
+		Domain[] seaDomains = new Domain[] { Domain.NATURE, Domain.LIFE, Domain.WAR };
+		// light
+		Domain[] skyDomains = new Domain[] { Domain.TEMPEST, Domain.KNOWLEDGE, Domain.WAR };
+		// war
+		Domain[] warDomains = new Domain[] { Domain.DEATH, Domain.TRICKERY, Domain.TEMPEST };
+
+		// death
+		Domain[] deathDomains = new Domain[] { Domain.TRICKERY, Domain.TEMPEST, Domain.WAR };
+		// life
+		Domain[] lifeDomains = new Domain[] { Domain.NATURE, Domain.TRICKERY, Domain.WAR };
+		// knowledge "tutelary"
+		Domain[] tutelary = new Domain[] { Domain.LIFE, Domain.TRICKERY, Domain.LIGHT };
+		// trickery
+		Domain[] trickery = new Domain[] { Domain.KNOWLEDGE, Domain.NATURE, Domain.LIFE };
 
 		Domain[] array = null;
 		Domain[] domains = null;
 
-		if (domain.equals(Domain.NATURE))
+		if (domain.equals(Domain.DEATH))
+			domains = deathDomains;
+		else if (domain.equals(Domain.KNOWLEDGE))
+			domains = tutelary;
+		else if (domain.equals(Domain.LIFE))
+			domains = lifeDomains;
+		else if (domain.equals(Domain.LIGHT))
+			domains = skyDomains;
+		else if (domain.equals(Domain.NATURE))
 			domains = earthDomains;
 		else if (domain.equals(Domain.TEMPEST))
 			domains = seaDomains;
-		else if (domain.equals(Domain.LIGHT))
-			domains = skyDomains;
+		else if (domain.equals(Domain.TRICKERY))
+			domains = trickery;
+		else if (domain.equals(Domain.WAR))
+			domains = warDomains;
 
 		int dice = Dice.roll(10);
 		if (dice < 5)
@@ -1488,11 +1249,12 @@ public abstract class Immortal implements Actor {
 
 		dice = Dice.roll(10);
 		if (array.length == 1 && dice < 5) {
-			array[0] = Domain.NATURE;
+			array[0] = domain;
 		} else if (array.length == 1 && (dice == 5 || dice == 6 || dice == 7)) {
-			array[0] = (Dice.roll(2) == 1) ? domains[0] : domains[1];
+			array[0] = (Dice.roll(2) == 1) ? domain : domains[0];
 		} else if (array.length == 1 && (dice == 8 || dice == 9)) {
-			array[0] = (Dice.roll(2) == 1) ? domains[1] : domains[2];
+			dice = Dice.roll(3);
+			array[0] = (dice == 1) ? domains[0] : (dice == 2) ? domains[1] : domains[2];
 		} else if (array.length == 1) {
 			array[0] = Dice.randomFromArray(DOMAINS);
 		} else {
@@ -1511,19 +1273,4 @@ public abstract class Immortal implements Actor {
 		return array;
 	}
 
-	private static Prototype greaterBeing(Entity entity, Greater greater, Alignment axis, Domain[] domains) {
-		return new Prototype(entity, greater, alignmentRandomizer(axis), domains);
-	}
-
-	private static Prototype greaterBeing(Entity entity, Greater greater, Alignment axis) {
-		return new Prototype(entity, greater, alignmentRandomizer(axis), domainRandomizer());
-	}
-
-	private static Prototype lesserBeing(Entity entity, Lesser lesser, Alignment axis, Domain[] domains) {
-		return new Prototype(entity, lesser, alignmentRandomizer(axis), domains);
-	}
-
-	private static Prototype lesserBeing(Entity entity, Lesser lesser, Alignment axis) {
-		return new Prototype(entity, lesser, alignmentRandomizer(axis), domainRandomizer());
-	}
 }

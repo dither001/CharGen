@@ -210,16 +210,23 @@ public final class Dice {
 	public static String stringToName(String string) {
 		String name = "";
 
-		char current, previous = ' ';
-		char[] array = string.toCharArray();
+		char current, previous = ' ', next = 0;
+		char[] array = string.toLowerCase().toCharArray();
 		for (int i = 0; i < array.length; ++i) {
 			current = array[i];
 
 			if (i == 0 || previous == ' ') {
 				current = Character.toUpperCase(current);
 
-			} else if (current == ' ') {
-				current = ' ';
+			} else if (current == '_') {
+				next = (i + 1 <= array.length) ? array[i + 1] : 0;
+				if (next != 0 && (next == 'e' || next == 'i')) {
+					current = '-';
+
+				} else {
+					current = ' ';
+
+				}
 
 			} else {
 				current = Character.toLowerCase(current);
