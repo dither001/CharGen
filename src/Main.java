@@ -17,9 +17,8 @@ public class Main {
 
 		System.out.println(Immortal.beingsByGridToString());
 		System.out.println(Immortal.alignmentGridStatsToString());
-		
-		
-//		testMainWorld();
+
+		// testMainWorld();
 
 		// jobProportions();
 		// raceProportions();

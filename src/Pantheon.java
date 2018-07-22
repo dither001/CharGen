@@ -99,4 +99,10 @@ public class Pantheon implements Faction {
 		this.members = members;
 	}
 
+	/*
+	 * STATIC METHODS
+	 */
+	public Set<Pantheon> getPantheons() {
+		return pantheons;
+	}
 }

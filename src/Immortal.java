@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public abstract class Immortal implements Actor {
@@ -188,6 +189,21 @@ public abstract class Immortal implements Actor {
 	}
 
 	public static class Prototype {
+		private static Map<Entity, Prototype> prototypes;
+		
+		static {
+			prototypes = new HashMap<Entity, Prototype>();
+			
+			
+			
+		}
+		
+		/*
+		 * INSTANCE FIELDS
+		 */
+		private Lesser affiliation;
+		
+		
 		private Entity entity;
 		private Greater greater;
 		private Lesser lesser;
@@ -256,7 +272,9 @@ public abstract class Immortal implements Actor {
 		private Prototype prototype;
 
 		//
+		private String name;
 		private Entity entity;
+
 		private Greater greater;
 		private Lesser lesser;
 		private EnumSet<Domain> domains;
@@ -264,6 +282,7 @@ public abstract class Immortal implements Actor {
 
 		public Instance(Prototype prototype) {
 			this.prototype = prototype;
+			this.name = Dice.stringToName(prototype.entity.toString());
 
 			//
 			this.entity = prototype.entity;
@@ -276,6 +295,11 @@ public abstract class Immortal implements Actor {
 			this.alignment = EnumSet.copyOf(prototype.alignment);
 
 		}
+		
+		public String getName() {
+			return name;
+		}
+		
 	}
 
 	/*
