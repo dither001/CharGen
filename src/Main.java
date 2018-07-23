@@ -15,6 +15,13 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		
+//		for (Immortal.Lesser el : Immortal.getPantheons()) {
+//			System.out.println(el.toString() + " (" + Immortal.filterByPantheon(el).size() + ")");
+//		}
+		
+		
+		
 		System.out.println(Immortal.beingsByGridToString());
 		System.out.println(Immortal.alignmentGridStatsToString());
 		System.out.println(Immortal.domainStatsToString());

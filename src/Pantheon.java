@@ -19,35 +19,35 @@ public class Pantheon implements Faction {
 	 */
 	private Immortal.Lesser affiliation;
 	private String name;
-	private Actor leader;
+	private Immortal.Instance leader;
 
-	private Set<Actor> members;
+	private Set<Immortal.Instance> members;
 
 	/*
 	 * CONSTRUCTORS
 	 */
 	public Pantheon(Immortal.Lesser affiliation) {
-		this.members = new HashSet<Actor>();
+		this.members = new HashSet<Immortal.Instance>();
 
 		//
 		this.name = Dice.stringToName(affiliation.toString());
 
-//		Set<Actor> set = Immortal.filterByPantheon(affiliation);
-//		Immortal.Instance instance;
-//		for (Iterator<Actor> it = set.iterator(); it.hasNext();) {
-//			instance = it.next();
-//			
-//			add(instance);
-//		}
+		Set<Immortal.Instance> set = Immortal.filterByPantheon(affiliation);
+		Immortal.Instance instance;
+		for (Iterator<Immortal.Instance> it = set.iterator(); it.hasNext();) {
+			instance = it.next();
+			
+			add(instance);
+		}
 	}
 
 	/*
 	 * 
 	 */
-	public boolean add(Actor actor) {
+	public boolean add(Immortal.Instance immortal) {
 		boolean added = false;
-		if (members.contains(actor) != true) {
-			members.add(actor);
+		if (members.contains(immortal) != true) {
+			members.add(immortal);
 			added = true;
 
 		}
@@ -92,30 +92,26 @@ public class Pantheon implements Faction {
 
 	@Override
 	public Set<Actor> getMembers() {
-		return members;
+		return new HashSet<Actor>(members);
 	}
 
 	@Override
 	public boolean addMember(Actor actor) {
-		return add(actor);
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public boolean addAllMembers(Collection<Actor> actors) {
-		boolean addedAll = true;
+		// TODO Auto-generated method stub
 
-		for (Iterator<Actor> it = actors.iterator(); it.hasNext();) {
-			if (add(it.next()) != true)
-				addedAll = false;
-
-		}
-
-		return addedAll;
+		return false;
 	}
 
 	@Override
 	public void setMembers(Set<Actor> members) {
-		this.members = members;
+		// TODO Auto-generated method stub
+
 	}
 
 	/*
