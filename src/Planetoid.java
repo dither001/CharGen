@@ -19,7 +19,7 @@ public class Planetoid implements World {
 	private EnumSet<Base> worldFacilities;
 
 	private Group group;
-	private Planetoid home;
+	private Planetoid parent;
 	private Type type;
 	private int orbit;
 	private int subOrbit;
@@ -28,6 +28,7 @@ public class Planetoid implements World {
 	private char spaceport;
 	private byte techLevel;
 	private Set<Planetoid> moons;
+	private int totalMoons;
 
 	/*
 	 * CONSTRUCTORS
@@ -44,7 +45,7 @@ public class Planetoid implements World {
 	public Planetoid(Type type, int orbit, Group group, Planetoid home) {
 		this.name = String.format("%s (%s)", type, orbit);
 		this.group = group;
-		this.home = home;
+		this.parent = home;
 		this.type = type;
 		this.orbit = orbit;
 		this.subOrbit = orbit;
@@ -145,6 +146,7 @@ public class Planetoid implements World {
 		/*
 		 * SATELLITES
 		 */
+		totalMoons = 0;
 		if (type.equals(Type.SATELLITE)) {
 			moons = new HashSet<Planetoid>();
 
@@ -211,6 +213,7 @@ public class Planetoid implements World {
 						orbits.add(moon.subOrbit = dice);
 					}
 
+					++totalMoons;
 				}
 
 			}
@@ -225,7 +228,7 @@ public class Planetoid implements World {
 	 */
 	@Override
 	public String toString() {
-		String string = String.format("%s (%s)", type, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
+		String string = String.format("%s (%s)", name, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
 
 		if (isWorld()) {
 			int size = scores[0], atmo = scores[1];
@@ -235,12 +238,12 @@ public class Planetoid implements World {
 			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
 
 			if (type.equals(Type.SATELLITE))
-				string = String.format("%25s %s", "* " + string, world);
+				string = String.format("%-32s %s", "* " + string, world);
 			else
-				string = String.format("%-25s %s", string, world);
+				string = String.format("%-32s %s", string, world);
 		} else if (isRing()) {
 
-			string = String.format("   * %s", string);
+			string = String.format("%-32s", "* " + string);
 		}
 
 		// facilities
@@ -254,7 +257,7 @@ public class Planetoid implements World {
 	}
 
 	public String toStringDetailed() {
-		String string = String.format("%s (%s)", type, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
+		String string = String.format("%s (%s)", name, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
 
 		if (isWorld()) {
 			int size = scores[0], atmo = scores[1];
@@ -264,12 +267,12 @@ public class Planetoid implements World {
 			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
 
 			if (type.equals(Type.SATELLITE))
-				string = String.format("%25s %s", "* " + string, world);
+				string = String.format("%-32s %s", "* " + string, world);
 			else
-				string = String.format("%-25s %s", string, world);
+				string = String.format("%-32s %s", string, world);
 		} else if (isRing()) {
 
-			string = String.format("   * %s", string);
+			string = String.format("%-32s", "* " + string);
 		}
 
 		// facilities
@@ -287,7 +290,7 @@ public class Planetoid implements World {
 			String satellites = "";
 			for (Planetoid el : moonList) {
 				satellites += String.format("%n%s", el);
-				
+
 			}
 
 			string += satellites;
@@ -436,8 +439,18 @@ public class Planetoid implements World {
 	}
 
 	@Override
+	public Planetoid getParent() {
+		return parent;
+	}
+
+	@Override
 	public Set<Planetoid> getMoons() {
 		return moons;
+	}
+
+	@Override
+	public int totalMoons() {
+		return totalMoons;
 	}
 
 }

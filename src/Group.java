@@ -18,6 +18,7 @@ public class Group {
 	private int habitableZone, unavailableZones, innerZone;
 	private Set<Planetoid> planets;
 	private Set<Planetoid> spaceObjects;
+	private int namedObjects;
 	private int populousWorlds;
 
 	private char starport;
@@ -31,6 +32,7 @@ public class Group {
 	 * 
 	 */
 	public Group() {
+		namedObjects = 0;
 		int dice = Dice.roll(2, 6);
 
 		// solitary, binary, or trinary system
@@ -43,9 +45,11 @@ public class Group {
 
 		// generate stars
 		Star primary = new Star();
+		++namedObjects;
 		stars[0] = primary;
 		for (int i = 1; i < stars.length; ++i) {
 			stars[i] = new Star(primary, i);
+			++namedObjects;
 		}
 
 		// verify that third star is farther from primary than second star
@@ -208,6 +212,7 @@ public class Group {
 		planet = World.Type.CAPTURED;
 		while (capturedPlanets > 0) {
 			planets.add(new Planetoid(planet, Dice.roll(2, 6), this));
+			++namedObjects;
 			--capturedPlanets;
 		}
 
@@ -218,12 +223,14 @@ public class Group {
 
 			if (contains && available.get(0) >= habitableZone) {
 				planets.add(new Planetoid(planet, available.remove(0), this));
+				++namedObjects;
 				--gasGiants;
 			} else if (contains && available.get(0) < habitableZone) {
 				Collections.rotate(available, 1);
 
 			} else {
 				planets.add(new Planetoid(planet, ++outerMostOrbit, this));
+				++namedObjects;
 				--gasGiants;
 			}
 		}
@@ -250,12 +257,14 @@ public class Group {
 					int index = available.indexOf(candidate);
 					planets.add(new Planetoid(planet, available.remove(index), this));
 					// System.out.println("Placed asteroid at: " + candidate);
+					++namedObjects;
 					--asteroids;
 				}
 			}
 
 			if (available.size() > 0 && asteroids > 0) {
 				planets.add(new Planetoid(planet, available.remove(0), this));
+				++namedObjects;
 				--asteroids;
 
 			}
@@ -265,6 +274,7 @@ public class Group {
 		planet = World.Type.STANDARD;
 		while (available.size() > 0) {
 			planets.add(new Planetoid(planet, available.remove(0), this));
+			++namedObjects;
 		}
 
 		/*
@@ -328,8 +338,12 @@ public class Group {
 		}
 
 		/*
+		 * NAMING CONVENTIONS
+		 */
+		nameSetup(this);
+
+		/*
 		 * FACTION SETUP
-		 * 
 		 */
 		factions = new HashSet<Faction>();
 
@@ -484,6 +498,14 @@ public class Group {
 		return innerZoneStart;
 	}
 
+	private List<Planetoid> orderedPlanetList() {
+		List<Planetoid> planetList = Dice.setToList(planets);
+		World.OrbitAscending worldSort = new World.OrbitAscending();
+		Collections.sort(planetList, worldSort);
+
+		return planetList;
+	}
+
 	public String toStringDetailed() {
 		String star = "";
 		star += String.format("Main world: %s", mainWorld.getName());
@@ -519,15 +541,15 @@ public class Group {
 		}
 
 		String pops = "";
-		List<Faction> factionList = Dice.setToList(factions);
-		Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
-		Collections.sort(factionList, factionSort);
-		if (factionList.size() > 0) {
-			pops += "\n- - -";
-			for (Faction el : factionList)
-				pops += "\n" + el.toString();
-		}
-		
+		// List<Faction> factionList = Dice.setToList(factions);
+		// Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
+		// Collections.sort(factionList, factionSort);
+		// if (factionList.size() > 0) {
+		// pops += "\n- - -";
+		// for (Faction el : factionList)
+		// pops += "\n" + el.toString();
+		// }
+
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,
 		// asteroids, capturedPlanets);
@@ -671,6 +693,50 @@ public class Group {
 		return workingSet;
 	}
 
+	private static void nameSetup(Group group) {
+		List<String> nameList = Pantheon.getNameList();
+		while (nameList.size() < group.namedObjects) {
+			nameList = Pantheon.getNameList();
+		}
+
+		Collections.shuffle(nameList);
+		Iterator<String> nameIt = nameList.iterator();
+		String current;
+
+		for (Star el : group.stars) {
+			el.setName(nameIt.next());
+		}
+
+		/*
+		 * PLANET LIST & SORT BY ORBIT ASCENDING
+		 */
+		Planetoid planet, moon;
+		int moonCounter;
+		for (Iterator<Planetoid> it = group.orderedPlanetList().iterator(); it.hasNext();) {
+			planet = it.next();
+
+			if (planet.nameable() && planet.notMoon()) {
+				current = nameIt.next();
+				planet.setName(current);
+
+				// TODO - testing
+				// System.out.println("Named world " + previous);
+
+				moonCounter = 2;
+				for (Iterator<Planetoid> moonIt = planet.orderedMoonList().iterator(); moonIt.hasNext();) {
+					moon = moonIt.next();
+
+					if (moon.nameable())
+						moon.setName(current + " " + Names.romanNumeral(moonCounter++));
+
+				}
+
+			}
+
+		}
+
+	}
+
 	/*
 	 * STAR INNER CLASS
 	 * 
@@ -679,6 +745,7 @@ public class Group {
 		/*
 		 * INSTANCE FIELDS
 		 */
+		private String name;
 		private byte sizeRoll, typeRoll;
 
 		private char size, color;
@@ -770,6 +837,13 @@ public class Group {
 			 */
 		}
 
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
 	}
 
 }

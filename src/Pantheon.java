@@ -1,7 +1,9 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Pantheon implements Faction {
@@ -12,6 +14,25 @@ public class Pantheon implements Faction {
 
 	static {
 		pantheons = new HashSet<Pantheon>();
+
+		Immortal.Lesser[] array = Immortal.getPantheons();
+		Set<Immortal.Instance> set;
+		Immortal.Instance god;
+		Pantheon pantheon;
+
+		for (int i = 0; i < array.length; ++i) {
+			pantheon = new Pantheon(array[i]);
+			pantheons.add(pantheon);
+
+			set = Immortal.filterByPantheon(array[i]);
+			for (Iterator<Immortal.Instance> it = set.iterator(); it.hasNext();) {
+				god = it.next();
+				pantheon.add(god);
+
+			}
+
+		}
+
 	}
 
 	/*
@@ -22,21 +43,23 @@ public class Pantheon implements Faction {
 	private Immortal.Instance leader;
 
 	private Set<Immortal.Instance> members;
+	private int membership;
 
 	/*
 	 * CONSTRUCTORS
 	 */
 	public Pantheon(Immortal.Lesser affiliation) {
 		this.members = new HashSet<Immortal.Instance>();
+		membership = 0;
 
 		//
-		this.name = Dice.stringToName(affiliation.toString());
+		this.name = Names.stringToName(affiliation.toString());
 
 		Set<Immortal.Instance> set = Immortal.filterByPantheon(affiliation);
 		Immortal.Instance instance;
 		for (Iterator<Immortal.Instance> it = set.iterator(); it.hasNext();) {
 			instance = it.next();
-			
+
 			add(instance);
 		}
 	}
@@ -44,22 +67,31 @@ public class Pantheon implements Faction {
 	/*
 	 * 
 	 */
-	public boolean add(Immortal.Instance immortal) {
-		boolean added = false;
-		if (members.contains(immortal) != true) {
+	public void add(Immortal.Instance immortal) {
+		if (immortal != null && members.contains(immortal) != true) {
 			members.add(immortal);
-			added = true;
+			++membership;
 
 		}
-
-		return added;
 	}
 
 	@Override
 	public String toString() {
-		String string = name;
+		String string = String.format("%s", name);
 
 		return string;
+	}
+
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
+	public static Set<Pantheon> getPantheons() {
+		return pantheons;
+	}
+
+	public static List<String> getNameList() {
+		return Dice.randomFromSet(pantheons).nameList();
 	}
 
 	/*
@@ -96,6 +128,11 @@ public class Pantheon implements Faction {
 	}
 
 	@Override
+	public int membership() {
+		return membership;
+	}
+
+	@Override
 	public boolean addMember(Actor actor) {
 		// TODO Auto-generated method stub
 		return false;
@@ -114,10 +151,17 @@ public class Pantheon implements Faction {
 
 	}
 
-	/*
-	 * STATIC METHODS
-	 */
-	public Set<Pantheon> getPantheons() {
-		return pantheons;
+	@Override
+	public List<String> nameList() {
+		List<String> nameList = new ArrayList<String>();
+		String name;
+		for (Iterator<Immortal.Instance> it = members.iterator(); it.hasNext();) {
+			name = it.next().getName();
+			if (name != null)
+				nameList.add(name);
+		}
+
+		return nameList;
 	}
+
 }

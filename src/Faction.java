@@ -1,6 +1,7 @@
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 public interface Faction {
@@ -352,11 +353,15 @@ public interface Faction {
 	
 	public Set<Actor> getMembers();
 	
+	public int membership();
+	
 	public boolean addMember(Actor actor);
 	
 	public boolean addAllMembers(Collection<Actor> actors);
 	
 	public void setMembers(Set<Actor> members);
+	
+	public List<String> nameList();
 
 	/*
 	 * STATIC METHODS

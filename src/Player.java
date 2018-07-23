@@ -105,7 +105,7 @@ public class Player implements Actor {
 
 	private String skillsToString() {
 		List<Skill> skillsList = Dice.setToList(skills);
-		Dice.AlphabeticalDescending<Skill> sort = new Dice.AlphabeticalDescending<Skill>();
+		Names.AlphabeticalDescending<Skill> sort = new Names.AlphabeticalDescending<Skill>();
 
 		Collections.sort(skillsList, sort);
 		String string = String.format("%s", skills.toString());

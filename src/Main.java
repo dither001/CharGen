@@ -15,18 +15,15 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		
-//		for (Immortal.Lesser el : Immortal.getPantheons()) {
-//			System.out.println(el.toString() + " (" + Immortal.filterByPantheon(el).size() + ")");
-//		}
-		
-		
-		
-		System.out.println(Immortal.beingsByGridToString());
-		System.out.println(Immortal.alignmentGridStatsToString());
-		System.out.println(Immortal.domainStatsToString());
+		// for (Pantheon el : Pantheon.getPantheons()) {
+		// System.out.println(el.toString() + " (" + el.membership() + ")");
+		// }
 
-		// testMainWorld();
+		// System.out.println(Immortal.beingsByGridToString());
+		// System.out.println(Immortal.alignmentGridStatsToString());
+		// System.out.println(Immortal.domainStatsToString());
+
+		testMainWorld();
 
 		// jobProportions();
 		// raceProportions();

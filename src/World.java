@@ -1,6 +1,8 @@
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public interface World {
@@ -59,15 +61,15 @@ public interface World {
 		}
 
 	}
-	
+
 	/*
 	 * 
 	 * 
 	 */
 	public String getName();
-	
+
 	public void setName(String name);
-	
+
 	public EnumSet<TradeCodes> getTradeCodes();
 
 	public void setTradeCodes(EnumSet<TradeCodes> set);
@@ -104,7 +106,11 @@ public interface World {
 
 	public void setAttribute(int index, int value);
 
+	public Planetoid getParent();
+
 	public Set<Planetoid> getMoons();
+
+	public int totalMoons();
 
 	/*
 	 * TODO - this is the first big automated initialization of a world after it has
@@ -133,7 +139,7 @@ public interface World {
 
 			// validation step
 			dice = (dice < 0) ? 0 : (dice > 14) ? 14 : dice;
-			
+
 			gov = dice;
 
 			/*
@@ -437,6 +443,22 @@ public interface World {
 		return isWorld;
 	}
 
+	public default boolean nameable() {
+		boolean nameable = true;
+		Type type = getType();
+
+		if (type.equals(Type.EMPTY))
+			nameable = false;
+
+		if (type.equals(Type.ASTEROID))
+			nameable = false;
+
+		if (type.equals(Type.RING))
+			nameable = false;
+
+		return nameable;
+	}
+
 	public default boolean isMainWorld() {
 		boolean isMainWorld = false;
 		Planetoid mainWorld = getGroup().getMainWorld();
@@ -508,6 +530,14 @@ public interface World {
 			hasMoons = true;
 
 		return hasMoons;
+	}
+
+	public default List<Planetoid> orderedMoonList() {
+		List<Planetoid> moonList = Dice.setToList(getMoons());
+		World.SubOrbitAscending moonSort = new World.SubOrbitAscending();
+		Collections.sort(moonList, moonSort);
+
+		return moonList;
 	}
 
 	public default int getAttribute(int index) {
