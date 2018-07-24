@@ -339,7 +339,7 @@ public class Group {
 
 		// world tag cleanup
 		for (it = pops.iterator(); it.hasNext();) {
-			World.pruneWorldTags(it.next());
+			World.pruneWorldTags(commonTags, it.next());
 		}
 		
 		/*
@@ -514,7 +514,7 @@ public class Group {
 	public String toStringDetailed() {
 		String star = "";
 		star += String.format("Main world: %s", mainWorld.getName());
-		star += String.format("%n%s", commonTags);
+		star += (commonTags.size() > 0) ? String.format("%n%s", commonTags) : "";
 		star += String.format("%nStarport: %s || Tech Level: %d", starport, mainWorld.getTechLevel());
 		star += String.format("%nGovernment: %s", mainWorld.governmentType());
 		star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
