@@ -605,6 +605,10 @@ public interface World {
 	 * STATIC METHODS
 	 * 
 	 */
+	public static Tag randomTag() {
+		return Dice.randomFromArray(ALL_TAGS);
+	}
+	
 	public static void setupWorldTags(World world) {
 		if (world.isWorld() != true)
 			return;

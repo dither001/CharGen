@@ -15,6 +15,10 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		testMainWorld();
+
+		// testMissionDetail();
+
 		// for (Pantheon el : Pantheon.getPantheons()) {
 		// System.out.println(el.toString() + " (" + el.membership() + ")");
 		// }
@@ -22,8 +26,6 @@ public class Main {
 		// System.out.println(Immortal.beingsByGridToString());
 		// System.out.println(Immortal.alignmentGridStatsToString());
 		// System.out.println(Immortal.domainStatsToString());
-
-		testMainWorld();
 
 		// jobProportions();
 		// raceProportions();
@@ -64,12 +66,50 @@ public class Main {
 
 	public static void testMainWorld() {
 		Group group = new Group();
-		while (group.getMainWorld() == null) {
+		while (group.getMainWorld() == null || group.getMainWorld().getPopulation() < 5) {
 			group = new Group();
 		}
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();
+	}
+
+	public static void testMissionDetail() {
+		Group group = new Group();
+		while (group.getMainWorld() == null || group.getMainWorld().getPopulation() < 5) {
+			group = new Group();
+		}
+
+		System.out.println(group.toStringDetailed());
+		System.out.println();
+
+		int mission = 1;
+		String line;
+		World.Tag tag;
+		while (proceed == 1) {
+			System.out.println(" - - - - - - - - score: " + ++mission);
+
+			tag = Dice.randomFromSet(group.getMainWorld().getWorldTags());
+			System.out.print("(" + tag + ") ");
+			System.out.println(Mission.completeMissionDetail(tag));
+
+			line = INPUT.nextLine();
+			try {
+				proceed = Integer.parseInt(line);
+			} catch (NumberFormatException e) {
+				proceed = 1;
+			}
+
+			// if (proceed != 0) {
+			// if (proceed == 2) {
+			// // "option two"
+			// System.out.println();
+			// }
+			//
+			// proceed = 1;
+			// }
+		}
+
 	}
 
 	public static void trinarySystem() {
