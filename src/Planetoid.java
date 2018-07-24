@@ -247,11 +247,10 @@ public class Planetoid implements World {
 		}
 
 		// facilities
-		// String facilities = (worldFacilities != null) ? String.format(" %s",
-		// worldFacilities) : "";
+		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
 		// world tags
-		// String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
-		// string += String.format("%-20s %s", facilities, tags);
+		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
+		string += String.format("%-20s %s", facilities, tags);
 
 		return string;
 	}
@@ -276,11 +275,10 @@ public class Planetoid implements World {
 		}
 
 		// facilities
-		// String facilities = (worldFacilities != null) ? String.format(" %s",
-		// worldFacilities) : "";
+		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
 		// world tags
-		// String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
-		// string += String.format("%-20s %s", facilities, tags);
+		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
+		string += String.format("%-20s %s", facilities, tags);
 
 		if (hasMoons()) {
 			List<Planetoid> moonList = Dice.setToList(moons);

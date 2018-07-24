@@ -361,6 +361,14 @@ public enum Asset {
 		}
 
 		// methods
+		@Override
+		public String toString() {
+			String string = String.format("%s (%s)", prototype.asset,
+					(prototype.tier == 0) ? location.getName() : "tier " + prototype.tier);
+
+			return string;
+		}
+
 		public Prototype getPrototype() {
 			return prototype;
 		}

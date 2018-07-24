@@ -332,11 +332,16 @@ public class Group {
 				commonTags.add(tag);
 		}
 
-		// remove all common tags
+		// remove common tags
 		for (it = pops.iterator(); it.hasNext();) {
 			it.next().getWorldTags().removeAll(commonTags);
 		}
 
+		// world tag cleanup
+		for (it = pops.iterator(); it.hasNext();) {
+			World.pruneWorldTags(it.next());
+		}
+		
 		/*
 		 * NAMING CONVENTIONS
 		 */
@@ -541,14 +546,14 @@ public class Group {
 		}
 
 		String pops = "";
-		// List<Faction> factionList = Dice.setToList(factions);
-		// Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
-		// Collections.sort(factionList, factionSort);
-		// if (factionList.size() > 0) {
-		// pops += "\n- - -";
-		// for (Faction el : factionList)
-		// pops += "\n" + el.toString();
-		// }
+//		List<Faction> factionList = Dice.setToList(factions);
+//		Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
+//		Collections.sort(factionList, factionSort);
+//		if (factionList.size() > 0) {
+//			pops += "\n- - -";
+//			for (Faction el : factionList)
+//				pops += "\n" + el.toString();
+//		}
 
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,

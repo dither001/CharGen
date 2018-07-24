@@ -31,6 +31,12 @@ public interface World {
 			Tag.SEISMIC_INSTABILITY, Tag.SECRET_MASTERS, Tag.THEOCRACY, Tag.TOMB_WORLD, Tag.TRADE_HUB, Tag.TYRANNY,
 			Tag.UNBRAKED_AI, Tag.WARLORDS, Tag.XENOPHILES, Tag.XENOPHOBES, Tag.ZOMBIES };
 
+	public static final Tag[] COMMON_TAGS = { Tag.ABANDONED_COLONY, Tag.ALIEN_RUINS, Tag.ALTERED_HUMANITY, Tag.AREA_51,
+			Tag.EUGENIC_CULT, Tag.FORBIDDEN_TECH, Tag.FRIENDLY_FOE, Tag.HATRED, Tag.LOCAL_SPECIALTY,
+			Tag.PERIMETER_AGENCY, Tag.PILGRIMAGE_SITE, Tag.PRECEPTOR_ARCHIVE, Tag.PRETECH_CULTISTS,
+			Tag.QUARANTINE_WORLD, Tag.RADICAL_SEXISM, Tag.SEALED_MENACE, Tag.SECTARIANS, Tag.XENOPHILES, Tag.XENOPHOBES,
+			Tag.ZOMBIES };
+
 	/*
 	 * COMPARATOR CLASSES
 	 * 
@@ -623,185 +629,294 @@ public interface World {
 		EnumSet<TradeCodes> tradeCodes = world.getTradeCodes();
 		EnumSet<Base> bases = world.getWorldFacilities();
 
+		// quick booleans
+		boolean habitable = (orbit == habitableZone) ? true : false;
+		boolean tainted = (atmo == 2 || atmo == 4 || atmo == 7 || atmo > 8) ? true : false;
+		boolean noColony = (bases.contains(Base.COLONY) != true) ? true : false;
+		boolean militaryLab = (bases.contains(Base.LAB) || bases.contains(Base.MILITARY)) ? true : false;
+		boolean connected = (spaceport == 'A' || spaceport == 'B') ? true : false;
+		boolean backwater = (spaceport == 'D' || spaceport == 'E') ? true : false;
+		boolean idealSize, idealAtmo, idealHydro, idealPop, idealGov, idealLaw;
+
 		// ABANDONED_COLONY
-		if (pop == 0)
+		if (pop < 5 && backwater && Dice.roll(2, 6) >= 10)
 			set.add(Tag.ABANDONED_COLONY);
 
 		// ALIEN_RUINS
+		if (pop < 5 && backwater && Dice.roll(2, 6) >= 10)
+			set.add(Tag.ALIEN_RUINS);
+
 		// ALTERED_HUMANITY
-		// TODO
+		if (pop < 5 && backwater && Dice.roll(2, 6) >= 10)
+			set.add(Tag.ALTERED_HUMANITY);
 
 		// AREA_51
-		if (gov == 10 && law >= 9)
+		if (militaryLab && gov > 7 && Dice.roll(2, 6) >= 10)
 			set.add(Tag.AREA_51);
 
-		// HOSTILE_SPACE
-		if (gov == 0 || gov == 7 || gov == 10)
-			set.add(Tag.HOSTILE_SPACE);
-		else if (law == 0 || law >= 9)
-			set.add(Tag.HOSTILE_SPACE);
-
-		// POLICE_STATE
-		// RESTRICTIVE_LAWS
-		dice = Dice.roll(3);
-		if (law >= 9 && dice == 1)
-			set.add(Tag.POLICE_STATE);
-		else if (law >= 9 && dice == 1)
-			set.add(Tag.RESTRICTIVE_LAWS);
-
 		// BADLANDS_WORLD
-		// DESERT_WORLD
-		dice = Dice.roll(3);
-		if (dice == 1 && (atmo >= 2 && hydro == 0))
+		if (pop > 3 && tainted && hydro < 5)
 			set.add(Tag.BADLANDS_WORLD);
-		else if (dice == 2 && (atmo >= 2 && hydro == 0))
-			set.add(Tag.DESERT_WORLD);
 
 		// BUBBLE_CITIES
-		if (pop > 0 && (atmo == 0 || hydro == 10))
+		if (pop > 5 && noColony && (atmo == 0 || tainted))
 			set.add(Tag.BUBBLE_CITIES);
 
 		// CIVIL_WAR
-		// COLD_WAR
-		dice = Dice.roll(3);
-		if (gov == 7 && dice == 1)
+		if (pop > 5 && gov == 7 && Dice.roll(2, 6) >= 10)
 			set.add(Tag.CIVIL_WAR);
-		else if (gov == 7 && dice == 2)
+
+		// COLD_WAR
+		if (pop > 7 && gov == 7 && Dice.roll(2, 6) >= 8)
 			set.add(Tag.COLD_WAR);
 
 		// COLONIZED_POPULATION
-		if (gov == 6)
+		if (bases.contains(Base.COLONY) && Dice.roll(2, 6) >= 8)
 			set.add(Tag.COLONIZED_POPULATION);
 
+		// DESERT_WORLD
+		if ((atmo == 6 || atmo == 7) && hydro < 4)
+			set.add(Tag.DESERT_WORLD);
+
 		// EUGENIC_CULT
-		if (techLevel >= 13)
+		if (techLevel > 12 && Dice.roll(2, 6) >= 10)
 			set.add(Tag.EUGENIC_CULT);
 
 		// EXCHANGE_CONSULATE
-		if (pop >= 9 && techLevel >= 11)
+		if (pop > 8 && connected && techLevel > 12)
 			set.add(Tag.EXCHANGE_CONSULATE);
 
 		// FERAL_WORLD
-		if (pop <= 7 && techLevel < 2)
+		if (pop > 5 && techLevel < 2)
 			set.add(Tag.FERAL_WORLD);
 
 		// FLYING_CITIES
+		if (pop > 5 && noColony && atmo == 10)
+			set.add(Tag.FLYING_CITIES);
+
 		// FORBIDDEN_TECH
-		// TODO
+		if (techLevel > 12 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.FORBIDDEN_TECH);
 
 		// FREAK_GEOLOGY
-		dice = Dice.roll(2, 6);
-		if (size != 8 && dice == 12)
+		if (size < 8 && militaryLab && Dice.roll(2, 6) >= 10)
 			set.add(Tag.FREAK_GEOLOGY);
 
 		// FREAK_WEATHER
-		dice = Dice.roll(2, 6);
-		if (atmo != 6 && dice == 12)
+		if (tainted && militaryLab && Dice.roll(2, 6) >= 10)
 			set.add(Tag.FREAK_WEATHER);
 
 		// FRIENDLY_FOE
-		// TODO
+		if (techLevel > 12 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.FRIENDLY_FOE);
 
 		// GOLD_RUSH
-		dice = Dice.roll(2, 6);
-		if (dice == 12)
+		if (pop < 5 && bases.contains(Base.MINE) && Dice.roll(2, 6) >= 10)
 			set.add(Tag.GOLD_RUSH);
 
 		// HATRED
-		// TODO
+		if (pop < 5 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.HATRED);
 
 		// HEAVY_INDUSTRY
 		if (tradeCodes.contains(TradeCodes.IN))
 			set.add(Tag.HEAVY_INDUSTRY);
 
 		// HEAVY_MINING
-		if (bases.contains(Base.MINE))
-			set.add(Tag.DESERT_WORLD);
+		if (bases.contains(Base.MINE) && Dice.roll(2, 6) >= 8)
+			set.add(Tag.HEAVY_MINING);
 
 		// HOSTILE_BIOSPHERE
-		// TODO
+		idealAtmo = (atmo >= 4 && atmo <= 8) ? true : false;
+		idealHydro = (hydro >= 4 && hydro <= 8) ? true : false;
+		if (habitable && idealAtmo && idealHydro && Dice.roll(2, 6) >= 8)
+			set.add(Tag.HOSTILE_BIOSPHERE);
+
+		// HOSTILE_SPACE
+		idealGov = (gov == 0 || gov == 7) ? true : false;
+		idealLaw = (law == 0 || law >= 9) ? true : false;
+		if (idealGov && idealLaw && Dice.roll(2, 6) >= 10)
+			set.add(Tag.HOSTILE_SPACE);
 
 		// LOCAL_SPECIALTY
-		dice = Dice.roll(2, 6);
-		if (dice == 12)
+		if (pop > 3 && Dice.roll(2, 6) >= 10)
 			set.add(Tag.LOCAL_SPECIALTY);
 
 		// LOCAL_TECH
-		dice = Dice.roll(2, 6);
-		if (techLevel >= 13 && dice == 12)
+		if (pop > 3 && techLevel > 12 && Dice.roll(2, 6) >= 10)
 			set.add(Tag.LOCAL_TECH);
 
 		// MAJOR_SPACEYARD
-		dice = Dice.roll(2, 6);
-		if (spaceport == 'A' && dice == 12)
+		if (spaceport == 'A' && Dice.roll(2, 6) >= 10)
 			set.add(Tag.MAJOR_SPACEYARD);
 
 		// MINIMAL_CONTACT
-		// RADICAL_SEXISM
-		// TODO
+		if (backwater && gov > 7 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.MINIMAL_CONTACT);
 
 		// OCEANIC_WORLD
-		// SEAGOING_CITIES
-		dice = Dice.roll(3);
-		if (hydro >= 8 && dice == 1)
+		if (tradeCodes.contains(TradeCodes.FL))
 			set.add(Tag.OCEANIC_WORLD);
-		else if (hydro >= 8 && dice == 2)
-			set.add(Tag.SEAGOING_CITIES);
 
 		// OUT_OF_CONTACT
-		// TODO
+		if (backwater && Dice.roll(2, 6) >= 10)
+			set.add(Tag.OUT_OF_CONTACT);
 
 		// OUTPOST_WORLD
-		if (pop <= 2)
+		if (pop > 0 && pop < 5 && Dice.roll(2, 6) >= 10)
 			set.add(Tag.OUTPOST_WORLD);
 
 		// PERIMETER_AGENCY
+		if (pop > 5 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.PERIMETER_AGENCY);
+
 		// PILGRIMAGE_SITE
-		// TODO
+		if (pop > 5 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.PILGRIMAGE_SITE);
+
+		// POLICE_STATE
+		if (gov > 7 && law > 9 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.POLICE_STATE);
 
 		// PRECEPTOR_ARCHIVE
+		if (pop > 5 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.PRECEPTOR_ARCHIVE);
+
 		// PRETECH_CULTISTS
+		if (pop > 5 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.PRETECH_CULTISTS);
+
 		// PRIMITIVE_ALIENS
+		if (bases.contains(Base.COLONY) && Dice.roll(2, 6) == 12)
+			set.add(Tag.PRIMITIVE_ALIENS);
+
+		// PSIONICS_ACADEMY
+		if (pop > 5 && Dice.roll(2, 6) == 12)
+			set.add(Tag.PSIONICS_ACADEMY);
+
 		// PSIONICS_FEAR
 		// PSIONICS_WORSHIP
-		// PSIONICS_ACADEMY
+		dice = Dice.roll(2, 6);
+		if (pop < 5 && dice <= 3)
+			set.add(Tag.PSIONICS_FEAR);
+		if (pop < 5 && dice >= 11)
+			set.add(Tag.PSIONICS_WORSHIP);
+
 		// QUARANTINE_WORLD
-		// TODO
+		if (pop > 5 && law > 9 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.QUARANTINE_WORLD);
+
+		// RADICAL_SEXISM
+		if (pop < 5 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.RADICAL_SEXISM);
 
 		// RADIOACTIVE_WORLD
 		if (orbit < habitableZone && atmo < 4)
 			set.add(Tag.RADIOACTIVE_WORLD);
 
 		// REGIONAL_HEGEMON
+		if (pop > 8 && connected && techLevel > 12)
+			set.add(Tag.REGIONAL_HEGEMON);
+
+		// RESTRICTIVE_LAWS
+		if (pop > 5 && law > 9 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.RESTRICTIVE_LAWS);
+
 		// RIGID_CULTURE
+		if (pop > 5 && law > 9 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.RIGID_CULTURE);
+
+		// SEAGOING_CITIES
+		if (pop > 5 && hydro == 10)
+			set.add(Tag.SEAGOING_CITIES);
+
 		// SEALED_MENACE
-		// SECTARIANS
+		if (pop > 5 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.SEALED_MENACE);
+
 		// SECRET_MASTERS
-		// TODO
+		if (pop > 7 && gov > 0 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.SECRET_MASTERS);
+
+		// SECTARIANS
+		if (pop > 5 && gov == 7 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.SECTARIANS);
 
 		// SEISMIC_INSTABILITY
-		dice = Dice.roll(2, 6);
-		if (size != 8 && dice == 12)
+		if (size < 5 && bases.contains(Base.MINE) && Dice.roll(2, 6) >= 10)
 			set.add(Tag.SEISMIC_INSTABILITY);
 
 		// THEOCRACY
-		if (gov == 13)
+		if (gov == 13 && Dice.roll(2, 6) >= 8)
 			set.add(Tag.THEOCRACY);
 
-		// TOMB_WORLD
 		// TRADE_HUB
+		if (connected && Dice.roll(2, 6) >= 10)
+			set.add(Tag.TRADE_HUB);
+
+		// TOMB_WORLD
+		if (pop < 3 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.TOMB_WORLD);
+
 		// TYRANNY
+		if (gov > 7 && law > 9 && Dice.roll(2, 6) >= 8)
+			set.add(Tag.TYRANNY);
+
 		// UNBRAKED_AI
+		if (techLevel > 12 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.UNBRAKED_AI);
+
 		// WARLORDS
+		idealGov = (gov == 0 || gov == 7) ? true : false;
+		if (pop > 5 && idealGov && law == 0 && Dice.roll(2, 6) >= 10)
+			set.add(Tag.WARLORDS);
+
 		// XENOPHILES
 		// XENOPHOBES
-		// ZOMBIES
-		// TODO
+		dice = Dice.roll(2, 6);
+		if (pop < 5 && dice <= 3)
+			set.add(Tag.XENOPHILES);
+		if (pop < 5 && dice >= 11)
+			set.add(Tag.XENOPHOBES);
 
-		// while (set.size() < 2) {
-		// set.add(Dice.randomFromArray(ALL_TAGS));
-		// }
+		// ZOMBIES
+		if (pop < 5 && backwater && Dice.roll(2, 6) >= 10)
+			set.add(Tag.ZOMBIES);
 
 		world.setWorldTags(set);
 	}
+
+	public static void pruneWorldTags(World world) {
+		if (world.isWorld() != true)
+			return;
+
+		EnumSet<Tag> workingSet;
+		if (world.getWorldTags() != null)
+			workingSet = EnumSet.copyOf(world.getWorldTags());
+		else
+			workingSet = EnumSet.noneOf(Tag.class);
+
+		if (workingSet.size() == 2) {
+			// System.out.println("Returned with the right number.");
+			return;
+		} else if (workingSet.size() < 2) {
+			// System.out.println("Added one or two.");
+			while (workingSet.size() < 2) {
+				workingSet.add(Dice.randomFromArray(COMMON_TAGS));
+			}
+
+			world.setWorldTags(workingSet);
+		} else {
+			// System.out.println("Cut down the list from " + workingSet.size());
+			EnumSet<Tag> tempSet = EnumSet.noneOf(Tag.class);
+
+			while (tempSet.size() < 2) {
+				tempSet.add(Dice.randomFromSet(workingSet));
+			}
+
+			world.setWorldTags(tempSet);
+		}
+
+	}
+
 }
