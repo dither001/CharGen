@@ -865,7 +865,7 @@ public enum Spell {
 		} else if (job.equals(Class.RANGER)) {
 			spellSelector(0, 0, job, spellsKnown);
 
-		} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+		} else if (archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
 			spellSelector(0, 0, job, spellsKnown);
 
 		} else if (job.equals(Class.SORCERER)) {

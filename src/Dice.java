@@ -1,6 +1,9 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -104,6 +107,27 @@ public abstract class Dice {
 		T choice = array[Dice.roll(array.length) - 1];
 
 		return choice;
+	}
+
+	public static <T> List<T> mapToList(Map<T, Integer> map) {
+		List<T> list = new ArrayList<T>();
+
+		for (Iterator<T> it = map.keySet().iterator(); it.hasNext();) {
+			list.add(it.next());
+		}
+
+		// Anonymous Comparator class to sort the list by map values
+		class sort implements Comparator<T> {
+			@Override
+			public int compare(T left, T right) {
+				return map.get(left) - map.get(right);
+			}
+
+		}
+
+		Collections.sort(list, new sort());
+
+		return list;
 	}
 
 	@SuppressWarnings("unchecked")

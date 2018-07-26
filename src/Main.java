@@ -15,8 +15,13 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		testMainWorld();
+		// Main.rollCharactersOfClass(Class.FIGHTER);
+		// rollCharactersOfArchetype(Class.Subclass.DEATH);
+		levelUpTest(20, Class.FIGHTER);
+		// levelUpTest(Class.Subclass.DEATH);
 
+		//
+		// testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
@@ -32,10 +37,6 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-		// Main.rollCharactersOfClass(Class.DRUID);
-		// rollCharactersOfArchetype(Class.Subclass.DEATH);
-		// levelUpTest(20, Class.CLERIC);
-		// levelUpTest(Class.Subclass.DEATH);
 
 	}
 
@@ -83,15 +84,18 @@ public class Main {
 		System.out.println(group.toStringDetailed());
 		System.out.println();
 
-		int mission = 1;
 		String line;
 		World.Tag tag;
+		int counter = 1;
 		while (proceed == 1) {
-			System.out.println(" - - - - - - - - score: " + ++mission);
+			System.out.println(" - - - - - - - - score: " + counter++);
 
 			tag = Dice.randomFromSet(group.getMainWorld().getWorldTags());
 			System.out.print("(" + tag + ") ");
 			System.out.println(Mission.completeMissionDetail(tag));
+
+			// System.out.println(Mission.mission(counter++,
+			// group.getMainWorld().getWorldTags()));
 
 			line = INPUT.nextLine();
 			try {

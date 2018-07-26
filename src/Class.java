@@ -354,8 +354,8 @@ public enum Class implements Option {
 			features.addAll(cleric(actor));
 		} else if (job.equals(Class.DRUID)) {
 			features.addAll(druid(actor));
-			// } else if (job.equals(Class.FIGHTER)) {
-			// features.addAll(fighter(actor));
+		} else if (job.equals(Class.FIGHTER)) {
+			features.addAll(fighter(actor));
 			// } else if (job.equals(Class.MONK)) {
 			// features.addAll(monk(actor));
 			// } else if (job.equals(Class.PALADIN)) {
@@ -392,8 +392,8 @@ public enum Class implements Option {
 			features.addAll(cleric(actor));
 		} else if (job.equals(Class.DRUID)) {
 			features.addAll(druid(actor));
-			// } else if (job.equals(Class.FIGHTER)) {
-			// features.addAll(fighter(actor));
+		} else if (job.equals(Class.FIGHTER)) {
+			features.addAll(fighter(actor));
 			// } else if (job.equals(Class.MONK)) {
 			// features.addAll(monk(actor));
 			// } else if (job.equals(Class.PALADIN)) {
@@ -413,6 +413,10 @@ public enum Class implements Option {
 		actor.setFeatures(features);
 	}
 
+	/*
+	 * BARBARIAN ADVANCEMENT
+	 * 
+	 */
 	public static EnumSet<Feature> barbarian(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
@@ -519,6 +523,10 @@ public enum Class implements Option {
 		return set;
 	}
 
+	/*
+	 * BARD ADVANCEMENT
+	 * 
+	 */
 	public static EnumSet<Feature> bard(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
@@ -882,6 +890,10 @@ public enum Class implements Option {
 		return set;
 	}
 
+	/*
+	 * DRUID ADVANCEMENT
+	 * 
+	 */
 	public static EnumSet<Feature> druid(Actor actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
@@ -954,10 +966,10 @@ public enum Class implements Option {
 
 			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
 				set.add(Feature.ELEMENTAL_SHAPE);
-				
+
 			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE)) {
 				set.add(Feature.NATURES_WARD);
-				
+
 			}
 
 		} else if (level == 11) {
@@ -996,6 +1008,196 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 		} else if (level == 20) {
 			set.add(Feature.ARCHDRUID);
+
+		}
+
+		return set;
+	}
+
+	/*
+	 * FIGHTER ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> fighter(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		Class job = actor.getJob();
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			set.add(Feature.FIGHTING_STYLE);
+			set.addAll(fighterFightingStyle(1, actor));
+			set.add(Feature.SECOND_WIND);
+
+		} else if (level == 2) {
+			set.add(Feature.ACTION_SURGE_2);
+
+		} else if (level == 3) {
+			// Martial archetype
+			if (archetype.equals(Class.Subclass.CHAMPION)) {
+				set.add(Feature.IMPROVED_CRITICAL);
+
+			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+				set.add(Feature.COMBAT_SUPERIORITY);
+				set.add(Feature.SUPERIORITY_D8);
+				set.add(Feature.SUPERIORITY_DICE_4);
+				set.addAll(addFighterManeuver(3, actor));
+				set.add(Feature.STUDENT_OF_WAR);
+
+			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+				//
+				set.add(Feature.WEAPON_BOND);
+				Spell.addCantripKnown(job, spellsKnown);
+				Spell.addCantripKnown(job, spellsKnown);
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+			}
+
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		} else if (level == 5) {
+			set.add(Feature.EXTRA_ATTACK_1);
+
+		} else if (level == 6) {
+			set.add(Feature.ABILITY_BONUS_6);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 7) {
+			// Martial archetype
+			if (archetype.equals(Class.Subclass.CHAMPION)) {
+				set.add(Feature.REMARKABLE_ATHLETE);
+
+			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+				set.add(Feature.SUPERIORITY_DICE_5);
+				set.addAll(addFighterManeuver(2, actor));
+				set.add(Feature.KNOW_YOUR_ENEMY);
+
+			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+				//
+				set.add(Feature.WAR_MAGIC);
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+			}
+
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		} else if (level == 9) {
+			set.add(Feature.INDOMITABLE_1);
+
+		} else if (level == 10) {
+			// Martial archetype
+			if (archetype.equals(Class.Subclass.CHAMPION)) {
+				set.add(Feature.ADDITIONAL_FIGHTING_STYLE);
+				set.addAll(fighterFightingStyle(1, actor));
+
+			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+				//
+				set.add(Feature.SUPERIORITY_D10);
+				set.addAll(addFighterManeuver(2, actor));
+
+			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+				set.add(Feature.ELDRITCH_STRIKE);
+				Spell.addCantripKnown(job, spellsKnown);
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+			}
+
+		} else if (level == 11) {
+			set.add(Feature.EXTRA_ATTACK_2);
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 13) {
+			set.add(Feature.INDOMITABLE_2);
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		} else if (level == 14) {
+			set.add(Feature.ABILITY_BONUS_14);
+			set.add(abilityImprove(actor));
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		} else if (level == 15) {
+			// Martial archetype
+			if (archetype.equals(Class.Subclass.CHAMPION)) {
+				set.add(Feature.SUPERIOR_CRITICAL);
+
+			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+				//
+				set.add(Feature.SUPERIORITY_DICE_6);
+				set.addAll(addFighterManeuver(2, actor));
+				set.add(Feature.RELENTLESS);
+
+			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+				//
+				set.add(Feature.ARCANE_CHARGE);
+
+			}
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		} else if (level == 17) {
+			set.add(Feature.ACTION_SURGE_17);
+			set.add(Feature.INDOMITABLE_3);
+
+		} else if (level == 18) {
+			// Martial archetype
+			if (archetype.equals(Class.Subclass.CHAMPION)) {
+				set.add(Feature.SURVIVOR);
+
+			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+				//
+				set.add(Feature.SUPERIORITY_D12);
+
+			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+				//
+				set.add(Feature.WAR_MAGIC);
+
+			}
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		} else if (level == 20) {
+			set.add(Feature.EXTRA_ATTACK_3);
+			//
+			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+				Spell.addToSpellsKnown(level, job, spellsKnown);
 
 		}
 
@@ -1280,6 +1482,50 @@ public enum Class implements Option {
 			expertise = Feature.EXPERTISE_SURVIVAL;
 
 		return expertise;
+	}
+
+	private static EnumSet<Feature> fighterFightingStyle(int toAdd, Actor actor) {
+		Feature[] array = new Feature[] { Feature.STYLE_ARCHERY, Feature.STYLE_DEFENSE, Feature.STYLE_DUELING,
+				Feature.STYLE_GREAT_WEAPON, Feature.STYLE_PROTECTION, Feature.STYLE_TWO_WEAPON };
+
+		EnumSet<Feature> features;
+		if (actor.getFeatures() != null)
+			features = actor.getFeatures();
+		else
+			features = EnumSet.noneOf(Feature.class);
+
+		int added = 0;
+		Feature candidate;
+		while (added < toAdd) {
+			candidate = Dice.randomFromArray(array);
+
+			if (features.contains(candidate) != true) {
+				features.add(candidate);
+				++added;
+			}
+		}
+
+		return features;
+	}
+
+	private static EnumSet<Feature> addFighterManeuver(int toAdd, Actor actor) {
+		Feature[] array = new Feature[] { Feature.COMMANDERS_STRIKE, Feature.DISARMING_ATTACK,
+				Feature.DISTRACTING_STRIKE, Feature.EVASIVE_FOOTWORK, Feature.FEINTING_ATTACK, Feature.GOADING_ATTACK,
+				Feature.LUNGING_ATTACK, Feature.MANEUVERING_ATTACK, Feature.MENACING_ATTACK, Feature.PARRY,
+				Feature.PRECISION_ATTACK, Feature.PUSHING_ATTACK, Feature.RALLY, Feature.RIPOSTE,
+				Feature.SWEEPING_ATTACK, Feature.TRIP_ATTACK };
+		EnumSet<Feature> features = actor.getFeatures();
+
+		int added = 0;
+		Feature candidate;
+		while (added < toAdd) {
+			candidate = Dice.randomFromArray(array);
+
+			if (features.add(candidate))
+				++added;
+		}
+
+		return features;
 	}
 
 	// private static Skill matchSkillToExpertise(Feature feature) {
