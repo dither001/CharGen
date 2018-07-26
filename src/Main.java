@@ -15,9 +15,10 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		rollOneCharacter();
 		// Main.rollCharactersOfClass(Class.FIGHTER);
 		// rollCharactersOfArchetype(Class.Subclass.DEATH);
-		levelUpTest(20, Class.FIGHTER);
+		// levelUpTest(20, Class.FIGHTER);
 		// levelUpTest(Class.Subclass.DEATH);
 
 		//
@@ -236,7 +237,22 @@ public class Main {
 	}
 
 	public static void rollOneCharacter() {
-		System.out.println(new Player().toStringDetailed());
+		Player player = new Player();
+		System.out.println(player.toStringDetailed());
+		//
+		System.out.println();
+		System.out.println();
+		for (Iterator<Weapon.Instance> it = player.getInventory().weaponList().iterator(); it.hasNext();) {
+			System.out.println(it.next().toString());
+		}
+		//
+		System.out.println();
+		System.out.println();
+		for (Iterator<CombatBlock.Attack> it = player.getCombatBlock().attackSet().iterator(); it.hasNext();) {
+			System.out.println(it.next().toString());
+		}
+
+		//
 		System.out.println();
 	}
 

@@ -1,3 +1,5 @@
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class CombatBlock {
@@ -9,17 +11,138 @@ public class CombatBlock {
 		MELEE_ATTACK, RANGED_ATTACK, SPELL_ATTACK, SPELL_SAVE
 	}
 
-	private class Attack {
+	/*
+	 * INNER CLASS - ATTACK
+	 * 
+	 */
+	public class Attack {
 		private Actor subject;
+		//
+		private boolean isWeaponAttack;
+		private boolean proficient;
+		private AttackMode attackMode;
 		private Weapon.Instance weapon;
+		private Spell spell;
+		//
+		private int attackBonus;
+		private int averageDamage, damageModifier;
 
+		/*
+		 * CONSTRUCTORS
+		 */
 		public Attack(Actor subject, Weapon.Instance weapon) {
-			
+			this.subject = subject;
+			this.weapon = weapon;
+			//
+			this.isWeaponAttack = true;
+			if (subject.getWeaponProficiency().contains(weapon.getWeapon()))
+				this.proficient = true;
+			else
+				this.proficient = false;
+
+			//
+			calcAttackBonus();
 		}
-		
+
+		public Attack(Actor subject, Spell spell) {
+			this.subject = subject;
+			this.spell = spell;
+			//
+			this.isWeaponAttack = false;
+			this.proficient = true;
+
+			//
+			calcAttackBonus();
+		}
+
+		/*
+		 * INSTANCE METHODS
+		 */
+		@Override
+		public String toString() {
+			String string;
+
+			String attack = (attackBonus >= 0) ? "+" + attackBonus : "" + attackBonus;
+			String damageAvg = (averageDamage > 0) ? " (" + averageDamage + ")" : "";
+			String damageMod = (damageModifier > -1) ? "+" + damageModifier : "" + damageModifier;
+			string = String.format("%s %s %s %s", weapon.toString(), attack, damageAvg, damageMod);
+			return string;
+		}
+
+		public boolean equals(Attack other) {
+			boolean equals = false;
+			if (other.attackMode.equals(this.attackMode) && this.weaponAttack() && other.weaponAttack()) {
+				// TODO - maybe
+
+			} else if (other.attackMode.equals(this.attackMode) && this.spellAttack() && other.spellAttack()) {
+				// TODO - maybe
+
+			}
+
+			return equals;
+		}
+
+		private boolean weaponAttack() {
+			return isWeaponAttack;
+		}
+
+		private boolean spellAttack() {
+			return isWeaponAttack != true;
+		}
+
+		private void calcAttackBonus() {
+			Class job = owner.getJob();
+			Class.Subclass archetype = owner.getArchetype();
+			// TODO - need?
+			int atk = 0;
+
+			int abilityBonus = 0, proficiency = owner.getProficiencyBonus();
+			int strength = owner.getStrengthModifier(), dexterity = owner.getDexterityModifier(),
+					intelligence = owner.getIntelligenceModifier(), wisdom = owner.getWisdomModifier(),
+					charisma = owner.getCharismaModifier();
+
+			if (weaponAttack()) {
+				// check for Finesse, -OR- check if ranged only
+				if (weapon.useDexterity() && dexterity >= strength) {
+					abilityBonus = dexterity;
+				} else if (weapon.rangedOnly()) {
+					abilityBonus = dexterity;
+				} else {
+					abilityBonus = strength;
+				}
+
+			} else if (spellAttack()) {
+				// confirm if attack or save spell; get primary ability
+				if (job.equals(Class.BARD) || job.equals(Class.PALADIN) || job.equals(Class.SORCERER)
+						|| job.equals(Class.WARLOCK)) {
+					abilityBonus = charisma;
+				} else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID) || job.equals(Class.MONK)
+						|| job.equals(Class.RANGER)) {
+					abilityBonus = wisdom;
+				} else if (job.equals(Class.WIZARD) || archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)
+						|| archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
+					abilityBonus = intelligence;
+				}
+
+			}
+
+			/*
+			 * MASSIVE TODO - needs magic, traits, features, and other bonuses
+			 */
+
+			if (attackMode != null && attackMode.equals(AttackMode.SPELL_SAVE)) {
+				this.attackBonus = 8 + proficiency + abilityBonus;
+			} else {
+				this.attackBonus = (proficient) ? proficiency + abilityBonus : abilityBonus;
+
+			}
+		}
 	}
 
-	// fields
+	/*
+	 * INSTANCE FIELDS
+	 * 
+	 */
 	private Actor owner;
 	private Role role;
 	private AttackMode preferredAttack;
@@ -31,7 +154,10 @@ public class CombatBlock {
 	private int attackBonus;
 	private int averageDamage, damageModifier;
 
-	// constructors
+	/*
+	 * CONSTRUCTORS
+	 * 
+	 */
 	public CombatBlock(Actor owner) {
 		this.owner = owner;
 	}
@@ -40,6 +166,10 @@ public class CombatBlock {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public boolean hasOwner() {
+		return owner != null;
+	}
+
 	public void update() {
 		calcArmorClass();
 		calcHitPoints();
@@ -47,10 +177,23 @@ public class CombatBlock {
 		calcAverageDamage();
 	}
 
-	public boolean hasOwner() {
-		return owner != null;
+	public Set<Attack> attackSet() {
+		Set<Attack> set = new HashSet<Attack>();
+
+		Weapon.Instance weapon;
+		for (Iterator<Weapon.Instance> it = owner.getInventory().weaponList().iterator(); it.hasNext();) {
+			weapon = it.next();
+
+			set.add(new Attack(owner, weapon));
+		}
+
+		return set;
 	}
 
+	/*
+	 * FIXME - LOTS OF OLD STUFF
+	 * 
+	 */
 	private void preferredAttackType() {
 		Class job = owner.getJob();
 

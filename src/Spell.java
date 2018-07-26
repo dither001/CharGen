@@ -39,6 +39,14 @@ public enum Spell {
 			}
 		}
 
+		public boolean combatSpell() {
+			return dice > 0 || faces > 0;
+		}
+
+		public boolean nonCombatSpell() {
+			return (dice > 0 && faces > 0) != true;
+		}
+
 		public int getAverageDamage() {
 			return faces * dice / 2;
 		}

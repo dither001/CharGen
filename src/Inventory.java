@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +28,6 @@ public class Inventory {
 
 	/*
 	 * CONSTRUCTORS
-	 * 
 	 */
 	public Inventory(Actor owner) {
 		this.owner = owner;
@@ -35,12 +35,25 @@ public class Inventory {
 
 	/*
 	 * INSTANCE METHODS
-	 * 
 	 */
 	public boolean hasOwner() {
 		return owner != null;
 	}
 
+	public List<Weapon.Instance> weaponList() {
+		List<Weapon.Instance> list = new ArrayList<Weapon.Instance>();
+		list.addAll(weaponList.list());
+
+		Weapon.SortWeaponByUseability sort = new Weapon.SortWeaponByUseability(owner);
+		Collections.sort(list, sort);
+		
+		return list;
+	}
+
+	/*
+	 * FIXME - OLD STUFF
+	 * 
+	 */
 	private void optimizeArmor() {
 		if (clearBodyArmor() && armorList.size() > 0) {
 			// TODO - needs to sort list
@@ -227,7 +240,7 @@ public class Inventory {
 	}
 
 	public void setWeapons(Weapon.WeaponList list) {
-		this.weaponList = new Weapon.WeaponList(list);
+		this.weaponList = new Weapon.WeaponList(owner, list);
 	}
 
 	public List<Armor.Instance> getArmor() {
@@ -304,7 +317,7 @@ public class Inventory {
 		Inventory inventory = new Inventory(actor);
 
 		// create lists
-		Weapon.WeaponList weaponList = new Weapon.WeaponList();
+		Weapon.WeaponList weaponList = new Weapon.WeaponList(actor);
 		List<Armor.Instance> armorList = new ArrayList<Armor.Instance>();
 
 		//

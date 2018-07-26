@@ -110,6 +110,14 @@ public enum Weapon {
 			return prototype.weapon.equals(Weapon.SHIELD);
 		}
 
+		public boolean rangedOnly() {
+			boolean rangedOnly = false;
+			if (prototype.traits.contains(Trait.AMMUNITION))
+				rangedOnly = true;
+
+			return rangedOnly;
+		}
+
 		public boolean rangedOrThrown() {
 			boolean rangedOrThrown = false;
 			if (prototype.traits.contains(Trait.AMMUNITION) || prototype.traits.contains(Trait.THROWN))
@@ -591,16 +599,25 @@ public enum Weapon {
 
 	public static class WeaponList implements Item.ItemList<Instance> {
 		private ArrayList<Instance> list;
+		private Actor owner;
 
-		public WeaponList() {
-			this.list = new ArrayList<Instance>();
+		// CONSTRUCTORS
+		public WeaponList(Actor owner) {
+			this(owner, new ArrayList<Instance>());
 		}
 
-		public WeaponList(Collection<Instance> c) {
+		public WeaponList(Actor owner, Collection<Instance> c) {
+			this.owner = owner;
 			this.list = new ArrayList<Instance>();
 			addAll(c);
 		}
 
+		// ORIGINAL METHODS
+		public Collection<Instance> list() {
+			return (Collection<Instance>) list;
+		}
+
+		// LIST METHODS
 		@Override
 		public boolean add(Instance e) {
 			boolean added = false;
@@ -792,6 +809,23 @@ public enum Weapon {
 
 			return two - one;
 		}
+	}
+
+	public static class SortWeaponByUseability implements Comparator<Weapon.Instance> {
+		EnumSet<Weapon> weaponProf;
+
+		public SortWeaponByUseability(Actor actor) {
+			this.weaponProf = actor.getWeaponProficiency();
+		}
+
+		@Override
+		public int compare(Weapon.Instance w1, Weapon.Instance w2) {
+			int left = (weaponProf.contains(w1.getWeapon())) ? 1 : 0;
+			int right = (weaponProf.contains(w2.getWeapon())) ? 1 : 0;
+
+			return right - left;
+		}
+
 	}
 
 	public static class SortByDefender implements Comparator<Instance> {
