@@ -2,6 +2,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 public enum Spell {
@@ -9,6 +10,10 @@ public enum Spell {
 
 	public enum School {
 		ABJURATION, CONJURATION, DIVINATION, ENCHANTMENT, EVOCATION, ILLUSION, NECROMANCY, TRANSMUTATION
+	}
+
+	public enum Mode {
+		MELEE_ATTACK, RANGED_ATTACK, SPELL_ATTACK, SPELL_SAVE, NERF, BUFF
 	}
 
 	public static class Prototype {
@@ -26,9 +31,27 @@ public enum Spell {
 	public static class Instance {
 		private Prototype prototype;
 		private int dice, faces;
+		private Mode mode;
+		private boolean attackSpell;
+		private boolean attackRider;
 
 		public Instance(Prototype prototype, int... is) {
+			this(prototype, Mode.SPELL_SAVE, is);
+		}
+
+		public Instance(Prototype prototype, Mode mode, int... is) {
 			this.prototype = prototype;
+			this.mode = mode;
+
+			if (mode.equals(Mode.SPELL_ATTACK))
+				this.attackSpell = true;
+			else
+				this.attackSpell = false;
+
+			if (mode.equals(Mode.MELEE_ATTACK) || mode.equals(Mode.RANGED_ATTACK))
+				this.attackRider = true;
+			else
+				this.attackRider = false;
 
 			if (is.length > 1) {
 				this.dice = is[0];
@@ -698,15 +721,15 @@ public enum Spell {
 		//
 		spellMap.put(ACID_SPLASH, new Instance(prototypeMap.get(ACID_SPLASH), 1, 6));
 		spellMap.put(ARMS_OF_HADAR, new Instance(prototypeMap.get(ARMS_OF_HADAR), 2, 6));
-		spellMap.put(BANISHING_SMITE, new Instance(prototypeMap.get(BANISHING_SMITE), 5, 10));
+		spellMap.put(BANISHING_SMITE, new Instance(prototypeMap.get(BANISHING_SMITE), Mode.MELEE_ATTACK, 5, 10));
 		spellMap.put(BLIGHT, new Instance(prototypeMap.get(BLIGHT), 8, 8));
-		spellMap.put(BLINDING_SMITE, new Instance(prototypeMap.get(BLINDING_SMITE), 3, 8));
-		spellMap.put(BRANDING_SMITE, new Instance(prototypeMap.get(BRANDING_SMITE), 2, 6));
+		spellMap.put(BLINDING_SMITE, new Instance(prototypeMap.get(BLINDING_SMITE), Mode.MELEE_ATTACK, 3, 8));
+		spellMap.put(BRANDING_SMITE, new Instance(prototypeMap.get(BRANDING_SMITE), Mode.MELEE_ATTACK, 2, 6));
 		spellMap.put(BURNING_HANDS, new Instance(prototypeMap.get(BURNING_HANDS), 3, 6));
 		spellMap.put(CALL_LIGHTNING, new Instance(prototypeMap.get(CALL_LIGHTNING), 3, 10));
 		spellMap.put(CHAIN_LIGHTNING, new Instance(prototypeMap.get(CHAIN_LIGHTNING), 10, 8));
-		spellMap.put(CHILL_TOUCH, new Instance(prototypeMap.get(CHILL_TOUCH), 1, 8));
-		spellMap.put(CHROMATIC_ORB, new Instance(prototypeMap.get(CHROMATIC_ORB), 3, 8));
+		spellMap.put(CHILL_TOUCH, new Instance(prototypeMap.get(CHILL_TOUCH), Mode.SPELL_ATTACK, 1, 8));
+		spellMap.put(CHROMATIC_ORB, new Instance(prototypeMap.get(CHROMATIC_ORB), Mode.SPELL_ATTACK, 3, 8));
 		spellMap.put(CIRCLE_OF_DEATH, new Instance(prototypeMap.get(CIRCLE_OF_DEATH), 8, 6));
 		spellMap.put(CLOUD_OF_DAGGERS, new Instance(prototypeMap.get(CLOUD_OF_DAGGERS), 4, 4));
 		spellMap.put(CLOUDKILL, new Instance(prototypeMap.get(CLOUDKILL), 5, 8));
@@ -721,14 +744,14 @@ public enum Spell {
 		spellMap.put(EVARDS_BLACK_TENTACLES, new Instance(prototypeMap.get(EVARDS_BLACK_TENTACLES), 3, 6));
 		spellMap.put(FINGER_OF_DEATH, new Instance(prototypeMap.get(FINGER_OF_DEATH), 7, 8));
 		spellMap.put(FIREBALL, new Instance(prototypeMap.get(FIREBALL), 8, 6));
-		spellMap.put(FIREBOLT, new Instance(prototypeMap.get(FIREBOLT), 1, 10));
+		spellMap.put(FIREBOLT, new Instance(prototypeMap.get(FIREBOLT), Mode.SPELL_ATTACK, 1, 10));
 		spellMap.put(FIRE_STORM, new Instance(prototypeMap.get(FIRE_STORM), 7, 10));
-		spellMap.put(FLAME_BLADE, new Instance(prototypeMap.get(FLAME_BLADE), 3, 6));
+		spellMap.put(FLAME_BLADE, new Instance(prototypeMap.get(FLAME_BLADE), Mode.SPELL_ATTACK, 3, 6));
 		spellMap.put(FLAME_STRIKE, new Instance(prototypeMap.get(FLAME_STRIKE), 4, 6));
 		spellMap.put(FLAMING_SPHERE, new Instance(prototypeMap.get(FLAMING_SPHERE), 2, 6));
 		spellMap.put(GLYPH_OF_WARDING, new Instance(prototypeMap.get(GLYPH_OF_WARDING), 5, 8));
-		spellMap.put(GUIDING_BOLT, new Instance(prototypeMap.get(GUIDING_BOLT), 4, 6));
-		spellMap.put(HAIL_OF_THORNS, new Instance(prototypeMap.get(HAIL_OF_THORNS), 1, 10));
+		spellMap.put(GUIDING_BOLT, new Instance(prototypeMap.get(GUIDING_BOLT), Mode.SPELL_ATTACK, 4, 6));
+		spellMap.put(HAIL_OF_THORNS, new Instance(prototypeMap.get(HAIL_OF_THORNS), Mode.RANGED_ATTACK, 1, 10));
 		spellMap.put(HARM, new Instance(prototypeMap.get(HARM), 14, 6));
 		spellMap.put(HEAT_METAL, new Instance(prototypeMap.get(HEAT_METAL), 2, 8));
 		spellMap.put(HELLISH_REBUKE, new Instance(prototypeMap.get(HELLISH_REBUKE), 2, 10));
@@ -739,7 +762,7 @@ public enum Spell {
 		spellMap.put(INSECT_PLAGUE, new Instance(prototypeMap.get(INSECT_PLAGUE), 4, 10));
 		spellMap.put(LIGHTNING_ARROW, new Instance(prototypeMap.get(LIGHTNING_ARROW), 4, 8));
 		spellMap.put(LIGHTNING_BOLT, new Instance(prototypeMap.get(LIGHTNING_BOLT), 8, 6));
-		spellMap.put(MAGIC_MISSILE, new Instance(prototypeMap.get(MAGIC_MISSILE), 3, 4));
+		spellMap.put(MAGIC_MISSILE, new Instance(prototypeMap.get(MAGIC_MISSILE), 3, 4, 3));
 		spellMap.put(MELFS_ACID_ARROW, new Instance(prototypeMap.get(MELFS_ACID_ARROW), 4, 4));
 		spellMap.put(METEOR_SWARM, new Instance(prototypeMap.get(METEOR_SWARM), 40, 6));
 		spellMap.put(MOONBEAM, new Instance(prototypeMap.get(MOONBEAM), 2, 10));
@@ -750,22 +773,22 @@ public enum Spell {
 		spellMap.put(PRISMATIC_SPRAY, new Instance(prototypeMap.get(PRISMATIC_SPRAY), 10, 6));
 		spellMap.put(PRISMATIC_WALL, new Instance(prototypeMap.get(PRISMATIC_WALL), 50, 6));
 		spellMap.put(PRODUCE_FLAME, new Instance(prototypeMap.get(PRODUCE_FLAME), 1, 8));
-		spellMap.put(RAY_OF_FROST, new Instance(prototypeMap.get(RAY_OF_FROST), 1, 8));
+		spellMap.put(RAY_OF_FROST, new Instance(prototypeMap.get(RAY_OF_FROST), Mode.SPELL_ATTACK, 1, 8));
 		spellMap.put(RAY_OF_SICKNESS, new Instance(prototypeMap.get(RAY_OF_SICKNESS), 2, 8));
 		spellMap.put(SACRED_FLAME, new Instance(prototypeMap.get(SACRED_FLAME), 1, 8));
 		spellMap.put(SCORCHING_RAY, new Instance(prototypeMap.get(SCORCHING_RAY), 2, 6));
-		spellMap.put(SEARING_SMITE, new Instance(prototypeMap.get(SEARING_SMITE), 1, 6));
+		spellMap.put(SEARING_SMITE, new Instance(prototypeMap.get(SEARING_SMITE), Mode.MELEE_ATTACK, 1, 6));
 		spellMap.put(SHATTER, new Instance(prototypeMap.get(SHATTER), 3, 8));
-		spellMap.put(SHILLELAGH, new Instance(prototypeMap.get(SHILLELAGH), 1, 8));
-		spellMap.put(SHOCKING_GRASP, new Instance(prototypeMap.get(SHOCKING_GRASP), 1, 8));
-		spellMap.put(SPIRITUAL_WEAPON, new Instance(prototypeMap.get(SPIRITUAL_WEAPON), 1, 8));
-		spellMap.put(STAGGERING_SMITE, new Instance(prototypeMap.get(STAGGERING_SMITE), 4, 6));
+		spellMap.put(SHILLELAGH, new Instance(prototypeMap.get(SHILLELAGH), Mode.MELEE_ATTACK, 1, 8));
+		spellMap.put(SHOCKING_GRASP, new Instance(prototypeMap.get(SHOCKING_GRASP), Mode.SPELL_ATTACK, 1, 8));
+		spellMap.put(SPIRITUAL_WEAPON, new Instance(prototypeMap.get(SPIRITUAL_WEAPON), Mode.SPELL_ATTACK, 1, 8));
+		spellMap.put(STAGGERING_SMITE, new Instance(prototypeMap.get(STAGGERING_SMITE), Mode.MELEE_ATTACK, 4, 6));
 		spellMap.put(STORM_OF_VENGEANCE, new Instance(prototypeMap.get(STORM_OF_VENGEANCE), 10, 6));
 		spellMap.put(SUNBEAM, new Instance(prototypeMap.get(SUNBEAM), 6, 8));
 		spellMap.put(SUNBURST, new Instance(prototypeMap.get(SUNBURST), 12, 6));
 		spellMap.put(SYMBOL, new Instance(prototypeMap.get(SYMBOL), 10, 10));
-		spellMap.put(THORN_WHIP, new Instance(prototypeMap.get(THORN_WHIP), 1, 6));
-		spellMap.put(THUNDEROUS_SMITE, new Instance(prototypeMap.get(THUNDEROUS_SMITE), 2, 6));
+		spellMap.put(THORN_WHIP, new Instance(prototypeMap.get(THORN_WHIP), Mode.SPELL_ATTACK, 1, 6));
+		spellMap.put(THUNDEROUS_SMITE, new Instance(prototypeMap.get(THUNDEROUS_SMITE), Mode.MELEE_ATTACK, 2, 6));
 		spellMap.put(THUNDERWAVE, new Instance(prototypeMap.get(THUNDERWAVE), 2, 8));
 		spellMap.put(VAMPIRIC_TOUCH, new Instance(prototypeMap.get(VAMPIRIC_TOUCH), 3, 6));
 		spellMap.put(VICIOUS_MOCKERY, new Instance(prototypeMap.get(VICIOUS_MOCKERY), 1, 4));
@@ -773,8 +796,8 @@ public enum Spell {
 		spellMap.put(WALL_OF_ICE, new Instance(prototypeMap.get(WALL_OF_ICE), 10, 6));
 		spellMap.put(WALL_OF_THORNS, new Instance(prototypeMap.get(WALL_OF_THORNS), 7, 8));
 		spellMap.put(WEIRD, new Instance(prototypeMap.get(WEIRD), 4, 10));
-		spellMap.put(WITCH_BOLT, new Instance(prototypeMap.get(WITCH_BOLT), 1, 12));
-		spellMap.put(WRATHFUL_SMITE, new Instance(prototypeMap.get(WRATHFUL_SMITE), 1, 6));
+		spellMap.put(WITCH_BOLT, new Instance(prototypeMap.get(WITCH_BOLT), Mode.SPELL_ATTACK, 1, 12));
+		spellMap.put(WRATHFUL_SMITE, new Instance(prototypeMap.get(WRATHFUL_SMITE), Mode.MELEE_ATTACK, 1, 6));
 
 	}
 
@@ -989,6 +1012,19 @@ public enum Spell {
 	/*
 	 * 
 	 */
+	// public static Map<Spell, Instance> spellMap() {
+	// return spellMap;
+	// }
+
+	public static boolean isCombatSpell(Spell spell) {
+		boolean combatSpell = false;
+
+		if (spellMap.get(spell) != null && spellMap.get(spell).combatSpell())
+			combatSpell = true;
+
+		return combatSpell;
+	}
+
 	public static Spell highestDamagingSpell(Set<Spell> spellsKnown) {
 		Set<Spell> filteredSet;
 		Spell candidate, highestDamage = null;

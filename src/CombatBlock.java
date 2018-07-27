@@ -1,3 +1,4 @@
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -26,6 +27,7 @@ public class CombatBlock {
 		//
 		private int attackBonus;
 		private int averageDamage, damageModifier;
+		private String dice;
 
 		/*
 		 * CONSTRUCTORS
@@ -42,6 +44,7 @@ public class CombatBlock {
 
 			//
 			calcAttackBonus();
+			calcAverageDamage();
 		}
 
 		public Attack(Actor subject, Spell spell) {
@@ -53,6 +56,7 @@ public class CombatBlock {
 
 			//
 			calcAttackBonus();
+			calcAverageDamage();
 		}
 
 		/*
@@ -63,9 +67,23 @@ public class CombatBlock {
 			String string;
 
 			String attack = (attackBonus >= 0) ? "+" + attackBonus : "" + attackBonus;
-			String damageAvg = (averageDamage > 0) ? " (" + averageDamage + ")" : "";
-			String damageMod = (damageModifier > -1) ? "+" + damageModifier : "" + damageModifier;
-			string = String.format("%s %s %s %s", weapon.toString(), attack, damageAvg, damageMod);
+			String damageAvg = (averageDamage > 0) ? "(" + averageDamage + ")" : "";
+			String damageMod = (damageModifier > 0) ? "+" + damageModifier
+					: (damageModifier < 0) ? "" + damageModifier : "";
+
+			String name;
+			if (weaponAttack())
+				name = "Weapon " + weapon.toString();
+			else
+				name = "Spell " + spell.toString();
+
+			String damageString;
+			if (weaponAttack())
+				damageString = String.format("%s%s", dice, damageMod);
+			else
+				damageString = String.format("%s", dice);
+
+			string = String.format("%s %s %s %s", name, attack, damageString, damageAvg);
 			return string;
 		}
 
@@ -93,8 +111,6 @@ public class CombatBlock {
 		private void calcAttackBonus() {
 			Class job = owner.getJob();
 			Class.Subclass archetype = owner.getArchetype();
-			// TODO - need?
-			int atk = 0;
 
 			int abilityBonus = 0, proficiency = owner.getProficiencyBonus();
 			int strength = owner.getStrengthModifier(), dexterity = owner.getDexterityModifier(),
@@ -137,6 +153,78 @@ public class CombatBlock {
 
 			}
 		}
+
+		private void calcAverageDamage() {
+			Class job = owner.getJob();
+			Class.Subclass archetype = owner.getArchetype();
+			EnumSet<Option.Feature> features = owner.getFeatures();
+
+			int level = owner.getLevel(), abilityBonus = 0, baseDamage = 0;
+			int strength = owner.getStrengthModifier(), dexterity = owner.getDexterityModifier(),
+					intelligence = owner.getIntelligenceModifier(), wisdom = owner.getWisdomModifier(),
+					charisma = owner.getCharismaModifier();
+
+			if (weaponAttack()) {
+				if (weapon.useDexterity() && dexterity >= strength) {
+					abilityBonus = dexterity;
+				} else if (weapon.rangedOnly()) {
+					abilityBonus = dexterity;
+				} else {
+					abilityBonus = strength;
+				}
+
+				this.dice = weapon.getDiceString();
+				baseDamage = weapon.getAverageDamage();
+
+			} else if (spellAttack()) {
+				// confirm if attack or save spell; get primary ability
+				if (job.equals(Class.BARD) || job.equals(Class.PALADIN) || job.equals(Class.SORCERER)
+						|| job.equals(Class.WARLOCK)) {
+					abilityBonus = charisma;
+				} else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID) || job.equals(Class.MONK)
+						|| job.equals(Class.RANGER)) {
+					abilityBonus = wisdom;
+				} else if (job.equals(Class.WIZARD) || archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)
+						|| archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
+					abilityBonus = intelligence;
+				}
+
+				this.dice = Spell.getDiceString(spell);
+				baseDamage = Spell.getAverageDamage(spell);
+			}
+
+			/*
+			 * MASSIVE TODO - needs magic, traits, features, and other bonuses
+			 */
+
+			if (attackMode != null
+					&& (attackMode.equals(AttackMode.SPELL_ATTACK) || attackMode.equals(AttackMode.SPELL_SAVE))) {
+
+				if (level >= 17)
+					this.averageDamage = baseDamage * 4;
+				else if (level >= 11)
+					this.averageDamage = baseDamage * 3;
+				else if (level >= 5)
+					this.averageDamage = baseDamage * 2;
+				else
+					this.averageDamage = baseDamage;
+
+			} else {
+				this.damageModifier = abilityBonus;
+
+				if (features.contains(Option.Feature.EXTRA_ATTACK_3))
+					this.averageDamage = (baseDamage + abilityBonus) * 4;
+				else if (features.contains(Option.Feature.EXTRA_ATTACK_2))
+					this.averageDamage = (baseDamage + abilityBonus) * 3;
+				else if (features.contains(Option.Feature.EXTRA_ATTACK_1))
+					this.averageDamage = (baseDamage + abilityBonus) * 2;
+				else
+					this.averageDamage = baseDamage + abilityBonus;
+
+			}
+
+		}
+
 	}
 
 	/*
@@ -171,10 +259,10 @@ public class CombatBlock {
 	}
 
 	public void update() {
-		calcArmorClass();
-		calcHitPoints();
-		calcAttackBonus();
-		calcAverageDamage();
+		// calcArmorClass();
+		// calcHitPoints();
+		// calcAttackBonus();
+		// calcAverageDamage();
 	}
 
 	public Set<Attack> attackSet() {
@@ -185,6 +273,14 @@ public class CombatBlock {
 			weapon = it.next();
 
 			set.add(new Attack(owner, weapon));
+		}
+
+		Spell spell;
+		for (Iterator<Spell> it = owner.getSpellsKnown().iterator(); it.hasNext();) {
+			spell = it.next();
+
+			if (Spell.isCombatSpell(spell))
+				set.add(new Attack(owner, spell));
 		}
 
 		return set;
@@ -387,31 +483,49 @@ public class CombatBlock {
 			string += "0";
 
 		int experienceValue = ChallengeRating.challengeToXP(challengeRating);
-		return String.format("CR %s (%-2d) ", string, experienceValue);
+		return String.format("CR %s (%-2d exp) ", string, experienceValue);
 	}
 
 	public String toStringDetailed() {
-		String string = "", attack = "";
+		String string = "", armor = null, attack = "";
 
-		if (preferredAttack.equals(AttackMode.MELEE_ATTACK) || preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
-			attack = (preferredWeapon != null) ? preferredWeapon.toString() + " " : "Unarmed ";
-			attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
-			attack += preferredWeapon.getDiceString();
-			attack += (damageModifier > -1) ? "+" + damageModifier : damageModifier;
-			attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
+		Inventory gear = owner.getInventory();
+		if (gear.wearingArmor())
+			armor = "armor";
 
-			string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints, attack, toStringCR());
+		if (gear.usingShield())
+			armor = (armor != null) ? armor + ", shield" : "shield";
 
-		} else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
-			attack = (preferredCantrip != null) ? preferredCantrip.toString() + " " : "Cantrip ";
-			attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
-			attack += Spell.getDiceString(preferredCantrip);
-			attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
+		if (armor != null)
+			armor = " (" + armor + ")";
+		else
+			armor = "";
 
-			string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints, attack, toStringCR());
+		// if (preferredAttack.equals(AttackMode.MELEE_ATTACK) ||
+		// preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
+		// attack = (preferredWeapon != null) ? preferredWeapon.toString() + " " :
+		// "Unarmed ";
+		// attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
+		// attack += preferredWeapon.getDiceString();
+		// attack += (damageModifier > -1) ? "+" + damageModifier : damageModifier;
+		// attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
+		//
+		// string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints,
+		// attack, toStringCR());
+		//
+		// } else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
+		// attack = (preferredCantrip != null) ? preferredCantrip.toString() + " " :
+		// "Cantrip ";
+		// attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
+		// attack += Spell.getDiceString(preferredCantrip);
+		// attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
+		//
+		// string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints,
+		// attack, toStringCR());
+		//
+		// }
 
-		}
-
+		string = String.format("AC %2d%s || %2d hp || %s", armorClass, armor, hitPoints, toStringCR());
 		return string;
 	}
 

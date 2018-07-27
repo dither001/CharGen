@@ -40,13 +40,30 @@ public class Inventory {
 		return owner != null;
 	}
 
+	public List<Weapon.Instance> getWeapons() {
+		return weaponList;
+	}
+
+	public void setWeapons(Weapon.WeaponList list) {
+		this.weaponList = new Weapon.WeaponList(owner, list);
+	}
+
+	public List<Armor.Instance> getArmor() {
+		return armorList;
+	}
+
+	public void setArmor(List<Armor.Instance> list) {
+		this.armorList = new ArrayList<Armor.Instance>(list);
+	}
+
+	//
 	public List<Weapon.Instance> weaponList() {
 		List<Weapon.Instance> list = new ArrayList<Weapon.Instance>();
 		list.addAll(weaponList.list());
 
 		Weapon.SortWeaponByUseability sort = new Weapon.SortWeaponByUseability(owner);
 		Collections.sort(list, sort);
-		
+
 		return list;
 	}
 
@@ -233,22 +250,6 @@ public class Inventory {
 
 	public int getShieldArmorBonus() {
 		return offHand.getArmorBonus();
-	}
-
-	public List<Weapon.Instance> getWeapons() {
-		return weaponList;
-	}
-
-	public void setWeapons(Weapon.WeaponList list) {
-		this.weaponList = new Weapon.WeaponList(owner, list);
-	}
-
-	public List<Armor.Instance> getArmor() {
-		return armorList;
-	}
-
-	public void setArmor(List<Armor.Instance> list) {
-		this.armorList = new ArrayList<Armor.Instance>(list);
 	}
 
 	private static List<Weapon.Instance> filterWeaponsForUseable(Actor actor) {
