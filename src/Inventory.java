@@ -1,15 +1,12 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class Inventory {
-	public enum Slot {
-		BODY_ARMOR, MAIN_HAND, OFF_HAND, BROW, NECK, GLOVES, BRACERS, BELT, BOOTS, RING
-	}
-
 	/*
 	 * INSTANCE FIELDS
 	 * 
@@ -17,7 +14,7 @@ public class Inventory {
 	private Actor owner;
 
 	private ArrayList<Armor.Instance> armorList;
-	private Weapon.WeaponList weaponList;
+	private Weapon.WeaponSet weaponSet;
 	// private ArrayList<Tool.Instance> tools;
 
 	private Armor.Instance bodyArmor;
@@ -40,12 +37,12 @@ public class Inventory {
 		return owner != null;
 	}
 
-	public List<Weapon.Instance> getWeapons() {
-		return weaponList;
+	public Set<Weapon.Instance> getWeapons() {
+		return weaponSet;
 	}
 
-	public void setWeapons(Weapon.WeaponList list) {
-		this.weaponList = new Weapon.WeaponList(owner, list);
+	public void setWeapons(Weapon.WeaponSet list) {
+		this.weaponSet = new Weapon.WeaponSet(owner, list);
 	}
 
 	public List<Armor.Instance> getArmor() {
@@ -59,7 +56,7 @@ public class Inventory {
 	//
 	public List<Weapon.Instance> weaponList() {
 		List<Weapon.Instance> list = new ArrayList<Weapon.Instance>();
-		list.addAll(weaponList.list());
+		list.addAll(weaponSet.list());
 
 		Weapon.SortWeaponByUseability sort = new Weapon.SortWeaponByUseability(owner);
 		Collections.sort(list, sort);
@@ -84,11 +81,11 @@ public class Inventory {
 	}
 
 	private void optimizeWeapons() {
-		if (clearMainHand() && clearOffHand() && weaponList.size() > 0) {
+		if (clearMainHand() && clearOffHand() && weaponSet.size() > 0) {
 			CombatBlock.Role role = CombatBlock.getRoleFromClass(owner.getJob());
 
 			// TODO - needs to sort list
-			List<Weapon.Instance> list = filterWeaponsForUseable(owner);
+			List<Weapon.Instance> list = Dice.setToList(filterWeaponsForUseable(owner));
 			if (list.size() > 0 && role.equals(CombatBlock.Role.STRIKER)) {
 				Weapon.Instance weapon = list.get(0);
 				equipMainHand(weapon);
@@ -252,13 +249,13 @@ public class Inventory {
 		return offHand.getArmorBonus();
 	}
 
-	private static List<Weapon.Instance> filterWeaponsForUseable(Actor actor) {
-		List<Weapon.Instance> weaponList, filteredList = new ArrayList<Weapon.Instance>();
-		weaponList = actor.getInventory().getWeapons();
+	private static Set<Weapon.Instance> filterWeaponsForUseable(Actor actor) {
+		Set<Weapon.Instance> set, filteredList = new HashSet<Weapon.Instance>();
+		set = actor.getInventory().getWeapons();
 
 		EnumSet<Weapon> weaponProf = actor.getWeaponProficiency();
 		Weapon.Instance instance;
-		for (Iterator<Weapon.Instance> it = weaponList.iterator(); it.hasNext();) {
+		for (Iterator<Weapon.Instance> it = set.iterator(); it.hasNext();) {
 			instance = it.next();
 			if (weaponProf.contains(instance.getWeapon()))
 				filteredList.add(instance);
@@ -286,7 +283,7 @@ public class Inventory {
 		String string = "";
 
 		// weapon line
-		string += weaponList.toString();
+		string += weaponSet.toString();
 		// armor line
 		if (armorList.size() > 0)
 			string += String.format("%n%s", armorList.toString());
@@ -298,7 +295,7 @@ public class Inventory {
 	 * STARTING GEAR
 	 * 
 	 */
-	private static void randomSimpleHelper(Weapon.WeaponList list) {
+	private static void randomSimpleHelper(Weapon.WeaponSet list) {
 		Weapon.Instance weapon = new Weapon.Instance(Weapon.randomSimpleWeapon());
 		list.add(weapon);
 
@@ -306,7 +303,7 @@ public class Inventory {
 			list.add(Weapon.getAmmunition(weapon.getWeapon()));
 	}
 
-	private static void randomMartialHelper(Weapon.WeaponList list) {
+	private static void randomMartialHelper(Weapon.WeaponSet list) {
 		Weapon.Instance weapon = new Weapon.Instance(Weapon.randomMartialWeapon());
 		list.add(weapon);
 
@@ -318,7 +315,7 @@ public class Inventory {
 		Inventory inventory = new Inventory(actor);
 
 		// create lists
-		Weapon.WeaponList weaponList = new Weapon.WeaponList(actor);
+		Weapon.WeaponSet weaponList = new Weapon.WeaponSet(actor);
 		List<Armor.Instance> armorList = new ArrayList<Armor.Instance>();
 
 		//

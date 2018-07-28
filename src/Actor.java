@@ -254,7 +254,7 @@ public interface Actor {
 
 	public void setLanguages(EnumSet<Language> languages);
 
-	public CombatBlock getCombatBlock();
+	public CombatBlock combatBlock();
 
 	public void setCombatBlock(CombatBlock combat);
 
@@ -272,7 +272,7 @@ public interface Actor {
 		if (advanced) {
 			// TODO
 			Class.updateClassFeatures(this);
-			getCombatBlock().update();
+			combatBlock().update();
 
 		}
 	}
@@ -471,7 +471,7 @@ public interface Actor {
 		return getSavingThrow(5);
 	}
 
-	public default List<Weapon.Instance> getWeapons() {
+	public default Set<Weapon.Instance> getWeapons() {
 		return getInventory().getWeapons();
 	}
 
@@ -496,31 +496,33 @@ public interface Actor {
 	}
 
 	public default int getArmorClass() {
-		return getCombatBlock().getArmorClass();
+		return combatBlock().getArmorClass();
 	}
 
 	public default int getHitPoints() {
-		return getCombatBlock().getHitPoints();
+		return combatBlock().getHitPoints();
 	}
 
 	public default CombatBlock.AttackMode getPreferredAttackType() {
-		return getCombatBlock().getPreferredAttackType();
+		return combatBlock().getPreferredAttackType();
 	}
 
 	public default int getAttackBonus() {
-		return getCombatBlock().getAttackBonus();
+		return combatBlock().getAttackBonus();
 	}
 
 	public default int getAverageDamage() {
-		return getCombatBlock().getAverageDamage();
+		return combatBlock().getAverageDamage();
 	}
 
 	public default int getHighestSpellDamage() {
-		return getCombatBlock().highestSpellDamage();
+		Spell s = Spell.highestDamagingSpell(getSpellsKnown());
+
+		return Spell.getAverageDamage(s);
 	}
 
 	public default int getChallengeRating() {
-		return getCombatBlock().getChallengeRating();
+		return combatBlock().getChallengeRating();
 	}
 
 }

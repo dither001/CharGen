@@ -259,8 +259,8 @@ public class CombatBlock {
 	}
 
 	public void update() {
-		// calcArmorClass();
-		// calcHitPoints();
+		calcArmorClass();
+		calcHitPoints();
 		// calcAttackBonus();
 		// calcAverageDamage();
 	}

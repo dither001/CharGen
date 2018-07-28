@@ -786,7 +786,7 @@ public abstract class Immortal {
 		}
 
 		@Override
-		public CombatBlock getCombatBlock() {
+		public CombatBlock combatBlock() {
 			// TODO Auto-generated method stub
 			return null;
 		}

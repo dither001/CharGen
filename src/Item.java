@@ -1,10 +1,10 @@
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Set;
 
 public interface Item {
+	public enum Slot {
+		BODY_ARMOR, MAIN_HAND, OFF_HAND, BROW, NECK, GLOVES, BRACERS, BELT, BOOTS, RING
+	}
+
 	public enum Rarity {
 		MUNDANE, COMMON, UNCOMMON, RARE, VERY_RARE, LEGENDARY;
 
@@ -49,7 +49,7 @@ public interface Item {
 		}
 	}
 
-	public static interface ItemList<T> extends List<T> {
+	public static interface ItemSet<T> extends Set<T> {
 	};
 
 	public boolean isCursed();

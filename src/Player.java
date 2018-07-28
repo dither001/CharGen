@@ -365,7 +365,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public CombatBlock getCombatBlock() {
+	public CombatBlock combatBlock() {
 		return combat;
 	}
 

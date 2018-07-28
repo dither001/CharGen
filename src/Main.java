@@ -248,7 +248,7 @@ public class Main {
 		//
 		System.out.println();
 		System.out.println();
-		for (Iterator<CombatBlock.Attack> it = player.getCombatBlock().attackSet().iterator(); it.hasNext();) {
+		for (Iterator<CombatBlock.Attack> it = player.combatBlock().attackSet().iterator(); it.hasNext();) {
 			System.out.println(it.next().toString());
 		}
 

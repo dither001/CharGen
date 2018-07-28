@@ -597,16 +597,16 @@ public enum Weapon {
 	// }
 	// }
 
-	public static class WeaponList implements Item.ItemList<Instance> {
+	public static class WeaponSet implements Item.ItemSet<Instance> {
 		private ArrayList<Instance> list;
 		private Actor owner;
 
 		// CONSTRUCTORS
-		public WeaponList(Actor owner) {
+		public WeaponSet(Actor owner) {
 			this(owner, new ArrayList<Instance>());
 		}
 
-		public WeaponList(Actor owner, Collection<Instance> c) {
+		public WeaponSet(Actor owner, Collection<Instance> c) {
 			this.owner = owner;
 			this.list = new ArrayList<Instance>();
 			addAll(c);
@@ -648,12 +648,6 @@ public enum Weapon {
 		}
 
 		@Override
-		public void add(int index, Instance element) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
 		public boolean addAll(Collection<? extends Instance> c) {
 			boolean addedAll = true;
 
@@ -663,12 +657,6 @@ public enum Weapon {
 			}
 
 			return addedAll;
-		}
-
-		@Override
-		public boolean addAll(int index, Collection<? extends Instance> c) {
-			// TODO Auto-generated method stub
-			return false;
 		}
 
 		@Override
@@ -687,16 +675,6 @@ public enum Weapon {
 		}
 
 		@Override
-		public Instance get(int index) {
-			return list.get(index);
-		}
-
-		@Override
-		public int indexOf(Object o) {
-			return list.indexOf(o);
-		}
-
-		@Override
 		public boolean isEmpty() {
 			return list.isEmpty();
 		}
@@ -707,30 +685,9 @@ public enum Weapon {
 		}
 
 		@Override
-		public int lastIndexOf(Object o) {
-			return list.lastIndexOf(o);
-		}
-
-		@Override
-		public ListIterator<Instance> listIterator() {
-			return list.listIterator();
-		}
-
-		@Override
-		public ListIterator<Instance> listIterator(int index) {
-			return list.listIterator(index);
-		}
-
-		@Override
 		public boolean remove(Object o) {
 			// TODO Auto-generated method stub
 			return false;
-		}
-
-		@Override
-		public Instance remove(int index) {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 		@Override
@@ -746,20 +703,8 @@ public enum Weapon {
 		}
 
 		@Override
-		public Instance set(int index, Instance element) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public int size() {
 			return list.size();
-		}
-
-		@Override
-		public List<Instance> subList(int fromIndex, int toIndex) {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 		@Override
