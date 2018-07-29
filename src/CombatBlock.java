@@ -100,6 +100,10 @@ public class CombatBlock {
 			}
 
 			string = String.format("%s %s %s", name, attack, damageString);
+			
+			if (owner.getJob().equals(Class.ROGUE) && weapon.useDexterity())
+				string += " w/Sneak Attack";
+
 			return string;
 		}
 
@@ -224,6 +228,12 @@ public class CombatBlock {
 					this.averageDamage = (baseDamage + abilityBonus) * 2;
 				else
 					this.averageDamage = baseDamage + abilityBonus;
+
+				// sneak attack bonus
+				if (job.equals(Class.ROGUE) && weapon.useDexterity()) {
+					this.averageDamage += (owner.getLevel() * 7 / 4);
+
+				}
 
 			} else if (spellAttack()) {
 

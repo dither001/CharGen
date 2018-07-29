@@ -889,6 +889,78 @@ public enum Spell {
 		actor.setSpellsKnown(spellsKnown);
 	}
 
+	public static void addEldritchKnightSpells(int toAdd, int tier, Actor actor) {
+		Class job = actor.getJob();
+		EnumSet<Spell> spellsKnown;
+
+		if (actor.getSpellsKnown() != null)
+			spellsKnown = actor.getSpellsKnown();
+		else
+			spellsKnown = EnumSet.noneOf(Spell.class);
+
+		Set<Spell> set = listToSet(job, tier);
+		Spell.retainSpellsOfSchools(School.ABJURATION, School.EVOCATION, set);
+
+		int added = 0;
+
+		Spell candidate;
+		while (added < toAdd && set.size() > 0) {
+			candidate = Dice.randomFromSet(set);
+
+			if (spellsKnown.add(candidate))
+				++added;
+		}
+
+		if (added < toAdd)
+			set = listToSet(job, tier);
+
+		while (added < toAdd) {
+			candidate = Dice.randomFromSet(set);
+
+			if (spellsKnown.add(candidate))
+				++added;
+		}
+
+		// final step
+		actor.setSpellsKnown(spellsKnown);
+	}
+
+	public static void addArcaneTricksterSpells(int toAdd, int tier, Actor actor) {
+		Class job = actor.getJob();
+		EnumSet<Spell> spellsKnown;
+
+		if (actor.getSpellsKnown() != null)
+			spellsKnown = actor.getSpellsKnown();
+		else
+			spellsKnown = EnumSet.noneOf(Spell.class);
+
+		Set<Spell> set = listToSet(job, tier);
+		Spell.retainSpellsOfSchools(School.ENCHANTMENT, School.ILLUSION, set);
+
+		int added = 0;
+
+		Spell candidate;
+		while (added < toAdd && set.size() > 0) {
+			candidate = Dice.randomFromSet(set);
+
+			if (spellsKnown.add(candidate))
+				++added;
+		}
+
+		if (added < toAdd)
+			set = listToSet(job, tier);
+
+		while (added < toAdd) {
+			candidate = Dice.randomFromSet(set);
+
+			if (spellsKnown.add(candidate))
+				++added;
+		}
+
+		// final step
+		actor.setSpellsKnown(spellsKnown);
+	}
+
 	public static Set<Spell> allSpellsOfSchool(int tier, School school) {
 		Set<Spell> spells = EnumSet.noneOf(Spell.class);
 
@@ -1053,9 +1125,7 @@ public enum Spell {
 		spellSelector(1, 0, job, spellsKnown);
 	}
 
-	public static void addToSpellsKnown(int characterLevel, Class job, EnumSet<Spell> spellsKnown) {
-		int tier = ((characterLevel - 1) / 2 + 1 > 9) ? 9
-				: ((characterLevel - 1) / 2 + 1 < 1) ? 1 : (characterLevel - 1) / 2 + 1;
+	public static void addToSpellsKnown(int tier, Class job, EnumSet<Spell> spellsKnown) {
 		spellSelector(1, tier, job, spellsKnown);
 	}
 
