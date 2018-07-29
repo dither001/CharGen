@@ -30,7 +30,7 @@ public enum Spell {
 
 	public static class Instance {
 		private Prototype prototype;
-		private int dice, faces;
+		private int dice, faces, bonus;
 		private Mode mode;
 		private boolean attackSpell;
 		private boolean attackRider;
@@ -53,13 +53,17 @@ public enum Spell {
 			else
 				this.attackRider = false;
 
-			if (is.length > 1) {
+			this.bonus = 0;
+			if (is.length > 2)
+				this.bonus = is[2];
+
+			this.dice = 0;
+			if (is.length > 1)
 				this.dice = is[0];
+
+			this.faces = 0;
+			if (is.length > 0)
 				this.faces = is[1];
-			} else {
-				this.dice = 0;
-				this.faces = 0;
-			}
 		}
 
 		public boolean combatSpell() {
@@ -71,11 +75,13 @@ public enum Spell {
 		}
 
 		public int getAverageDamage() {
-			return faces * dice / 2;
+			return ((faces + 1) * dice / 2) + bonus;
 		}
 
 		public String getDiceString() {
-			return dice + "d" + faces;
+			String string = String.format("%s", dice + "d" + faces);
+
+			return string += (bonus > 0) ? bonus : "";
 		}
 	}
 
@@ -817,6 +823,8 @@ public enum Spell {
 			array = DRUID_SPELLS[tier];
 		else if (job.equals(Class.FIGHTER) && tier <= 4)
 			array = WIZARD_SPELLS[tier];
+		else if (job.equals(Class.FIGHTER))
+			array = WIZARD_SPELLS[4];
 		else if (job.equals(Class.PALADIN) && tier <= 5)
 			array = PALADIN_SPELLS[tier];
 		else if (job.equals(Class.RANGER) && tier <= 5)
@@ -1054,6 +1062,14 @@ public enum Spell {
 		return highestDamage;
 	}
 
+	public static int spellTier(Spell spell) {
+		return prototypeMap.get(spell).level;
+	}
+
+	public static boolean cantrip(Spell spell) {
+		return (prototypeMap.get(spell).level == 0);
+	}
+
 	public static Set<Spell> getAllSpells(Class job) {
 		Set<Spell> spells = EnumSet.noneOf(Spell.class);
 
@@ -1065,7 +1081,11 @@ public enum Spell {
 	}
 
 	public static int getAverageDamage(Spell spell) {
-		return spellMap.get(spell).getAverageDamage();
+		int averageDamage = 0;
+		if (spellMap.get(spell) != null)
+			averageDamage = spellMap.get(spell).getAverageDamage();
+
+		return averageDamage;
 	}
 
 	public static String getDiceString(Spell spell) {

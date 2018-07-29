@@ -125,14 +125,16 @@ public class Player implements Actor {
 		string += "\n" + combat.toStringDetailed();
 		// abilities line
 		string += "\n" + abilitiesToString();
+		// attacks line
+		string += combat.topThreeAttacks();
 		// skills line
-//		string += "\n" + skillsToString();
+		// string += "\n" + skillsToString();
 		// armor line
 		// string += "\n" + armor.toString();
 		// weapon line
 		// string += "\n" + weapons.toString();
 		// languages line
-//		string += "\n" + languages.toString();
+		// string += "\n" + languages.toString();
 		// inventory line
 		string += "\n" + inventory.toStringDetailed();
 		// features line

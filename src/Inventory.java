@@ -58,7 +58,7 @@ public class Inventory {
 		List<Weapon.Instance> list = new ArrayList<Weapon.Instance>();
 		list.addAll(weaponSet.list());
 
-		Weapon.SortWeaponByUseability sort = new Weapon.SortWeaponByUseability(owner);
+		Weapon.SortByUseability sort = new Weapon.SortByUseability(owner);
 		Collections.sort(list, sort);
 
 		return list;

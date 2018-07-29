@@ -66,6 +66,10 @@ public enum Weapon {
 		private int quantity;
 
 		//
+		private EnumSet<Trait> traits;
+		private int dice, faces;
+
+		//
 		private int attackBonus;
 		private int armorBonus;
 
@@ -78,9 +82,12 @@ public enum Weapon {
 
 		public Instance(Weapon weapon, int quantity) {
 			// TODO
-			this.name = "Default";
-
+			this.name = Names.stringToName(weapon.toString());
 			this.prototype = weaponPrototypeMap.get(weapon);
+
+			this.traits = EnumSet.copyOf(prototype.traits);
+			this.dice = prototype.dice;
+			this.faces = prototype.faces;
 			this.quantity = quantity;
 
 			// TODO - take into account magic
@@ -90,7 +97,7 @@ public enum Weapon {
 				this.armorBonus = 0;
 
 			// TODO - take into account magic
-			attackBonus = 0;
+			this.attackBonus = 0;
 		}
 
 		// methods
@@ -106,13 +113,29 @@ public enum Weapon {
 			return prototype.type;
 		}
 
+		public int getDice() {
+			return dice;
+		}
+
+		public void setDice(int dice) {
+			this.dice = dice;
+		}
+
+		public int getFaces() {
+			return faces;
+		}
+
+		public void setFaces(int faces) {
+			this.faces = faces;
+		}
+
 		public boolean isShield() {
 			return prototype.weapon.equals(Weapon.SHIELD);
 		}
 
 		public boolean rangedOnly() {
 			boolean rangedOnly = false;
-			if (prototype.traits.contains(Trait.AMMUNITION))
+			if (traits.contains(Trait.AMMUNITION))
 				rangedOnly = true;
 
 			return rangedOnly;
@@ -120,7 +143,7 @@ public enum Weapon {
 
 		public boolean rangedOrThrown() {
 			boolean rangedOrThrown = false;
-			if (prototype.traits.contains(Trait.AMMUNITION) || prototype.traits.contains(Trait.THROWN))
+			if (traits.contains(Trait.AMMUNITION) || traits.contains(Trait.THROWN))
 				rangedOrThrown = true;
 
 			return rangedOrThrown;
@@ -128,14 +151,14 @@ public enum Weapon {
 
 		public boolean useDexterity() {
 			boolean useDexterity = false;
-			if (prototype.traits.contains(Trait.AMMUNITION) || prototype.traits.contains(Trait.FINESSE))
+			if (traits.contains(Trait.AMMUNITION) || traits.contains(Trait.FINESSE))
 				useDexterity = true;
 
 			return useDexterity;
 		}
 
 		public int getAverageDamage() {
-			return prototype.faces / 2 * prototype.dice;
+			return ((faces + 1) * dice / 2);
 		}
 
 		public Energy getDamageType() {
@@ -152,7 +175,7 @@ public enum Weapon {
 		}
 
 		public boolean stackable() {
-			return prototype.traits.contains(Trait.STACKABLE);
+			return traits.contains(Trait.STACKABLE);
 		}
 
 		public int getQuantity() {
@@ -189,7 +212,7 @@ public enum Weapon {
 		}
 
 		public String getDiceString() {
-			return prototype.dice + "d" + prototype.faces;
+			return dice + "d" + faces;
 		}
 
 		@Override
@@ -229,16 +252,16 @@ public enum Weapon {
 
 	public static final Weapon DEFAULT_WEAPON = UNARMED;
 
-	private static final Weapon[] ALL_WEAPONS = { CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE,
-			QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING, BATTLEAXE, FLAIL, GLAIVE, GREATAXE,
-			GREATSWORD, HALBERD, LANCE, LONGSWORD, MAUL, MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD, TRIDENT,
-			WAR_PICK, WARHAMMER, WHIP, BLOWGUN, HAND_CROSSBOW, HEAVY_CROSSBOW, LONGBOW, NET, SHIELD };
+	private static final Weapon[] ALL_WEAPONS = { UNARMED, CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER,
+			MACE, QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING, BATTLEAXE, FLAIL, GLAIVE,
+			GREATAXE, GREATSWORD, HALBERD, LANCE, LONGSWORD, MAUL, MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD,
+			TRIDENT, WAR_PICK, WARHAMMER, WHIP, BLOWGUN, HAND_CROSSBOW, HEAVY_CROSSBOW, LONGBOW, NET, SHIELD };
 
-	private static final Weapon[] SIMPLE_MELEE = { CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE,
-			QUARTERSTAFF, SICKLE, SPEAR };
+	private static final Weapon[] SIMPLE_MELEE = { UNARMED, CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER,
+			MACE, QUARTERSTAFF, SICKLE, SPEAR };
 	private static final Weapon[] SIMPLE_RANGED = { LIGHT_CROSSBOW, DART, SHORTBOW, SLING };
-	private static final Weapon[] SIMPLE_WEAPONS = { CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE,
-			QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING };
+	private static final Weapon[] SIMPLE_WEAPONS = { UNARMED, CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER,
+			MACE, QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING };
 
 	private static final Weapon[] MARTIAL_MELEE = { BATTLEAXE, FLAIL, GLAIVE, GREATAXE, GREATSWORD, HALBERD, LANCE,
 			LONGSWORD, MAUL, MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD, TRIDENT, WAR_PICK, WARHAMMER, WHIP };
@@ -247,12 +270,12 @@ public enum Weapon {
 			LONGSWORD, MAUL, MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD, TRIDENT, WAR_PICK, WARHAMMER, WHIP,
 			BLOWGUN, HAND_CROSSBOW, HEAVY_CROSSBOW, LONGBOW, NET };
 
-	private static final Weapon[] DRUID_WEAPONS = { CLUB, DAGGER, DART, JAVELIN, MACE, QUARTERSTAFF, SCIMITAR, SICKLE,
-			SLING, SPEAR };
-	private static final Weapon[] ROGUE_WEAPONS = { CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE,
-			QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING, LONGSWORD, RAPIER, SHORTSWORD,
+	private static final Weapon[] DRUID_WEAPONS = { UNARMED, CLUB, DAGGER, DART, JAVELIN, MACE, QUARTERSTAFF, SCIMITAR,
+			SICKLE, SLING, SPEAR };
+	private static final Weapon[] ROGUE_WEAPONS = { UNARMED, CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER,
+			MACE, QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING, LONGSWORD, RAPIER, SHORTSWORD,
 			HAND_CROSSBOW };
-	private static final Weapon[] MAGE_WEAPONS = { DAGGER, DART, SLING, QUARTERSTAFF, LIGHT_CROSSBOW };
+	private static final Weapon[] MAGE_WEAPONS = { UNARMED, DAGGER, DART, SLING, QUARTERSTAFF, LIGHT_CROSSBOW };
 
 	static {
 		weaponPrototypeMap = new HashMap<Weapon, Prototype>();
@@ -355,9 +378,36 @@ public enum Weapon {
 	}
 
 	/*
-	 * STATIC FIELDS
+	 * STATIC METHODS
 	 * 
 	 */
+	public static Instance unarmed(Actor actor) {
+		Instance weapon;
+		if (actor.getJob().equals(Class.MONK))
+			weapon = monkUnarmedStrike(actor);
+		else
+			weapon = new Instance(UNARMED);
+
+		return weapon;
+	}
+
+	public static Instance monkUnarmedStrike(Actor actor) {
+		Instance weapon = new Instance(UNARMED);
+		weapon.traits.add(Trait.FINESSE);
+
+		EnumSet<Option.Feature> features = actor.getFeatures();
+		if (features.contains(Option.Feature.MARTIAL_ARTS_D10))
+			weapon.setFaces(10);
+		else if (features.contains(Option.Feature.MARTIAL_ARTS_D8))
+			weapon.setFaces(8);
+		else if (features.contains(Option.Feature.MARTIAL_ARTS_D6))
+			weapon.setFaces(6);
+		else
+			weapon.setFaces(4);
+
+		return weapon;
+	}
+
 	public static Weapon randomSimpleMelee() {
 		return Dice.randomFromArray(SIMPLE_MELEE);
 	}
@@ -530,73 +580,9 @@ public enum Weapon {
 	}
 
 	/*
-	 * COMPARATOR CLASSES
+	 * INNER CLASSES
 	 * 
 	 */
-	// private static class HandsAscending implements Comparator<Prototype> {
-	// // TODO - needs testing
-	// @Override
-	// public int compare(Prototype w1, Prototype w2) {
-	// int left = 0, right = 0;
-	//
-	// if (w1.hand.equals(Hand.LIGHT))
-	// left = 1;
-	// else if (w1.hand.equals(Hand.ONE))
-	// left = 2;
-	// else if (w1.hand.equals(Hand.VERSATILE))
-	// left = 3;
-	// else if (w1.hand.equals(Hand.TWO))
-	// left = 4;
-	// else if (w1.hand.equals(Hand.HEAVY))
-	// left = 5;
-	//
-	// if (w2.hand.equals(Hand.LIGHT))
-	// right = 1;
-	// else if (w2.hand.equals(Hand.ONE))
-	// right = 2;
-	// else if (w2.hand.equals(Hand.VERSATILE))
-	// right = 3;
-	// else if (w2.hand.equals(Hand.TWO))
-	// right = 4;
-	// else if (w2.hand.equals(Hand.HEAVY))
-	// right = 5;
-	//
-	// return left - right;
-	// }
-	// }
-	//
-	// private static class HandsDescending implements Comparator<Prototype> {
-	// // TODO - needs testing
-	// @Override
-	// public int compare(Prototype w1, Prototype w2) {
-	// int left = 0, right = 0;
-	//
-	// if (w1.hand.equals(Hand.LIGHT))
-	// left = 1;
-	// else if (w1.hand.equals(Hand.ONE))
-	// left = 2;
-	// else if (w1.hand.equals(Hand.VERSATILE))
-	// left = 3;
-	// else if (w1.hand.equals(Hand.TWO))
-	// left = 4;
-	// else if (w1.hand.equals(Hand.HEAVY))
-	// left = 5;
-	//
-	// if (w2.hand.equals(Hand.LIGHT))
-	// right = 1;
-	// else if (w2.hand.equals(Hand.ONE))
-	// right = 2;
-	// else if (w2.hand.equals(Hand.VERSATILE))
-	// right = 3;
-	// else if (w2.hand.equals(Hand.TWO))
-	// right = 4;
-	// else if (w2.hand.equals(Hand.HEAVY))
-	// right = 5;
-	//
-	// return right - left;
-	// }
-	// }
-
 	public static class WeaponSet implements Item.ItemSet<Instance> {
 		private ArrayList<Instance> list;
 		private Actor owner;
@@ -740,26 +726,26 @@ public enum Weapon {
 	 * COMPARATOR
 	 * 
 	 */
-	public static class SortByWeaponTrait implements Comparator<Instance> {
+	public static class SortByTrait implements Comparator<Instance> {
 		private Trait trait;
 
-		public SortByWeaponTrait(Trait trait) {
+		public SortByTrait(Trait trait) {
 			this.trait = trait;
 		}
 
 		@Override
 		public int compare(Instance left, Instance right) {
-			int one = (left.prototype.traits.contains(trait)) ? 1 : 0;
-			int two = (right.prototype.traits.contains(trait)) ? 1 : 0;
+			int one = (left.traits.contains(trait)) ? 1 : 0;
+			int two = (right.traits.contains(trait)) ? 1 : 0;
 
 			return two - one;
 		}
 	}
 
-	public static class SortWeaponByUseability implements Comparator<Weapon.Instance> {
+	public static class SortByUseability implements Comparator<Weapon.Instance> {
 		EnumSet<Weapon> weaponProf;
 
-		public SortWeaponByUseability(Actor actor) {
+		public SortByUseability(Actor actor) {
 			this.weaponProf = actor.getWeaponProficiency();
 		}
 

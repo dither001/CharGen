@@ -11,15 +11,12 @@ public class ChallengeRating {
 
 	// methods
 	public static int evaluateCR(Actor actor) {
+		CombatBlock.Attack bestAttack = actor.combatBlock().bestAttack();
+		int atk = bestAttack.attackBonus();
+		int dmg = bestAttack.averageDamage();
+		
 		int hp = actor.getHitPoints();
 		int ac = actor.getArmorClass();
-		int atk = actor.getAttackBonus();
-
-		int dmg;
-		if (actor.getPreferredAttackType().equals(CombatBlock.AttackMode.SPELL_ATTACK))
-			dmg = actor.getHighestSpellDamage();
-		else
-			dmg = actor.getAverageDamage();
 
 		int offense, defense, finalRating = 0;
 		defense = defenseRating(hp, ac);

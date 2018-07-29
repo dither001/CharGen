@@ -1,6 +1,10 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class CombatBlock {
@@ -62,28 +66,40 @@ public class CombatBlock {
 		/*
 		 * INSTANCE METHODS
 		 */
+		public int attackBonus() {
+			return attackBonus;
+		}
+
+		public int averageDamage() {
+			return averageDamage;
+		}
+
 		@Override
 		public String toString() {
 			String string;
 
+			//
 			String attack = (attackBonus >= 0) ? "+" + attackBonus : "" + attackBonus;
-			String damageAvg = (averageDamage > 0) ? "(" + averageDamage + ")" : "";
-			String damageMod = (damageModifier > 0) ? "+" + damageModifier
-					: (damageModifier < 0) ? "" + damageModifier : "";
-
 			String name;
 			if (weaponAttack())
 				name = "Weapon " + weapon.toString();
 			else
 				name = "Spell " + spell.toString();
 
-			String damageString;
-			if (weaponAttack())
-				damageString = String.format("%s%s", dice, damageMod);
-			else
-				damageString = String.format("%s", dice);
+			//
+			String damageString, damageAvg, damageMod;
+			damageAvg = (averageDamage > 0) ? " (" + averageDamage + ")" : " (0)";
+			damageMod = (damageModifier > 0) ? "+" + damageModifier : (damageModifier < 0) ? "" + damageModifier : "";
 
-			string = String.format("%s %s %s %s", name, attack, damageString, damageAvg);
+			if (weaponAttack()) {
+				damageString = String.format("%s%s%s", dice, damageMod, damageAvg);
+
+			} else {
+				damageString = String.format("%s%s", dice, damageAvg);
+
+			}
+
+			string = String.format("%s %s %s", name, attack, damageString);
 			return string;
 		}
 
@@ -197,19 +213,7 @@ public class CombatBlock {
 			 * MASSIVE TODO - needs magic, traits, features, and other bonuses
 			 */
 
-			if (attackMode != null
-					&& (attackMode.equals(AttackMode.SPELL_ATTACK) || attackMode.equals(AttackMode.SPELL_SAVE))) {
-
-				if (level >= 17)
-					this.averageDamage = baseDamage * 4;
-				else if (level >= 11)
-					this.averageDamage = baseDamage * 3;
-				else if (level >= 5)
-					this.averageDamage = baseDamage * 2;
-				else
-					this.averageDamage = baseDamage;
-
-			} else {
+			if (weaponAttack()) {
 				this.damageModifier = abilityBonus;
 
 				if (features.contains(Option.Feature.EXTRA_ATTACK_3))
@@ -221,8 +225,40 @@ public class CombatBlock {
 				else
 					this.averageDamage = baseDamage + abilityBonus;
 
+			} else if (spellAttack()) {
+
+				if (Spell.cantrip(spell) && level >= 17)
+					this.averageDamage = baseDamage * 4;
+				else if (Spell.cantrip(spell) && level >= 11)
+					this.averageDamage = baseDamage * 3;
+				else if (Spell.cantrip(spell) && level >= 5)
+					this.averageDamage = baseDamage * 2;
+				else
+					this.averageDamage = baseDamage;
+
+			}
+		}
+
+	}
+
+	private class SortAttackThenDamage implements Comparator<Attack> {
+
+		@Override
+		public int compare(Attack arg1, Attack arg2) {
+			int sort = 0;
+
+			// first attempt, "simplest"
+			int left = arg1.attackBonus + (arg1.averageDamage / 2);
+			int right = arg2.attackBonus + (arg2.averageDamage / 2);
+			sort = right - left;
+
+			if (sort == 0) {
+				left = arg1.attackBonus + arg1.averageDamage;
+				right = arg2.attackBonus + arg2.averageDamage;
+				sort = right - left;
 			}
 
+			return sort;
 		}
 
 	}
@@ -237,6 +273,7 @@ public class CombatBlock {
 	private Weapon.Instance preferredWeapon;
 	private Spell preferredCantrip;
 
+	private String bounty;
 	private int armorClass;
 	private int hitPoints;
 	private int attackBonus;
@@ -263,6 +300,27 @@ public class CombatBlock {
 		calcHitPoints();
 		// calcAttackBonus();
 		// calcAverageDamage();
+		bounty = toStringCR();
+	}
+
+	public Attack bestAttack() {
+		return orderedAttackList().get(0);
+	}
+
+	public String topThreeAttacks() {
+		String string = "";
+		List<Attack> list = orderedAttackList();
+
+		if (list.size() > 0)
+			string += "\n" + list.get(0).toString();
+
+		if (list.size() > 1)
+			string += "\n" + list.get(1).toString();
+
+		if (list.size() > 2)
+			string += "\n" + list.get(2).toString();
+
+		return string;
 	}
 
 	public Set<Attack> attackSet() {
@@ -286,41 +344,76 @@ public class CombatBlock {
 		return set;
 	}
 
+	public List<Attack> orderedAttackList() {
+		List<Attack> list = new ArrayList<Attack>();
+
+		// every character has an unarmed attack
+		list.add(new Attack(owner, Weapon.unarmed(owner)));
+
+		Weapon.Instance weapon;
+		for (Iterator<Weapon.Instance> it = owner.getInventory().weaponList().iterator(); it.hasNext();) {
+			weapon = it.next();
+
+			list.add(new Attack(owner, weapon));
+		}
+
+		Spell spell;
+		for (Iterator<Spell> it = owner.getSpellsKnown().iterator(); it.hasNext();) {
+			spell = it.next();
+
+			if (Spell.isCombatSpell(spell))
+				list.add(new Attack(owner, spell));
+		}
+
+		SortAttackThenDamage sort = new SortAttackThenDamage();
+		Collections.sort(list, sort);
+
+		return list;
+	}
+
 	/*
 	 * FIXME - LOTS OF OLD STUFF
 	 * 
 	 */
-	private void preferredAttackType() {
-		Class job = owner.getJob();
-
-		int STR = owner.getStrength(), DEX = owner.getDexterity(), CON = owner.getConstitution(),
-				INT = owner.getIntelligence(), WIS = owner.getWisdom(), CHA = owner.getCharisma();
-		if (job.equals(Class.BARBARIAN))
-			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
-		else if (job.equals(Class.BARD))
-			preferredAttack = AttackMode.SPELL_ATTACK;
-		else if (job.equals(Class.CLERIC))
-			preferredAttack = AttackMode.SPELL_ATTACK;
-		else if (job.equals(Class.DRUID))
-			preferredAttack = AttackMode.SPELL_ATTACK;
-		else if (job.equals(Class.FIGHTER))
-			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
-		else if (job.equals(Class.MONK))
-			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
-		else if (job.equals(Class.PALADIN))
-			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
-		else if (job.equals(Class.RANGER))
-			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
-		else if (job.equals(Class.ROGUE))
-			preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK : AttackMode.RANGED_ATTACK;
-		else if (job.equals(Class.SORCERER))
-			preferredAttack = AttackMode.SPELL_ATTACK;
-		else if (job.equals(Class.WARLOCK))
-			preferredAttack = AttackMode.SPELL_ATTACK;
-		else if (job.equals(Class.WIZARD))
-			preferredAttack = AttackMode.SPELL_ATTACK;
-
-	}
+	// private void preferredAttackType() {
+	// Class job = owner.getJob();
+	//
+	// int STR = owner.getStrength(), DEX = owner.getDexterity(), CON =
+	// owner.getConstitution(),
+	// INT = owner.getIntelligence(), WIS = owner.getWisdom(), CHA =
+	// owner.getCharisma();
+	// if (job.equals(Class.BARBARIAN))
+	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
+	// AttackMode.RANGED_ATTACK;
+	// else if (job.equals(Class.BARD))
+	// preferredAttack = AttackMode.SPELL_ATTACK;
+	// else if (job.equals(Class.CLERIC))
+	// preferredAttack = AttackMode.SPELL_ATTACK;
+	// else if (job.equals(Class.DRUID))
+	// preferredAttack = AttackMode.SPELL_ATTACK;
+	// else if (job.equals(Class.FIGHTER))
+	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
+	// AttackMode.RANGED_ATTACK;
+	// else if (job.equals(Class.MONK))
+	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
+	// AttackMode.RANGED_ATTACK;
+	// else if (job.equals(Class.PALADIN))
+	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
+	// AttackMode.RANGED_ATTACK;
+	// else if (job.equals(Class.RANGER))
+	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
+	// AttackMode.RANGED_ATTACK;
+	// else if (job.equals(Class.ROGUE))
+	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
+	// AttackMode.RANGED_ATTACK;
+	// else if (job.equals(Class.SORCERER))
+	// preferredAttack = AttackMode.SPELL_ATTACK;
+	// else if (job.equals(Class.WARLOCK))
+	// preferredAttack = AttackMode.SPELL_ATTACK;
+	// else if (job.equals(Class.WIZARD))
+	// preferredAttack = AttackMode.SPELL_ATTACK;
+	//
+	// }
 
 	private void calcHitPoints() {
 		// TODO - doesn't take into account magical bonuses or other features
@@ -373,37 +466,40 @@ public class CombatBlock {
 		this.armorClass = ac;
 	}
 
-	private void calcAttackBonus() {
-		int atk = 0, STR = owner.getStrengthModifier(), DEX = owner.getDexterityModifier(),
-				INT = owner.getIntelligenceModifier(), WIS = owner.getWisdomModifier(),
-				CHA = owner.getCharismaModifier();
-
-		Class job = owner.getJob();
-		Set<Spell> spellsKnown, cantrips;
-		if (preferredAttack.equals(AttackMode.MELEE_ATTACK) || preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
-			preferredWeapon = owner.getInventory().getMainHand();
-
-			if (preferredWeapon != null && preferredWeapon.useDexterity())
-				atk += owner.getProficiencyBonus() + DEX + preferredWeapon.getAttackBonus();
-			else if (preferredWeapon != null)
-				atk += owner.getProficiencyBonus() + STR + preferredWeapon.getAttackBonus();
-
-		} else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
-			spellsKnown = owner.getSpellsKnown();
-			cantrips = Spell.retainSpellsOfTier(0, spellsKnown);
-			preferredCantrip = Spell.highestDamagingSpell(cantrips);
-
-			if (job.equals(Class.BARD) || job.equals(Class.SORCERER) || job.equals(Class.WARLOCK))
-				atk += owner.getProficiencyBonus() + CHA;
-			else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID))
-				atk += owner.getProficiencyBonus() + WIS;
-			else if (job.equals(Class.WIZARD))
-				atk += owner.getProficiencyBonus() + INT;
-
-		}
-
-		this.attackBonus = atk;
-	}
+	// private void calcAttackBonus() {
+	// int atk = 0, STR = owner.getStrengthModifier(), DEX =
+	// owner.getDexterityModifier(),
+	// INT = owner.getIntelligenceModifier(), WIS = owner.getWisdomModifier(),
+	// CHA = owner.getCharismaModifier();
+	//
+	// Class job = owner.getJob();
+	// Set<Spell> spellsKnown, cantrips;
+	// if (preferredAttack.equals(AttackMode.MELEE_ATTACK) ||
+	// preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
+	// preferredWeapon = owner.getInventory().getMainHand();
+	//
+	// if (preferredWeapon != null && preferredWeapon.useDexterity())
+	// atk += owner.getProficiencyBonus() + DEX + preferredWeapon.getAttackBonus();
+	// else if (preferredWeapon != null)
+	// atk += owner.getProficiencyBonus() + STR + preferredWeapon.getAttackBonus();
+	//
+	// } else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
+	// spellsKnown = owner.getSpellsKnown();
+	// cantrips = Spell.retainSpellsOfTier(0, spellsKnown);
+	// preferredCantrip = Spell.highestDamagingSpell(cantrips);
+	//
+	// if (job.equals(Class.BARD) || job.equals(Class.SORCERER) ||
+	// job.equals(Class.WARLOCK))
+	// atk += owner.getProficiencyBonus() + CHA;
+	// else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID))
+	// atk += owner.getProficiencyBonus() + WIS;
+	// else if (job.equals(Class.WIZARD))
+	// atk += owner.getProficiencyBonus() + INT;
+	//
+	// }
+	//
+	// this.attackBonus = atk;
+	// }
 
 	private void calcAverageDamage() {
 		int dmg = 0, STR = owner.getStrengthModifier(), DEX = owner.getDexterityModifier(),
@@ -511,7 +607,7 @@ public class CombatBlock {
 		// attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
 		//
 		// string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints,
-		// attack, toStringCR());
+		// attack, bounty);
 		//
 		// } else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
 		// attack = (preferredCantrip != null) ? preferredCantrip.toString() + " " :
@@ -521,11 +617,11 @@ public class CombatBlock {
 		// attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
 		//
 		// string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints,
-		// attack, toStringCR());
+		// attack, bounty);
 		//
 		// }
 
-		string = String.format("AC %2d%s || %2d hp || %s", armorClass, armor, hitPoints, toStringCR());
+		string = String.format("AC %2d%s || %2d hp || %s", armorClass, armor, hitPoints, bounty);
 		return string;
 	}
 
@@ -567,12 +663,13 @@ public class CombatBlock {
 	public static void setupCombatBlock(Actor actor) {
 		CombatBlock combat = new CombatBlock(actor);
 
-		combat.preferredAttackType();
+		// combat.preferredAttackType();
 		combat.calcArmorClass();
 		combat.calcHitPoints();
-		combat.calcAttackBonus();
-		combat.calcAverageDamage();
+		// combat.calcAttackBonus();
+		// combat.calcAverageDamage();
 		//
 		actor.setCombatBlock(combat);
+		combat.bounty = combat.toStringCR();
 	}
 }

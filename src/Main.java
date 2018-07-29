@@ -15,11 +15,15 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		rollOneCharacter();
-		// Main.rollCharactersOfClass(Class.FIGHTER);
-		// rollCharactersOfArchetype(Class.Subclass.DEATH);
-		// levelUpTest(20, Class.FIGHTER);
-		// levelUpTest(Class.Subclass.DEATH);
+		// rollCharacters();
+		// rollCharactersOfClass(Class.MONK);
+		// rollCharactersOfArchetype(Class.Subclass.FOUR_ELEMENTS);
+		// levelUpTest(20, Class.MONK);
+
+		for (int i = 0; i < 50; ++i) {
+			levelUpTestDisplayOnly(6, Class.MONK);
+
+		}
 
 		//
 		// testMainWorld();
@@ -239,20 +243,6 @@ public class Main {
 	public static void rollOneCharacter() {
 		Player player = new Player();
 		System.out.println(player.toStringDetailed());
-		//
-		System.out.println();
-		System.out.println();
-		for (Iterator<Weapon.Instance> it = player.getInventory().weaponList().iterator(); it.hasNext();) {
-			System.out.println(it.next().toString());
-		}
-		//
-		System.out.println();
-		System.out.println();
-		for (Iterator<CombatBlock.Attack> it = player.combatBlock().attackSet().iterator(); it.hasNext();) {
-			System.out.println(it.next().toString());
-		}
-
-		//
 		System.out.println();
 	}
 

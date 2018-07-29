@@ -356,8 +356,8 @@ public enum Class implements Option {
 			features.addAll(druid(actor));
 		} else if (job.equals(Class.FIGHTER)) {
 			features.addAll(fighter(actor));
-			// } else if (job.equals(Class.MONK)) {
-			// features.addAll(monk(actor));
+		} else if (job.equals(Class.MONK)) {
+			features.addAll(monk(actor));
 			// } else if (job.equals(Class.PALADIN)) {
 			// features.addAll(paladin(actor));
 			// } else if (job.equals(Class.RANGER)) {
@@ -394,8 +394,8 @@ public enum Class implements Option {
 			features.addAll(druid(actor));
 		} else if (job.equals(Class.FIGHTER)) {
 			features.addAll(fighter(actor));
-			// } else if (job.equals(Class.MONK)) {
-			// features.addAll(monk(actor));
+		} else if (job.equals(Class.MONK)) {
+			features.addAll(monk(actor));
 			// } else if (job.equals(Class.PALADIN)) {
 			// features.addAll(paladin(actor));
 			// } else if (job.equals(Class.RANGER)) {
@@ -426,7 +426,7 @@ public enum Class implements Option {
 			set.add(Feature.RAGE);
 			set.add(Feature.RAGE_PER_DAY_2);
 			set.add(Feature.RAGE_BONUS_2);
-			set.add(Feature.UNARMORED_DEFENSE_BARBARIAN);
+			set.add(Feature.UNARMORED_BARBARIAN);
 		} else if (level == 2) {
 			set.add(Feature.RECKLESS_ATTACK);
 			set.add(Feature.DANGER_SENSE);
@@ -787,7 +787,7 @@ public enum Class implements Option {
 				set.add(Feature.THUNDERBOLT_STRIKE);
 			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
 				//
-				set.add(Feature.CLOAK_OF_SHADOWS);
+				set.add(Feature.TRICKERY_CLOAK);
 			} else if (archetype.equals(Class.Subclass.WAR)) {
 				//
 				set.add(Feature.WAR_GODS_BLESSING);
@@ -1198,6 +1198,154 @@ public enum Class implements Option {
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
 				Spell.addToSpellsKnown(level, job, spellsKnown);
+
+		}
+
+		return set;
+	}
+
+	/*
+	 * MONK
+	 * 
+	 */
+	public static EnumSet<Feature> monk(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			set.add(Feature.UNARMORED_MONK);
+			set.add(Feature.MARTIAL_ARTS_D4);
+
+		} else if (level == 2) {
+			set.add(Feature.MONK_MOVE_2);
+			set.add(Feature.KI_POWERS);
+			set.add(Feature.FLURRY_OF_BLOWS);
+			set.add(Feature.PATIENT_DEFENSE);
+			set.add(Feature.STEP_OF_THE_WIND);
+
+		} else if (level == 3) {
+			set.add(Feature.DEFLECT_MISSILES);
+
+			// monastic tradition
+			if (archetype.equals(Subclass.OPEN_HAND)) {
+				set.add(Feature.OPEN_HAND_TECHNIQUE);
+
+			} else if (archetype.equals(Subclass.SHADOW_WAY)) {
+				set.add(Feature.SHADOW_ARTS);
+				spellsKnown.add(Spell.MINOR_ILLUSION);
+
+			} else if (archetype.equals(Subclass.FOUR_ELEMENTS)) {
+				set.add(Feature.ELEMENTAL_ATTUNEMENT);
+				Option.addElementalDiscipline(1, actor);
+
+			}
+
+		} else if (level == 4) {
+			set.add(Feature.SLOW_FALL);
+			//
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 5) {
+			set.add(Feature.MARTIAL_ARTS_D6);
+			set.add(Feature.EXTRA_ATTACK_1);
+			set.add(Feature.STUNNING_STRIKE);
+
+		} else if (level == 6) {
+			set.add(Feature.MONK_MOVE_6);
+			set.add(Feature.KI_STRIKE);
+
+			// monastic tradition
+			if (archetype.equals(Subclass.OPEN_HAND)) {
+				set.add(Feature.WHOLENESS_OF_BODY);
+
+			} else if (archetype.equals(Subclass.SHADOW_WAY)) {
+				set.add(Feature.SHADOW_STEP);
+
+			} else if (archetype.equals(Subclass.FOUR_ELEMENTS)) {
+				Option.addElementalDiscipline(1, actor);
+
+			}
+
+		} else if (level == 7) {
+			set.add(Feature.EVASION);
+			set.add(Feature.STILLNESS_OF_MIND);
+
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 9) {
+			set.add(Feature.WALL_RUNNING);
+
+		} else if (level == 10) {
+			set.add(Feature.MONK_MOVE_10);
+			set.add(Feature.PURITY_OF_BODY);
+
+		} else if (level == 11) {
+			set.add(Feature.MARTIAL_ARTS_D8);
+
+			// monastic tradition
+			if (archetype.equals(Subclass.OPEN_HAND)) {
+				set.add(Feature.TRANQUILITY);
+
+			} else if (archetype.equals(Subclass.SHADOW_WAY)) {
+				set.add(Feature.SHADOW_CLOAK);
+
+			} else if (archetype.equals(Subclass.FOUR_ELEMENTS)) {
+				Option.addElementalDiscipline(1, actor);
+
+			}
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 13) {
+			set.add(Feature.TONGUE_OF_SUN_MOON);
+
+		} else if (level == 14) {
+			set.add(Feature.MONK_MOVE_14);
+			set.add(Feature.DIAMOND_SOUL);
+
+		} else if (level == 15) {
+			set.add(Feature.TIMELESS_BODY);
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 17) {
+			set.add(Feature.MARTIAL_ARTS_D10);
+
+			// monastic tradition
+			if (archetype.equals(Subclass.OPEN_HAND)) {
+				set.add(Feature.QUIVERING_PALM);
+
+			} else if (archetype.equals(Subclass.SHADOW_WAY)) {
+				set.add(Feature.OPPORTUNIST);
+
+			} else if (archetype.equals(Subclass.FOUR_ELEMENTS)) {
+				Option.addElementalDiscipline(1, actor);
+
+			}
+
+		} else if (level == 18) {
+			set.add(Feature.MONK_MOVE_18);
+			set.add(Feature.EMPTY_BODY);
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+			set.add(Feature.PERFECT_SELF);
 
 		}
 
