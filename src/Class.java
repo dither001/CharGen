@@ -358,10 +358,10 @@ public enum Class implements Option {
 			features.addAll(fighter(actor));
 		} else if (job.equals(Class.MONK)) {
 			features.addAll(monk(actor));
-			// } else if (job.equals(Class.PALADIN)) {
-			// features.addAll(paladin(actor));
-			// } else if (job.equals(Class.RANGER)) {
-			// features.addAll(ranger(actor));
+		} else if (job.equals(Class.PALADIN)) {
+			features.addAll(paladin(actor));
+		} else if (job.equals(Class.RANGER)) {
+			features.addAll(ranger(actor));
 			// } else if (job.equals(Class.ROGUE)) {
 			// features.addAll(rogue(actor));
 			// } else if (job.equals(Class.SORCERER)) {
@@ -396,10 +396,10 @@ public enum Class implements Option {
 			features.addAll(fighter(actor));
 		} else if (job.equals(Class.MONK)) {
 			features.addAll(monk(actor));
-			// } else if (job.equals(Class.PALADIN)) {
-			// features.addAll(paladin(actor));
-			// } else if (job.equals(Class.RANGER)) {
-			// features.addAll(ranger(actor));
+		} else if (job.equals(Class.PALADIN)) {
+			features.addAll(paladin(actor));
+		} else if (job.equals(Class.RANGER)) {
+			features.addAll(ranger(actor));
 			// } else if (job.equals(Class.ROGUE)) {
 			// features.addAll(rogue(actor));
 			// } else if (job.equals(Class.SORCERER)) {
@@ -1353,6 +1353,261 @@ public enum Class implements Option {
 	}
 
 	/*
+	 * PALADIN ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> paladin(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			set.add(Feature.DIVINE_SENSE);
+			set.add(Feature.LAY_ON_HANDS);
+
+		} else if (level == 2) {
+			set.add(Feature.DIVINE_SMITE);
+			set.addAll(paladinFightingStyle(1, actor));
+
+		} else if (level == 3) {
+			set.add(Feature.DIVINE_HEALTH);
+			set.add(Feature.CHANNEL_DIVINITY_1);
+
+			// sacred oath
+			if (archetype.equals(Subclass.DEVOTION_OATH)) {
+				set.add(Feature.SACRED_WEAPON);
+				set.add(Feature.TURN_THE_UNHOLY);
+
+			} else if (archetype.equals(Subclass.ANCIENTS_OATH)) {
+				set.add(Feature.NATURES_WRATH);
+				set.add(Feature.TURN_THE_FAITHLESS);
+
+			} else if (archetype.equals(Subclass.VENGEANCE_OATH)) {
+				set.add(Feature.ABJURE_ENEMY);
+				set.add(Feature.VOW_OF_ENMITY);
+
+			} else if (archetype.equals(Subclass.OATHBREAKER)) {
+				set.add(Feature.CONTROL_UNDEAD);
+				set.add(Feature.DREADFUL_ASPECT);
+
+			}
+
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+		} else if (level == 5) {
+			set.add(Feature.EXTRA_ATTACK_1);
+
+		} else if (level == 6) {
+			set.add(Feature.AURA_OF_PROTECTION);
+
+		} else if (level == 7) {
+			// sacred oath
+			if (archetype.equals(Subclass.DEVOTION_OATH)) {
+				set.add(Feature.AURA_OF_DEVOTION);
+
+			} else if (archetype.equals(Subclass.ANCIENTS_OATH)) {
+				set.add(Feature.AURA_OF_WARDING);
+
+			} else if (archetype.equals(Subclass.VENGEANCE_OATH)) {
+				set.add(Feature.RELENTLESS_AVENGER);
+
+			} else if (archetype.equals(Subclass.OATHBREAKER)) {
+				set.add(Feature.AURA_OF_HATE);
+
+			}
+
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+		} else if (level == 9) {
+
+		} else if (level == 10) {
+			set.add(Feature.AURA_OF_COURAGE);
+
+		} else if (level == 11) {
+			set.add(Feature.IMPROVED_SMITE);
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+		} else if (level == 13) {
+
+		} else if (level == 14) {
+			set.add(Feature.CLEANSING_TOUCH);
+
+		} else if (level == 15) {
+			// sacred oath
+			if (archetype.equals(Subclass.DEVOTION_OATH)) {
+				set.add(Feature.PURITY_OF_SPIRIT);
+
+			} else if (archetype.equals(Subclass.ANCIENTS_OATH)) {
+				set.add(Feature.UNDYING_SENTINEL);
+
+			} else if (archetype.equals(Subclass.VENGEANCE_OATH)) {
+				set.add(Feature.SOUL_OF_VENGEANCE);
+
+			} else if (archetype.equals(Subclass.OATHBREAKER)) {
+				set.add(Feature.SUPERNATURAL_RESISTANCE);
+
+			}
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+		} else if (level == 17) {
+
+		} else if (level == 18) {
+			set.add(Feature.IMPROVED_AURA_18);
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+		} else if (level == 20) {
+			// sacred oath
+			if (archetype.equals(Subclass.DEVOTION_OATH)) {
+				set.add(Feature.HOLY_NIMBUS);
+
+			} else if (archetype.equals(Subclass.ANCIENTS_OATH)) {
+				set.add(Feature.ELDER_CHAMPION);
+
+			} else if (archetype.equals(Subclass.VENGEANCE_OATH)) {
+				set.add(Feature.AVENGING_ANGEL);
+
+			} else if (archetype.equals(Subclass.OATHBREAKER)) {
+				set.add(Feature.DREAD_LORD);
+
+			}
+
+		}
+
+		return set;
+	}
+
+	/*
+	 * RANGER ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> ranger(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			set.addAll(rangerFavoredEnemy(1, actor));
+			set.addAll(rangerTerrainExplorer(1, actor));
+
+		} else if (level == 2) {
+			set.addAll(rangerFightingStyle(1, actor));
+
+		} else if (level == 3) {
+			set.add(Feature.PRIMEVAL_AWARENESS);
+
+			// archetype
+			if (archetype.equals(Subclass.HUNTER)) {
+				Option.addHunterTechnique(1, actor);
+
+			} else if (archetype.equals(Subclass.BEAST_MASTER)) {
+				set.add(Feature.RANGERS_COMPANION);
+
+			}
+
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 5) {
+			set.add(Feature.EXTRA_ATTACK_1);
+
+		} else if (level == 6) {
+			set.addAll(rangerFavoredEnemy(1, actor));
+			set.addAll(rangerTerrainExplorer(1, actor));
+
+		} else if (level == 7) {
+			// archetype
+			if (archetype.equals(Subclass.HUNTER)) {
+				Option.addHunterTechnique(1, actor);
+
+			} else if (archetype.equals(Subclass.BEAST_MASTER)) {
+				set.add(Feature.BEAST_TRAINING);
+
+			}
+
+		} else if (level == 8) {
+			set.add(Feature.LANDS_STRIDE);
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 9) {
+
+		} else if (level == 10) {
+			set.addAll(rangerTerrainExplorer(1, actor));
+			set.add(Feature.HIDE_IN_PLAIN_SIGHT);
+
+		} else if (level == 11) {
+			// archetype
+			if (archetype.equals(Subclass.HUNTER)) {
+				Option.addHunterTechnique(1, actor);
+
+			} else if (archetype.equals(Subclass.BEAST_MASTER)) {
+				set.add(Feature.BESTIAL_FURY);
+
+			}
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 13) {
+
+		} else if (level == 14) {
+			set.addAll(rangerFavoredEnemy(1, actor));
+			set.add(Feature.VANISH);
+
+		} else if (level == 15) {
+			// archetype
+			if (archetype.equals(Subclass.HUNTER)) {
+				Option.addHunterTechnique(1, actor);
+
+			} else if (archetype.equals(Subclass.BEAST_MASTER)) {
+				set.add(Feature.SHARE_SPELLS);
+
+			}
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 17) {
+
+		} else if (level == 18) {
+			set.add(Feature.FERAL_SENSES);
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 20) {
+			set.add(Feature.FOE_SLAYER);
+
+		}
+
+		return set;
+	}
+
+	/*
 	 * CLASS TEMPLATE
 	 * 
 	 */
@@ -1633,9 +1888,30 @@ public enum Class implements Option {
 	}
 
 	private static EnumSet<Feature> fighterFightingStyle(int toAdd, Actor actor) {
-		Feature[] array = new Feature[] { Feature.STYLE_ARCHERY, Feature.STYLE_DEFENSE, Feature.STYLE_DUELING,
-				Feature.STYLE_GREAT_WEAPON, Feature.STYLE_PROTECTION, Feature.STYLE_TWO_WEAPON };
+		return addFromArray(toAdd, Option.Feature.FIGHTER_STYLE, actor);
+	}
 
+	private static EnumSet<Feature> addFighterManeuver(int toAdd, Actor actor) {
+		return addFromArray(toAdd, Option.Feature.FIGHTER_MANEUVERS, actor);
+	}
+
+	private static EnumSet<Feature> paladinFightingStyle(int toAdd, Actor actor) {
+		return addFromArray(toAdd, Option.Feature.PALADIN_STYLE, actor);
+	}
+
+	private static EnumSet<Feature> rangerFightingStyle(int toAdd, Actor actor) {
+		return addFromArray(toAdd, Option.Feature.RANGER_STYLE, actor);
+	}
+
+	private static EnumSet<Feature> rangerFavoredEnemy(int toAdd, Actor actor) {
+		return addFromArray(toAdd, Option.Feature.RANGER_ENEMY, actor);
+	}
+
+	private static EnumSet<Feature> rangerTerrainExplorer(int toAdd, Actor actor) {
+		return addFromArray(toAdd, Option.Feature.RANGER_TERRAIN, actor);
+	}
+
+	private static EnumSet<Feature> addFromArray(int toAdd, Feature[] array, Actor actor) {
 		EnumSet<Feature> features;
 		if (actor.getFeatures() != null)
 			features = actor.getFeatures();
@@ -1651,26 +1927,6 @@ public enum Class implements Option {
 				features.add(candidate);
 				++added;
 			}
-		}
-
-		return features;
-	}
-
-	private static EnumSet<Feature> addFighterManeuver(int toAdd, Actor actor) {
-		Feature[] array = new Feature[] { Feature.COMMANDERS_STRIKE, Feature.DISARMING_ATTACK,
-				Feature.DISTRACTING_STRIKE, Feature.EVASIVE_FOOTWORK, Feature.FEINTING_ATTACK, Feature.GOADING_ATTACK,
-				Feature.LUNGING_ATTACK, Feature.MANEUVERING_ATTACK, Feature.MENACING_ATTACK, Feature.PARRY,
-				Feature.PRECISION_ATTACK, Feature.PUSHING_ATTACK, Feature.RALLY, Feature.RIPOSTE,
-				Feature.SWEEPING_ATTACK, Feature.TRIP_ATTACK };
-		EnumSet<Feature> features = actor.getFeatures();
-
-		int added = 0;
-		Feature candidate;
-		while (added < toAdd) {
-			candidate = Dice.randomFromArray(array);
-
-			if (features.add(candidate))
-				++added;
 		}
 
 		return features;
