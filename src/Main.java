@@ -16,12 +16,12 @@ public class Main {
 		// TODO
 
 		// rollCharacters();
-		// rollCharactersOfClass(Class.MONK);
+		// rollCharactersOfClass(Class.RANGER);
 		// rollCharactersOfArchetype(Class.Subclass.FOUR_ELEMENTS);
-		// levelUpTest(20, Class.MONK);
+		// levelUpTest(20, Class.RANGER);
 
 		for (int i = 0; i < 50; ++i) {
-			levelUpTestDisplayOnly(6, Class.RANGER);
+			levelUpTestDisplayOnly(20, Class.FIGHTER);
 
 		}
 

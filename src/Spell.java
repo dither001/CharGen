@@ -847,6 +847,48 @@ public enum Spell {
 		return set;
 	}
 
+	public static Spell spellFromSchool(int tier, Class job, School school) {
+		Set<Spell> set = listToSet(job, tier);
+
+		return Dice.randomFromSet(set);
+	}
+
+	public static void spellFromSchoolOrElse(int toAdd, int tier, School school, Actor actor) {
+		Class job = actor.getJob();
+		EnumSet<Spell> spellsKnown;
+
+		if (actor.getSpellsKnown() != null)
+			spellsKnown = actor.getSpellsKnown();
+		else
+			spellsKnown = EnumSet.noneOf(Spell.class);
+
+		Set<Spell> set = listToSet(job, tier);
+		Spell.retainSpellsOfSchool(school, set);
+
+		int added = 0;
+
+		Spell candidate;
+		while (added < toAdd && set.size() > 0) {
+			candidate = Dice.randomFromSet(set);
+
+			if (spellsKnown.add(candidate))
+				++added;
+		}
+
+		if (added < toAdd)
+			set = listToSet(job, tier);
+
+		while (added < toAdd) {
+			candidate = Dice.randomFromSet(set);
+
+			if (spellsKnown.add(candidate))
+				++added;
+		}
+
+		// final step
+		actor.setSpellsKnown(spellsKnown);
+	}
+
 	public static Set<Spell> allSpellsOfSchool(int tier, School school) {
 		Set<Spell> spells = EnumSet.noneOf(Spell.class);
 
@@ -869,6 +911,7 @@ public enum Spell {
 		Spell candidate;
 		while (spellsAdded < spellsToAdd) {
 			candidate = Dice.randomFromSet(spellPool);
+
 			if (spellsKnown.contains(candidate) != true) {
 				spellsKnown.add(candidate);
 				++spellsAdded;
@@ -933,6 +976,23 @@ public enum Spell {
 			candidate = it.next();
 			if (prototypeMap.get(candidate).school.equals(school))
 				set.add(candidate);
+		}
+
+		return set;
+	}
+
+	public static Set<Spell> retainSpellsOfSchools(School school1, School school2, Set<Spell> spells) {
+		Set<Spell> set = EnumSet.noneOf(Spell.class);
+
+		Spell candidate;
+		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (prototypeMap.get(candidate).school.equals(school1)
+					|| prototypeMap.get(candidate).school.equals(school2)) {
+				set.add(candidate);
+
+			}
 		}
 
 		return set;
@@ -1020,10 +1080,6 @@ public enum Spell {
 	/*
 	 * 
 	 */
-	// public static Map<Spell, Instance> spellMap() {
-	// return spellMap;
-	// }
-
 	public static boolean isCombatSpell(Spell spell) {
 		boolean combatSpell = false;
 
@@ -1094,299 +1150,6 @@ public enum Spell {
 
 		return string;
 	}
-
-	// public static HashSet<Spell> bardCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	// int dice = Dice.roll(3);
-	// if (dice == 1)
-	// toAdd.add(VICIOUS_MOCKERY);
-	//
-	// dice = Dice.roll(6);
-	// if (dice == 1)
-	// toAdd.add(DANCING_LIGHTS);
-	// else if (dice == 2)
-	// toAdd.add(MAGE_HAND);
-	// else if (dice == 3)
-	// toAdd.add(MESSAGE);
-	// else if (dice == 4)
-	// toAdd.add(MINOR_ILLUSION);
-	// else if (dice == 5)
-	// toAdd.add(PRESTIDIGITATION);
-	//
-	// while (toAdd.size() < 2) {
-	// toAdd.add(randomBardCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> clericCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	// int dice = Dice.roll(2);
-	// if (dice == 1)
-	// toAdd.add(SACRED_FLAME);
-	//
-	// dice = Dice.roll(3);
-	// if (dice == 1)
-	// toAdd.add(THAUMATURGY);
-	//
-	// while (toAdd.size() < 3) {
-	// toAdd.add(randomClericCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> druidCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	// int dice = Dice.roll(5);
-	// if (dice == 1)
-	// toAdd.add(POISON_SPRAY);
-	// else if (dice == 2)
-	// toAdd.add(PRODUCE_FLAME);
-	// else if (dice == 3)
-	// toAdd.add(SHILLELAGH);
-	// else if (dice == 4)
-	// toAdd.add(THORN_WHIP);
-	//
-	// dice = Dice.roll(3);
-	// if (dice == 1)
-	// toAdd.add(DRUIDCRAFT);
-	//
-	// while (toAdd.size() < 3) {
-	// toAdd.add(randomDruidCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> fighterCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	//
-	// if (actor.getIntelligence() > 11) {
-	// while (toAdd.size() < 3)
-	// toAdd.add(randomWizardCantrip());
-	// } else {
-	// // this is to prevent a "stupid" PC from choosing attack spells
-	// while (toAdd.size() < 3)
-	// toAdd.add(wizardUtilityCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> rogueCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	//
-	// // every ARCANE TRICKSTER learns mage hand
-	// toAdd.add(MAGE_HAND);
-	//
-	// if (actor.getIntelligence() > 11) {
-	// while (toAdd.size() < 3)
-	// toAdd.add(randomWizardCantrip());
-	// } else {
-	// // this is to prevent a "stupid" PC from choosing attack spells
-	// while (toAdd.size() < 3)
-	// toAdd.add(wizardUtilityCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> sorcererCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	// int dice = Dice.roll(6);
-	// if (dice == 1)
-	// toAdd.add(ACID_SPLASH);
-	// else if (dice == 2)
-	// toAdd.add(CHILL_TOUCH);
-	// else if (dice == 3)
-	// toAdd.add(FIREBOLT);
-	// else if (dice == 4)
-	// toAdd.add(POISON_SPRAY);
-	// else if (dice == 5)
-	// toAdd.add(RAY_OF_FROST);
-	// else if (dice == 6)
-	// toAdd.add(SHOCKING_GRASP);
-	//
-	// while (toAdd.size() < 4) {
-	// toAdd.add(randomSorcererCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> warlockCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	// int dice = Dice.roll(5);
-	// if (dice < 5)
-	// toAdd.add(ELDRITCH_BLAST);
-	//
-	// while (toAdd.size() < 2) {
-	// toAdd.add(randomWarlockCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> wizardCantripSetup(Actor actor) {
-	// HashSet<Spell> toAdd = new HashSet<Spell>();
-	// int dice = Dice.roll(6);
-	// if (dice == 1)
-	// toAdd.add(ACID_SPLASH);
-	// else if (dice == 2)
-	// toAdd.add(CHILL_TOUCH);
-	// else if (dice == 3)
-	// toAdd.add(FIREBOLT);
-	// else if (dice == 4)
-	// toAdd.add(POISON_SPRAY);
-	// else if (dice == 5)
-	// toAdd.add(RAY_OF_FROST);
-	// else if (dice == 6)
-	// toAdd.add(SHOCKING_GRASP);
-	//
-	// dice = Dice.roll(3);
-	// if (dice == 1)
-	// toAdd.add(PRESTIDIGITATION);
-	//
-	// while (toAdd.size() < 3) {
-	// toAdd.add(randomWizardCantrip());
-	// }
-	//
-	// return toAdd;
-	// }
-
-	// public static HashSet<Spell> bardSetup(Actor actor) {
-	// int level = actor.getLevel();
-	// HashSet<Spell> spellsKnown = new HashSet<Spell>();
-	//
-	// int dice = Dice.roll(3);
-	// if (dice == 1)
-	// spellsKnown.add(CURE_WOUNDS);
-	// else if (dice == 2)
-	// spellsKnown.add(HEALING_WORD);
-	//
-	// dice = Dice.roll(3);
-	// if (dice == 1)
-	// spellsKnown.add(ANIMAL_FRIENDSHIP);
-	// else if (dice == 2)
-	// spellsKnown.add(CHARM_PERSON);
-	//
-	// dice = Dice.roll(3);
-	// if (dice == 1)
-	// spellsKnown.add(DISSONANT_WHISPERS);
-	// else if (dice == 2)
-	// spellsKnown.add(THUNDERWAVE);
-	//
-	// while (spellsKnown.size() < BARD_KNOWN[0]) {
-	// spellsKnown.add(randomBardSpell(level));
-	// }
-	//
-	// return spellsKnown;
-	// }
-
-	// public static HashSet<Spell> bardUpdate(Actor actor) {
-	// // TODO
-	// int level = actor.getLevel();
-	// Spellcasting spellcasting = actor.getSpellcasting();
-	// HashSet<Spell> spellsKnown = spellcasting.getSpellsKnown();
-	//
-	// while (spellsKnown.size() < BARD_KNOWN[level - 1]) {
-	// spellsKnown.add(randomBardSpell(level));
-	// }
-	//
-	// return spellsKnown;
-	// }
-
-	// public static HashSet<Spell> spellbookSetup(Actor actor) {
-	// Class.Subclass archetype = actor.getArchetype();
-	// Set<Spell> spellbook = EnumSet.noneOf(Spell.class);
-	//
-	// List<Spell> candidates = new ArrayList<Spell>();
-	//
-	// spellbook.add(MAGE_ARMOR);
-	// if (Dice.roll(2) == 1)
-	// spellbook.add(FIND_FAMILIAR);
-	// if (Dice.roll(2) == 1)
-	// spellbook.add(IDENTIFY);
-	//
-	// if (archetype.equals(Class.Subclass.ABJURER))
-	// candidates.addAll(filterSpellsBySchool(School.ABJURATION, 1));
-	// else if (archetype.equals(Class.Subclass.CONJUROR))
-	// candidates.addAll(filterSpellsBySchool(School.CONJURATION, 1));
-	// else if (archetype.equals(Class.Subclass.DIVINER))
-	// candidates.addAll(filterSpellsBySchool(School.DIVINATION, 1));
-	// else if (archetype.equals(Class.Subclass.ENCHANTER))
-	// candidates.addAll(filterSpellsBySchool(School.ENCHANTMENT, 1));
-	// else if (archetype.equals(Class.Subclass.EVOKER))
-	// candidates.addAll(filterSpellsBySchool(School.EVOCATION, 1));
-	// else if (archetype.equals(Class.Subclass.ILLUSIONIST))
-	// candidates.addAll(filterSpellsBySchool(School.ILLUSION, 1));
-	// else if (archetype.equals(Class.Subclass.NECROMANCER))
-	// candidates.addAll(filterSpellsBySchool(School.NECROMANCY, 1));
-	// else if (archetype.equals(Class.Subclass.TRANSMUTER))
-	// candidates.addAll(filterSpellsBySchool(School.TRANSMUTATION, 1));
-	//
-	// Collections.shuffle(candidates);
-	// for (int i = 0; candidates.isEmpty() != true && i < 3; ++i) {
-	// spellbook.add(candidates.remove(0));
-	// }
-	//
-	// while (spellbook.size() < 6) {
-	// spellbook.add(randomWizardSpell(1));
-	// }
-	//
-	// return spellbook;
-	// }
-
-	// public static HashSet<Spell> spellbookUpdate(Actor actor) {
-	// // TODO - requires updates
-	// Spellcasting spellcasting = actor.getSpellcasting();
-	// HashSet<Spell> spellsKnown = spellcasting.getSpellsKnown();
-	//
-	// Class.Subclass archetype = actor.getArchetype();
-	// int level = actor.getLevel();
-	//
-	// /*
-	// * FIXME - ABSOLUTELY needs to check for existing wizard's spellbook before
-	// * simply adding to the character's new "spells known." I'm going to have to
-	// * work out exactly how a wizard will replace a lost spellbook (i.e. by the
-	// * rules)
-	// */
-	// HashSet<Spell> spellbook = new HashSet<Spell>(spellsKnown);
-	// List<Spell> candidates = new ArrayList<Spell>();
-	//
-	// if (archetype.equals(Class.Subclass.ABJURER))
-	// candidates.addAll(filterSpellsBySchool(School.ABJURATION, level));
-	// else if (archetype.equals(Class.Subclass.CONJUROR))
-	// candidates.addAll(filterSpellsBySchool(School.CONJURATION, level));
-	// else if (archetype.equals(Class.Subclass.DIVINER))
-	// candidates.addAll(filterSpellsBySchool(School.DIVINATION, level));
-	// else if (archetype.equals(Class.Subclass.ENCHANTER))
-	// candidates.addAll(filterSpellsBySchool(School.ENCHANTMENT, level));
-	// else if (archetype.equals(Class.Subclass.EVOKER))
-	// candidates.addAll(filterSpellsBySchool(School.EVOCATION, level));
-	// else if (archetype.equals(Class.Subclass.ILLUSIONIST))
-	// candidates.addAll(filterSpellsBySchool(School.ILLUSION, level));
-	// else if (archetype.equals(Class.Subclass.NECROMANCER))
-	// candidates.addAll(filterSpellsBySchool(School.NECROMANCY, level));
-	// else if (archetype.equals(Class.Subclass.TRANSMUTER))
-	// candidates.addAll(filterSpellsBySchool(School.TRANSMUTATION, level));
-	//
-	// Collections.shuffle(candidates);
-	// int targetNumber = spellbook.size() + 2;
-	//
-	// for (int i = 0; candidates.isEmpty() != true && i < 1; ++i) {
-	// if (spellbook.add(candidates.remove(0)) != true)
-	// --i;
-	// }
-	//
-	// while (spellbook.size() < targetNumber) {
-	// spellbook.add(randomWizardSpell(level));
-	// }
-	//
-	// return spellbook;
-	// }
 
 	public static Spell wizardUtilityCantrip() {
 		Spell[] array = { BLADE_WARD, DANCING_LIGHTS, FRIENDS, LIGHT, MAGE_HAND, MENDING, MESSAGE, MINOR_ILLUSION,

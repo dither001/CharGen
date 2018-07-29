@@ -1023,7 +1023,7 @@ public enum Class implements Option {
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
-		Class job = actor.getJob();
+		Class casterClass = WIZARD;
 		EnumSet<Spell> spellsKnown;
 		if (actor.getSpellsKnown() == null)
 			spellsKnown = EnumSet.noneOf(Spell.class);
@@ -1053,11 +1053,11 @@ public enum Class implements Option {
 			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
 				//
 				set.add(Feature.WEAPON_BOND);
-				Spell.addCantripKnown(job, spellsKnown);
-				Spell.addCantripKnown(job, spellsKnown);
-				Spell.addToSpellsKnown(level, job, spellsKnown);
-				Spell.addToSpellsKnown(level, job, spellsKnown);
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addCantripKnown(casterClass, spellsKnown);
+				Spell.addCantripKnown(casterClass, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 			}
 
@@ -1066,7 +1066,7 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		} else if (level == 5) {
 			set.add(Feature.EXTRA_ATTACK_1);
@@ -1088,7 +1088,7 @@ public enum Class implements Option {
 			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
 				//
 				set.add(Feature.WAR_MAGIC);
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 			}
 
@@ -1097,7 +1097,7 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		} else if (level == 9) {
 			set.add(Feature.INDOMITABLE_1);
@@ -1115,8 +1115,8 @@ public enum Class implements Option {
 
 			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
 				set.add(Feature.ELDRITCH_STRIKE);
-				Spell.addCantripKnown(job, spellsKnown);
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addCantripKnown(casterClass, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 			}
 
@@ -1124,7 +1124,7 @@ public enum Class implements Option {
 			set.add(Feature.EXTRA_ATTACK_2);
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		} else if (level == 12) {
 			set.add(Feature.ABILITY_BONUS_12);
@@ -1134,14 +1134,14 @@ public enum Class implements Option {
 			set.add(Feature.INDOMITABLE_2);
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		} else if (level == 14) {
 			set.add(Feature.ABILITY_BONUS_14);
 			set.add(abilityImprove(actor));
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		} else if (level == 15) {
 			// Martial archetype
@@ -1165,7 +1165,7 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		} else if (level == 17) {
 			set.add(Feature.ACTION_SURGE_17);
@@ -1191,13 +1191,13 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		} else if (level == 20) {
 			set.add(Feature.EXTRA_ATTACK_3);
 			//
 			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
-				Spell.addToSpellsKnown(level, job, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
 
 		}
 
@@ -1361,12 +1361,6 @@ public enum Class implements Option {
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
-		EnumSet<Spell> spellsKnown;
-		if (actor.getSpellsKnown() == null)
-			spellsKnown = EnumSet.noneOf(Spell.class);
-		else
-			spellsKnown = actor.getSpellsKnown();
-
 		if (level == 1) {
 			set.add(Feature.DIVINE_SENSE);
 			set.add(Feature.LAY_ON_HANDS);
@@ -1499,12 +1493,6 @@ public enum Class implements Option {
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
-		EnumSet<Spell> spellsKnown;
-		if (actor.getSpellsKnown() == null)
-			spellsKnown = EnumSet.noneOf(Spell.class);
-		else
-			spellsKnown = actor.getSpellsKnown();
-
 		if (level == 1) {
 			set.addAll(rangerFavoredEnemy(1, actor));
 			set.addAll(rangerTerrainExplorer(1, actor));
@@ -1601,6 +1589,138 @@ public enum Class implements Option {
 
 		} else if (level == 20) {
 			set.add(Feature.FOE_SLAYER);
+
+		}
+
+		return set;
+	}
+
+	/*
+	 * ROGUE ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> rogue(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		EnumSet<Skill> skills = actor.getSkills();
+
+		Class casterClass = WIZARD;
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			skills.add(Skill.THIEVES_TOOLS);
+			set.addAll(addRandomExpertise(2, actor));
+
+		} else if (level == 2) {
+			set.add(Feature.CUNNING_ACTION);
+
+		} else if (level == 3) {
+			// rogue archetype
+			if (archetype.equals(Subclass.THIEF)) {
+				set.add(Feature.FAST_HANDS);
+				set.add(Feature.SECOND_STORY_WORK);
+
+			} else if (archetype.equals(Subclass.ASSASSIN)) {
+				skills.add(Skill.DISGUISE_KIT);
+				skills.add(Skill.POISONER_KIT);
+				set.add(Feature.ASSASSINATE);
+
+			} else if (archetype.equals(Subclass.ARCANE_TRICKSTER)) {
+
+			}
+
+		} else if (level == 4) {
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 5) {
+			set.add(Feature.UNCANNY_DODGE);
+
+		} else if (level == 6) {
+
+		} else if (level == 7) {
+			set.add(Feature.EVASION);
+
+		} else if (level == 8) {
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 9) {
+			// rogue archetype
+			if (archetype.equals(Subclass.THIEF)) {
+				set.add(Feature.SUPREME_SNEAK);
+
+			} else if (archetype.equals(Subclass.ASSASSIN)) {
+				set.add(Feature.INFILTRATION_EXPERTISE);
+
+			} else if (archetype.equals(Subclass.ARCANE_TRICKSTER)) {
+				spellsKnown.add(Spell.MAGE_HAND);
+				Spell.addCantripKnown(casterClass, spellsKnown);
+				Spell.addCantripKnown(casterClass, spellsKnown);
+				Spell.addToSpellsKnown(level, casterClass, spellsKnown);
+
+			}
+
+		} else if (level == 10) {
+			set.add(Feature.ABILITY_BONUS_10);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 11) {
+			set.add(Feature.RELIABLE_TALENT);
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 13) {
+			// rogue archetype
+			if (archetype.equals(Subclass.THIEF)) {
+				set.add(Feature.USE_MAGIC_DEVICE);
+
+			} else if (archetype.equals(Subclass.ASSASSIN)) {
+				set.add(Feature.IMPOSTOR);
+
+			} else if (archetype.equals(Subclass.ARCANE_TRICKSTER)) {
+
+			}
+
+		} else if (level == 14) {
+			set.add(Feature.BLINDSENSE);
+
+		} else if (level == 15) {
+			set.add(Feature.SLIPPERY_MIND);
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 17) {
+			// rogue archetype
+			if (archetype.equals(Subclass.THIEF)) {
+				set.add(Feature.THIEFS_REFLEXES);
+
+			} else if (archetype.equals(Subclass.ASSASSIN)) {
+				set.add(Feature.DEATH_STRIKE);
+
+			} else if (archetype.equals(Subclass.ARCANE_TRICKSTER)) {
+
+			}
+
+		} else if (level == 18) {
+			set.add(Feature.ELUSIVE);
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 20) {
+			set.add(Feature.STROKE_OF_LUCK);
 
 		}
 
@@ -1834,7 +1954,7 @@ public enum Class implements Option {
 		int added = 0;
 		Feature expertise;
 		while (added < toAdd) {
-			expertise = matchExpertiseToSkill(Dice.randomFromSet(skills));
+			expertise = matchingExpertise(Dice.randomFromSet(skills));
 
 			if (features.contains(expertise) != true) {
 				features.add(expertise);
@@ -1845,8 +1965,9 @@ public enum Class implements Option {
 		return features;
 	}
 
-	private static Feature matchExpertiseToSkill(Skill skill) {
+	private static Feature matchingExpertise(Skill skill) {
 		Feature expertise = null;
+
 		if (skill.equals(Skill.ACROBATICS))
 			expertise = Feature.EXPERTISE_ACROBATICS;
 		else if (skill.equals(Skill.ANIMAL_HANDLING))
@@ -1883,6 +2004,8 @@ public enum Class implements Option {
 			expertise = Feature.EXPERTISE_STEALTH;
 		else if (skill.equals(Skill.SURVIVAL))
 			expertise = Feature.EXPERTISE_SURVIVAL;
+		else if (skill.equals(Skill.THIEVES_TOOLS))
+			expertise = Feature.EXPERTISE_THIEVES_TOOLS;
 
 		return expertise;
 	}
