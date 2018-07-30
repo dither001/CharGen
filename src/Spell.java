@@ -827,10 +827,16 @@ public enum Spell {
 			array = WIZARD_SPELLS[4];
 		else if (job.equals(Class.PALADIN) && tier <= 5)
 			array = PALADIN_SPELLS[tier];
+		else if (job.equals(Class.PALADIN))
+			array = WIZARD_SPELLS[5];
 		else if (job.equals(Class.RANGER) && tier <= 5)
 			array = RANGER_SPELLS[tier];
+		else if (job.equals(Class.RANGER))
+			array = WIZARD_SPELLS[5];
 		else if (job.equals(Class.ROGUE) && tier <= 4)
 			array = WIZARD_SPELLS[tier];
+		else if (job.equals(Class.ROGUE))
+			array = WIZARD_SPELLS[4];
 		else if (job.equals(Class.SORCERER))
 			array = SORCERER_SPELLS[tier];
 		else if (job.equals(Class.WARLOCK))
@@ -977,18 +983,29 @@ public enum Spell {
 	}
 
 	private static void spellSelector(int spellsToAdd, int tier, Class job, Set<Spell> spellsKnown) {
-		int spellsAdded = 0;
+		EnumSet<Spell> workingSet = EnumSet.copyOf(spellsKnown);
 
 		Set<Spell> spellPool = listToSet(job, tier);
+		if (tier > 3) {
+			// 3&4 or 4&5 or 5&6
+			spellPool.addAll(listToSet(job, tier - 1));
+		} else if (tier > 6) {
+			// 6&7 or 7&8 or 8&9
+			spellPool.addAll(listToSet(job, tier - 1));
+			spellPool.addAll(listToSet(job, tier - 2));
+
+		}
+
+		int spellsAdded = 0;
 		Spell candidate;
 		while (spellsAdded < spellsToAdd) {
 			candidate = Dice.randomFromSet(spellPool);
 
-			if (spellsKnown.contains(candidate) != true) {
-				spellsKnown.add(candidate);
+			if (spellsKnown.add(candidate))
 				++spellsAdded;
-			}
+
 		}
+
 	}
 
 	public static void setupSpellsKnown(Actor actor) {
@@ -1010,17 +1027,17 @@ public enum Spell {
 		} else if (job.equals(Class.DRUID)) {
 			spellSelector(2, 0, job, spellsKnown);
 
-		} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
-			spellSelector(0, 0, job, spellsKnown);
+			// } else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+			// spellSelector(0, 0, job, spellsKnown);
 
-		} else if (job.equals(Class.PALADIN)) {
-			spellSelector(0, 0, job, spellsKnown);
+			// } else if (job.equals(Class.PALADIN)) {
+			// spellSelector(0, 0, job, spellsKnown);
 
-		} else if (job.equals(Class.RANGER)) {
-			spellSelector(0, 0, job, spellsKnown);
+			// } else if (job.equals(Class.RANGER)) {
+			// spellSelector(0, 0, job, spellsKnown);
 
-		} else if (archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
-			spellSelector(0, 0, job, spellsKnown);
+			// } else if (archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
+			// spellSelector(0, 0, job, spellsKnown);
 
 		} else if (job.equals(Class.SORCERER)) {
 			spellSelector(4, 0, job, spellsKnown);
@@ -1077,6 +1094,20 @@ public enum Spell {
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			candidate = it.next();
 			if (prototypeMap.get(candidate).level == tier)
+				set.add(candidate);
+		}
+
+		return set;
+	}
+
+	public static Set<Spell> retainSpellsOfTiers(int tier1, int tier2, Set<Spell> spells) {
+		Set<Spell> set = EnumSet.noneOf(Spell.class);
+
+		Spell candidate;
+		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (prototypeMap.get(candidate).level == tier1 || prototypeMap.get(candidate).level == tier2)
 				set.add(candidate);
 		}
 

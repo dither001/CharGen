@@ -100,8 +100,8 @@ public class CombatBlock {
 			}
 
 			string = String.format("%s %s %s", name, attack, damageString);
-			
-			if (owner.getJob().equals(Class.ROGUE) && weapon.useDexterity())
+
+			if (weaponAttack() && owner.getJob().equals(Class.ROGUE) && weapon.useDexterity())
 				string += " w/Sneak Attack";
 
 			return string;
@@ -231,7 +231,7 @@ public class CombatBlock {
 
 				// sneak attack bonus
 				if (job.equals(Class.ROGUE) && weapon.useDexterity()) {
-					this.averageDamage += (owner.getLevel() * 7 / 4);
+					this.averageDamage += ((owner.getLevel() + 1) / 2 * 7 / 2);
 
 				}
 
@@ -432,10 +432,18 @@ public class CombatBlock {
 		int constitution = owner.getConstitutionModifier();
 
 		int hp = 0, perLevel = constitution;
+
+		// check features
+		EnumSet<Option.Feature> features = owner.getFeatures();
+		if (features.contains(Option.Feature.DRACONIC_RESILIENCE))
+			perLevel += 1;
+
+		//
 		for (int i = 0; i < level; ++i) {
 			hp += (hitDice[i] + perLevel > 0) ? hitDice[i] + perLevel : 1;
 		}
 
+		// final step
 		this.hitPoints = hp;
 	}
 
@@ -463,6 +471,12 @@ public class CombatBlock {
 
 			if (owner.notWearingArmor() && owner.notUsingShield())
 				ac = 10 + dexterity + wisdom;
+
+		} else if (job.equals(Class.SORCERER)) {
+			boolean draconic = owner.getFeatures().contains(Option.Feature.DRACONIC_RESILIENCE);
+
+			if (draconic && owner.notWearingArmor())
+				ac = 13 + dexterity;
 
 		} else {
 			// all others

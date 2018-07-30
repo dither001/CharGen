@@ -131,6 +131,30 @@ public interface Option {
 		ASSASSINATE, INFILTRATION_EXPERTISE, IMPOSTOR, DEATH_STRIKE,
 		// arcane trickster
 		MAGE_HAND_LEGERDEMAIN, MAGICAL_AMBUSH, VERSATILE_TRICKSTER, SPELL_THIEF,
+		/*
+		 * SORCERER
+		 */
+		FONT_OF_MAGIC, FLEXIBLE_CASTING, SORCEROUS_RESTORATION,
+		// metamagic
+		CAREFUL_SPELL, DISTANCE_SPELL, EMPOWERED_SPELL, EXTENDED_SPELL, HEIGHTENED_SPELL, QUICKENED_SPELL, SUBTLE_SPELL, TWINNED_SPELL,
+		// draconic
+		ANCESTRY_FIRE, ANCESTRY_COLD, ANCESTRY_LIGHTNING, ANCESTRY_ACID, ANCESTRY_POISON, DRACONIC_RESILIENCE, ELEMENTAL_AFFINITY, DRAGON_WINGS, DRACONIC_PRESENCE,
+		// wild magic
+		WILD_MAGIC_SURGE, TIDES_OF_CHAOS, BEND_LUCK, CONTROLLED_CHAOS, SPELL_BOMBARDMENT,
+		/*
+		 * WARLOCK
+		 */
+		PACT_OF_THE_CHAIN, PACT_OF_THE_BLADE, PACT_OF_THE_TOME, WARLOCK_SLOT_1, WARLOCK_SLOT_2, WARLOCK_SLOT_3, WARLOCK_SLOT_4, MYSTIC_ARCANUM_11, MYSTIC_ARCANUM_13, MYSTIC_ARCANUM_15, MYSTIC_ARCANUM_17, ELDRITCH_MASTER,
+		// invocations
+		ARMOR_OF_SHADOWS, BEAST_SPEECH, BEGUILING_INFLUENCE, DEVILS_SIGHT, ELDRITCH_SIGHT, EYES_OF_THE_KEEPER, FIENDISH_VIGOR, GAZE_OF_TWO_MINDS, MASK_OF_MANY_FACES, MISTY_VISIONS, THIEF_OF_FIVE_FATES, MIRE_OF_THE_MIND_5, ONE_WITH_SHADOWS_5, SIGN_OF_ILL_OMEN_5, BEWITCHING_WHISPERS_7, DREADFUL_WORD_7, SCULPTOR_OF_FLESH_7, ASCENDANT_STEP_9, MINIONS_OF_CHAOS_9, OTHERWORLDLY_LEAP_9, WHISPERS_OF_THE_GRAVE_9, MASTER_OF_MYRIAD_FORMS_15, VISIONS_OF_DISTANT_REALMS_15, WITCH_SIGHT_15,
+		// prereqs
+		AGONIZING_BLAST, BOOK_OF_ANCIENT_SECRETS, ELDRITCH_SPEAR, REPELLING_BLAST, VOICE_OF_THE_CHAIN_MASTER, THIRSTING_BLADE_5, LIFEDRINKER_12, CHAINS_OF_CARCERI_15,
+		// fey pact
+		FEY_PRESENCE, MISTY_ESCAPE, BEGUILING_DEFENSES, DARK_DELIRIUM,
+		// fiend pact
+		DARK_ONES_BLESSING, DARK_ONES_OWN_LUCK, FIENDISH_RESILIENCE, HURL_THROUGH_HELL,
+		// eldritch pact
+		AWAKENED_MIND, ENTROPIC_WARD, THOUGHT_SHIELD, CREATE_THRALL,
 
 		/*
 		 * END OF FEATURES
@@ -191,6 +215,22 @@ public interface Option {
 				{ ESCAPE_THE_HORDE, MULTIATTACK_DEFENSE, STEEL_WILL }, { VOLLEY, WHIRLWIND_ATTACK },
 				{ EVASION, STAND_AGAINST_THE_TIDE, UNCANNY_DODGE } };
 
+		protected static final Feature[] METAMAGIC_FEATS = { CAREFUL_SPELL, DISTANCE_SPELL, EMPOWERED_SPELL,
+				EXTENDED_SPELL, HEIGHTENED_SPELL, QUICKENED_SPELL, SUBTLE_SPELL, TWINNED_SPELL };
+
+		protected static final Feature[] DRAGON_ANCESTRY = { ANCESTRY_FIRE, ANCESTRY_COLD, ANCESTRY_LIGHTNING,
+				ANCESTRY_ACID, ANCESTRY_POISON };
+
+		protected static final Feature[] WARLOCK_PACTS = { PACT_OF_THE_BLADE, PACT_OF_THE_CHAIN, PACT_OF_THE_TOME };
+
+		protected static final Feature[][] INVOCATIONS = {
+				{ ARMOR_OF_SHADOWS, BEAST_SPEECH, BEGUILING_INFLUENCE, DEVILS_SIGHT, ELDRITCH_SIGHT, EYES_OF_THE_KEEPER,
+						FIENDISH_VIGOR, GAZE_OF_TWO_MINDS, MASK_OF_MANY_FACES, MISTY_VISIONS, THIEF_OF_FIVE_FATES },
+				{ MIRE_OF_THE_MIND_5, ONE_WITH_SHADOWS_5, SIGN_OF_ILL_OMEN_5 },
+				{ BEWITCHING_WHISPERS_7, DREADFUL_WORD_7, SCULPTOR_OF_FLESH_7 },
+				{ ASCENDANT_STEP_9, MINIONS_OF_CHAOS_9, OTHERWORLDLY_LEAP_9, WHISPERS_OF_THE_GRAVE_9 },
+				{ MASTER_OF_MYRIAD_FORMS_15, VISIONS_OF_DISTANT_REALMS_15, WITCH_SIGHT_15 } };
+
 	}
 
 	/*
@@ -248,6 +288,127 @@ public interface Option {
 			array = Feature.HUNTER_TECHNIQUES[0];
 
 		int added = 0;
+		Feature candidate;
+		while (added < toAdd) {
+			candidate = Dice.randomFromArray(array);
+
+			if (features.add(candidate))
+				++added;
+		}
+
+		actor.setFeatures(features);
+	}
+
+	public static void addMetamagic(int toAdd, Actor actor) {
+		Feature[] array = Feature.METAMAGIC_FEATS;
+
+		EnumSet<Feature> features;
+		if (actor.getFeatures() == null)
+			features = EnumSet.noneOf(Feature.class);
+		else
+			features = actor.getFeatures();
+
+		int added = 0;
+		Feature candidate;
+		while (added < toAdd) {
+			candidate = Dice.randomFromArray(array);
+
+			if (features.add(candidate))
+				++added;
+		}
+
+		actor.setFeatures(features);
+	}
+
+	public static void draconicAncestry(Actor actor) {
+		Feature[] array = Feature.DRAGON_ANCESTRY;
+
+		EnumSet<Feature> features;
+		if (actor.getFeatures() == null)
+			features = EnumSet.noneOf(Feature.class);
+		else
+			features = actor.getFeatures();
+
+		features.add(Dice.randomFromArray(array));
+		actor.setFeatures(features);
+	}
+
+	public static Feature randomWarlockPact() {
+		return Dice.randomFromArray(Feature.WARLOCK_PACTS);
+	}
+
+	public static void addWarlockInvocations(int toAdd, Actor actor) {
+		int level = actor.getLevel(), added = 0;
+
+		EnumSet<Spell> spells;
+		if (actor.getSpellsKnown() == null)
+			spells = EnumSet.noneOf(Spell.class);
+		else
+			spells = actor.getSpellsKnown();
+
+		EnumSet<Feature> features;
+		if (actor.getFeatures() == null)
+			features = EnumSet.noneOf(Feature.class);
+		else
+			features = actor.getFeatures();
+
+		boolean blade = features.contains(Feature.PACT_OF_THE_BLADE);
+		boolean chain = features.contains(Feature.PACT_OF_THE_CHAIN);
+		boolean tome = features.contains(Feature.PACT_OF_THE_TOME);
+		boolean eldritchBlast = spells.contains(Spell.ELDRITCH_BLAST);
+
+		Feature[] array;
+		if (level >= 15 && chain) {
+			array = Feature.INVOCATIONS[4];
+			// 33% chance of chains of carceri w/pact of chain
+			if (Dice.roll(3) == 1 && features.add(Feature.CHAINS_OF_CARCERI_15))
+				++added;
+
+		} else if (level >= 15)
+			array = Feature.INVOCATIONS[4];
+		else if (level >= 12 && blade) {
+			array = Feature.INVOCATIONS[3];
+			// 33% chance of lifedrinker w/pact of blade
+			if (Dice.roll(3) == 1 && features.add(Feature.LIFEDRINKER_12))
+				++added;
+
+		} else if (level >= 9)
+			array = Feature.INVOCATIONS[3];
+		else if (level >= 7)
+			array = Feature.INVOCATIONS[2];
+		else if (level >= 5 && blade) {
+			array = Feature.INVOCATIONS[1];
+			// 33% chance of thirsting blade w/pact of blade
+			if (Dice.roll(3) == 1 && features.add(Feature.THIRSTING_BLADE_5))
+				++added;
+
+		} else if (level >= 5) {
+			array = Feature.INVOCATIONS[1];
+		} else if (eldritchBlast) {
+			array = Feature.INVOCATIONS[0];
+			int dice = Dice.roll(6);
+			if (dice < 3 && features.add(Feature.AGONIZING_BLAST))
+				++added;
+			else if (dice == 3 && features.add(Feature.ELDRITCH_SPEAR))
+				++added;
+			else if (dice == 4 && features.add(Feature.REPELLING_BLAST))
+				++added;
+
+		} else if (chain) {
+			array = Feature.INVOCATIONS[0];
+			// 33% chance of voice of chain master w/ chain pact
+			if (Dice.roll(3) == 1 && features.add(Feature.VOICE_OF_THE_CHAIN_MASTER))
+				++added;
+
+		} else if (tome) {
+			array = Feature.INVOCATIONS[0];
+			// 33% chance of book of ancient secrets w/ tome pact
+			if (Dice.roll(3) == 1 && features.add(Feature.BOOK_OF_ANCIENT_SECRETS))
+				++added;
+
+		} else
+			array = Feature.INVOCATIONS[0];
+
 		Feature candidate;
 		while (added < toAdd) {
 			candidate = Dice.randomFromArray(array);

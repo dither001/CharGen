@@ -364,10 +364,10 @@ public enum Class implements Option {
 			features.addAll(ranger(actor));
 		} else if (job.equals(Class.ROGUE)) {
 			features.addAll(rogue(actor));
-			// } else if (job.equals(Class.SORCERER)) {
-			// features.addAll(sorcerer(actor));
-			// } else if (job.equals(Class.WARLOCK)) {
-			// features.addAll(warlock(actor));
+		} else if (job.equals(Class.SORCERER)) {
+			features.addAll(sorcerer(actor));
+		} else if (job.equals(Class.WARLOCK)) {
+			features.addAll(warlock(actor));
 			// } else if (job.equals(Class.WIZARD)) {
 			// features.addAll(wizard(actor));
 		}
@@ -402,10 +402,10 @@ public enum Class implements Option {
 			features.addAll(ranger(actor));
 		} else if (job.equals(Class.ROGUE)) {
 			features.addAll(rogue(actor));
-			// } else if (job.equals(Class.SORCERER)) {
-			// features.addAll(sorcerer(actor));
-			// } else if (job.equals(Class.WARLOCK)) {
-			// features.addAll(warlock(actor));
+		} else if (job.equals(Class.SORCERER)) {
+			features.addAll(sorcerer(actor));
+		} else if (job.equals(Class.WARLOCK)) {
+			features.addAll(warlock(actor));
 			// } else if (job.equals(Class.WIZARD)) {
 			// features.addAll(wizard(actor));
 		}
@@ -1751,6 +1751,275 @@ public enum Class implements Option {
 
 			if (archetype.equals(Subclass.ARCANE_TRICKSTER))
 				Spell.addToSpellsKnown(4, casterClass, spellsKnown);
+
+		}
+
+		return set;
+	}
+
+	/*
+	 * SORCERER ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> sorcerer(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		Class casterClass = SORCERER;
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			if (archetype.equals(Subclass.DRAGON_ORIGIN)) {
+				actor.getLanguages().add(Actor.Language.DRACONIC);
+				Option.draconicAncestry(actor);
+				set.add(Feature.DRACONIC_RESILIENCE);
+
+			} else if (archetype.equals(Subclass.CHAOS_ORIGIN)) {
+				set.add(Feature.WILD_MAGIC_SURGE);
+				set.add(Feature.TIDES_OF_CHAOS);
+
+			}
+
+		} else if (level == 2) {
+			Spell.addToSpellsKnown(1, casterClass, spellsKnown);
+			set.add(Feature.FONT_OF_MAGIC);
+			set.add(Feature.FLEXIBLE_CASTING);
+
+		} else if (level == 3) {
+			Spell.addToSpellsKnown(2, casterClass, spellsKnown);
+			Option.addMetamagic(2, actor);
+
+		} else if (level == 4) {
+			Spell.addToSpellsKnown(2, casterClass, spellsKnown);
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 5) {
+			Spell.addToSpellsKnown(3, casterClass, spellsKnown);
+
+		} else if (level == 6) {
+			Spell.addToSpellsKnown(3, casterClass, spellsKnown);
+
+			if (archetype.equals(Subclass.DRAGON_ORIGIN)) {
+				set.add(Feature.ELEMENTAL_AFFINITY);
+
+			} else if (archetype.equals(Subclass.CHAOS_ORIGIN)) {
+				set.add(Feature.BEND_LUCK);
+
+			}
+
+		} else if (level == 7) {
+			Spell.addToSpellsKnown(4, casterClass, spellsKnown);
+
+		} else if (level == 8) {
+			Spell.addToSpellsKnown(4, casterClass, spellsKnown);
+
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 9) {
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+
+		} else if (level == 10) {
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+			Option.addMetamagic(1, actor);
+
+		} else if (level == 11) {
+			Spell.addToSpellsKnown(6, casterClass, spellsKnown);
+
+		} else if (level == 12) {
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 13) {
+			Spell.addToSpellsKnown(7, casterClass, spellsKnown);
+
+		} else if (level == 14) {
+			if (archetype.equals(Subclass.DRAGON_ORIGIN)) {
+				set.add(Feature.DRAGON_WINGS);
+
+			} else if (archetype.equals(Subclass.CHAOS_ORIGIN)) {
+				set.add(Feature.CONTROLLED_CHAOS);
+
+			}
+
+		} else if (level == 15) {
+			Spell.addToSpellsKnown(8, casterClass, spellsKnown);
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 17) {
+			Spell.addToSpellsKnown(9, casterClass, spellsKnown);
+			Option.addMetamagic(1, actor);
+
+		} else if (level == 18) {
+			if (archetype.equals(Subclass.DRAGON_ORIGIN)) {
+				set.add(Feature.DRACONIC_PRESENCE);
+
+			} else if (archetype.equals(Subclass.CHAOS_ORIGIN)) {
+				set.add(Feature.SPELL_BOMBARDMENT);
+
+			}
+
+		} else if (level == 19) {
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 20) {
+
+		}
+
+		return set;
+	}
+
+	/*
+	 * WARLOCK ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> warlock(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		Class casterClass = WARLOCK;
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			set.add(Option.randomWarlockPact());
+			set.add(Feature.WARLOCK_SLOT_1);
+
+			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+				set.add(Feature.FEY_PRESENCE);
+
+			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+				set.add(Feature.DARK_ONES_BLESSING);
+
+			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+				set.add(Feature.AWAKENED_MIND);
+
+			}
+
+		} else if (level == 2) {
+			Option.addWarlockInvocations(2, actor);
+			Spell.addToSpellsKnown(1, casterClass, spellsKnown);
+			set.add(Feature.WARLOCK_SLOT_2);
+
+		} else if (level == 3) {
+			Spell.addToSpellsKnown(2, casterClass, spellsKnown);
+
+		} else if (level == 4) {
+			Spell.addToSpellsKnown(2, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 5) {
+			Option.addWarlockInvocations(1, actor);
+			Spell.addToSpellsKnown(3, casterClass, spellsKnown);
+
+		} else if (level == 6) {
+			Spell.addToSpellsKnown(3, casterClass, spellsKnown);
+
+			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+				set.add(Feature.MISTY_ESCAPE);
+
+			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+				set.add(Feature.DARK_ONES_OWN_LUCK);
+
+			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+				set.add(Feature.ENTROPIC_WARD);
+
+			}
+
+		} else if (level == 7) {
+			Option.addWarlockInvocations(1, actor);
+			Spell.addToSpellsKnown(4, casterClass, spellsKnown);
+
+		} else if (level == 8) {
+			Spell.addToSpellsKnown(4, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 9) {
+			Option.addWarlockInvocations(1, actor);
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+
+		} else if (level == 10) {
+			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+				set.add(Feature.BEGUILING_DEFENSES);
+
+			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+				set.add(Feature.FIENDISH_RESILIENCE);
+
+			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+				set.add(Feature.THOUGHT_SHIELD);
+
+			}
+
+		} else if (level == 11) {
+			set.add(Feature.MYSTIC_ARCANUM_11);
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+			set.add(Feature.WARLOCK_SLOT_3);
+
+		} else if (level == 12) {
+			Option.addWarlockInvocations(1, actor);
+			//
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 13) {
+			set.add(Feature.MYSTIC_ARCANUM_13);
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+
+		} else if (level == 14) {
+			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+				set.add(Feature.DARK_DELIRIUM);
+
+			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+				set.add(Feature.HURL_THROUGH_HELL);
+
+			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+				set.add(Feature.CREATE_THRALL);
+
+			}
+
+		} else if (level == 15) {
+			set.add(Feature.MYSTIC_ARCANUM_15);
+			Option.addWarlockInvocations(1, actor);
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+
+		} else if (level == 16) {
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 17) {
+			set.add(Feature.MYSTIC_ARCANUM_17);
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+			set.add(Feature.WARLOCK_SLOT_4);
+
+		} else if (level == 18) {
+			Option.addWarlockInvocations(1, actor);
+
+		} else if (level == 19) {
+			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 20) {
+			set.add(Feature.ELDRITCH_MASTER);
 
 		}
 

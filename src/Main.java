@@ -17,11 +17,11 @@ public class Main {
 
 		// rollCharacters();
 		// rollCharactersOfClass(Class.RANGER);
-		// rollCharactersOfArchetype(Class.Subclass.FOUR_ELEMENTS);
+		// rollCharactersOfArchetype(Class.Subclass.ARCANE_TRICKSTER);
 		// levelUpTest(20, Class.RANGER);
 
 		for (int i = 0; i < 50; ++i) {
-			levelUpTestDisplayOnly(20, Class.ROGUE);
+			levelUpTestDisplayOnly(20, Class.WARLOCK);
 
 		}
 
