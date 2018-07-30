@@ -16,15 +16,15 @@ public class Main {
 		// TODO
 
 		// rollCharacters();
-		rollOneCharacter();
+		// rollOneCharacter();
 		// rollCharactersOfClass(Class.RANGER);
 		// rollCharactersOfArchetype(Class.Subclass.ARCANE_TRICKSTER);
-		// levelUpTest(20, Class.RANGER);
+		// levelUpTest(20);
 
-		// for (int i = 0; i < 50; ++i) {
-		// levelUpTestDisplayOnly(20, Class.WIZARD);
-		//
-		// }
+		for (int i = 0; i < 50; ++i) {
+			levelUpTestDisplayOnly(20);
+
+		}
 
 		//
 		// testMainWorld();
@@ -150,6 +150,10 @@ public class Main {
 
 	}
 
+	public static void levelUpTest(int level) {
+		levelUpTest(level, Class.randomJob());
+	}
+
 	public static void levelUpTest(Class job) {
 		levelUpTest(1, job);
 	}
@@ -171,6 +175,10 @@ public class Main {
 		}
 
 		System.out.print("Done.");
+	}
+
+	public static void levelUpTestDisplayOnly(int level) {
+		levelUpTestDisplayOnly(level, Class.randomJob());
 	}
 
 	public static void levelUpTestDisplayOnly(int level, Class job) {

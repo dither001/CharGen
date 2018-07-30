@@ -82,7 +82,7 @@ public class Player implements Actor {
 
 		// inventory setup
 		Inventory.setupStartingGear(this);
-		Combat.setupCombatBlock(this);
+		Combat.setupCombat(this);
 	}
 
 	@Override
@@ -371,7 +371,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public void setCombatBlock(Combat combat) {
+	public void setCombat(Combat combat) {
 		this.combat = combat;
 	}
 

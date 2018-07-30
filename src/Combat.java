@@ -138,32 +138,29 @@ public class Combat implements Option {
 			Class job = owner.getJob();
 			Class.Subclass archetype = owner.getArchetype();
 
-			int abilityBonus = 0, proficiency = owner.getProficiencyBonus();
-			int strength = owner.getStrengthModifier(), dexterity = owner.getDexterityModifier(),
-					intelligence = owner.getIntelligenceModifier(), wisdom = owner.getWisdomModifier(),
-					charisma = owner.getCharismaModifier();
+			int abilityBonus = 0, proficiency = owner.proficiency();
 
 			if (weaponAttack()) {
 				// check for Finesse, -OR- check if ranged only
-				if (weapon.useDexterity() && dexterity >= strength) {
-					abilityBonus = dexterity;
+				if (weapon.useDexterity() && dexterityBonus >= strengthBonus) {
+					abilityBonus = dexterityBonus;
 				} else if (weapon.rangedOnly()) {
-					abilityBonus = dexterity;
+					abilityBonus = dexterityBonus;
 				} else {
-					abilityBonus = strength;
+					abilityBonus = strengthBonus;
 				}
 
 			} else if (spellAttack()) {
 				// confirm if attack or save spell; get primary ability
 				if (job.equals(Class.BARD) || job.equals(Class.PALADIN) || job.equals(Class.SORCERER)
 						|| job.equals(Class.WARLOCK)) {
-					abilityBonus = charisma;
+					abilityBonus = charismaBonus;
 				} else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID) || job.equals(Class.MONK)
 						|| job.equals(Class.RANGER)) {
-					abilityBonus = wisdom;
+					abilityBonus = wisdomBonus;
 				} else if (job.equals(Class.WIZARD) || archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)
 						|| archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
-					abilityBonus = intelligence;
+					abilityBonus = intelligenceBonus;
 				}
 
 			}
@@ -264,7 +261,7 @@ public class Combat implements Option {
 	}
 
 	/*
-	 * INNER CLASS - COMPARTOR
+	 * INNER CLASS - COMPARATOR
 	 */
 	private class SortAttackThenDamage implements Comparator<Attack> {
 
@@ -300,8 +297,8 @@ public class Combat implements Option {
 	private EnumSet<Spell> spells;
 
 	// ability get
-	private int strength, dexterity, constitution;
-	private int intelligence, wisdom, charisma;
+	private int strengthBonus, dexterityBonus, constitutionBonus;
+	private int intelligenceBonus, wisdomBonus, charismaBonus;
 
 	private Actor owner;
 	private Role role;
@@ -344,12 +341,12 @@ public class Combat implements Option {
 			this.spells = EnumSet.noneOf(Spell.class);
 
 		// ability scores
-		this.strength = owner.getStrength();
-		this.dexterity = owner.getDexterity();
-		this.constitution = owner.getConstitution();
-		this.intelligence = owner.getIntelligence();
-		this.wisdom = owner.getWisdom();
-		this.charisma = owner.getCharisma();
+		this.strengthBonus = owner.getStrengthModifier();
+		this.dexterityBonus = owner.getDexterityModifier();
+		this.constitutionBonus = owner.getConstitutionModifier();
+		this.intelligenceBonus = owner.getIntelligenceModifier();
+		this.wisdomBonus = owner.getWisdomModifier();
+		this.charismaBonus = owner.getCharismaModifier();
 
 		//
 		calcArmorClass();
@@ -357,7 +354,7 @@ public class Combat implements Option {
 		bounty = toStringCR();
 	}
 
-	public static void setupCombatBlock(Actor actor) {
+	public static void setupCombat(Actor actor) {
 		// initialization
 		Combat combat = new Combat(actor);
 
@@ -377,12 +374,12 @@ public class Combat implements Option {
 			combat.spells = EnumSet.noneOf(Spell.class);
 
 		// ability scores
-		combat.strength = actor.getStrength();
-		combat.dexterity = actor.getDexterity();
-		combat.constitution = actor.getConstitution();
-		combat.intelligence = actor.getIntelligence();
-		combat.wisdom = actor.getWisdom();
-		combat.charisma = actor.getCharisma();
+		combat.strengthBonus = actor.getStrengthModifier();
+		combat.dexterityBonus = actor.getDexterityModifier();
+		combat.constitutionBonus = actor.getConstitutionModifier();
+		combat.intelligenceBonus = actor.getIntelligenceModifier();
+		combat.wisdomBonus = actor.getWisdomModifier();
+		combat.charismaBonus = actor.getCharismaModifier();
 
 		/*
 		 * FIXME - clean up loose ends
@@ -390,9 +387,11 @@ public class Combat implements Option {
 
 		combat.calcArmorClass();
 		combat.calcHitPoints();
-		combat.bounty = combat.toStringCR();
+
 		//
-		actor.setCombatBlock(combat);
+		actor.setCombat(combat);
+		// CR must be calculated AFTER combat block has been set
+		combat.bounty = combat.toStringCR();
 	}
 
 	private void calcHitPoints() {
@@ -419,54 +418,53 @@ public class Combat implements Option {
 
 	private void calcArmorClass() {
 		// and begin
-		int ac = 10 + dexterity;
+		int ac = 10 + dexterityBonus;
 
 		if (owner.notWearingArmor()) {
+			/*
+			 * UNARMORED
+			 */
+			if (features.contains(Feature.UNARMORED_BARBARIAN)) {
+				// barbarian
+				ac = 10 + dexterityBonus + constitutionBonus;
+
+				if (owner.usingShield())
+					ac += gear.getShieldArmorBonus();
+
+			} else if (features.contains(Feature.UNARMORED_MONK)) {
+				// monk
+				if (owner.notUsingShield())
+					ac = 10 + dexterityBonus + wisdomBonus;
+				else
+					ac = 10 + dexterityBonus + gear.getShieldArmorBonus();
+
+			} else if (features.contains(Feature.DRACONIC_RESILIENCE)) {
+				// dragon sorcerer
+				if (owner.notUsingShield())
+					ac = 13 + dexterityBonus;
+				else
+					ac = 13 + dexterityBonus + gear.getShieldArmorBonus();
+
+			} else if (spells.contains(Spell.MAGE_ARMOR)) {
+				if (owner.notUsingShield())
+					ac = 13 + dexterityBonus;
+				else
+					ac = 13 + dexterityBonus + gear.getShieldArmorBonus();
+
+			}
 
 		} else {
-
-		}
-
-		Class job = owner.getJob();
-		if (job.equals(Class.BARBARIAN)) {
-			// barbarian unarmored defense
-			constitution = owner.getConstitutionModifier();
-
-			if (owner.notWearingArmor() && owner.usingShield())
-				ac = 10 + dexterity + constitution + gear.getShieldArmorBonus();
-			else if (owner.notWearingArmor())
-				ac = 10 + dexterity + constitution;
-			else if (owner.wearingArmor() && owner.usingShield())
-				ac = gear.getBodyArmorBonus() + gear.getShieldArmorBonus();
-			else if (owner.wearingArmor())
+			/*
+			 * ARMORED
+			 */
+			if (owner.notUsingShield())
 				ac = gear.getBodyArmorBonus();
-
-		} else if (job.equals(Class.MONK)) {
-			// monk unarmored defense
-			wisdom = owner.getWisdomModifier();
-
-			if (owner.notWearingArmor() && owner.notUsingShield())
-				ac = 10 + dexterity + wisdom;
-
-		} else if (job.equals(Class.SORCERER) && owner.notWearingArmor()) {
-			boolean draconic = owner.getFeatures().contains(Feature.DRACONIC_RESILIENCE);
-
-			if (draconic)
-				ac = 13 + dexterity;
-			else if (spells.contains(Spell.MAGE_ARMOR))
-				ac = 13 + dexterity;
-
-		} else {
-			// all others
-
-			if (owner.wearingArmor() && owner.usingShield())
-				ac = gear.getBodyArmorBonus() + gear.getShieldArmorBonus();
-			else if (owner.notWearingArmor() && spells.contains(Spell.MAGE_ARMOR))
-				ac = 13 + dexterity;
 			else
-				ac = gear.getBodyArmorBonus();
+				ac = gear.getBodyArmorBonus() + gear.getShieldArmorBonus();
+
 		}
 
+		// final step
 		this.armorClass = ac;
 	}
 
@@ -484,6 +482,10 @@ public class Combat implements Option {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public Attack unarmedAttack() {
+		return new Attack(owner, Weapon.unarmed(owner));
+	}
+
 	public boolean hasOwner() {
 		return owner != null;
 	}

@@ -11,7 +11,12 @@ public class ChallengeRating {
 
 	// methods
 	public static int evaluateCR(Actor actor) {
-		Combat.Attack bestAttack = actor.combat().bestAttack();
+		Combat.Attack bestAttack;
+		if (actor.combat() != null)
+			bestAttack = actor.combat().bestAttack();
+		else
+			bestAttack = actor.combat().unarmedAttack();
+		
 		int atk = bestAttack.attackBonus();
 		int dmg = bestAttack.averageDamage();
 		

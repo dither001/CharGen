@@ -256,7 +256,7 @@ public interface Actor {
 
 	public Combat combat();
 
-	public void setCombatBlock(Combat combat);
+	public void setCombat(Combat combat);
 
 	public Inventory getInventory();
 
@@ -267,17 +267,6 @@ public interface Actor {
 	 * 
 	 */
 	public default void advance() {
-		boolean advanced = advancementCheck();
-
-		if (advanced) {
-			// TODO
-			Class.updateClassFeatures(this);
-			combat().update();
-
-		}
-	}
-
-	public default boolean advancementCheck() {
 		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,
 				165000, 195000, 225000, 265000, 305000, 355000 };
 		int currentLevel = getLevel(), currentEXP = getExperience();
@@ -291,10 +280,15 @@ public interface Actor {
 				currentEXP = requires[currentLevel + 1] - 1;
 		}
 
-		return advanced;
+		if (advanced) {
+			// TODO
+			Class.updateClassFeatures(this);
+			combat().update();
+
+		}
 	}
 
-	public default int getProficiencyBonus() {
+	public default int proficiency() {
 		int bonus, level = getLevel();
 		if (level > 16)
 			bonus = 6;

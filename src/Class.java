@@ -7,6 +7,9 @@ public enum Class implements Option {
 	 * STATIC FIELDS
 	 * 
 	 */
+	private static final Class[] ALL_CLASSES = { BARBARIAN, BARD, CLERIC, DRUID, FIGHTER, MONK, PALADIN, RANGER, ROGUE,
+			SORCERER, WARLOCK, WIZARD };
+
 	private static final float BEST_XP = 1.10f;
 	private static final float GOOD_XP = 1.05f;
 	private static final float BAD_XP = 0.90f;
@@ -16,6 +19,10 @@ public enum Class implements Option {
 	 * STATIC METHODS
 	 * 
 	 */
+	public static Class randomJob() {
+		return Dice.randomFromArray(ALL_CLASSES);
+	}
+
 	public static int getHitDie(Class job) {
 		int hitDie = 8;
 

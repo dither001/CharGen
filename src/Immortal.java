@@ -792,7 +792,7 @@ public abstract class Immortal {
 		}
 
 		@Override
-		public void setCombatBlock(Combat combat) {
+		public void setCombat(Combat combat) {
 			// TODO Auto-generated method stub
 
 		}
