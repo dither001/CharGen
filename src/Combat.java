@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class CombatBlock implements Option {
+public class Combat implements Option {
 	public enum Role {
 		STRIKER, DEFENDER, LEADER, CONTROLLER
 	}
@@ -319,7 +319,7 @@ public class CombatBlock implements Option {
 	 * CONSTRUCTORS
 	 * 
 	 */
-	public CombatBlock(Actor owner) {
+	public Combat(Actor owner) {
 		this.owner = owner;
 	}
 
@@ -359,7 +359,7 @@ public class CombatBlock implements Option {
 
 	public static void setupCombatBlock(Actor actor) {
 		// initialization
-		CombatBlock combat = new CombatBlock(actor);
+		Combat combat = new Combat(actor);
 
 		// inventory
 		combat.gear = actor.getInventory();

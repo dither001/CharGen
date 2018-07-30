@@ -33,7 +33,7 @@ public class Player implements Actor {
 
 	// gear
 	private Inventory inventory;
-	private CombatBlock combat;
+	private Combat combat;
 
 	// basic
 	private String name;
@@ -82,7 +82,7 @@ public class Player implements Actor {
 
 		// inventory setup
 		Inventory.setupStartingGear(this);
-		CombatBlock.setupCombatBlock(this);
+		Combat.setupCombatBlock(this);
 	}
 
 	@Override
@@ -366,12 +366,12 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public CombatBlock combatBlock() {
+	public Combat combat() {
 		return combat;
 	}
 
 	@Override
-	public void setCombatBlock(CombatBlock combat) {
+	public void setCombatBlock(Combat combat) {
 		this.combat = combat;
 	}
 

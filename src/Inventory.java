@@ -82,17 +82,17 @@ public class Inventory {
 
 	private void optimizeWeapons() {
 		if (clearMainHand() && clearOffHand() && weaponSet.size() > 0) {
-			CombatBlock.Role role = CombatBlock.getRoleFromClass(owner.getJob());
+			Combat.Role role = Combat.getRoleFromClass(owner.getJob());
 
 			// TODO - needs to sort list
 			List<Weapon.Instance> list = Dice.setToList(filterWeaponsForUseable(owner));
-			if (list.size() > 0 && role.equals(CombatBlock.Role.STRIKER)) {
+			if (list.size() > 0 && role.equals(Combat.Role.STRIKER)) {
 				Weapon.Instance weapon = list.get(0);
 				equipMainHand(weapon);
 				// System.out.println("Equipped " + weapon.toString());
 
 			} else if (list.size() > 0
-					&& (role.equals(CombatBlock.Role.DEFENDER) || role.equals(CombatBlock.Role.LEADER))) {
+					&& (role.equals(Combat.Role.DEFENDER) || role.equals(Combat.Role.LEADER))) {
 				Weapon.SortByDefender sortMethod = new Weapon.SortByDefender();
 				Collections.sort(list, sortMethod);
 
@@ -108,9 +108,9 @@ public class Inventory {
 					// System.out.println("Equipped " + slotOne.toString());
 				}
 
-			} else if (list.size() > 0 && role.equals(CombatBlock.Role.LEADER)) {
+			} else if (list.size() > 0 && role.equals(Combat.Role.LEADER)) {
 
-			} else if (list.size() > 0 && role.equals(CombatBlock.Role.CONTROLLER)) {
+			} else if (list.size() > 0 && role.equals(Combat.Role.CONTROLLER)) {
 
 			}
 		}

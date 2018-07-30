@@ -254,9 +254,9 @@ public interface Actor {
 
 	public void setLanguages(EnumSet<Language> languages);
 
-	public CombatBlock combatBlock();
+	public Combat combat();
 
-	public void setCombatBlock(CombatBlock combat);
+	public void setCombatBlock(Combat combat);
 
 	public Inventory getInventory();
 
@@ -272,7 +272,7 @@ public interface Actor {
 		if (advanced) {
 			// TODO
 			Class.updateClassFeatures(this);
-			combatBlock().update();
+			combat().update();
 
 		}
 	}
@@ -576,23 +576,23 @@ public interface Actor {
 	}
 
 	public default int getArmorClass() {
-		return combatBlock().getArmorClass();
+		return combat().getArmorClass();
 	}
 
 	public default int getHitPoints() {
-		return combatBlock().getHitPoints();
+		return combat().getHitPoints();
 	}
 
-	public default CombatBlock.AttackMode getPreferredAttackType() {
-		return combatBlock().getPreferredAttackType();
+	public default Combat.AttackMode getPreferredAttackType() {
+		return combat().getPreferredAttackType();
 	}
 
 	public default int getAttackBonus() {
-		return combatBlock().getAttackBonus();
+		return combat().getAttackBonus();
 	}
 
 	public default int getAverageDamage() {
-		return combatBlock().getAverageDamage();
+		return combat().getAverageDamage();
 	}
 
 	public default int getHighestSpellDamage() {
@@ -602,7 +602,7 @@ public interface Actor {
 	}
 
 	public default int getChallengeRating() {
-		return combatBlock().getChallengeRating();
+		return combat().getChallengeRating();
 	}
 
 }
