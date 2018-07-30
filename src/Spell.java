@@ -81,7 +81,7 @@ public enum Spell {
 		public String getDiceString() {
 			String string = String.format("%s", dice + "d" + faces);
 
-			return string += (bonus > 0) ? bonus : "";
+			return string += (bonus > 0) ? "+" + bonus : "";
 		}
 	}
 
