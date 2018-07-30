@@ -263,6 +263,9 @@ public class CombatBlock {
 
 	}
 
+	/*
+	 * INNER CLASS - COMPARTOR
+	 */
 	private class SortAttackThenDamage implements Comparator<Attack> {
 
 		@Override
@@ -289,17 +292,28 @@ public class CombatBlock {
 	 * INSTANCE FIELDS
 	 * 
 	 */
+	// inventory get
+	private Inventory gear;;
+
+	// feature get
+	private EnumSet<Option.Feature> features;
+	private EnumSet<Spell> spells;
+
+	// ability get
+	private int strength, dexterity, constitution;
+	private int intelligence, wisdom, charisma;
+
 	private Actor owner;
 	private Role role;
 	private AttackMode preferredAttack;
 	private Weapon.Instance preferredWeapon;
 	private Spell preferredCantrip;
 
-	private String bounty;
-	private int armorClass;
-	private int hitPoints;
+	private int armorClass, hitPoints;
 	private int attackBonus;
 	private int averageDamage, damageModifier;
+
+	private String bounty;
 
 	/*
 	 * CONSTRUCTORS
@@ -310,93 +324,77 @@ public class CombatBlock {
 	}
 
 	/*
-	 * INSTANCE METHODS
+	 * INTEGRAL METHODS
 	 * 
 	 */
-	public boolean hasOwner() {
-		return owner != null;
-	}
-
 	public void update() {
+		// inventory
+		this.gear = owner.getInventory();
+
+		// features
+		if (owner.getFeatures() != null)
+			this.features = owner.getFeatures();
+		else
+			this.features = EnumSet.noneOf(Option.Feature.class);
+
+		// spells
+		if (owner.getSpellsKnown() != null)
+			this.spells = owner.getSpellsKnown();
+		else
+			this.spells = EnumSet.noneOf(Spell.class);
+
+		// ability scores
+		this.strength = owner.getStrength();
+		this.dexterity = owner.getDexterity();
+		this.constitution = owner.getConstitution();
+		this.intelligence = owner.getIntelligence();
+		this.wisdom = owner.getWisdom();
+		this.charisma = owner.getCharisma();
+
+		//
 		calcArmorClass();
 		calcHitPoints();
-		// calcAttackBonus();
-		// calcAverageDamage();
 		bounty = toStringCR();
 	}
 
-	public Attack bestAttack() {
-		return orderedAttackList().get(0);
+	public static void setupCombatBlock(Actor actor) {
+		// initialization
+		CombatBlock combat = new CombatBlock(actor);
+
+		// inventory
+		combat.gear = actor.getInventory();
+
+		// features
+		if (actor.getFeatures() != null)
+			combat.features = actor.getFeatures();
+		else
+			combat.features = EnumSet.noneOf(Option.Feature.class);
+
+		// spells
+		if (actor.getSpellsKnown() != null)
+			combat.spells = actor.getSpellsKnown();
+		else
+			combat.spells = EnumSet.noneOf(Spell.class);
+
+		// ability scores
+		combat.strength = actor.getStrength();
+		combat.dexterity = actor.getDexterity();
+		combat.constitution = actor.getConstitution();
+		combat.intelligence = actor.getIntelligence();
+		combat.wisdom = actor.getWisdom();
+		combat.charisma = actor.getCharisma();
+
+		/*
+		 * FIXME - clean up loose ends
+		 */
+
+		combat.calcArmorClass();
+		combat.calcHitPoints();
+		combat.bounty = combat.toStringCR();
+		//
+		actor.setCombatBlock(combat);
 	}
 
-	public String topThreeAttacks() {
-		String string = "";
-		List<Attack> list = orderedAttackList();
-
-		if (list.size() > 0)
-			string += "\n" + list.get(0).toString();
-
-		if (list.size() > 1)
-			string += "\n" + list.get(1).toString();
-
-		if (list.size() > 2)
-			string += "\n" + list.get(2).toString();
-
-		return string;
-	}
-
-	public Set<Attack> attackSet() {
-		Set<Attack> set = new HashSet<Attack>();
-
-		Weapon.Instance weapon;
-		for (Iterator<Weapon.Instance> it = owner.getInventory().weaponList().iterator(); it.hasNext();) {
-			weapon = it.next();
-
-			set.add(new Attack(owner, weapon));
-		}
-
-		Spell spell;
-		for (Iterator<Spell> it = owner.getSpellsKnown().iterator(); it.hasNext();) {
-			spell = it.next();
-
-			if (Spell.isCombatSpell(spell))
-				set.add(new Attack(owner, spell));
-		}
-
-		return set;
-	}
-
-	public List<Attack> orderedAttackList() {
-		List<Attack> list = new ArrayList<Attack>();
-
-		// every character has an unarmed attack
-		list.add(new Attack(owner, Weapon.unarmed(owner)));
-
-		Weapon.Instance weapon;
-		for (Iterator<Weapon.Instance> it = owner.getInventory().weaponList().iterator(); it.hasNext();) {
-			weapon = it.next();
-
-			list.add(new Attack(owner, weapon));
-		}
-
-		Spell spell;
-		for (Iterator<Spell> it = owner.getSpellsKnown().iterator(); it.hasNext();) {
-			spell = it.next();
-
-			if (Spell.isCombatSpell(spell))
-				list.add(new Attack(owner, spell));
-		}
-
-		SortAttackThenDamage sort = new SortAttackThenDamage();
-		Collections.sort(list, sort);
-
-		return list;
-	}
-
-	/*
-	 * FIXME - LOTS OF OLD STUFF
-	 * 
-	 */
 	private void calcHitPoints() {
 		// TODO - doesn't take into account magical bonuses or other features
 		int level = owner.getLevel();
@@ -420,14 +418,14 @@ public class CombatBlock {
 	}
 
 	private void calcArmorClass() {
-		EnumSet<Spell> spells;
-		if (owner.getSpellsKnown() != null)
-			spells = owner.getSpellsKnown();
-		else
-			spells = EnumSet.noneOf(Spell.class);
+		// and begin
+		int ac = 10 + dexterity;
 
-		int dexterity = owner.getDexterityModifier(), constitution, wisdom, ac = 10 + dexterity;
-		Inventory gear = owner.getInventory();
+		if (owner.notWearingArmor()) {
+
+		} else {
+
+		}
 
 		Class job = owner.getJob();
 		if (job.equals(Class.BARBARIAN)) {
@@ -471,6 +469,87 @@ public class CombatBlock {
 
 		this.armorClass = ac;
 	}
+
+	/*
+	 * INSTANCE METHODS
+	 * 
+	 */
+	public boolean hasOwner() {
+		return owner != null;
+	}
+
+	public Attack bestAttack() {
+		return orderedAttackList().get(0);
+	}
+
+	public String topThreeAttacks() {
+		String string = "";
+		List<Attack> list = orderedAttackList();
+
+		if (list.size() > 0)
+			string += "\n" + list.get(0).toString();
+
+		if (list.size() > 1)
+			string += "\n" + list.get(1).toString();
+
+		if (list.size() > 2)
+			string += "\n" + list.get(2).toString();
+
+		return string;
+	}
+
+	public List<Attack> orderedAttackList() {
+		List<Attack> list = new ArrayList<Attack>();
+
+		// every character has an unarmed attack
+		list.add(new Attack(owner, Weapon.unarmed(owner)));
+
+		Weapon.Instance weapon;
+		for (Iterator<Weapon.Instance> it = owner.getInventory().weaponList().iterator(); it.hasNext();) {
+			weapon = it.next();
+
+			list.add(new Attack(owner, weapon));
+		}
+
+		Spell spell;
+		for (Iterator<Spell> it = owner.getSpellsKnown().iterator(); it.hasNext();) {
+			spell = it.next();
+
+			if (Spell.isCombatSpell(spell))
+				list.add(new Attack(owner, spell));
+		}
+
+		SortAttackThenDamage sort = new SortAttackThenDamage();
+		Collections.sort(list, sort);
+
+		return list;
+	}
+
+	public Set<Attack> attackSet() {
+		Set<Attack> set = new HashSet<Attack>();
+
+		Weapon.Instance weapon;
+		for (Iterator<Weapon.Instance> it = owner.getInventory().weaponList().iterator(); it.hasNext();) {
+			weapon = it.next();
+
+			set.add(new Attack(owner, weapon));
+		}
+
+		Spell spell;
+		for (Iterator<Spell> it = owner.getSpellsKnown().iterator(); it.hasNext();) {
+			spell = it.next();
+
+			if (Spell.isCombatSpell(spell))
+				set.add(new Attack(owner, spell));
+		}
+
+		return set;
+	}
+
+	/*
+	 * FIXME - LOTS OF OLD STUFF
+	 * 
+	 */
 
 	public Role getRole() {
 		return (role != null) ? role : Role.STRIKER;
@@ -583,16 +662,4 @@ public class CombatBlock {
 		return role;
 	}
 
-	public static void setupCombatBlock(Actor actor) {
-		CombatBlock combat = new CombatBlock(actor);
-
-		// combat.preferredAttackType();
-		combat.calcArmorClass();
-		combat.calcHitPoints();
-		// combat.calcAttackBonus();
-		// combat.calcAverageDamage();
-		//
-		actor.setCombatBlock(combat);
-		combat.bounty = combat.toStringCR();
-	}
 }
