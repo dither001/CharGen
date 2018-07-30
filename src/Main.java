@@ -15,19 +15,16 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		// rollCharacters();
+		 rollCharacters();
 		// rollOneCharacter();
 		// rollCharactersOfClass(Class.RANGER);
 		// rollCharactersOfArchetype(Class.Subclass.ARCANE_TRICKSTER);
 		// levelUpTest(20);
 
-		for (int i = 0; i < 50; ++i) {
-			levelUpTestDisplayOnly(20);
-
-		}
+		// levelUpTestDisplayOnly(20);
 
 		//
-		// testMainWorld();
+//		testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
