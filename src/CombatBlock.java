@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class CombatBlock {
+public class CombatBlock implements Option {
 	public enum Role {
 		STRIKER, DEFENDER, LEADER, CONTROLLER
 	}
@@ -76,7 +76,7 @@ public class CombatBlock {
 
 		@Override
 		public String toString() {
-			EnumSet<Option.Feature> features = owner.getFeatures();
+			EnumSet<Feature> features = owner.getFeatures();
 
 			// begin
 			String string;
@@ -98,7 +98,7 @@ public class CombatBlock {
 				damageString = String.format("%s%s%s", dice, damageMod, damageAvg);
 
 			} else if (spellAttack()) {
-				if (spell.equals(Spell.ELDRITCH_BLAST) && features.contains(Option.Feature.AGONIZING_BLAST))
+				if (spell.equals(Spell.ELDRITCH_BLAST) && features.contains(Feature.AGONIZING_BLAST))
 					damageString = String.format("%s%s%s", dice, damageMod, damageAvg);
 				else
 					damageString = String.format("%s%s", dice, damageAvg);
@@ -183,7 +183,7 @@ public class CombatBlock {
 		private void calcAverageDamage() {
 			Class job = owner.getJob();
 			Class.Subclass archetype = owner.getArchetype();
-			EnumSet<Option.Feature> features = owner.getFeatures();
+			EnumSet<Feature> features = owner.getFeatures();
 
 			int level = owner.getLevel(), abilityBonus = 0, baseDamage = 0;
 			int strength = owner.getStrengthModifier(), dexterity = owner.getDexterityModifier(),
@@ -218,7 +218,7 @@ public class CombatBlock {
 				this.dice = Spell.getDiceString(spell);
 				baseDamage = Spell.getAverageDamage(spell);
 
-				if (spell.equals(Spell.ELDRITCH_BLAST) && features.contains(Option.Feature.AGONIZING_BLAST)) {
+				if (spell.equals(Spell.ELDRITCH_BLAST) && features.contains(Feature.AGONIZING_BLAST)) {
 					this.damageModifier = abilityBonus;
 					baseDamage += charisma;
 				}
@@ -232,17 +232,17 @@ public class CombatBlock {
 			if (weaponAttack()) {
 				this.damageModifier = abilityBonus;
 
-				if (features.contains(Option.Feature.EXTRA_ATTACK_3))
+				if (features.contains(Feature.EXTRA_ATTACK_3))
 					this.averageDamage = (baseDamage + abilityBonus) * 4;
-				else if (features.contains(Option.Feature.EXTRA_ATTACK_2))
+				else if (features.contains(Feature.EXTRA_ATTACK_2))
 					this.averageDamage = (baseDamage + abilityBonus) * 3;
-				else if (features.contains(Option.Feature.EXTRA_ATTACK_1))
+				else if (features.contains(Feature.EXTRA_ATTACK_1))
 					this.averageDamage = (baseDamage + abilityBonus) * 2;
 				else
 					this.averageDamage = baseDamage + abilityBonus;
 
 				// sneak attack bonus
-				if (weapon.useDexterity() && features.contains(Option.Feature.SNEAK_ATTACK_1)) {
+				if (weapon.useDexterity() && features.contains(Feature.SNEAK_ATTACK_1)) {
 					this.averageDamage += ((owner.getLevel() + 1) / 2 * 7 / 2);
 
 				}
@@ -296,7 +296,7 @@ public class CombatBlock {
 	private Inventory gear;;
 
 	// feature get
-	private EnumSet<Option.Feature> features;
+	private EnumSet<Feature> features;
 	private EnumSet<Spell> spells;
 
 	// ability get
@@ -335,7 +335,7 @@ public class CombatBlock {
 		if (owner.getFeatures() != null)
 			this.features = owner.getFeatures();
 		else
-			this.features = EnumSet.noneOf(Option.Feature.class);
+			this.features = EnumSet.noneOf(Feature.class);
 
 		// spells
 		if (owner.getSpellsKnown() != null)
@@ -368,7 +368,7 @@ public class CombatBlock {
 		if (actor.getFeatures() != null)
 			combat.features = actor.getFeatures();
 		else
-			combat.features = EnumSet.noneOf(Option.Feature.class);
+			combat.features = EnumSet.noneOf(Feature.class);
 
 		// spells
 		if (actor.getSpellsKnown() != null)
@@ -404,8 +404,8 @@ public class CombatBlock {
 		int hp = 0, perLevel = constitution;
 
 		// check features
-		EnumSet<Option.Feature> features = owner.getFeatures();
-		if (features.contains(Option.Feature.DRACONIC_RESILIENCE))
+		EnumSet<Feature> features = owner.getFeatures();
+		if (features.contains(Feature.DRACONIC_RESILIENCE))
 			perLevel += 1;
 
 		//
@@ -449,7 +449,7 @@ public class CombatBlock {
 				ac = 10 + dexterity + wisdom;
 
 		} else if (job.equals(Class.SORCERER) && owner.notWearingArmor()) {
-			boolean draconic = owner.getFeatures().contains(Option.Feature.DRACONIC_RESILIENCE);
+			boolean draconic = owner.getFeatures().contains(Feature.DRACONIC_RESILIENCE);
 
 			if (draconic)
 				ac = 13 + dexterity;
@@ -468,6 +468,16 @@ public class CombatBlock {
 		}
 
 		this.armorClass = ac;
+	}
+
+	private void relaventFeaturesUpdate() {
+		/*
+		 * I'm considering a massive boolean list for "combat relevant features" so I
+		 * don't have to run contains() EVERY single time I want to check for relevant
+		 * features; if this is good, I'll probably migrate to the Option/Feature object
+		 * and create an inner "CombatFeatures" object that contains ALL this stuff
+		 */
+
 	}
 
 	/*
