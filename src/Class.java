@@ -423,10 +423,14 @@ public enum Class implements Option {
 		int level = actor.getLevel();
 
 		if (level == 1) {
+			set.add(Feature.STRENGTH_SAVE);
+			set.add(Feature.CONSTITUTION_SAVE);
+			//
 			set.add(Feature.RAGE);
 			set.add(Feature.RAGE_PER_DAY_2);
 			set.add(Feature.RAGE_BONUS_2);
 			set.add(Feature.UNARMORED_BARBARIAN);
+
 		} else if (level == 2) {
 			set.add(Feature.RECKLESS_ATTACK);
 			set.add(Feature.DANGER_SENSE);
@@ -541,7 +545,11 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.DEXTERITY_SAVE);
+			set.add(Feature.CHARISMA_SAVE);
+			//
 			set.add(Feature.INSPIRATION_D6);
+
 		} else if (level == 2) {
 			Spell.addToSpellsKnown(1, job, spellsKnown);
 			set.add(Feature.JACK_OF_ALL_TRADES);
@@ -674,6 +682,9 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.WISDOM_SAVE);
+			set.add(Feature.CHARISMA_SAVE);
+			//
 			// divine domain
 			if (archetype.equals(Class.Subclass.DEATH)) {
 				//
@@ -907,6 +918,9 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.INTELLIGENCE_SAVE);
+			set.add(Feature.WISDOM_SAVE);
+			//
 			Actor.Language.addLanguage(Actor.Language.DRUIDIC, actor);
 			set.add(Feature.RITUAL_CASTING_DRUID);
 
@@ -1031,6 +1045,9 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.STRENGTH_SAVE);
+			set.add(Feature.CONSTITUTION_SAVE);
+			//
 			set.add(Feature.FIGHTING_STYLE);
 			set.addAll(fighterFightingStyle(1, actor));
 			set.add(Feature.SECOND_WIND);
@@ -1218,6 +1235,9 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.STRENGTH_SAVE);
+			set.add(Feature.DEXTERITY_SAVE);
+			//
 			set.add(Feature.UNARMORED_MONK);
 			set.add(Feature.MARTIAL_ARTS_D4);
 
@@ -1360,6 +1380,9 @@ public enum Class implements Option {
 		int level = actor.getLevel();
 
 		if (level == 1) {
+			set.add(Feature.STRENGTH_SAVE);
+			set.add(Feature.DEXTERITY_SAVE);
+			//
 			set.add(Feature.DIVINE_SENSE);
 			set.add(Feature.LAY_ON_HANDS);
 
@@ -1492,6 +1515,9 @@ public enum Class implements Option {
 		int level = actor.getLevel();
 
 		if (level == 1) {
+			set.add(Feature.STRENGTH_SAVE);
+			set.add(Feature.DEXTERITY_SAVE);
+			//
 			set.addAll(rangerFavoredEnemy(1, actor));
 			set.addAll(rangerTerrainExplorer(1, actor));
 
@@ -1612,6 +1638,10 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.DEXTERITY_SAVE);
+			set.add(Feature.INTELLIGENCE_SAVE);
+			//
+			set.add(Feature.SNEAK_ATTACK_1);
 			skills.add(Skill.THIEVES_TOOLS);
 			set.addAll(addRandomExpertise(2, actor));
 
@@ -1619,6 +1649,8 @@ public enum Class implements Option {
 			set.add(Feature.CUNNING_ACTION);
 
 		} else if (level == 3) {
+			set.add(Feature.SNEAK_ATTACK_2);
+
 			// rogue archetype
 			if (archetype.equals(Subclass.THIEF)) {
 				set.add(Feature.FAST_HANDS);
@@ -1646,11 +1678,13 @@ public enum Class implements Option {
 				Spell.addArcaneTricksterSpells(1, 1, actor);
 
 		} else if (level == 5) {
+			set.add(Feature.SNEAK_ATTACK_3);
 			set.add(Feature.UNCANNY_DODGE);
 
 		} else if (level == 6) {
 
 		} else if (level == 7) {
+			set.add(Feature.SNEAK_ATTACK_4);
 			set.add(Feature.EVASION);
 
 			if (archetype.equals(Subclass.ARCANE_TRICKSTER))
@@ -1664,6 +1698,8 @@ public enum Class implements Option {
 				Spell.addToSpellsKnown(2, casterClass, spellsKnown);
 
 		} else if (level == 9) {
+			set.add(Feature.SNEAK_ATTACK_5);
+
 			// rogue archetype
 			if (archetype.equals(Subclass.THIEF)) {
 				set.add(Feature.SUPREME_SNEAK);
@@ -1684,6 +1720,7 @@ public enum Class implements Option {
 				Spell.addArcaneTricksterSpells(1, 2, actor);
 
 		} else if (level == 11) {
+			set.add(Feature.SNEAK_ATTACK_6);
 			set.add(Feature.RELIABLE_TALENT);
 
 			if (archetype.equals(Subclass.ARCANE_TRICKSTER))
@@ -1694,6 +1731,8 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 
 		} else if (level == 13) {
+			set.add(Feature.SNEAK_ATTACK_7);
+
 			// rogue archetype
 			if (archetype.equals(Subclass.THIEF)) {
 				set.add(Feature.USE_MAGIC_DEVICE);
@@ -1714,6 +1753,7 @@ public enum Class implements Option {
 				Spell.addToSpellsKnown(3, casterClass, spellsKnown);
 
 		} else if (level == 15) {
+			set.add(Feature.SNEAK_ATTACK_8);
 			set.add(Feature.SLIPPERY_MIND);
 
 		} else if (level == 16) {
@@ -1724,6 +1764,8 @@ public enum Class implements Option {
 				Spell.addArcaneTricksterSpells(1, 3, actor);
 
 		} else if (level == 17) {
+			set.add(Feature.SNEAK_ATTACK_9);
+
 			// rogue archetype
 			if (archetype.equals(Subclass.THIEF)) {
 				set.add(Feature.THIEFS_REFLEXES);
@@ -1740,6 +1782,7 @@ public enum Class implements Option {
 			set.add(Feature.ELUSIVE);
 
 		} else if (level == 19) {
+			set.add(Feature.SNEAK_ATTACK_10);
 			set.add(Feature.ABILITY_BONUS_19);
 			set.add(abilityImprove(actor));
 
@@ -1775,6 +1818,9 @@ public enum Class implements Option {
 
 		if (level == 1) {
 			if (archetype.equals(Subclass.DRAGON_ORIGIN)) {
+				set.add(Feature.CONSTITUTION_SAVE);
+				set.add(Feature.CHARISMA_SAVE);
+				//
 				actor.getLanguages().add(Actor.Language.DRACONIC);
 				Option.draconicAncestry(actor);
 				set.add(Feature.DRACONIC_RESILIENCE);
@@ -1896,6 +1942,9 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.WISDOM_SAVE);
+			set.add(Feature.CHARISMA_SAVE);
+			//
 			set.add(Option.randomWarlockPact());
 			set.add(Feature.WARLOCK_SLOT_1);
 
@@ -2046,6 +2095,9 @@ public enum Class implements Option {
 			spellsKnown = actor.getSpellsKnown();
 
 		if (level == 1) {
+			set.add(Feature.INTELLIGENCE_SAVE);
+			set.add(Feature.WISDOM_SAVE);
+			//
 			set.add(Feature.ARCANE_RECOVERY);
 
 		} else if (level == 2) {

@@ -17,7 +17,7 @@ public enum Skill {
 	CARRIAGE, CART, CHARIOT, SLED, WAGON, GALLEY, KEELBOAT, LONGSHIP, ROWBOAT, SAILING_SHIP, WARSHIP;
 
 	// static fields
-	private static final Skill[] ALL_SKILLS = { ACROBATICS, ANIMAL_HANDLING, ARCANA, ATHLETICS, DECEPTION, HISTORY,
+	private static final Skill[] COMMON_SKILLS = { ACROBATICS, ANIMAL_HANDLING, ARCANA, ATHLETICS, DECEPTION, HISTORY,
 			INSIGHT, INTIMIDATION, INVESTIGATION, MEDICINE, NATURE, PERCEPTION, PERFORMANCE, PERSUASION, RELIGION,
 			SLEIGHT_OF_HAND, STEALTH, SURVIVAL };
 
@@ -71,7 +71,23 @@ public enum Skill {
 	 * 
 	 */
 	public static Skill randomSkill() {
-		return Dice.randomFromArray(ALL_SKILLS);
+		return Dice.randomFromArray(COMMON_SKILLS);
+	}
+
+	public static Skill randomProfessionSkill() {
+		return Dice.randomFromArray(PROFESSION_SKILLS);
+	}
+
+	public static Skill randomToolSkill() {
+		return Dice.randomFromArray(TOOL_SKILLS);
+	}
+
+	public static Skill randomInstrumentSkill() {
+		return Dice.randomFromArray(INSTRUMENT_SKILLS);
+	}
+
+	public static Skill randomVehicleSkill() {
+		return Dice.randomFromArray(VEHICLE_SKILLS);
 	}
 
 	public static boolean testSkillFromArray(Skill[] array, Actor actor) {
@@ -120,7 +136,7 @@ public enum Skill {
 		if (job.equals(Class.BARBARIAN))
 			array = BARBARIAN_SKILLS;
 		else if (job.equals(Class.BARD))
-			array = ALL_SKILLS;
+			array = COMMON_SKILLS;
 		else if (job.equals(Class.CLERIC))
 			array = CLERIC_SKILLS;
 		else if (job.equals(Class.DRUID))
@@ -142,7 +158,7 @@ public enum Skill {
 		else if (job.equals(Class.WIZARD))
 			array = WIZARD_SKILLS;
 		else
-			array = ALL_SKILLS;
+			array = COMMON_SKILLS;
 
 		return Dice.randomFromArray(array);
 	}
@@ -159,32 +175,32 @@ public enum Skill {
 		// TODO
 		Skill[] array;
 
-		if (job.equals(Class.BARBARIAN))
+		if (actor.isBarbarian())
 			array = BARBARIAN_SKILLS;
-		else if (job.equals(Class.BARD))
-			array = ALL_SKILLS;
-		else if (job.equals(Class.CLERIC))
+		else if (actor.isBard())
+			array = COMMON_SKILLS;
+		else if (actor.isCleric())
 			array = CLERIC_SKILLS;
-		else if (job.equals(Class.DRUID))
+		else if (actor.isDruid())
 			array = DRUID_SKILLS;
-		else if (job.equals(Class.FIGHTER))
+		else if (actor.isFighter())
 			array = FIGHTER_SKILLS;
-		else if (job.equals(Class.MONK))
+		else if (actor.isMonk())
 			array = MONK_SKILLS;
-		else if (job.equals(Class.PALADIN))
+		else if (actor.isPaladin())
 			array = PALADIN_SKILLS;
-		else if (job.equals(Class.RANGER))
+		else if (actor.isRanger())
 			array = RANGER_SKILLS;
-		else if (job.equals(Class.ROGUE))
+		else if (actor.isRogue())
 			array = ROGUE_SKILLS;
-		else if (job.equals(Class.SORCERER))
+		else if (actor.isSorcerer())
 			array = SORCERER_SKILLS;
-		else if (job.equals(Class.WARLOCK))
+		else if (actor.isWarlock())
 			array = WARLOCK_SKILLS;
-		else if (job.equals(Class.WIZARD))
+		else if (actor.isWizard())
 			array = WIZARD_SKILLS;
 		else
-			array = ALL_SKILLS;
+			array = COMMON_SKILLS;
 
 		Skill candidate;
 		while (addedSkills < skillsToAdd) {

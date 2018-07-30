@@ -318,6 +318,86 @@ public interface Actor {
 		return getConditions().containsAll(c);
 	}
 
+	public default boolean hasJob(Class job) {
+		boolean hasJob = false;
+		if (getJob() != null && getJob().equals(job))
+			hasJob = true;
+
+		return hasJob;
+	}
+
+	public default boolean isBarbarian() {
+		Class job = Class.BARBARIAN;
+
+		return hasJob(job);
+	}
+
+	public default boolean isBard() {
+		Class job = Class.BARD;
+
+		return hasJob(job);
+	}
+
+	public default boolean isCleric() {
+		Class job = Class.CLERIC;
+
+		return hasJob(job);
+	}
+
+	public default boolean isDruid() {
+		Class job = Class.DRUID;
+
+		return hasJob(job);
+	}
+
+	public default boolean isFighter() {
+		Class job = Class.FIGHTER;
+
+		return hasJob(job);
+	}
+
+	public default boolean isMonk() {
+		Class job = Class.MONK;
+
+		return hasJob(job);
+	}
+
+	public default boolean isPaladin() {
+		Class job = Class.PALADIN;
+
+		return hasJob(job);
+	}
+
+	public default boolean isRanger() {
+		Class job = Class.RANGER;
+
+		return hasJob(job);
+	}
+
+	public default boolean isRogue() {
+		Class job = Class.ROGUE;
+
+		return hasJob(job);
+	}
+
+	public default boolean isSorcerer() {
+		Class job = Class.SORCERER;
+
+		return hasJob(job);
+	}
+
+	public default boolean isWarlock() {
+		Class job = Class.WARLOCK;
+
+		return hasJob(job);
+	}
+
+	public default boolean isWizard() {
+		Class job = Class.WIZARD;
+
+		return hasJob(job);
+	}
+
 	public default int getStrength() {
 		return getAbilityScores()[0];
 	}

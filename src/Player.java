@@ -118,9 +118,10 @@ public class Player implements Actor {
 		String string = String.format("%s the level %d %s %s (%s)", name, level, race, job, archetype);
 
 		// creature line
-		// String sex = (isFemale) ? "female" : "male";
-		// string += String.format("%n%s %s %s (%s) %s follower of %s", size, sex,
-		// creature, race, alignment, god);
+//		String sex = (isFemale) ? "female" : "male";
+//		string += String.format("%n%s %s %s (%s) %s follower of %s", size, sex, creature, race, alignment, god);
+		// profile line
+//		string += "\n\n" + career.toStringDetailed() + "\n";
 		// combat line
 		string += "\n" + combat.toStringDetailed();
 		// abilities line
@@ -128,20 +129,18 @@ public class Player implements Actor {
 		// attacks line
 		string += combat.topThreeAttacks();
 		// skills line
-		// string += "\n" + skillsToString();
+		string += "\n" + skillsToString();
 		// armor line
 		// string += "\n" + armor.toString();
 		// weapon line
 		// string += "\n" + weapons.toString();
 		// languages line
-		// string += "\n" + languages.toString();
+		string += "\n" + languages.toString();
 		// inventory line
 		string += "\n" + inventory.toStringDetailed();
 		// features line
 		if (features.size() > 0)
 			string += "\n" + features.toString();
-		// profile line
-		// string += "\n" + career.toStringDetailed();
 		if (spellsKnown.size() > 0) {
 			EnumSet<Spell> cantripsKnown = EnumSet.copyOf(Spell.retainSpellsOfTier(0, spellsKnown));
 			EnumSet<Spell> otherKnown = EnumSet.copyOf(Spell.retainSpellsExceptOfTier(0, spellsKnown));

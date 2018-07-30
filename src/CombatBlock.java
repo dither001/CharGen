@@ -242,7 +242,7 @@ public class CombatBlock {
 					this.averageDamage = baseDamage + abilityBonus;
 
 				// sneak attack bonus
-				if (weapon.useDexterity() && features.contains(Option.Feature.SNEAK_ATTACK)) {
+				if (weapon.useDexterity() && features.contains(Option.Feature.SNEAK_ATTACK_1)) {
 					this.averageDamage += ((owner.getLevel() + 1) / 2 * 7 / 2);
 
 				}
@@ -397,46 +397,6 @@ public class CombatBlock {
 	 * FIXME - LOTS OF OLD STUFF
 	 * 
 	 */
-	// private void preferredAttackType() {
-	// Class job = owner.getJob();
-	//
-	// int STR = owner.getStrength(), DEX = owner.getDexterity(), CON =
-	// owner.getConstitution(),
-	// INT = owner.getIntelligence(), WIS = owner.getWisdom(), CHA =
-	// owner.getCharisma();
-	// if (job.equals(Class.BARBARIAN))
-	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
-	// AttackMode.RANGED_ATTACK;
-	// else if (job.equals(Class.BARD))
-	// preferredAttack = AttackMode.SPELL_ATTACK;
-	// else if (job.equals(Class.CLERIC))
-	// preferredAttack = AttackMode.SPELL_ATTACK;
-	// else if (job.equals(Class.DRUID))
-	// preferredAttack = AttackMode.SPELL_ATTACK;
-	// else if (job.equals(Class.FIGHTER))
-	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
-	// AttackMode.RANGED_ATTACK;
-	// else if (job.equals(Class.MONK))
-	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
-	// AttackMode.RANGED_ATTACK;
-	// else if (job.equals(Class.PALADIN))
-	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
-	// AttackMode.RANGED_ATTACK;
-	// else if (job.equals(Class.RANGER))
-	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
-	// AttackMode.RANGED_ATTACK;
-	// else if (job.equals(Class.ROGUE))
-	// preferredAttack = (STR > DEX) ? AttackMode.MELEE_ATTACK :
-	// AttackMode.RANGED_ATTACK;
-	// else if (job.equals(Class.SORCERER))
-	// preferredAttack = AttackMode.SPELL_ATTACK;
-	// else if (job.equals(Class.WARLOCK))
-	// preferredAttack = AttackMode.SPELL_ATTACK;
-	// else if (job.equals(Class.WIZARD))
-	// preferredAttack = AttackMode.SPELL_ATTACK;
-	//
-	// }
-
 	private void calcHitPoints() {
 		// TODO - doesn't take into account magical bonuses or other features
 		int level = owner.getLevel();
