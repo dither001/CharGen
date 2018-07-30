@@ -21,7 +21,7 @@ public class Main {
 		// levelUpTest(20, Class.RANGER);
 
 		for (int i = 0; i < 50; ++i) {
-			levelUpTestDisplayOnly(20, Class.WARLOCK);
+			levelUpTestDisplayOnly(3, Class.WIZARD);
 
 		}
 

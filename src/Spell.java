@@ -983,8 +983,6 @@ public enum Spell {
 	}
 
 	private static void spellSelector(int spellsToAdd, int tier, Class job, Set<Spell> spellsKnown) {
-		EnumSet<Spell> workingSet = EnumSet.copyOf(spellsKnown);
-
 		Set<Spell> spellPool = listToSet(job, tier);
 		if (tier > 3) {
 			// 3&4 or 4&5 or 5&6
@@ -1158,6 +1156,10 @@ public enum Spell {
 
 	public static void addToSpellsKnown(int tier, Class job, EnumSet<Spell> spellsKnown) {
 		spellSelector(1, tier, job, spellsKnown);
+	}
+
+	public static void addToSpellsKnown(int toAdd, int tier, Class job, EnumSet<Spell> spellsKnown) {
+		spellSelector(toAdd, tier, job, spellsKnown);
 	}
 
 	public static void addMagicalSecret(int tier, Actor actor) {

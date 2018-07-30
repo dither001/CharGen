@@ -76,6 +76,9 @@ public class CombatBlock {
 
 		@Override
 		public String toString() {
+			EnumSet<Option.Feature> features = owner.getFeatures();
+
+			// begin
 			String string;
 
 			//
@@ -87,15 +90,18 @@ public class CombatBlock {
 				name = "Spell " + spell.toString();
 
 			//
-			String damageString, damageAvg, damageMod;
+			String damageString = "", damageAvg, damageMod;
 			damageAvg = (averageDamage > 0) ? " (" + averageDamage + ")" : " (0)";
 			damageMod = (damageModifier > 0) ? "+" + damageModifier : (damageModifier < 0) ? "" + damageModifier : "";
 
 			if (weaponAttack()) {
 				damageString = String.format("%s%s%s", dice, damageMod, damageAvg);
 
-			} else {
-				damageString = String.format("%s%s", dice, damageAvg);
+			} else if (spellAttack()) {
+				if (spell.equals(Spell.ELDRITCH_BLAST) && features.contains(Option.Feature.AGONIZING_BLAST))
+					damageString = String.format("%s%s%s", dice, damageMod, damageAvg);
+				else
+					damageString = String.format("%s%s", dice, damageAvg);
 
 			}
 
@@ -211,6 +217,12 @@ public class CombatBlock {
 
 				this.dice = Spell.getDiceString(spell);
 				baseDamage = Spell.getAverageDamage(spell);
+
+				if (spell.equals(Spell.ELDRITCH_BLAST) && features.contains(Option.Feature.AGONIZING_BLAST)) {
+					this.damageModifier = abilityBonus;
+					baseDamage += charisma;
+				}
+
 			}
 
 			/*
@@ -230,7 +242,7 @@ public class CombatBlock {
 					this.averageDamage = baseDamage + abilityBonus;
 
 				// sneak attack bonus
-				if (job.equals(Class.ROGUE) && weapon.useDexterity()) {
+				if (weapon.useDexterity() && features.contains(Option.Feature.SNEAK_ATTACK)) {
 					this.averageDamage += ((owner.getLevel() + 1) / 2 * 7 / 2);
 
 				}
@@ -448,6 +460,12 @@ public class CombatBlock {
 	}
 
 	private void calcArmorClass() {
+		EnumSet<Spell> spells;
+		if (owner.getSpellsKnown() != null)
+			spells = owner.getSpellsKnown();
+		else
+			spells = EnumSet.noneOf(Spell.class);
+
 		int dexterity = owner.getDexterityModifier(), constitution, wisdom, ac = 10 + dexterity;
 		Inventory gear = owner.getInventory();
 
@@ -472,10 +490,12 @@ public class CombatBlock {
 			if (owner.notWearingArmor() && owner.notUsingShield())
 				ac = 10 + dexterity + wisdom;
 
-		} else if (job.equals(Class.SORCERER)) {
+		} else if (job.equals(Class.SORCERER) && owner.notWearingArmor()) {
 			boolean draconic = owner.getFeatures().contains(Option.Feature.DRACONIC_RESILIENCE);
 
-			if (draconic && owner.notWearingArmor())
+			if (draconic)
+				ac = 13 + dexterity;
+			else if (spells.contains(Spell.MAGE_ARMOR))
 				ac = 13 + dexterity;
 
 		} else {
@@ -483,70 +503,13 @@ public class CombatBlock {
 
 			if (owner.wearingArmor() && owner.usingShield())
 				ac = gear.getBodyArmorBonus() + gear.getShieldArmorBonus();
+			else if (owner.notWearingArmor() && spells.contains(Spell.MAGE_ARMOR))
+				ac = 13 + dexterity;
 			else
 				ac = gear.getBodyArmorBonus();
 		}
 
 		this.armorClass = ac;
-	}
-
-	// private void calcAttackBonus() {
-	// int atk = 0, STR = owner.getStrengthModifier(), DEX =
-	// owner.getDexterityModifier(),
-	// INT = owner.getIntelligenceModifier(), WIS = owner.getWisdomModifier(),
-	// CHA = owner.getCharismaModifier();
-	//
-	// Class job = owner.getJob();
-	// Set<Spell> spellsKnown, cantrips;
-	// if (preferredAttack.equals(AttackMode.MELEE_ATTACK) ||
-	// preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
-	// preferredWeapon = owner.getInventory().getMainHand();
-	//
-	// if (preferredWeapon != null && preferredWeapon.useDexterity())
-	// atk += owner.getProficiencyBonus() + DEX + preferredWeapon.getAttackBonus();
-	// else if (preferredWeapon != null)
-	// atk += owner.getProficiencyBonus() + STR + preferredWeapon.getAttackBonus();
-	//
-	// } else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
-	// spellsKnown = owner.getSpellsKnown();
-	// cantrips = Spell.retainSpellsOfTier(0, spellsKnown);
-	// preferredCantrip = Spell.highestDamagingSpell(cantrips);
-	//
-	// if (job.equals(Class.BARD) || job.equals(Class.SORCERER) ||
-	// job.equals(Class.WARLOCK))
-	// atk += owner.getProficiencyBonus() + CHA;
-	// else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID))
-	// atk += owner.getProficiencyBonus() + WIS;
-	// else if (job.equals(Class.WIZARD))
-	// atk += owner.getProficiencyBonus() + INT;
-	//
-	// }
-	//
-	// this.attackBonus = atk;
-	// }
-
-	private void calcAverageDamage() {
-		int dmg = 0, STR = owner.getStrengthModifier(), DEX = owner.getDexterityModifier(),
-				INT = owner.getIntelligenceModifier(), WIS = owner.getWisdomModifier(),
-				CHA = owner.getCharismaModifier();
-
-		Weapon.Instance weapon = owner.getInventory().getMainHand();
-		if (preferredAttack.equals(AttackMode.MELEE_ATTACK) || preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
-			if (weapon != null && weapon.useDexterity()) {
-				dmg += weapon.getAverageDamage() + DEX + weapon.getAttackBonus();
-				damageModifier = DEX + weapon.getAttackBonus();
-			} else if (weapon != null) {
-				dmg += weapon.getAverageDamage() + STR + weapon.getAttackBonus();
-				damageModifier = STR + weapon.getAttackBonus();
-			}
-
-		} else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
-			if (preferredCantrip != null)
-				dmg = Spell.getAverageDamage(preferredCantrip);
-
-		}
-
-		this.averageDamage = dmg;
 	}
 
 	public Role getRole() {
@@ -620,30 +583,6 @@ public class CombatBlock {
 			armor = " (" + armor + ")";
 		else
 			armor = "";
-
-		// if (preferredAttack.equals(AttackMode.MELEE_ATTACK) ||
-		// preferredAttack.equals(AttackMode.RANGED_ATTACK)) {
-		// attack = (preferredWeapon != null) ? preferredWeapon.toString() + " " :
-		// "Unarmed ";
-		// attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
-		// attack += preferredWeapon.getDiceString();
-		// attack += (damageModifier > -1) ? "+" + damageModifier : damageModifier;
-		// attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
-		//
-		// string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints,
-		// attack, bounty);
-		//
-		// } else if (preferredAttack.equals(AttackMode.SPELL_ATTACK)) {
-		// attack = (preferredCantrip != null) ? preferredCantrip.toString() + " " :
-		// "Cantrip ";
-		// attack += (attackBonus > -1) ? "+" + attackBonus + " " : attackBonus + " ";
-		// attack += Spell.getDiceString(preferredCantrip);
-		// attack += (averageDamage > 0) ? " (" + averageDamage + ")" : "";
-		//
-		// string = String.format("AC %2d || %2d hp || %s || %s", armorClass, hitPoints,
-		// attack, bounty);
-		//
-		// }
 
 		string = String.format("AC %2d%s || %2d hp || %s", armorClass, armor, hitPoints, bounty);
 		return string;

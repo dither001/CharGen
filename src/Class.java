@@ -368,8 +368,8 @@ public enum Class implements Option {
 			features.addAll(sorcerer(actor));
 		} else if (job.equals(Class.WARLOCK)) {
 			features.addAll(warlock(actor));
-			// } else if (job.equals(Class.WIZARD)) {
-			// features.addAll(wizard(actor));
+		} else if (job.equals(Class.WIZARD)) {
+			features.addAll(wizard(actor));
 		}
 
 		actor.setFeatures(features);
@@ -406,8 +406,8 @@ public enum Class implements Option {
 			features.addAll(sorcerer(actor));
 		} else if (job.equals(Class.WARLOCK)) {
 			features.addAll(warlock(actor));
-			// } else if (job.equals(Class.WIZARD)) {
-			// features.addAll(wizard(actor));
+		} else if (job.equals(Class.WIZARD)) {
+			features.addAll(wizard(actor));
 		}
 
 		actor.setFeatures(features);
@@ -1919,6 +1919,7 @@ public enum Class implements Option {
 			Spell.addToSpellsKnown(2, casterClass, spellsKnown);
 
 		} else if (level == 4) {
+			Spell.addCantripKnown(casterClass, spellsKnown);
 			Spell.addToSpellsKnown(2, casterClass, spellsKnown);
 			//
 			set.add(Feature.ABILITY_BONUS_4);
@@ -1957,6 +1958,8 @@ public enum Class implements Option {
 			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
 
 		} else if (level == 10) {
+			Spell.addCantripKnown(casterClass, spellsKnown);
+			//
 			if (archetype.equals(Class.Subclass.FEY_PACT)) {
 				set.add(Feature.BEGUILING_DEFENSES);
 
@@ -2020,6 +2023,216 @@ public enum Class implements Option {
 
 		} else if (level == 20) {
 			set.add(Feature.ELDRITCH_MASTER);
+
+		}
+
+		return set;
+	}
+
+	/*
+	 * WIZARD ADVANCEMENT
+	 * 
+	 */
+	public static EnumSet<Feature> wizard(Actor actor) {
+		Class.Subclass archetype = actor.getArchetype();
+		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
+		int level = actor.getLevel();
+
+		Class casterClass = actor.getJob();
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() == null)
+			spellsKnown = EnumSet.noneOf(Spell.class);
+		else
+			spellsKnown = actor.getSpellsKnown();
+
+		if (level == 1) {
+			set.add(Feature.ARCANE_RECOVERY);
+
+		} else if (level == 2) {
+			Spell.addToSpellsKnown(2, 1, casterClass, spellsKnown);
+
+			if (archetype.equals(Subclass.ABJURER)) {
+				set.add(Feature.ABJURATION_SAVANT);
+				set.add(Feature.ARCANE_WARD);
+
+			} else if (archetype.equals(Subclass.CONJUROR)) {
+				set.add(Feature.CONJURATION_SAVANT);
+				set.add(Feature.MINOR_CONJURATION);
+
+			} else if (archetype.equals(Subclass.DIVINER)) {
+				set.add(Feature.DIVINATION_SAVANT);
+				set.add(Feature.PORTENT);
+
+			} else if (archetype.equals(Subclass.ENCHANTER)) {
+				set.add(Feature.ENCHANTMENT_SAVANT);
+				set.add(Feature.HYPNOTIC_GAZE);
+
+			} else if (archetype.equals(Subclass.EVOKER)) {
+				set.add(Feature.EVOCATION_SAVANT);
+				set.add(Feature.SCULPT_SPELLS);
+
+			} else if (archetype.equals(Subclass.ILLUSIONIST)) {
+				set.add(Feature.ILLUSION_SAVANT);
+				set.add(Feature.IMPROVED_MINOR_ILLUSION);
+
+			} else if (archetype.equals(Subclass.NECROMANCER)) {
+				set.add(Feature.NECROMANCY_SAVANT);
+				set.add(Feature.GRIM_HARVEST);
+
+			} else if (archetype.equals(Subclass.TRANSMUTER)) {
+				set.add(Feature.TRANSMUTATION_SAVANT);
+				set.add(Feature.MINOR_ALCHEMY);
+
+			}
+
+		} else if (level == 3) {
+			Spell.addToSpellsKnown(2, 2, casterClass, spellsKnown);
+
+		} else if (level == 4) {
+			Spell.addCantripKnown(casterClass, spellsKnown);
+			Spell.addToSpellsKnown(2, 2, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_4);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 5) {
+			Spell.addToSpellsKnown(2, 3, casterClass, spellsKnown);
+
+		} else if (level == 6) {
+			Spell.addToSpellsKnown(2, 3, casterClass, spellsKnown);
+			//
+			if (archetype.equals(Subclass.ABJURER)) {
+				set.add(Feature.PROJECTED_WARD);
+
+			} else if (archetype.equals(Subclass.CONJUROR)) {
+				set.add(Feature.BENIGN_TRANSPOSITION);
+
+			} else if (archetype.equals(Subclass.DIVINER)) {
+				set.add(Feature.EXPERT_DIVINATION);
+
+			} else if (archetype.equals(Subclass.ENCHANTER)) {
+				set.add(Feature.INSTINCTIVE_CHARM);
+
+			} else if (archetype.equals(Subclass.EVOKER)) {
+				set.add(Feature.POTENT_CANTRIP);
+
+			} else if (archetype.equals(Subclass.ILLUSIONIST)) {
+				set.add(Feature.MALLEABLE_ILLUSIONS);
+
+			} else if (archetype.equals(Subclass.NECROMANCER)) {
+				set.add(Feature.UNDEAD_THRALLS);
+
+			} else if (archetype.equals(Subclass.TRANSMUTER)) {
+				set.add(Feature.TRANSMUTERS_STONE);
+
+			}
+
+		} else if (level == 7) {
+			Spell.addToSpellsKnown(2, 4, casterClass, spellsKnown);
+
+		} else if (level == 8) {
+			Spell.addToSpellsKnown(2, 4, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_8);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 9) {
+			Spell.addToSpellsKnown(2, 5, casterClass, spellsKnown);
+
+		} else if (level == 10) {
+			Spell.addCantripKnown(casterClass, spellsKnown);
+			Spell.addToSpellsKnown(2, 5, casterClass, spellsKnown);
+			//
+			if (archetype.equals(Subclass.ABJURER)) {
+				set.add(Feature.IMPROVED_ABJURATION);
+
+			} else if (archetype.equals(Subclass.CONJUROR)) {
+				set.add(Feature.FOCUSED_CONJURATION);
+
+			} else if (archetype.equals(Subclass.DIVINER)) {
+				set.add(Feature.THE_THIRD_EYE);
+
+			} else if (archetype.equals(Subclass.ENCHANTER)) {
+				set.add(Feature.SPLIT_ENCHANTMENT);
+
+			} else if (archetype.equals(Subclass.EVOKER)) {
+				set.add(Feature.EMPOWERED_EVOCATION);
+
+			} else if (archetype.equals(Subclass.ILLUSIONIST)) {
+				set.add(Feature.ILLUSORY_SELF);
+
+			} else if (archetype.equals(Subclass.NECROMANCER)) {
+				set.add(Feature.INURED_TO_DEATH);
+
+			} else if (archetype.equals(Subclass.TRANSMUTER)) {
+				set.add(Feature.SHAPECHANGER);
+
+			}
+
+		} else if (level == 11) {
+			Spell.addToSpellsKnown(2, 6, casterClass, spellsKnown);
+
+		} else if (level == 12) {
+			Spell.addToSpellsKnown(2, 6, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_12);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 13) {
+			Spell.addToSpellsKnown(2, 7, casterClass, spellsKnown);
+
+		} else if (level == 14) {
+			Spell.addToSpellsKnown(2, 7, casterClass, spellsKnown);
+			//
+			if (archetype.equals(Subclass.ABJURER)) {
+				set.add(Feature.ABJURER_RESISTANCE);
+
+			} else if (archetype.equals(Subclass.CONJUROR)) {
+				set.add(Feature.DURABLE_SUMMONS);
+
+			} else if (archetype.equals(Subclass.DIVINER)) {
+				set.add(Feature.GREATER_PORTENT);
+
+			} else if (archetype.equals(Subclass.ENCHANTER)) {
+				set.add(Feature.ALTER_MEMORIES);
+
+			} else if (archetype.equals(Subclass.EVOKER)) {
+				set.add(Feature.OVERCHANNEL);
+
+			} else if (archetype.equals(Subclass.ILLUSIONIST)) {
+				set.add(Feature.ILLUSORY_REALITY);
+
+			} else if (archetype.equals(Subclass.NECROMANCER)) {
+				set.add(Feature.COMMAND_UNDEAD);
+
+			} else if (archetype.equals(Subclass.TRANSMUTER)) {
+				set.add(Feature.MASTER_TRANSMUTER);
+
+			}
+
+		} else if (level == 15) {
+			Spell.addToSpellsKnown(2, 8, casterClass, spellsKnown);
+
+		} else if (level == 16) {
+			Spell.addToSpellsKnown(2, 8, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_16);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 17) {
+			Spell.addToSpellsKnown(2, 9, casterClass, spellsKnown);
+
+		} else if (level == 18) {
+			Spell.addToSpellsKnown(2, 9, casterClass, spellsKnown);
+
+		} else if (level == 19) {
+			Spell.addToSpellsKnown(2, 9, casterClass, spellsKnown);
+			//
+			set.add(Feature.ABILITY_BONUS_19);
+			set.add(abilityImprove(actor));
+
+		} else if (level == 20) {
+			Spell.addToSpellsKnown(2, 9, casterClass, spellsKnown);
 
 		}
 
