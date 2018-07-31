@@ -163,24 +163,33 @@ public abstract class Dice {
 		return sublist;
 	}
 
-	public static <T> Set<T> addToSetFromArray(int toAdd, Set<T> set, T[] array) {
+	/*
+	 * addToSet is one of my most important and useful methods which I should use
+	 * basically all the time to avoid code repetition
+	 */
+	public static <T> Set<T> addToSet(T[] array, Set<T> set) {
+		return addToSet(1, array, set);
+	}
+
+	/*
+	 * addToSet is one of my most important and useful methods which I should use
+	 * basically all the time to avoid code repetition
+	 */
+	public static <T> Set<T> addToSet(int toAdd, T[] array, Set<T> set) {
 		int added = 0;
 		T candidate;
 
 		while (added < toAdd) {
 			candidate = randomFromArray(array);
 
-			if (set.contains(candidate) != true) {
-				set.add(candidate);
+			if (set.add(candidate))
 				++added;
-			}
-
 		}
 
 		return set;
 	}
 
-	public static <T> Set<T> addToSetOrElseFromArray(int toAdd, T[] element, Set<T> set, T[] array) {
+	public static <T> Set<T> addToSetOrElse(int toAdd, T[] element, T[] array, Set<T> set) {
 		int added = 0;
 
 		for (int i = 0; i < element.length; ++i) {

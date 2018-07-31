@@ -29,7 +29,7 @@ public class Player implements Actor {
 	private EnumSet<Weapon> weapons;
 	private EnumSet<Skill> skills;
 	private EnumSet<Option.Feature> features;
-	private EnumSet<Language> languages;
+	private EnumSet<Race.Language> languages;
 
 	// gear
 	private Inventory inventory;
@@ -70,7 +70,6 @@ public class Player implements Actor {
 		// others to follow can choose alternative skills
 		Skill.setupCareerSkills(this);
 		Skill.setupRacialSkills(this);
-		Actor.Language.setupLanguages(this);
 		Armor.setupArmorProficiency(this);
 		Weapon.setupWeaponProficiency(this);
 		Class.setupClassFeatures(this);
@@ -362,12 +361,12 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public EnumSet<Language> getLanguages() {
+	public EnumSet<Race.Language> getLanguages() {
 		return languages;
 	}
 
 	@Override
-	public void setLanguages(EnumSet<Language> languages) {
+	public void setLanguages(EnumSet<Race.Language> languages) {
 		this.languages = languages;
 	}
 

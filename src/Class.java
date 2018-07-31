@@ -705,8 +705,8 @@ public enum Class implements Option {
 				Skill[] array = { Skill.ARCANA, Skill.HISTORY, Skill.NATURE, Skill.RELIGION };
 				set.add(Feature.DIVINE_DOMAIN_KNOWLEDGE);
 				set.add(Feature.BLESSINGS_OF_KNOWLEDGE);
-				Actor.Language.learnNonsecretLanguage(actor);
-				Actor.Language.learnNonsecretLanguage(actor);
+				Race.Language.learnNonsecretLanguage(actor);
+				Race.Language.learnNonsecretLanguage(actor);
 				Skill.testSkillFromArray(array, actor);
 				Skill.testSkillFromArray(array, actor);
 			} else if (archetype.equals(Class.Subclass.LIFE)) {
@@ -928,7 +928,7 @@ public enum Class implements Option {
 			set.add(Feature.INTELLIGENCE_SAVE);
 			set.add(Feature.WISDOM_SAVE);
 			//
-			Actor.Language.addLanguage(Actor.Language.DRUIDIC, actor);
+			Race.Language.addLanguage(Race.Language.DRUIDIC, actor);
 			set.add(Feature.RITUAL_CASTING_DRUID);
 
 		} else if (level == 2) {
@@ -948,7 +948,7 @@ public enum Class implements Option {
 
 		} else if (level == 3) {
 			if (archetype.equals(Class.Subclass.LAND_CIRCLE))
-				set.addAll(Dice.addToSetFromArray(1, set, Feature.CIRCLE_SPELLS));
+				set.addAll(Dice.addToSet(1, Feature.CIRCLE_SPELLS, set));
 
 		} else if (level == 4) {
 			// cantrip
@@ -1828,7 +1828,7 @@ public enum Class implements Option {
 				set.add(Feature.CONSTITUTION_SAVE);
 				set.add(Feature.CHARISMA_SAVE);
 				//
-				actor.getLanguages().add(Actor.Language.DRACONIC);
+				actor.getLanguages().add(Race.Language.DRACONIC);
 				Option.dragonSorcererAncestry(actor);
 				set.add(Feature.DRACONIC_RESILIENCE);
 

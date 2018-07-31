@@ -1,25 +1,142 @@
 import java.util.EnumSet;
 
 public enum Race implements Option {
-	HUMAN,
-	//
-	DRAGONBORN,
-	//
+	HUMAN, DRAGONBORN, HALF_ELF, HALF_ORC, TIEFLING,
+	// two dwarf subraces
 	HILL_DWARF, MOUNTAIN_DWARF,
-	//
+	// three elf subraces
 	HIGH_ELF, WOOD_ELF, DARK_ELF,
-	//
+	// two gnome subraces
 	FOREST_GNOME, TINKER_GNOME,
-	//
-	LIGHTFOOT_HALFLING, STOUTHEART_HALFLING,
-	//
-	HALF_ELF,
-	//
-	HALF_ORC,
-	//
-	TIEFLING
-	//
-	;
+	// two half subraces
+	LIGHTFOOT_HALFLING, STOUTHEART_HALFLING;
+
+	/*
+	 * LANGUAGE ENUM
+	 */
+	public static enum Language {
+		COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING, ORCISH, ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL, PRIMORDIAL, SYLVAN, UNDERCOMMON, SUPERNAL, DRUIDIC, THIEVES_CANT;
+
+		private static final Language[] NONSECRET_LANGUAGES = { COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN,
+				HALFLING, ORCISH, ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL, PRIMORDIAL, SYLVAN,
+				UNDERCOMMON };
+		private static final Language[] COMMON_LANGUAGES = { COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING,
+				ORCISH };
+		private static final Language[] EXOTIC_LANGUAGES = { ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL,
+				PRIMORDIAL, SYLVAN, UNDERCOMMON };
+
+		public static Language randomCommonLanguage() {
+			return Dice.randomFromArray(COMMON_LANGUAGES);
+		}
+
+		public static Language randomExoticLanguage() {
+			return Dice.randomFromArray(EXOTIC_LANGUAGES);
+		}
+
+		public static void addLanguage(Language language, Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() != null)
+				languages = actor.getLanguages();
+			else
+				languages = EnumSet.noneOf(Language.class);
+
+			languages.add(language);
+			actor.setLanguages(languages);
+		}
+
+		public static void learnNonsecretLanguage(Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() != null)
+				languages = actor.getLanguages();
+			else
+				languages = EnumSet.noneOf(Language.class);
+
+			languages.addAll((EnumSet<Language>) Dice.addToSet(NONSECRET_LANGUAGES, languages));
+			actor.setLanguages(languages);
+		}
+
+		public static void learnCommonLanguage(Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() != null)
+				languages = actor.getLanguages();
+			else
+				languages = EnumSet.noneOf(Language.class);
+
+			languages.addAll((EnumSet<Language>) Dice.addToSet(COMMON_LANGUAGES, languages));
+			actor.setLanguages(languages);
+		}
+
+		public static void learnExoticLanguage(Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() == null)
+				languages = EnumSet.noneOf(Language.class);
+			else
+				languages = actor.getLanguages();
+
+			languages.addAll((EnumSet<Language>) Dice.addToSet(EXOTIC_LANGUAGES, languages));
+			actor.setLanguages(languages);
+		}
+
+		public static void setupLanguages(Actor actor) {
+			EnumSet<Language> languages;
+			if (actor.getLanguages() == null)
+				languages = EnumSet.noneOf(Language.class);
+			else
+				languages = actor.getLanguages();
+			int skillsToAdd = 0;
+
+			Race race = actor.getRace();
+			if (race.equals(HUMAN)) {
+				languages.add(COMMON);
+				skillsToAdd = +1;
+
+			} else if (race.equals(DRAGONBORN)) {
+				languages.add(COMMON);
+				languages.add(DRACONIC);
+
+			} else if (race.equals(HILL_DWARF)) {
+				languages.add(COMMON);
+				languages.add(DWARVISH);
+
+			} else if (race.equals(DARK_ELF)) {
+				languages.add(COMMON);
+				languages.add(ELVISH);
+
+			} else if (race.equals(HIGH_ELF)) {
+				languages.add(COMMON);
+				languages.add(ELVISH);
+				skillsToAdd = +1;
+
+			} else if (race.equals(WOOD_ELF)) {
+				languages.add(COMMON);
+				languages.add(ELVISH);
+
+			} else if (race.equals(LIGHTFOOT_HALFLING)) {
+				languages.add(COMMON);
+				languages.add(HALFLING);
+
+			} else if (race.equals(FOREST_GNOME)) {
+				languages.add(COMMON);
+				languages.add(GNOMISH);
+
+			} else if (race.equals(HALF_ELF)) {
+				languages.add(COMMON);
+				skillsToAdd += 1;
+
+			} else if (race.equals(HALF_ORC)) {
+				languages.add(COMMON);
+				languages.add(ORCISH);
+
+			} else if (race.equals(TIEFLING)) {
+				languages.add(COMMON);
+				languages.add(INFERNAL);
+
+			}
+
+			languages.addAll((EnumSet<Language>) Dice.addToSet(skillsToAdd, COMMON_LANGUAGES, languages));
+			actor.setLanguages(languages);
+		}
+	}
 
 	/*
 	 * STATIC FIELDS
@@ -178,50 +295,6 @@ public enum Race implements Option {
 		return race;
 	}
 
-	public static void applyRacialBonus(Actor actor, Race race) {
-		if (race.equals(HUMAN)) {
-			actor.setStrength(actor.getStrength() + 1);
-			actor.setDexterity(actor.getDexterity() + 1);
-			actor.setConstitution(actor.getConstitution() + 1);
-			actor.setIntelligence(actor.getIntelligence() + 1);
-			actor.setWisdom(actor.getWisdom() + 1);
-			actor.setCharisma(actor.getCharisma() + 1);
-		} else if (race.equals(DRAGONBORN)) {
-			actor.setStrength(actor.getStrength() + 2);
-			actor.setCharisma(actor.getCharisma() + 2);
-		} else if (race.equals(HILL_DWARF)) {
-			actor.setConstitution(actor.getConstitution() + 2);
-			actor.setStrength(actor.getStrength() + 1);
-			actor.setWisdom(actor.getWisdom() + 1);
-		} else if (race.equals(HIGH_ELF)) {
-			actor.setDexterity(actor.getDexterity() + 2);
-			actor.setIntelligence(actor.getIntelligence() + 1);
-		} else if (race.equals(WOOD_ELF)) {
-			actor.setDexterity(actor.getDexterity() + 2);
-			actor.setWisdom(actor.getWisdom() + 1);
-		} else if (race.equals(DARK_ELF)) {
-			actor.setDexterity(actor.getDexterity() + 2);
-			actor.setCharisma(actor.getCharisma() + 1);
-		} else if (race.equals(LIGHTFOOT_HALFLING)) {
-			actor.setDexterity(actor.getDexterity() + 2);
-			actor.setWisdom(actor.getWisdom() + 1);
-			actor.setCharisma(actor.getCharisma() + 1);
-		} else if (race.equals(FOREST_GNOME)) {
-			actor.setDexterity(actor.getDexterity() + 2);
-			actor.setConstitution(actor.getConstitution() + 1);
-			actor.setIntelligence(actor.getIntelligence() + 1);
-		} else if (race.equals(HALF_ELF)) {
-			actor.setDexterity(actor.getDexterity() + 2);
-			actor.setCharisma(actor.getCharisma() + 2);
-		} else if (race.equals(HALF_ORC)) {
-			actor.setStrength(actor.getStrength() + 2);
-			actor.setConstitution(actor.getConstitution() + 2);
-		} else if (race.equals(TIEFLING)) {
-			actor.setIntelligence(actor.getIntelligence() + 2);
-			actor.setCharisma(actor.getCharisma() + 2);
-		}
-	}
-
 	public static void applyRacialFeatures(Actor actor) {
 		applyRacialFeatures(selectRace(), actor);
 	}
@@ -229,6 +302,14 @@ public enum Race implements Option {
 	private static void applyRacialFeatures(Race race, Actor actor) {
 		actor.setRace(race);
 
+		// all races grant languages
+		EnumSet<Language> languages;
+		if (actor.getLanguages() != null)
+			languages = actor.getLanguages();
+		else
+			languages = EnumSet.noneOf(Language.class);
+
+		// all races grant features
 		EnumSet<Feature> features;
 		if (actor.getFeatures() != null)
 			features = actor.getFeatures();
@@ -282,6 +363,9 @@ public enum Race implements Option {
 			//
 			skills.add(Dice.randomFromArray(Skill.DWARF_TOOLS));
 			features.add(Feature.STONECUNNING);
+			//
+			languages.add(Language.COMMON);
+			languages.add(Language.DWARVISH);
 
 			if (race.equals(HILL_DWARF)) {
 				actor.setWisdom(actor.getWisdom() + 1);
@@ -305,6 +389,9 @@ public enum Race implements Option {
 			// skills.add(Skill.PERCEPTION);
 			features.add(Feature.FEY_ANCESTRY);
 			features.add(Feature.ELF_TRANCE);
+			//
+			languages.add(Language.COMMON);
+			languages.add(Language.ELVISH);
 
 			if (race.equals(HIGH_ELF)) {
 				actor.setIntelligence(actor.getIntelligence() + 1);
@@ -317,6 +404,7 @@ public enum Race implements Option {
 				weapons.add(Weapon.SHORTBOW);
 				//
 				Spell.addCantripKnown(Class.WIZARD, spellsKnown);
+				languages.addAll(Dice.addToSet(Language.COMMON_LANGUAGES, languages));
 
 			} else if (race.equals(WOOD_ELF)) {
 				actor.setWisdom(actor.getWisdom() + 1);
@@ -350,6 +438,9 @@ public enum Race implements Option {
 			features.add(Feature.HALFLING_LUCK);
 			features.add(Feature.HALFLING_BRAVERY);
 			features.add(Feature.HALFLING_NIMBLENESS);
+			//
+			languages.add(Language.COMMON);
+			languages.add(Language.HALFLING);
 
 			if (race.equals(LIGHTFOOT_HALFLING)) {
 				actor.setCharisma(actor.getCharisma() + 1);
@@ -373,6 +464,9 @@ public enum Race implements Option {
 			actor.setIntelligence(actor.getIntelligence() + 1);
 			actor.setWisdom(actor.getWisdom() + 1);
 			actor.setCharisma(actor.getCharisma() + 1);
+			//
+			languages.add(Language.COMMON);
+			languages.addAll(Dice.addToSet(Language.COMMON_LANGUAGES, languages));
 
 		} else if (race.equals(Race.DRAGONBORN)) {
 			/*
@@ -382,6 +476,8 @@ public enum Race implements Option {
 			actor.setCharisma(actor.getCharisma() + 1);
 			//
 			Option.dragonbornAncestry(actor);
+			languages.add(Language.COMMON);
+			languages.add(Language.DRACONIC);
 
 		} else if (race.equals(Race.FOREST_GNOME) || race.equals(Race.TINKER_GNOME)) {
 			/*
@@ -390,6 +486,9 @@ public enum Race implements Option {
 			actor.setIntelligence(actor.getIntelligence() + 2);
 			features.add(Feature.DARKVISION_60);
 			features.add(Feature.GNOME_CUNNING);
+			//
+			languages.add(Language.COMMON);
+			languages.add(Language.GNOMISH);
 
 			if (race.equals(Race.FOREST_GNOME)) {
 				actor.setDexterity(actor.getDexterity() + 1);
@@ -416,6 +515,9 @@ public enum Race implements Option {
 			//
 			features.add(Feature.DARKVISION_60);
 			features.add(Feature.FEY_ANCESTRY);
+			languages.add(Language.COMMON);
+			languages.add(Language.ELVISH);
+			languages.addAll(Dice.addToSet(Language.COMMON_LANGUAGES, languages));
 
 		} else if (race.equals(Race.HALF_ORC)) {
 			/*
@@ -425,6 +527,9 @@ public enum Race implements Option {
 			actor.setConstitution(actor.getConstitution() + 1);
 			//
 			features.add(Feature.DARKVISION_60);
+			languages.add(Language.COMMON);
+			languages.add(Language.ORCISH);
+			//
 			features.add(Feature.HALF_ORC_MENACE);
 			// TODO
 			// skills.add(Skill.INTIMIDATION);
@@ -437,6 +542,8 @@ public enum Race implements Option {
 			 */
 			actor.setCharisma(actor.getCharisma() + 2);
 			actor.setIntelligence(actor.getIntelligence() + 1);
+			languages.add(Language.COMMON);
+			languages.add(Language.INFERNAL);
 			//
 			features.add(Feature.DARKVISION_60);
 			features.add(Feature.HELLISH_RESISTANCE);

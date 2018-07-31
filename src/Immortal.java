@@ -517,7 +517,7 @@ public abstract class Immortal {
 
 		private Greater greater;
 		private EnumSet<Domain> domains;
-		private EnumSet<Alignment> alignment;
+		private EnumSet<Actor.Alignment> alignment;
 
 		public Instance(Prototype prototype) {
 			this.prototype = prototype;
@@ -594,7 +594,7 @@ public abstract class Immortal {
 		}
 
 		@Override
-		public Alignment getAlignment() {
+		public Actor.Alignment getAlignment() {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -780,13 +780,13 @@ public abstract class Immortal {
 		}
 
 		@Override
-		public EnumSet<Language> getLanguages() {
+		public EnumSet<Race.Language> getLanguages() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public void setLanguages(EnumSet<Language> languages) {
+		public void setLanguages(EnumSet<Race.Language> languages) {
 			// TODO Auto-generated method stub
 
 		}

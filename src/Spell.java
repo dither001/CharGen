@@ -1146,7 +1146,7 @@ public enum Spell {
 		else if (job.equals(Class.WIZARD))
 			array = WIZARD_SPELLS[0];
 
-		spellsKnown.addAll(Dice.addToSetOrElseFromArray(1, new Spell[] { spell }, spellsKnown, array));
+		spellsKnown.addAll(Dice.addToSetOrElse(1, new Spell[] { spell }, array, spellsKnown));
 		actor.setSpellsKnown(spellsKnown);
 	}
 

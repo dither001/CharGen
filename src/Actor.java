@@ -53,125 +53,6 @@ public interface Actor {
 		SIGHT, HEARING, SCENT, TOUCH, TASTE, BLINDSIGHT, DARKVISION, TREMORSENSE, TRUESIGHT
 	}
 
-	public enum Language {
-		COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING, ORCISH, ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL, PRIMORDIAL, SYLVAN, UNDERCOMMON, SUPERNAL, DRUIDIC, THIEVES_CANT;
-
-		private static final Language[] NONSECRET_LANGUAGES = { COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN,
-				HALFLING, ORCISH, ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL, PRIMORDIAL, SYLVAN,
-				UNDERCOMMON };
-		private static final Language[] COMMON_LANGUAGES = { COMMON, DWARVISH, ELVISH, GIANT, GNOMISH, GOBLIN, HALFLING,
-				ORCISH };
-		private static final Language[] EXOTIC_LANGUAGES = { ABYSSAL, CELESTIAL, DRACONIC, DEEP_SPEECH, INFERNAL,
-				PRIMORDIAL, SYLVAN, UNDERCOMMON };
-
-		public static Language randomCommonLanguage() {
-			return Dice.randomFromArray(COMMON_LANGUAGES);
-		}
-
-		public static Language randomExoticLanguage() {
-			return Dice.randomFromArray(EXOTIC_LANGUAGES);
-		}
-
-		public static void addLanguage(Language language, Actor actor) {
-			EnumSet<Language> languages = actor.getLanguages();
-			languages.add(language);
-			actor.setLanguages(languages);
-		}
-
-		public static void learnNonsecretLanguage(Actor actor) {
-			EnumSet<Language> languages;
-			if (actor.getLanguages() == null)
-				languages = EnumSet.noneOf(Language.class);
-			else
-				languages = actor.getLanguages();
-
-			languages.addAll((EnumSet<Language>) Dice.addToSetFromArray(1, languages, NONSECRET_LANGUAGES));
-			actor.setLanguages(languages);
-		}
-
-		public static void learnCommonLanguage(Actor actor) {
-			EnumSet<Language> languages;
-			if (actor.getLanguages() == null)
-				languages = EnumSet.noneOf(Language.class);
-			else
-				languages = actor.getLanguages();
-
-			languages.addAll((EnumSet<Language>) Dice.addToSetFromArray(1, languages, COMMON_LANGUAGES));
-			actor.setLanguages(languages);
-		}
-
-		public static void learnExoticLanguage(Actor actor) {
-			EnumSet<Language> languages;
-			if (actor.getLanguages() == null)
-				languages = EnumSet.noneOf(Language.class);
-			else
-				languages = actor.getLanguages();
-
-			languages.addAll((EnumSet<Language>) Dice.addToSetFromArray(1, languages, EXOTIC_LANGUAGES));
-			actor.setLanguages(languages);
-		}
-
-		public static void setupLanguages(Actor actor) {
-			EnumSet<Language> languages;
-			if (actor.getLanguages() == null)
-				languages = EnumSet.noneOf(Language.class);
-			else
-				languages = actor.getLanguages();
-			int skillsToAdd = 0;
-
-			Race race = actor.getRace();
-			if (race.equals(Race.HUMAN)) {
-				languages.add(COMMON);
-				skillsToAdd = +1;
-
-			} else if (race.equals(Race.DRAGONBORN)) {
-				languages.add(COMMON);
-				languages.add(DRACONIC);
-
-			} else if (race.equals(Race.HILL_DWARF)) {
-				languages.add(COMMON);
-				languages.add(DWARVISH);
-
-			} else if (race.equals(Race.DARK_ELF)) {
-				languages.add(COMMON);
-				languages.add(ELVISH);
-
-			} else if (race.equals(Race.HIGH_ELF)) {
-				languages.add(COMMON);
-				languages.add(ELVISH);
-				skillsToAdd = +1;
-
-			} else if (race.equals(Race.WOOD_ELF)) {
-				languages.add(COMMON);
-				languages.add(ELVISH);
-
-			} else if (race.equals(Race.LIGHTFOOT_HALFLING)) {
-				languages.add(COMMON);
-				languages.add(HALFLING);
-
-			} else if (race.equals(Race.FOREST_GNOME)) {
-				languages.add(COMMON);
-				languages.add(GNOMISH);
-
-			} else if (race.equals(Race.HALF_ELF)) {
-				languages.add(COMMON);
-				skillsToAdd += 1;
-
-			} else if (race.equals(Race.HALF_ORC)) {
-				languages.add(COMMON);
-				languages.add(ORCISH);
-
-			} else if (race.equals(Race.TIEFLING)) {
-				languages.add(COMMON);
-				languages.add(INFERNAL);
-
-			}
-
-			languages.addAll((EnumSet<Language>) Dice.addToSetFromArray(skillsToAdd, languages, COMMON_LANGUAGES));
-			actor.setLanguages(languages);
-		}
-	}
-
 	/*
 	 * INSTANCE METHODS
 	 * 
@@ -252,9 +133,9 @@ public interface Actor {
 
 	public EnumSet<Sense> getSenses();
 
-	public EnumSet<Language> getLanguages();
+	public EnumSet<Race.Language> getLanguages();
 
-	public void setLanguages(EnumSet<Language> languages);
+	public void setLanguages(EnumSet<Race.Language> languages);
 
 	public Combat combat();
 
