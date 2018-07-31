@@ -11,6 +11,26 @@ public abstract class Names {
 	 * STATIC METHODS
 	 * 
 	 */
+	public static String nameShorten(String name) {
+		String string = "";
+
+		int length = name.length();
+		if (length > 9 && (name.contains(" ") || name.contains("_") || name.contains("-"))) {
+			// FIXME - for some reason, not all names processed are shortened
+			// System.out.println("Name is longer than 9 characters");
+			for (int i = length - 1; i > -1; --i) {
+				if (name.charAt(i) == ' ' || name.charAt(i) == '_' || name.charAt(i) == '-')
+					string = name.substring(i + 1);
+			}
+
+		} else {
+			string = name;
+
+		}
+
+		return string;
+	}
+
 	public static String stringToName(String string) {
 		String name = "";
 

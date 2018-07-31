@@ -42,7 +42,7 @@ public abstract class Immortal {
 		/*
 		 * ANCESTOR, SAINT, DEMIGOD
 		 */
-		ANCESTOR, SAINT, DEMIGOD, PLUTOCRAT,
+		ANCESTOR, DEMIGOD, PLUTOCRAT, SAINT,
 		/*
 		 * DEMIURGES include the majority of monotheistic deities, like ABRAXAS, ALLAH,
 		 * and YAHWEH who are almost always specifically associated with Creation

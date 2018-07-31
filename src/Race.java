@@ -551,6 +551,7 @@ public enum Race implements Option {
 
 		}
 
+		actor.setLanguages(languages);
 		actor.setFeatures(features);
 		actor.setWeaponProficiency(weapons);
 		actor.setArmorProficiency(armor);

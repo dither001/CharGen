@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Main {
-	private static int PCS_TO_ROLL = 12;
+	private static int PCS_TO_ROLL = 500;
 	private static int SPELLBOOK_LEVEL = 17;
 
 	//
@@ -15,13 +15,16 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		 rollCharacters();
+//		 rollCharacters();
 		// rollOneCharacter();
-		// rollCharactersOfClass(Class.RANGER);
-		// rollCharactersOfArchetype(Class.Subclass.ARCANE_TRICKSTER);
+//		 rollCharactersOfClass(Class.ROGUE);
+//		 rollCharactersOfArchetype(Class.Subclass.KNOWLEDGE);
 		// levelUpTest(20);
 
-		// levelUpTestDisplayOnly(20);
+		for (int i = 0; i < 500; ++i) {
+			 levelUpTestDisplayOnly(20, Class.ROGUE);
+			
+		}
 
 		//
 //		testMainWorld();

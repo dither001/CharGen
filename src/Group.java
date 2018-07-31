@@ -721,7 +721,7 @@ public class Group {
 			planet = it.next();
 
 			if (planet.nameable() && planet.notMoon()) {
-				current = nameIt.next();
+				current = Names.nameShorten(nameIt.next());
 				planet.setName(current);
 
 				// TODO - testing

@@ -2519,7 +2519,11 @@ public enum Class implements Option {
 	}
 
 	public static EnumSet<Feature> addRandomExpertise(int toAdd, Actor actor) {
-		EnumSet<Skill> skills = actor.getSkills();
+		EnumSet<Skill> skills;
+		if (actor.getSkills() != null)
+			skills = actor.getSkills();
+		else
+			skills = EnumSet.noneOf(Skill.class);
 
 		EnumSet<Feature> features;
 		if (actor.getFeatures() != null)
@@ -2532,56 +2536,21 @@ public enum Class implements Option {
 		while (added < toAdd) {
 			expertise = matchingExpertise(Dice.randomFromSet(skills));
 
-			if (features.contains(expertise) != true) {
-				features.add(expertise);
+			if (expertise != null && features.add(expertise))
 				++added;
-			}
 		}
 
 		return features;
 	}
 
 	private static Feature matchingExpertise(Skill skill) {
+		Feature[] array = Feature.EXPERTISE;
 		Feature expertise = null;
 
-		if (skill.equals(Skill.ACROBATICS))
-			expertise = Feature.EXPERTISE_ACROBATICS;
-		else if (skill.equals(Skill.ANIMAL_HANDLING))
-			expertise = Feature.EXPERTISE_ANIMAL_HANDLING;
-		else if (skill.equals(Skill.ARCANA))
-			expertise = Feature.EXPERTISE_ARCANA;
-		else if (skill.equals(Skill.ATHLETICS))
-			expertise = Feature.EXPERTISE_ATHLETICS;
-		else if (skill.equals(Skill.DECEPTION))
-			expertise = Feature.EXPERTISE_DECEPTION;
-		else if (skill.equals(Skill.HISTORY))
-			expertise = Feature.EXPERTISE_HISTORY;
-		else if (skill.equals(Skill.INSIGHT))
-			expertise = Feature.EXPERTISE_INSIGHT;
-		else if (skill.equals(Skill.INTIMIDATION))
-			expertise = Feature.EXPERTISE_INTIMIDATION;
-		else if (skill.equals(Skill.INVESTIGATION))
-			expertise = Feature.EXPERTISE_INVESTIGATION;
-		else if (skill.equals(Skill.MEDICINE))
-			expertise = Feature.EXPERTISE_MEDICINE;
-		else if (skill.equals(Skill.NATURE))
-			expertise = Feature.EXPERTISE_NATURE;
-		else if (skill.equals(Skill.PERCEPTION))
-			expertise = Feature.EXPERTISE_PERCEPTION;
-		else if (skill.equals(Skill.PERFORMANCE))
-			expertise = Feature.EXPERTISE_PERFORMANCE;
-		else if (skill.equals(Skill.PERSUASION))
-			expertise = Feature.EXPERTISE_PERSUASION;
-		else if (skill.equals(Skill.RELIGION))
-			expertise = Feature.EXPERTISE_RELIGION;
-		else if (skill.equals(Skill.SLEIGHT_OF_HAND))
-			expertise = Feature.EXPERTISE_SLEIGHT_OF_HAND;
-		else if (skill.equals(Skill.STEALTH))
-			expertise = Feature.EXPERTISE_STEALTH;
-		else if (skill.equals(Skill.SURVIVAL))
-			expertise = Feature.EXPERTISE_SURVIVAL;
-		else if (skill.equals(Skill.THIEVES_TOOLS))
-			expertise = Feature.EXPERTISE_THIEVES_TOOLS;
+		for (Feature el : array) {
+			if (el.toString().endsWith(skill.toString()))
+				expertise = el;
+		}
 
 		return expertise;
 	}
