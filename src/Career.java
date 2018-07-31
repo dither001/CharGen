@@ -1,3 +1,4 @@
+import java.util.EnumSet;
 import java.util.HashMap;
 
 /*
@@ -880,6 +881,119 @@ public enum Career {
 	 * STATIC METHODS
 	 * 
 	 */
+	public static void applyCareerFeatures(Actor actor) {
+		applyCareerFeatures(Career.randomCareer(), actor);
+	}
+
+	public static void applyCareerFeatures(Career career, Actor actor) {
+		// background skills
+		Skill[] acolyte = { Skill.INSIGHT, Skill.RELIGION };
+		Skill[] charlatan = { Skill.DECEPTION, Skill.SLEIGHT_OF_HAND };
+		Skill[] criminal = { Skill.DECEPTION, Skill.STEALTH };
+		Skill[] entertainer = { Skill.ACROBATICS, Skill.PERFORMANCE };
+		Skill[] folkHero = { Skill.ANIMAL_HANDLING, Skill.SURVIVAL };
+		Skill[] guildArtisan = { Skill.INSIGHT, Skill.PERSUASION };
+		Skill[] hermit = { Skill.MEDICINE, Skill.RELIGION };
+		Skill[] noble = { Skill.HISTORY, Skill.PERSUASION };
+		Skill[] outlander = { Skill.ATHLETICS, Skill.SURVIVAL };
+		Skill[] sage = { Skill.ARCANA, Skill.HISTORY };
+		Skill[] sailor = { Skill.ATHLETICS, Skill.PERCEPTION };
+		Skill[] soldier = { Skill.ATHLETICS, Skill.INTIMIDATION };
+		Skill[] urchin = { Skill.SLEIGHT_OF_HAND, Skill.STEALTH };
+
+		// languages
+		EnumSet<Race.Language> languages;
+		if (actor.getLanguages() != null)
+			languages = actor.getLanguages();
+		else
+			languages = EnumSet.noneOf(Race.Language.class);
+
+		// skills
+		EnumSet<Skill> skills;
+		if (actor.getSkills() != null)
+			skills = actor.getSkills();
+		else
+			skills = EnumSet.noneOf(Skill.class);
+
+		/*
+		 * 
+		 */
+		if (career.equals(ACOLYTE)) {
+			skills.addAll(Dice.addAllToSetOrElse(acolyte, Skill.commonSkills(), skills));
+			languages.addAll(Dice.randomAddToSet(2, Race.exoticLanguages(), languages));
+
+		} else if (career.equals(CHARLATAN)) {
+			skills.addAll(Dice.addAllToSetOrElse(charlatan, Skill.commonSkills(), skills));
+			skills.add(Skill.DISGUISE_KIT);
+			skills.add(Skill.FORGERY_KIT);
+
+		} else if (career.equals(CRIMINAL)) {
+			skills.addAll(Dice.addAllToSetOrElse(criminal, Skill.commonSkills(), skills));
+			skills.addAll(Dice.randomAddToSet(Skill.gamingSkills(), skills));
+			skills.add(Skill.THIEVES_TOOLS);
+
+		} else if (career.equals(ENTERTAINER)) {
+			skills.addAll(Dice.addAllToSetOrElse(entertainer, Skill.commonSkills(), skills));
+			skills.add(Skill.DISGUISE_KIT);
+			skills.addAll(Dice.randomAddToSet(Skill.instrumentSkills(), skills));
+
+		} else if (career.equals(FOLK_HERO)) {
+			skills.addAll(Dice.addAllToSetOrElse(folkHero, Skill.commonSkills(), skills));
+			skills.addAll(Dice.randomAddToSet(Skill.professionSkills(), skills));
+			skills.addAll(Dice.addAllToSet(Skill.landVehicles(), skills));
+
+		} else if (career.equals(GUILD_ARTISAN)) {
+			skills.addAll(Dice.addAllToSetOrElse(guildArtisan, Skill.commonSkills(), skills));
+			skills.addAll(Dice.randomAddToSet(Skill.professionSkills(), skills));
+			languages.addAll(Dice.randomAddToSet(Race.commonLanguages(), languages));
+
+		} else if (career.equals(HERMIT)) {
+			skills.addAll(Dice.addAllToSetOrElse(hermit, Skill.commonSkills(), skills));
+			skills.add(Skill.HERBALISM_KIT);
+			languages.addAll(Dice.randomAddToSet(Race.exoticLanguages(), languages));
+
+		} else if (career.equals(NOBLE)) {
+			skills.addAll(Dice.addAllToSetOrElse(noble, Skill.commonSkills(), skills));
+			skills.addAll(Dice.randomAddToSet(Skill.gamingSkills(), skills));
+			languages.addAll(Dice.randomAddToSet(Race.commonLanguages(), languages));
+
+		} else if (career.equals(OUTLANDER)) {
+			skills.addAll(Dice.addAllToSetOrElse(outlander, Skill.commonSkills(), skills));
+			skills.addAll(Dice.randomAddToSet(Skill.instrumentSkills(), skills));
+			languages.addAll(Dice.randomAddToSet(Race.commonLanguages(), languages));
+
+		} else if (career.equals(SAGE)) {
+			skills.addAll(Dice.addAllToSetOrElse(sage, Skill.commonSkills(), skills));
+			languages.addAll(Dice.randomAddToSet(2, Race.exoticLanguages(), languages));
+
+		} else if (career.equals(SAILOR)) {
+			skills.addAll(Dice.addAllToSetOrElse(sailor, Skill.commonSkills(), skills));
+			skills.add(Skill.NAVIGATOR_TOOLS);
+			skills.addAll(Dice.addAllToSet(Skill.waterVehicles(), skills));
+
+		} else if (career.equals(SOLDIER)) {
+			skills.addAll(Dice.addAllToSetOrElse(soldier, Skill.commonSkills(), skills));
+			skills.addAll(Dice.randomAddToSet(Skill.gamingSkills(), skills));
+			skills.addAll(Dice.addAllToSet(Skill.landVehicles(), skills));
+
+		} else if (career.equals(URCHIN)) {
+			skills.addAll(Dice.addAllToSetOrElse(urchin, Skill.commonSkills(), skills));
+			skills.add(Skill.DISGUISE_KIT);
+			skills.add(Skill.THIEVES_TOOLS);
+
+		}
+
+		/*
+		 * FINAL STEP
+		 */
+		actor.setLanguages(languages);
+		actor.setSkills(skills);
+	}
+
+	/*
+	 * FIXME - lots of old stuff
+	 * 
+	 */
 	public static Career randomCareer() {
 		return Dice.randomFromArray(ALL_CAREERS);
 	}
@@ -1096,11 +1210,11 @@ public enum Career {
 
 	public static String meansMotiveOpportunity() {
 		String string = "Dramatic Conflict";
-		
+
 		string += String.format("%n%s", randomMotive());
 		string += String.format("%n%s", randomMeans());
 		string += String.format("%n%s", randomOpportunity());
-		
+
 		return string;
 	}
 

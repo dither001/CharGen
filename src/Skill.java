@@ -8,7 +8,7 @@ public enum Skill {
 	/*
 	 * KITS, TOOLS, INSTRUMENTS, and VEHICLES
 	 */
-	ALCHEMIST, BREWER, CALLIGRAPHER, CARPENTER, CARTOGRAPHER, COBBLER, COOK, GLASSBLOWER, JEWELER, LEATHERWORKER, MASON, NAVIGATOR, PAINTER, POTTER, SMITH, TINKER, WEAVER, WOODCARVER,
+	ALCHEMY_TOOLS, BREWING_TOOLS, CALLIGRAPHY_TOOLS, CARPENTER_TOOLS, CARTOGRAPHY_TOOLS, COBBLER_TOOLS, MESS_KIT, GLASSBLOWER_TOOLS, JEWELER_TOOLS, LEATHERWORKING_TOOLS, MASONRY_TOOLS, NAVIGATOR_TOOLS, PAINTING_TOOLS, POTTING_TOOLS, SMITHING_TOOLS, TINKERS_TOOLS, WEAVING_TOOLS, WOODCARVING_TOOLS,
 	// kits
 	DISGUISE_KIT, FORGERY_KIT, CHESS_SET, GAMING_DICE, PLAYING_CARDS, HERBALISM_KIT, POISONER_KIT, THIEVES_TOOLS,
 	// instruments
@@ -41,33 +41,23 @@ public enum Skill {
 	private static final Skill[] WIZARD_SKILLS = { ARCANA, HISTORY, INSIGHT, INVESTIGATION, MEDICINE, RELIGION };
 
 	// vehicle skills
-	private static final Skill[] PROFESSION_SKILLS = { ALCHEMIST, BREWER, CALLIGRAPHER, CARPENTER, CARTOGRAPHER,
-			COBBLER, COOK, GLASSBLOWER, JEWELER, LEATHERWORKER, MASON, NAVIGATOR, PAINTER, POTTER, SMITH, TINKER,
-			WEAVER, WOODCARVER };
+	private static final Skill[] PROFESSION_SKILLS = { ALCHEMY_TOOLS, BREWING_TOOLS, CALLIGRAPHY_TOOLS, CARPENTER_TOOLS,
+			CARTOGRAPHY_TOOLS, COBBLER_TOOLS, MESS_KIT, GLASSBLOWER_TOOLS, JEWELER_TOOLS, LEATHERWORKING_TOOLS,
+			MASONRY_TOOLS, NAVIGATOR_TOOLS, PAINTING_TOOLS, POTTING_TOOLS, SMITHING_TOOLS, TINKERS_TOOLS, WEAVING_TOOLS,
+			WOODCARVING_TOOLS };
 	private static final Skill[] TOOL_SKILLS = { DISGUISE_KIT, FORGERY_KIT, CHESS_SET, GAMING_DICE, PLAYING_CARDS,
 			HERBALISM_KIT, POISONER_KIT, THIEVES_TOOLS };
+	private static final Skill[] GAMING_SKILLS = { CHESS_SET, GAMING_DICE, PLAYING_CARDS };
 	private static final Skill[] INSTRUMENT_SKILLS = { BAGPIPES, DRUM, DULCIMER, FLUTE, LUTE, LYRE, HORN, PAN_FLUTE,
 			SHAWM, VIOL };
 	private static final Skill[] VEHICLE_SKILLS = { CARRIAGE, CART, CHARIOT, SLED, WAGON, GALLEY, KEELBOAT, LONGSHIP,
 			ROWBOAT, SAILING_SHIP, WARSHIP };
+	//
+	private static final Skill[] LAND_VEHICLES = { CARRIAGE, CART, CHARIOT, SLED, WAGON };
+	private static final Skill[] WATER_VEHICLES = { GALLEY, KEELBOAT, LONGSHIP, ROWBOAT, SAILING_SHIP, WARSHIP };
 
 	// special use
-	protected static final Skill[] DWARF_TOOLS = { BREWER, MASON, SMITH };
-
-	// background skills
-	private static final Skill[] ACOLYTE_SKILLS = { INSIGHT, RELIGION };
-	private static final Skill[] CHARLATAN_SKILLS = { DECEPTION, SLEIGHT_OF_HAND };
-	private static final Skill[] CRIMINAL_SKILLS = { DECEPTION, STEALTH };
-	private static final Skill[] ENTERTAINER_SKILLS = { ACROBATICS, PERFORMANCE };
-	private static final Skill[] FOLK_HERO_SKILLS = { ANIMAL_HANDLING, SURVIVAL };
-	private static final Skill[] GUILD_ARTISAN_SKILLS = { INSIGHT, PERSUASION };
-	private static final Skill[] HERMIT_SKILLS = { MEDICINE, RELIGION };
-	private static final Skill[] NOBLE_SKILLS = { HISTORY, PERSUASION };
-	private static final Skill[] OUTLANDER_SKILLS = { ATHLETICS, SURVIVAL };
-	private static final Skill[] SAGE_SKILLS = { ARCANA, HISTORY };
-	private static final Skill[] SAILOR_SKILLS = { ATHLETICS, PERCEPTION };
-	private static final Skill[] SOLDIER_SKILLS = { ATHLETICS, INTIMIDATION };
-	private static final Skill[] URCHIN_SKILLS = { SLEIGHT_OF_HAND, STEALTH };
+	protected static final Skill[] DWARF_TOOLS = { BREWING_TOOLS, MASONRY_TOOLS, SMITHING_TOOLS };
 
 	/*
 	 * STATIC METHODS
@@ -77,20 +67,56 @@ public enum Skill {
 		return Dice.randomFromArray(COMMON_SKILLS);
 	}
 
+	public static Skill[] commonSkills() {
+		return COMMON_SKILLS;
+	}
+
 	public static Skill randomProfessionSkill() {
 		return Dice.randomFromArray(PROFESSION_SKILLS);
+	}
+
+	public static Skill[] professionSkills() {
+		return PROFESSION_SKILLS;
 	}
 
 	public static Skill randomToolSkill() {
 		return Dice.randomFromArray(TOOL_SKILLS);
 	}
 
+	public static Skill[] toolSkills() {
+		return TOOL_SKILLS;
+	}
+
+	public static Skill randomgGamingSkill() {
+		return Dice.randomFromArray(GAMING_SKILLS);
+	}
+
+	public static Skill[] gamingSkills() {
+		return GAMING_SKILLS;
+	}
+
 	public static Skill randomInstrumentSkill() {
 		return Dice.randomFromArray(INSTRUMENT_SKILLS);
 	}
 
+	public static Skill[] instrumentSkills() {
+		return INSTRUMENT_SKILLS;
+	}
+
 	public static Skill randomVehicleSkill() {
 		return Dice.randomFromArray(VEHICLE_SKILLS);
+	}
+
+	public static Skill[] vehicleSkills() {
+		return VEHICLE_SKILLS;
+	}
+	
+	public static Skill[] landVehicles() {
+		return LAND_VEHICLES;
+	}
+
+	public static Skill[] waterVehicles() {
+		return WATER_VEHICLES;
 	}
 
 	public static boolean testSkillFromArray(Skill[] array, Actor actor) {
@@ -218,114 +244,115 @@ public enum Skill {
 		actor.setSkills(skills);
 	}
 
-	public static void setupCareerSkills(Actor actor) {
-		EnumSet<Skill> skills;
-		if (actor.getSkills() == null)
-			skills = EnumSet.noneOf(Skill.class);
-		else
-			skills = actor.getSkills();
+	// public static void setupCareerSkills(Actor actor) {
+	// EnumSet<Skill> skills;
+	// if (actor.getSkills() == null)
+	// skills = EnumSet.noneOf(Skill.class);
+	// else
+	// skills = actor.getSkills();
+	//
+	// Career.Profile job = actor.getCareer();
+	// int addedSkills = 0, skillsToAdd = 2;
+	// // TODO
+	// Skill[] array = null;
+	//
+	// if (job.equals(Career.ACOLYTE))
+	// array = ACOLYTE_SKILLS;
+	// else if (job.equals(Career.CHARLATAN))
+	// array = CHARLATAN_SKILLS;
+	// else if (job.equals(Career.CRIMINAL))
+	// array = CRIMINAL_SKILLS;
+	// else if (job.equals(Career.ENTERTAINER))
+	// array = ENTERTAINER_SKILLS;
+	// else if (job.equals(Career.FOLK_HERO))
+	// array = FOLK_HERO_SKILLS;
+	// else if (job.equals(Career.GUILD_ARTISAN))
+	// array = GUILD_ARTISAN_SKILLS;
+	// else if (job.equals(Career.HERMIT))
+	// array = HERMIT_SKILLS;
+	// else if (job.equals(Career.NOBLE))
+	// array = NOBLE_SKILLS;
+	// else if (job.equals(Career.OUTLANDER))
+	// array = OUTLANDER_SKILLS;
+	// else if (job.equals(Career.SAGE))
+	// array = SAGE_SKILLS;
+	// else if (job.equals(Career.SAILOR))
+	// array = SAILOR_SKILLS;
+	// else if (job.equals(Career.SOLDIER))
+	// array = SOLDIER_SKILLS;
+	// else if (job.equals(Career.URCHIN))
+	// array = URCHIN_SKILLS;
+	//
+	// if (skills.contains(array[0]) != true) {
+	// skills.add(array[0]);
+	// ++addedSkills;
+	// }
+	//
+	// if (skills.contains(array[1]) != true) {
+	// skills.add(array[1]);
+	// ++addedSkills;
+	// }
+	//
+	// Skill candidate;
+	// while (addedSkills < skillsToAdd) {
+	// candidate = randomSkill();
+	//
+	// if (skills.contains(candidate) != true) {
+	// skills.add(candidate);
+	// ++addedSkills;
+	// }
+	//
+	// }
+	//
+	// actor.setSkills(skills);
+	// }
 
-		Career.Profile job = actor.getCareer();
-		int addedSkills = 0, skillsToAdd = 2;
-		// TODO
-		Skill[] array = null;
-
-		if (job.equals(Career.ACOLYTE))
-			array = ACOLYTE_SKILLS;
-		else if (job.equals(Career.CHARLATAN))
-			array = CHARLATAN_SKILLS;
-		else if (job.equals(Career.CRIMINAL))
-			array = CRIMINAL_SKILLS;
-		else if (job.equals(Career.ENTERTAINER))
-			array = ENTERTAINER_SKILLS;
-		else if (job.equals(Career.FOLK_HERO))
-			array = FOLK_HERO_SKILLS;
-		else if (job.equals(Career.GUILD_ARTISAN))
-			array = GUILD_ARTISAN_SKILLS;
-		else if (job.equals(Career.HERMIT))
-			array = HERMIT_SKILLS;
-		else if (job.equals(Career.NOBLE))
-			array = NOBLE_SKILLS;
-		else if (job.equals(Career.OUTLANDER))
-			array = OUTLANDER_SKILLS;
-		else if (job.equals(Career.SAGE))
-			array = SAGE_SKILLS;
-		else if (job.equals(Career.SAILOR))
-			array = SAILOR_SKILLS;
-		else if (job.equals(Career.SOLDIER))
-			array = SOLDIER_SKILLS;
-		else if (job.equals(Career.URCHIN))
-			array = URCHIN_SKILLS;
-
-		if (skills.contains(array[0]) != true) {
-			skills.add(array[0]);
-			++addedSkills;
-		}
-
-		if (skills.contains(array[1]) != true) {
-			skills.add(array[1]);
-			++addedSkills;
-		}
-
-		Skill candidate;
-		while (addedSkills < skillsToAdd) {
-			candidate = randomSkill();
-
-			if (skills.contains(candidate) != true) {
-				skills.add(candidate);
-				++addedSkills;
-			}
-
-		}
-
-		actor.setSkills(skills);
-	}
-
-	public static void setupRacialSkills(Actor actor) {
-		EnumSet<Skill> skills;
-		if (actor.getSkills() == null)
-			skills = EnumSet.noneOf(Skill.class);
-		else
-			skills = actor.getSkills();
-
-		Race race = actor.getRace();
-		int addedSkills = 0, skillsToAdd = 0;
-		// TODO
-
-		if (race.equals(Race.DARK_ELF) || race.equals(Race.HIGH_ELF) || race.equals(Race.WOOD_ELF)) {
-			// all elves receive Perception (or a random skill)
-			skillsToAdd = 1;
-
-			if (skills.contains(PERCEPTION) != true) {
-				skills.add(PERCEPTION);
-				++addedSkills;
-			}
-
-		} else if (race.equals(Race.HALF_ELF)) {
-			// all half-elves receive two random skills
-			skillsToAdd = 2;
-
-		} else if (race.equals(Race.HALF_ORC)) {
-			// all half-orcs receive Intimidation (or a random skill)
-			skillsToAdd = 2;
-
-			if (skills.contains(INTIMIDATION) != true) {
-				skills.add(INTIMIDATION);
-				++addedSkills;
-			}
-		}
-
-		Skill candidate;
-		while (addedSkills < skillsToAdd) {
-			candidate = randomSkill();
-
-			if (skills.contains(candidate) != true) {
-				skills.add(candidate);
-				++addedSkills;
-			}
-
-		}
-
-		actor.setSkills(skills);
-	}
+	// public static void setupRacialSkills(Actor actor) {
+	// EnumSet<Skill> skills;
+	// if (actor.getSkills() == null)
+	// skills = EnumSet.noneOf(Skill.class);
+	// else
+	// skills = actor.getSkills();
+	//
+	// Race race = actor.getRace();
+	// int addedSkills = 0, skillsToAdd = 0;
+	// // TODO
+	//
+	// if (race.equals(Race.DARK_ELF) || race.equals(Race.HIGH_ELF) ||
+	// race.equals(Race.WOOD_ELF)) {
+	// // all elves receive Perception (or a random skill)
+	// skillsToAdd = 1;
+	//
+	// if (skills.contains(PERCEPTION) != true) {
+	// skills.add(PERCEPTION);
+	// ++addedSkills;
+	// }
+	//
+	// } else if (race.equals(Race.HALF_ELF)) {
+	// // all half-elves receive two random skills
+	// skillsToAdd = 2;
+	//
+	// } else if (race.equals(Race.HALF_ORC)) {
+	// // all half-orcs receive Intimidation (or a random skill)
+	// skillsToAdd = 2;
+	//
+	// if (skills.contains(INTIMIDATION) != true) {
+	// skills.add(INTIMIDATION);
+	// ++addedSkills;
+	// }
+	// }
+	//
+	// Skill candidate;
+	// while (addedSkills < skillsToAdd) {
+	// candidate = randomSkill();
+	//
+	// if (skills.contains(candidate) != true) {
+	// skills.add(candidate);
+	// ++addedSkills;
+	// }
+	//
+	// }
+	//
+	// actor.setSkills(skills);
+	// }
 }

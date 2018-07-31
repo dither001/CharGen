@@ -698,8 +698,8 @@ public enum Class implements Option {
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
 				set.add(Feature.DIVINE_DOMAIN_DEATH);
 				set.add(Feature.REAPER);
-				Spell spell = Dice.randomFromSet(Spell.allSpellsOfSchool(0, Spell.School.NECROMANCY));
-				Spell.addCantripOrElse(spell, CLERIC, actor);
+				spellsKnown.add(Spell.CHILL_TOUCH);
+
 			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
 				//
 				Skill[] array = { Skill.ARCANA, Skill.HISTORY, Skill.NATURE, Skill.RELIGION };
@@ -716,9 +716,9 @@ public enum Class implements Option {
 				set.add(Feature.DISCIPLE_OF_LIFE);
 			} else if (archetype.equals(Class.Subclass.LIGHT)) {
 				//
-				Spell.addCantripOrElse(Spell.LIGHT, CLERIC, actor);
 				set.add(Feature.DIVINE_DOMAIN_LIGHT);
 				set.add(Feature.WARDING_FLARE);
+				spellsKnown.add(Spell.LIGHT);
 			} else if (archetype.equals(Class.Subclass.NATURE)) {
 				//
 				Spell.addCantripKnown(DRUID, spellsKnown);
@@ -948,7 +948,7 @@ public enum Class implements Option {
 
 		} else if (level == 3) {
 			if (archetype.equals(Class.Subclass.LAND_CIRCLE))
-				set.addAll(Dice.addToSet(1, Feature.CIRCLE_SPELLS, set));
+				set.addAll(Dice.randomAddToSet(1, Feature.CIRCLE_SPELLS, set));
 
 		} else if (level == 4) {
 			// cantrip

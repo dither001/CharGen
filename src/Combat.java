@@ -138,6 +138,9 @@ public class Combat implements Option {
 		if (features.contains(Feature.DRACONIC_RESILIENCE))
 			perLevel += 1;
 
+		if (features.contains(Feature.STOUT_RESILIENCE))
+			perLevel += 1;
+
 		//
 		for (int i = 0; i < level; ++i) {
 			hp += (hitDice[i] + perLevel > 0) ? hitDice[i] + perLevel : 1;
@@ -169,14 +172,7 @@ public class Combat implements Option {
 				else
 					ac = 10 + dexterityBonus + gear.getShieldArmorBonus();
 
-			} else if (features.contains(Feature.DRACONIC_RESILIENCE)) {
-				// dragon sorcerer
-				if (owner.notUsingShield())
-					ac = 13 + dexterityBonus;
-				else
-					ac = 13 + dexterityBonus + gear.getShieldArmorBonus();
-
-			} else if (spells.contains(Spell.MAGE_ARMOR)) {
+			} else if (spells.contains(Spell.MAGE_ARMOR) || features.contains(Feature.DRACONIC_RESILIENCE)) {
 				if (owner.notUsingShield())
 					ac = 13 + dexterityBonus;
 				else
@@ -691,10 +687,10 @@ public class Combat implements Option {
 				bestAttack = actor.combat().bestAttack();
 			else
 				bestAttack = actor.combat().unarmedAttack();
-			
+
 			int atk = bestAttack.attackBonus();
 			int dmg = bestAttack.averageDamage();
-			
+
 			int hp = actor.getHitPoints();
 			int ac = actor.getArmorClass();
 

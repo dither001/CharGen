@@ -167,15 +167,15 @@ public abstract class Dice {
 	 * addToSet is one of my most important and useful methods which I should use
 	 * basically all the time to avoid code repetition
 	 */
-	public static <T> Set<T> addToSet(T[] array, Set<T> set) {
-		return addToSet(1, array, set);
+	public static <T> Set<T> randomAddToSet(T[] array, Set<T> set) {
+		return randomAddToSet(1, array, set);
 	}
 
 	/*
 	 * addToSet is one of my most important and useful methods which I should use
 	 * basically all the time to avoid code repetition
 	 */
-	public static <T> Set<T> addToSet(int toAdd, T[] array, Set<T> set) {
+	public static <T> Set<T> randomAddToSet(int toAdd, T[] array, Set<T> set) {
 		int added = 0;
 		T candidate;
 
@@ -189,19 +189,42 @@ public abstract class Dice {
 		return set;
 	}
 
-	public static <T> Set<T> addToSetOrElse(int toAdd, T[] element, T[] array, Set<T> set) {
-		int added = 0;
+	public static <T> Set<T> randomAddToSet(Set<T> fromSet, Set<T> toSet) {
+		return randomAddToSet(1, fromSet, toSet);
+	}
 
-		for (int i = 0; i < element.length; ++i) {
-			if (set.contains(element[i]) != true) {
-				set.add(element[i]);
+	public static <T> Set<T> randomAddToSet(int toAdd, Set<T> fromSet, Set<T> toSet) {
+		int added = 0;
+		T candidate;
+
+		while (added < toAdd) {
+			candidate = randomFromSet(fromSet);
+
+			if (toSet.add(candidate))
 				++added;
-			}
+		}
+
+		return toSet;
+	}
+
+	public static <T> Set<T> addAllToSet(T[] array, Set<T> set) {
+		for (T el : array)
+			set.add(el);
+
+		return set;
+	}
+
+	public static <T> Set<T> addAllToSetOrElse(T[] array1, T[] array2, Set<T> set) {
+		int toAdd = array1.length, added = 0;
+
+		for (int i = 0; i < array1.length; ++i) {
+			if (set.add(array1[i]))
+				++added;
 		}
 
 		T candidate;
 		while (added < toAdd) {
-			candidate = randomFromArray(array);
+			candidate = randomFromArray(array2);
 
 			if (set.contains(candidate) != true) {
 				set.add(candidate);

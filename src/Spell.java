@@ -811,7 +811,7 @@ public enum Spell {
 	 * STATIC METHODS
 	 * 
 	 */
-	private static Set<Spell> listToSet(Class job, int tier) {
+	private static Set<Spell> classSpellsByTier(Class job, int tier) {
 		Spell[] array = null;
 		Set<Spell> set = EnumSet.noneOf(Spell.class);
 
@@ -854,7 +854,7 @@ public enum Spell {
 	}
 
 	public static Spell spellFromSchool(int tier, Class job, School school) {
-		Set<Spell> set = listToSet(job, tier);
+		Set<Spell> set = classSpellsByTier(job, tier);
 
 		return Dice.randomFromSet(set);
 	}
@@ -868,7 +868,7 @@ public enum Spell {
 		else
 			spellsKnown = EnumSet.noneOf(Spell.class);
 
-		Set<Spell> set = listToSet(job, tier);
+		Set<Spell> set = classSpellsByTier(job, tier);
 		Spell.retainSpellsOfSchool(school, set);
 
 		int added = 0;
@@ -882,7 +882,7 @@ public enum Spell {
 		}
 
 		if (added < toAdd)
-			set = listToSet(job, tier);
+			set = classSpellsByTier(job, tier);
 
 		while (added < toAdd) {
 			candidate = Dice.randomFromSet(set);
@@ -904,7 +904,7 @@ public enum Spell {
 		else
 			spellsKnown = EnumSet.noneOf(Spell.class);
 
-		Set<Spell> set = listToSet(job, tier);
+		Set<Spell> set = classSpellsByTier(job, tier);
 		Spell.retainSpellsOfSchools(School.ABJURATION, School.EVOCATION, set);
 
 		int added = 0;
@@ -918,7 +918,7 @@ public enum Spell {
 		}
 
 		if (added < toAdd)
-			set = listToSet(job, tier);
+			set = classSpellsByTier(job, tier);
 
 		while (added < toAdd) {
 			candidate = Dice.randomFromSet(set);
@@ -940,7 +940,7 @@ public enum Spell {
 		else
 			spellsKnown = EnumSet.noneOf(Spell.class);
 
-		Set<Spell> set = listToSet(job, tier);
+		Set<Spell> set = classSpellsByTier(job, tier);
 		Spell.retainSpellsOfSchools(School.ENCHANTMENT, School.ILLUSION, set);
 
 		int added = 0;
@@ -954,7 +954,7 @@ public enum Spell {
 		}
 
 		if (added < toAdd)
-			set = listToSet(job, tier);
+			set = classSpellsByTier(job, tier);
 
 		while (added < toAdd) {
 			candidate = Dice.randomFromSet(set);
@@ -982,28 +982,20 @@ public enum Spell {
 		return spells;
 	}
 
-	private static void spellSelector(int spellsToAdd, int tier, Class job, Set<Spell> spellsKnown) {
-		Set<Spell> spellPool = listToSet(job, tier);
+	private static EnumSet<Spell> spellSelector(int toAdd, int tier, Class job, EnumSet<Spell> spellsKnown) {
+		Set<Spell> spellPool = classSpellsByTier(job, tier);
 		if (tier > 3) {
 			// 3&4 or 4&5 or 5&6
-			spellPool.addAll(listToSet(job, tier - 1));
+			spellPool.addAll(classSpellsByTier(job, tier - 1));
 		} else if (tier > 6) {
 			// 6&7 or 7&8 or 8&9
-			spellPool.addAll(listToSet(job, tier - 1));
-			spellPool.addAll(listToSet(job, tier - 2));
+			spellPool.addAll(classSpellsByTier(job, tier - 1));
+			spellPool.addAll(classSpellsByTier(job, tier - 2));
 
 		}
 
-		int spellsAdded = 0;
-		Spell candidate;
-		while (spellsAdded < spellsToAdd) {
-			candidate = Dice.randomFromSet(spellPool);
-
-			if (spellsKnown.add(candidate))
-				++spellsAdded;
-
-		}
-
+		spellsKnown.addAll(Dice.randomAddToSet(toAdd, spellPool, spellsKnown));
+		return spellsKnown;
 	}
 
 	public static void setupSpellsKnown(Actor actor) {
@@ -1125,31 +1117,6 @@ public enum Spell {
 		return set;
 	}
 
-	public static void addCantripOrElse(Spell spell, Class job, Actor actor) {
-		EnumSet<Spell> spellsKnown;
-		if (actor.getSpellsKnown() == null)
-			spellsKnown = EnumSet.noneOf(Spell.class);
-		else
-			spellsKnown = actor.getSpellsKnown();
-
-		Spell[] array = null;
-		if (job.equals(Class.BARD))
-			array = BARD_SPELLS[0];
-		else if (job.equals(Class.CLERIC))
-			array = CLERIC_SPELLS[0];
-		else if (job.equals(Class.DRUID))
-			array = DRUID_SPELLS[0];
-		else if (job.equals(Class.SORCERER))
-			array = SORCERER_SPELLS[0];
-		else if (job.equals(Class.WARLOCK))
-			array = WARLOCK_SPELLS[0];
-		else if (job.equals(Class.WIZARD))
-			array = WIZARD_SPELLS[0];
-
-		spellsKnown.addAll(Dice.addToSetOrElse(1, new Spell[] { spell }, array, spellsKnown));
-		actor.setSpellsKnown(spellsKnown);
-	}
-
 	public static void addCantripKnown(Class job, EnumSet<Spell> spellsKnown) {
 		spellSelector(1, 0, job, spellsKnown);
 	}
@@ -1233,7 +1200,7 @@ public enum Spell {
 		Set<Spell> spells = EnumSet.noneOf(Spell.class);
 
 		for (int i = 9; i >= 0; --i) {
-			spells.addAll(listToSet(job, i));
+			spells.addAll(classSpellsByTier(job, i));
 		}
 
 		return spells;

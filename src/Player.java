@@ -66,10 +66,10 @@ public class Player implements Actor {
 		this.hitDice = Dice.rollHitDice(job);
 
 		// always setup class skills first b/c they're the least flexible
-		Skill.setupClassSkills(this);
+		// Skill.setupClassSkills(this);
 		// others to follow can choose alternative skills
-		Skill.setupCareerSkills(this);
-		Skill.setupRacialSkills(this);
+		Career.applyCareerFeatures(this);
+		// Skill.setupRacialSkills(this);
 		Armor.setupArmorProficiency(this);
 		Weapon.setupWeaponProficiency(this);
 		Class.setupClassFeatures(this);
@@ -120,27 +120,40 @@ public class Player implements Actor {
 		// String sex = (isFemale) ? "female" : "male";
 		// string += String.format("%n%s %s %s (%s) %s follower of %s", size, sex,
 		// creature, race, alignment, god);
+
 		// profile line
 		// string += "\n\n" + career.toStringDetailed() + "\n";
+
 		// combat line
 		string += "\n" + combat.toStringDetailed();
+
 		// abilities line
 		string += "\n" + abilitiesToString();
+
 		// attacks line
 		string += combat.topThreeAttacks();
+
 		// skills line
+		// string += "\nSkills: " + skills.size();
 		string += "\n" + skillsToString();
+
 		// armor line
 		// string += "\n" + armor.toString();
+
 		// weapon line
 		// string += "\n" + weapons.toString();
+
 		// languages line
 		string += "\n" + languages.toString();
+
 		// inventory line
 		string += "\n" + inventory.toStringDetailed();
+
 		// features line
 		if (features.size() > 0)
 			string += "\n" + features.toString();
+
+		// spells block
 		if (spellsKnown.size() > 0) {
 			EnumSet<Spell> cantripsKnown = EnumSet.copyOf(Spell.retainSpellsOfTier(0, spellsKnown));
 			EnumSet<Spell> otherKnown = EnumSet.copyOf(Spell.retainSpellsExceptOfTier(0, spellsKnown));
