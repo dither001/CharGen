@@ -54,7 +54,7 @@ public class Player implements Actor {
 		//
 		job = Class.selectClass(this);
 		archetype = Class.Subclass.selectSubclass(this);
-		race = Race.selectRace();
+		Race.applyRacialFeatures(this);
 		god = Deity.selectDeity(this);
 		career = new Career.Profile(this);
 		isFemale = (abilityScores[2] > abilityScores[0]) ? true : false;
@@ -77,7 +77,7 @@ public class Player implements Actor {
 		Spell.setupSpellsKnown(this);
 
 		// must be after race is determined
-		this.size = (race.equals(Race.HALFLING) || race.equals(Race.GNOME)) ? Size.SMALL : Size.MEDIUM;
+		this.size = (race.equals(Race.LIGHTFOOT_HALFLING) || race.equals(Race.FOREST_GNOME)) ? Size.SMALL : Size.MEDIUM;
 		this.creature = Creature.HUMANOID;
 
 		// inventory setup
@@ -118,10 +118,11 @@ public class Player implements Actor {
 		String string = String.format("%s the level %d %s %s (%s)", name, level, race, job, archetype);
 
 		// creature line
-//		String sex = (isFemale) ? "female" : "male";
-//		string += String.format("%n%s %s %s (%s) %s follower of %s", size, sex, creature, race, alignment, god);
+		// String sex = (isFemale) ? "female" : "male";
+		// string += String.format("%n%s %s %s (%s) %s follower of %s", size, sex,
+		// creature, race, alignment, god);
 		// profile line
-//		string += "\n\n" + career.toStringDetailed() + "\n";
+		// string += "\n\n" + career.toStringDetailed() + "\n";
 		// combat line
 		string += "\n" + combat.toStringDetailed();
 		// abilities line
@@ -236,6 +237,11 @@ public class Player implements Actor {
 	@Override
 	public Race getRace() {
 		return race;
+	}
+
+	@Override
+	public void setRace(Race race) {
+		this.race = race;
 	}
 
 	@Override

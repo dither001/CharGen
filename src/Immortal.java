@@ -42,7 +42,7 @@ public abstract class Immortal {
 		/*
 		 * ANCESTOR, SAINT, DEMIGOD
 		 */
-		ANCESTOR, SAINT, DEMIGOD, PLUTOCRAT, 
+		ANCESTOR, SAINT, DEMIGOD, PLUTOCRAT,
 		/*
 		 * DEMIURGES include the majority of monotheistic deities, like ABRAXAS, ALLAH,
 		 * and YAHWEH who are almost always specifically associated with Creation
@@ -639,6 +639,12 @@ public abstract class Immortal {
 		public Race getRace() {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public void setRace(Race race) {
+			// TODO Auto-generated method stub
+
 		}
 
 		@Override

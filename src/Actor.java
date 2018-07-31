@@ -128,7 +128,7 @@ public interface Actor {
 				languages.add(COMMON);
 				languages.add(DRACONIC);
 
-			} else if (race.equals(Race.DWARF)) {
+			} else if (race.equals(Race.HILL_DWARF)) {
 				languages.add(COMMON);
 				languages.add(DWARVISH);
 
@@ -145,11 +145,11 @@ public interface Actor {
 				languages.add(COMMON);
 				languages.add(ELVISH);
 
-			} else if (race.equals(Race.HALFLING)) {
+			} else if (race.equals(Race.LIGHTFOOT_HALFLING)) {
 				languages.add(COMMON);
 				languages.add(HALFLING);
 
-			} else if (race.equals(Race.GNOME)) {
+			} else if (race.equals(Race.FOREST_GNOME)) {
 				languages.add(COMMON);
 				languages.add(GNOMISH);
 
@@ -205,6 +205,8 @@ public interface Actor {
 	public Class.Subclass getArchetype();
 
 	public Race getRace();
+	
+	public void setRace(Race race);
 
 	public EnumSet<Spell> getSpellsKnown();
 

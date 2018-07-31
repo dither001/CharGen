@@ -362,7 +362,7 @@ public class Main {
 
 			if (player.getRace().equals(Race.HUMAN))
 				++array[0];
-			else if (player.getRace().equals(Race.DWARF))
+			else if (player.getRace().equals(Race.HILL_DWARF))
 				++array[1];
 			else if (player.getRace().equals(Race.HIGH_ELF)) {
 				++array[2];
@@ -372,7 +372,7 @@ public class Main {
 				++array[3];
 				++elves;
 
-			} else if (player.getRace().equals(Race.HALFLING))
+			} else if (player.getRace().equals(Race.LIGHTFOOT_HALFLING))
 				++array[4];
 			else if (player.getRace().equals(Race.DRAGONBORN))
 				++array[5];
@@ -380,7 +380,7 @@ public class Main {
 				++array[6];
 				++elves;
 
-			} else if (player.getRace().equals(Race.GNOME))
+			} else if (player.getRace().equals(Race.FOREST_GNOME))
 				++array[7];
 			else if (player.getRace().equals(Race.HALF_ELF))
 				++array[8];
@@ -390,8 +390,8 @@ public class Main {
 				++array[10];
 		}
 
-		Race[] races = new Race[] { Race.HUMAN, Race.DWARF, Race.HIGH_ELF, Race.WOOD_ELF, Race.HALFLING,
-				Race.DRAGONBORN, Race.DARK_ELF, Race.GNOME, Race.HALF_ELF, Race.HALF_ORC, Race.TIEFLING };
+		Race[] races = new Race[] { Race.HUMAN, Race.HILL_DWARF, Race.HIGH_ELF, Race.WOOD_ELF, Race.LIGHTFOOT_HALFLING,
+				Race.DRAGONBORN, Race.DARK_ELF, Race.FOREST_GNOME, Race.HALF_ELF, Race.HALF_ORC, Race.TIEFLING };
 		String string;
 		for (int i = 0; i < races.length; ++i) {
 			string = String.format("%12s %5d (%5.1f)", races[i], array[i], (0.0 + array[i]) / PCS_TO_ROLL * 100);

@@ -51,6 +51,9 @@ public enum Skill {
 	private static final Skill[] VEHICLE_SKILLS = { CARRIAGE, CART, CHARIOT, SLED, WAGON, GALLEY, KEELBOAT, LONGSHIP,
 			ROWBOAT, SAILING_SHIP, WARSHIP };
 
+	// special use
+	protected static final Skill[] DWARF_TOOLS = { BREWER, MASON, SMITH };
+
 	// background skills
 	private static final Skill[] ACOLYTE_SKILLS = { INSIGHT, RELIGION };
 	private static final Skill[] CHARLATAN_SKILLS = { DECEPTION, SLEIGHT_OF_HAND };

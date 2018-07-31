@@ -1,6 +1,25 @@
+import java.util.EnumSet;
 
-public enum Race {
-	HUMAN, DRAGONBORN, DWARF, HIGH_ELF, WOOD_ELF, DARK_ELF, GNOME, HALFLING, HALF_ELF, HALF_ORC, TIEFLING;
+public enum Race implements Option {
+	HUMAN,
+	//
+	DRAGONBORN,
+	//
+	HILL_DWARF, MOUNTAIN_DWARF,
+	//
+	HIGH_ELF, WOOD_ELF, DARK_ELF,
+	//
+	FOREST_GNOME, TINKER_GNOME,
+	//
+	LIGHTFOOT_HALFLING, STOUTHEART_HALFLING,
+	//
+	HALF_ELF,
+	//
+	HALF_ORC,
+	//
+	TIEFLING
+	//
+	;
 
 	/*
 	 * STATIC FIELDS
@@ -102,42 +121,63 @@ public enum Race {
 			"REYNARD", "RICHARD", "ROBERT", "ROGER", "ROLAND", "ROLF", "SIMON", "THEOBALD", "THEODORIC", "THOMAS",
 			"TIMM", "WILLIAM", "WYMAR" };
 
-	// methods
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
 	public static Race selectRace() {
 		Race race;
 		int dice = Dice.roll(100);
 
 		if (dice < 41) {
 			race = HUMAN;
-		} else if (dice < 47) {
-			race = DRAGONBORN;
-		} else if (dice < 53) {
-			race = DWARF;
-		} else if (dice < 59) {
-			race = HIGH_ELF;
-		} else if (dice < 65) {
-			race = WOOD_ELF;
-		} else if (dice < 71) {
-			race = DARK_ELF;
-		} else if (dice < 77) {
-			race = GNOME;
-		} else if (dice < 83) {
-			race = HALF_ELF;
-		} else if (dice < 89) {
-			race = HALF_ORC;
-		} else if (dice < 95) {
-			race = HALFLING;
+		} else if (dice < 41 + 15) {
+			// DWARF
+			dice = Dice.roll(3);
+			if (dice < 3)
+				race = Race.HILL_DWARF;
+			else
+				race = Race.MOUNTAIN_DWARF;
+
+		} else if (dice < 41 + 30) {
+			// ELF
+			dice = Dice.roll(6);
+			if (dice < 4)
+				race = Race.WOOD_ELF;
+			else if (dice < 6)
+				race = Race.HIGH_ELF;
+			else
+				race = Race.DARK_ELF;
+
+		} else if (dice < 41 + 45) {
+			// HALFLING
+			dice = Dice.roll(3);
+			if (dice < 3)
+				race = Race.LIGHTFOOT_HALFLING;
+			else
+				race = Race.STOUTHEART_HALFLING;
+
 		} else {
-			race = TIEFLING;
+			// other races
+			dice = Dice.roll(10);
+			if (dice == 1 || dice == 2 || dice == 3)
+				race = Race.HALF_ELF;
+			else if (dice == 4 || dice == 5)
+				race = Race.DRAGONBORN;
+			else if (dice == 6 || dice == 7)
+				race = Race.TIEFLING;
+			else if (dice == 8)
+				race = Race.FOREST_GNOME;
+			else if (dice == 9)
+				race = Race.TINKER_GNOME;
+			else
+				race = Race.HALF_ORC;
+
 		}
 
 		return race;
 	}
 
-	/*
-	 * STATIC METHODS
-	 * 
-	 */
 	public static void applyRacialBonus(Actor actor, Race race) {
 		if (race.equals(HUMAN)) {
 			actor.setStrength(actor.getStrength() + 1);
@@ -149,7 +189,7 @@ public enum Race {
 		} else if (race.equals(DRAGONBORN)) {
 			actor.setStrength(actor.getStrength() + 2);
 			actor.setCharisma(actor.getCharisma() + 2);
-		} else if (race.equals(DWARF)) {
+		} else if (race.equals(HILL_DWARF)) {
 			actor.setConstitution(actor.getConstitution() + 2);
 			actor.setStrength(actor.getStrength() + 1);
 			actor.setWisdom(actor.getWisdom() + 1);
@@ -162,11 +202,11 @@ public enum Race {
 		} else if (race.equals(DARK_ELF)) {
 			actor.setDexterity(actor.getDexterity() + 2);
 			actor.setCharisma(actor.getCharisma() + 1);
-		} else if (race.equals(HALFLING)) {
+		} else if (race.equals(LIGHTFOOT_HALFLING)) {
 			actor.setDexterity(actor.getDexterity() + 2);
 			actor.setWisdom(actor.getWisdom() + 1);
 			actor.setCharisma(actor.getCharisma() + 1);
-		} else if (race.equals(GNOME)) {
+		} else if (race.equals(FOREST_GNOME)) {
 			actor.setDexterity(actor.getDexterity() + 2);
 			actor.setConstitution(actor.getConstitution() + 1);
 			actor.setIntelligence(actor.getIntelligence() + 1);
@@ -182,6 +222,235 @@ public enum Race {
 		}
 	}
 
+	public static void applyRacialFeatures(Actor actor) {
+		applyRacialFeatures(selectRace(), actor);
+	}
+
+	private static void applyRacialFeatures(Race race, Actor actor) {
+		actor.setRace(race);
+
+		EnumSet<Feature> features;
+		if (actor.getFeatures() != null)
+			features = actor.getFeatures();
+		else
+			features = EnumSet.noneOf(Feature.class);
+
+		// most races grant skills
+		EnumSet<Skill> skills;
+		if (actor.getSkills() != null)
+			skills = actor.getSkills();
+		else
+			skills = EnumSet.noneOf(Skill.class);
+
+		// some races grant armor proficiency
+		EnumSet<Armor> armor;
+		if (actor.getArmorProficiency() != null)
+			armor = actor.getArmorProficiency();
+		else
+			armor = EnumSet.noneOf(Armor.class);
+
+		// some races grant weapon proficiency
+		EnumSet<Weapon> weapons;
+		if (actor.getWeaponProficiency() != null)
+			weapons = actor.getWeaponProficiency();
+		else
+			weapons = EnumSet.noneOf(Weapon.class);
+
+		// some races grant spells
+		EnumSet<Spell> spellsKnown;
+		if (actor.getSpellsKnown() != null)
+			spellsKnown = actor.getSpellsKnown();
+		else
+			spellsKnown = EnumSet.noneOf(Spell.class);
+
+		/*
+		 * 
+		 */
+		if (race.equals(HILL_DWARF) || race.equals(MOUNTAIN_DWARF)) {
+			/*
+			 * DWARF FEATURES
+			 */
+			actor.setConstitution(actor.getConstitution() + 2);
+			features.add(Feature.DWARVEN_ENCUMBRANCE);
+			features.add(Feature.DARKVISION_60);
+			//
+			features.add(Feature.DWARF_WEAPON_TRAINING);
+			weapons.add(Weapon.BATTLEAXE);
+			weapons.add(Weapon.HANDAXE);
+			weapons.add(Weapon.LIGHT_HAMMER);
+			weapons.add(Weapon.WARHAMMER);
+			//
+			skills.add(Dice.randomFromArray(Skill.DWARF_TOOLS));
+			features.add(Feature.STONECUNNING);
+
+			if (race.equals(HILL_DWARF)) {
+				actor.setWisdom(actor.getWisdom() + 1);
+				//
+				features.add(Feature.DWARVEN_TOUGHNESS);
+
+			} else if (race.equals(MOUNTAIN_DWARF)) {
+				actor.setStrength(actor.getStrength() + 2);
+				//
+				features.add(Feature.DWARF_ARMOR_TRAINING);
+				armor.addAll(Armor.getLightArmorList());
+				armor.addAll(Armor.getMediumArmorList());
+			}
+
+		} else if (race.equals(Race.DARK_ELF) || race.equals(Race.HIGH_ELF) || race.equals(Race.WOOD_ELF)) {
+			/*
+			 * ELF FEATURES
+			 */
+			actor.setDexterity(actor.getDexterity() + 2);
+			// TODO
+			// skills.add(Skill.PERCEPTION);
+			features.add(Feature.FEY_ANCESTRY);
+			features.add(Feature.ELF_TRANCE);
+
+			if (race.equals(HIGH_ELF)) {
+				actor.setIntelligence(actor.getIntelligence() + 1);
+				features.add(Feature.DARKVISION_60);
+				//
+				features.add(Feature.ELF_WEAPON_TRAINING);
+				weapons.add(Weapon.LONGSWORD);
+				weapons.add(Weapon.LONGBOW);
+				weapons.add(Weapon.SHORTSWORD);
+				weapons.add(Weapon.SHORTBOW);
+				//
+				Spell.addCantripKnown(Class.WIZARD, spellsKnown);
+
+			} else if (race.equals(WOOD_ELF)) {
+				actor.setWisdom(actor.getWisdom() + 1);
+				features.add(Feature.DARKVISION_60);
+				//
+				features.add(Feature.ELF_WEAPON_TRAINING);
+				weapons.add(Weapon.LONGSWORD);
+				weapons.add(Weapon.LONGBOW);
+				weapons.add(Weapon.SHORTSWORD);
+				weapons.add(Weapon.SHORTBOW);
+
+			} else if (race.equals(DARK_ELF)) {
+				actor.setCharisma(actor.getCharisma() + 1);
+				features.add(Feature.DARKVISION_120);
+				features.add(Feature.SUNLIGHT_SENSITIVITY);
+				//
+				features.add(Feature.DROW_WEAPON_TRAINING);
+				weapons.add(Weapon.HAND_CROSSBOW);
+				weapons.add(Weapon.RAPIER);
+				weapons.add(Weapon.SHORTSWORD);
+				//
+				spellsKnown.add(Spell.DANCING_LIGHTS);
+
+			}
+
+		} else if (race.equals(Race.LIGHTFOOT_HALFLING) || race.equals(Race.STOUTHEART_HALFLING)) {
+			/*
+			 * HALFLING FEaTURES
+			 */
+			actor.setDexterity(actor.getDexterity() + 2);
+			features.add(Feature.HALFLING_LUCK);
+			features.add(Feature.HALFLING_BRAVERY);
+			features.add(Feature.HALFLING_NIMBLENESS);
+
+			if (race.equals(LIGHTFOOT_HALFLING)) {
+				actor.setCharisma(actor.getCharisma() + 1);
+				//
+				features.add(Feature.NATURALLY_STEALTHY);
+
+			} else if (race.equals(STOUTHEART_HALFLING)) {
+				actor.setConstitution(actor.getConstitution() + 1);
+				//
+				features.add(Feature.STOUT_RESILIENCE);
+
+			}
+
+		} else if (race.equals(Race.HUMAN)) {
+			/*
+			 * HUMAN FEATURES
+			 */
+			actor.setStrength(actor.getStrength() + 1);
+			actor.setDexterity(actor.getDexterity() + 1);
+			actor.setConstitution(actor.getConstitution() + 1);
+			actor.setIntelligence(actor.getIntelligence() + 1);
+			actor.setWisdom(actor.getWisdom() + 1);
+			actor.setCharisma(actor.getCharisma() + 1);
+
+		} else if (race.equals(Race.DRAGONBORN)) {
+			/*
+			 * DRAGONBORN FEATURES
+			 */
+			actor.setStrength(actor.getStrength() + 2);
+			actor.setCharisma(actor.getCharisma() + 1);
+			//
+			Option.dragonbornAncestry(actor);
+
+		} else if (race.equals(Race.FOREST_GNOME) || race.equals(Race.TINKER_GNOME)) {
+			/*
+			 * GNOME FEATURES
+			 */
+			actor.setIntelligence(actor.getIntelligence() + 2);
+			features.add(Feature.DARKVISION_60);
+			features.add(Feature.GNOME_CUNNING);
+
+			if (race.equals(Race.FOREST_GNOME)) {
+				actor.setDexterity(actor.getDexterity() + 1);
+				//
+				features.add(Feature.NATURAL_ILLUSIONIST);
+				spellsKnown.add(Spell.MINOR_ILLUSION);
+				features.add(Feature.SPEAK_WITH_SMALL_BEASTS);
+
+			} else if (race.equals(Race.TINKER_GNOME)) {
+				actor.setConstitution(actor.getConstitution() + 1);
+				//
+				features.add(Feature.ARTIFICERS_LORE);
+				features.add(Feature.GNOME_TINKER);
+
+			}
+
+		} else if (race.equals(Race.HALF_ELF)) {
+			/*
+			 * HALF-ELF FEATURES
+			 */
+			actor.setCharisma(actor.getCharisma() + 2);
+			actor.setDexterity(actor.getDexterity() + 1);
+			actor.setConstitution(actor.getConstitution() + 1);
+			//
+			features.add(Feature.DARKVISION_60);
+			features.add(Feature.FEY_ANCESTRY);
+
+		} else if (race.equals(Race.HALF_ORC)) {
+			/*
+			 * HALF-ORC FEATURES
+			 */
+			actor.setStrength(actor.getStrength() + 2);
+			actor.setConstitution(actor.getConstitution() + 1);
+			//
+			features.add(Feature.DARKVISION_60);
+			features.add(Feature.HALF_ORC_MENACE);
+			// TODO
+			// skills.add(Skill.INTIMIDATION);
+			features.add(Feature.RELENTLESS_ENDURANCE);
+			features.add(Feature.SAVAGE_ATTACKS);
+
+		} else if (race.equals(Race.TIEFLING)) {
+			/*
+			 * TIEFLING FEATURES
+			 */
+			actor.setCharisma(actor.getCharisma() + 2);
+			actor.setIntelligence(actor.getIntelligence() + 1);
+			//
+			features.add(Feature.DARKVISION_60);
+			features.add(Feature.HELLISH_RESISTANCE);
+			features.add(Feature.INFERNAL_LEGACY);
+
+		}
+
+		actor.setFeatures(features);
+		actor.setWeaponProficiency(weapons);
+		actor.setArmorProficiency(armor);
+		actor.setSkills(skills);
+		actor.setSpellsKnown(spellsKnown);
+	}
+
 	public static String randomName(boolean isFemale, Race race) {
 		String[] array = null;
 
@@ -189,21 +458,21 @@ public enum Race {
 			array = DRAGONBORN_FEMALE;
 		else if (race.equals(Race.DRAGONBORN))
 			array = DRAGONBORN_MALE;
-		else if (isFemale && race.equals(Race.DWARF))
+		else if (isFemale && (race.equals(Race.HILL_DWARF) || race.equals(Race.MOUNTAIN_DWARF)))
 			array = DWARF_FEMALE;
-		else if (race.equals(Race.DWARF))
+		else if (race.equals(Race.HILL_DWARF) || race.equals(Race.MOUNTAIN_DWARF))
 			array = DWARF_MALE;
 		else if (isFemale && (race.equals(Race.DARK_ELF) || race.equals(Race.HIGH_ELF) || race.equals(Race.WOOD_ELF)))
 			array = ELF_FEMALE;
 		else if (race.equals(Race.DARK_ELF) || race.equals(Race.HIGH_ELF) || race.equals(Race.WOOD_ELF))
 			array = ELF_MALE;
-		else if (isFemale && race.equals(Race.GNOME))
+		else if (isFemale && (race.equals(Race.FOREST_GNOME) || race.equals(Race.TINKER_GNOME)))
 			array = GNOME_FEMALE;
-		else if (race.equals(Race.GNOME))
+		else if (race.equals(Race.FOREST_GNOME) || race.equals(Race.TINKER_GNOME))
 			array = GNOME_MALE;
-		else if (isFemale && race.equals(Race.HALFLING))
+		else if (isFemale && (race.equals(Race.LIGHTFOOT_HALFLING) || race.equals(Race.STOUTHEART_HALFLING)))
 			array = HALFLING_FEMALE;
-		else if (race.equals(Race.HALFLING))
+		else if (race.equals(Race.LIGHTFOOT_HALFLING) || race.equals(Race.STOUTHEART_HALFLING))
 			array = HALFLING_MALE;
 		else if (isFemale && race.equals(Race.HALF_ORC))
 			array = HALF_ORC_FEMALE;

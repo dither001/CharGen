@@ -346,10 +346,10 @@ public enum Class implements Option {
 	 */
 	public static void updateClassFeatures(Actor actor) {
 		EnumSet<Feature> features;
-		if (actor.getFeatures() == null)
-			features = EnumSet.noneOf(Feature.class);
-		else
+		if (actor.getFeatures() != null)
 			features = actor.getFeatures();
+		else
+			features = EnumSet.noneOf(Feature.class);
 
 		// TODO
 		Class job = actor.getJob();
@@ -384,10 +384,10 @@ public enum Class implements Option {
 
 	public static void setupClassFeatures(Actor actor) {
 		EnumSet<Feature> features;
-		if (actor.getFeatures() == null)
-			features = EnumSet.noneOf(Feature.class);
-		else
+		if (actor.getFeatures() != null)
 			features = actor.getFeatures();
+		else
+			features = EnumSet.noneOf(Feature.class);
 
 		// TODO
 		Class job = actor.getJob();
@@ -1174,7 +1174,7 @@ public enum Class implements Option {
 				//
 				set.add(Feature.SUPERIORITY_DICE_6);
 				set.addAll(addFighterManeuver(2, actor));
-				set.add(Feature.RELENTLESS);
+				set.add(Feature.RELENTLESS_FIGHTER);
 
 			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
 				//
@@ -1829,7 +1829,7 @@ public enum Class implements Option {
 				set.add(Feature.CHARISMA_SAVE);
 				//
 				actor.getLanguages().add(Actor.Language.DRACONIC);
-				Option.draconicAncestry(actor);
+				Option.dragonSorcererAncestry(actor);
 				set.add(Feature.DRACONIC_RESILIENCE);
 
 			} else if (archetype.equals(Subclass.CHAOS_ORIGIN)) {

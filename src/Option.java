@@ -2,7 +2,28 @@ import java.util.EnumSet;
 
 public interface Option {
 	public enum Feature {
-		// ability bonus
+		/*
+		 * RACIAL FEATURES
+		 */
+		DARKVISION_60, DARKVISION_120, SUNLIGHT_SENSITIVITY,
+		// dwarf features
+		DWARVEN_ENCUMBRANCE, STOUT_RESILIENCE, DWARF_WEAPON_TRAINING, STONECUNNING, DWARVEN_TOUGHNESS, DWARF_ARMOR_TRAINING,
+		// elf features
+		FEY_ANCESTRY, ELF_TRANCE, ELF_WEAPON_TRAINING, FLEET_OF_FOOT, MASK_OF_THE_WILD, DROW_WEAPON_TRAINING,
+		// halfling features
+		HALFLING_LUCK, HALFLING_BRAVERY, HALFLING_NIMBLENESS, NATURALLY_STEALTHY,
+		// dragonborn features
+		FIRE_BREATH_LINE, LIGHTNING_BREATH_LINE, ACID_BREATH_LINE, FIRE_BREATH_CONE, COLD_BREATH_CONE, ACID_BREATH_CONE, POISON_BREATH_CONE,
+		// gnome features
+		GNOME_CUNNING, NATURAL_ILLUSIONIST, SPEAK_WITH_SMALL_BEASTS, ARTIFICERS_LORE, GNOME_TINKER, 
+		// half-orc features
+		HALF_ORC_MENACE, RELENTLESS_ENDURANCE, SAVAGE_ATTACKS, 
+		// tiefling features
+		HELLISH_RESISTANCE, INFERNAL_LEGACY, 
+
+		/*
+		 * CLASS FEATURES
+		 */
 		ABILITY_BONUS_4, ABILITY_BONUS_6, ABILITY_BONUS_8, ABILITY_BONUS_10, ABILITY_BONUS_12, ABILITY_BONUS_14, ABILITY_BONUS_16, ABILITY_BONUS_19,
 		// strength bonus
 		STR_BONUS_4, STR_BONUS_6, STR_BONUS_8, STR_BONUS_10, STR_BONUS_12, STR_BONUS_14, STR_BONUS_16, STR_BONUS_19,
@@ -80,7 +101,7 @@ public interface Option {
 		// champion
 		IMPROVED_CRITICAL, REMARKABLE_ATHLETE, ADDITIONAL_FIGHTING_STYLE, SUPERIOR_CRITICAL, SURVIVOR,
 		// battle master
-		COMBAT_SUPERIORITY, STUDENT_OF_WAR, KNOW_YOUR_ENEMY, RELENTLESS, SUPERIORITY_DICE_4, SUPERIORITY_DICE_5, SUPERIORITY_DICE_6, SUPERIORITY_D8, SUPERIORITY_D10, SUPERIORITY_D12,
+		COMBAT_SUPERIORITY, STUDENT_OF_WAR, KNOW_YOUR_ENEMY, RELENTLESS_FIGHTER, SUPERIORITY_DICE_4, SUPERIORITY_DICE_5, SUPERIORITY_DICE_6, SUPERIORITY_D8, SUPERIORITY_D10, SUPERIORITY_D12,
 		// maneuvers
 		COMMANDERS_STRIKE, DISARMING_ATTACK, DISTRACTING_STRIKE, EVASIVE_FOOTWORK, FEINTING_ATTACK, GOADING_ATTACK, LUNGING_ATTACK, MANEUVERING_ATTACK, MENACING_ATTACK, PARRY, PRECISION_ATTACK, PUSHING_ATTACK, RALLY, RIPOSTE, SWEEPING_ATTACK, TRIP_ATTACK,
 		// eldritch knight
@@ -257,6 +278,47 @@ public interface Option {
 	 * STATIC METHODS
 	 * 
 	 */
+	public static void dragonbornAncestry(Actor actor) {
+		EnumSet<Feature> features;
+		if (actor.getFeatures() != null)
+			features = actor.getFeatures();
+		else
+			features = EnumSet.noneOf(Feature.class);
+
+		int dice = Dice.roll(7);
+		if (dice == 1) {
+			features.add(Feature.FIRE_BREATH_CONE);
+			features.add(Feature.ANCESTRY_FIRE);
+
+		} else if (dice == 2) {
+			features.add(Feature.LIGHTNING_BREATH_LINE);
+			features.add(Feature.ANCESTRY_LIGHTNING);
+
+		} else if (dice == 3) {
+			features.add(Feature.ACID_BREATH_LINE);
+			features.add(Feature.ANCESTRY_ACID);
+
+		} else if (dice == 4) {
+			features.add(Feature.FIRE_BREATH_CONE);
+			features.add(Feature.ANCESTRY_FIRE);
+
+		} else if (dice == 5) {
+			features.add(Feature.COLD_BREATH_CONE);
+			features.add(Feature.ANCESTRY_COLD);
+
+		} else if (dice == 6) {
+			features.add(Feature.ACID_BREATH_CONE);
+			features.add(Feature.ANCESTRY_ACID);
+
+		} else {
+			features.add(Feature.POISON_BREATH_CONE);
+			features.add(Feature.ANCESTRY_POISON);
+
+		}
+
+		actor.setFeatures(features);
+	}
+
 	public static void addElementalDiscipline(int toAdd, Actor actor) {
 		int level = actor.getLevel();
 
@@ -340,7 +402,7 @@ public interface Option {
 		actor.setFeatures(features);
 	}
 
-	public static void draconicAncestry(Actor actor) {
+	public static void dragonSorcererAncestry(Actor actor) {
 		Feature[] array = Feature.DRAGON_ANCESTRY;
 
 		EnumSet<Feature> features;

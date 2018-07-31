@@ -81,7 +81,10 @@ public enum Deity {
 		case DRAGONBORN:
 			deity = (Dice.roll(2) == 1) ? BAHAMUT : TIAMAT;
 			break;
-		case DWARF:
+		case HILL_DWARF:
+			deity = MORADIN;
+			break;
+		case MOUNTAIN_DWARF:
 			deity = MORADIN;
 			break;
 		case HIGH_ELF:
@@ -93,10 +96,16 @@ public enum Deity {
 		case DARK_ELF:
 			deity = LOLTH;
 			break;
-		case GNOME:
+		case FOREST_GNOME:
+			deity = MELORA;
+			break;
+		case TINKER_GNOME:
 			deity = ERATHIS;
 			break;
-		case HALFLING:
+		case LIGHTFOOT_HALFLING:
+			deity = AVANDRA;
+			break;
+		case STOUTHEART_HALFLING:
 			deity = AVANDRA;
 			break;
 		case HALF_ORC:
