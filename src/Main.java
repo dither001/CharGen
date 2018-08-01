@@ -21,12 +21,12 @@ public class Main {
 		// rollCharactersOfArchetype(Class.Subclass.KNOWLEDGE);
 		// levelUpTest(20);
 
-		for (int i = 0; i < 50; ++i) {
-			levelUpTestDisplayOnly(20, Class.WIZARD);
-		}
+		// for (int i = 0; i < 50; ++i) {
+		// levelUpTestDisplayOnly(20, Class.WIZARD);
+		// }
 
 		//
-		// testMainWorld();
+		testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
@@ -412,15 +412,15 @@ public class Main {
 		for (int i = 0; i < PCS_TO_ROLL; ++i) {
 			player = new Player();
 
-			if (player.getAlignment().equals(Actor.Alignment.LAWFUL))
+			if (player.alignment().equals(Actor.Alignment.LAWFUL))
 				++array[0];
-			else if (player.getAlignment().equals(Actor.Alignment.GOOD))
+			else if (player.alignment().equals(Actor.Alignment.GOOD))
 				++array[1];
-			else if (player.getAlignment().equals(Actor.Alignment.NEUTRAL))
+			else if (player.alignment().equals(Actor.Alignment.NEUTRAL))
 				++array[2];
-			else if (player.getAlignment().equals(Actor.Alignment.EVIL))
+			else if (player.alignment().equals(Actor.Alignment.EVIL))
 				++array[3];
-			else if (player.getAlignment().equals(Actor.Alignment.CHAOTIC))
+			else if (player.alignment().equals(Actor.Alignment.CHAOTIC))
 				++array[4];
 		}
 

@@ -118,7 +118,7 @@ public enum Class implements Option {
 
 	public static Class selectClass(Actor actor) {
 		Class job;
-		Actor.Alignment ali = actor.getAlignment();
+		Actor.Alignment ali = actor.alignment();
 
 		int dexterity, intelligence, wisdom, charisma;
 		dexterity = actor.getDexterity();

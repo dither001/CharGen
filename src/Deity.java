@@ -28,7 +28,7 @@ public enum Deity {
 
 	// static methods
 	public static Deity selectDeity(Actor actor) {
-		Actor.Alignment ali = actor.getAlignment();
+		Actor.Alignment ali = actor.alignment();
 		Class job = actor.getJob();
 		Race race = actor.getRace();
 		Deity deity;

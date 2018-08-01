@@ -176,43 +176,19 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public boolean polymorphed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean magicUser() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean weaponUser() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean armorUser() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Size getSize() {
+	public Size creatureSize() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Creature getCreatureType() {
+	public Creature creatureType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Alignment getAlignment() {
+	public Alignment alignment() {
 		return alignment;
 	}
 

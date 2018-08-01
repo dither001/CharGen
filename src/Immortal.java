@@ -558,43 +558,19 @@ public abstract class Immortal {
 		}
 
 		@Override
-		public boolean polymorphed() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean magicUser() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean weaponUser() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean armorUser() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public Size getSize() {
+		public Size creatureSize() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public Creature getCreatureType() {
+		public Creature creatureType() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public Actor.Alignment getAlignment() {
+		public Actor.Alignment alignment() {
 			// TODO Auto-generated method stub
 			return null;
 		}
