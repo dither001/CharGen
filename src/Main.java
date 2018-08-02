@@ -25,8 +25,20 @@ public class Main {
 		// levelUpTestDisplayOnly(20, Class.WIZARD);
 		// }
 
+		Ladder ladder = new Ladder();
+		Set<Actor> actors = new HashSet<Actor>();
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			actors.add(new Player());
+		}
+
+		ladder.addAllCurrentMembers(actors);
+
+		for (Iterator<Actor> it = ladder.currentMemberSet().iterator(); it.hasNext();) {
+			System.out.println(it.next());
+		}
+
 		//
-		testMainWorld();
+		// testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {

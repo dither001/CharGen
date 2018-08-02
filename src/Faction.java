@@ -343,24 +343,29 @@ public interface Faction {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public boolean addCurrentMember(Actor actor);
+	
+	public boolean addAllCurrentMembers(Collection<Actor> c);
+	
+	public void setCurrentMembers(Collection<Actor> c);
+	
+	public Set<Actor> currentMemberSet();
+	
+	public boolean addFormerMember(Actor actor);
+	
+	public boolean addAllFormerMembers(Collection<Actor> c);
+	
+	public void setFormerMembers(Collection<Actor> c);
+	
+	public Set<Actor> formerMemberSet();
+	
 	public World getHomeworld();
 
-	public void setHomeworld(World homeworld);
-
+	//
 	public Set<Tag> getFactionTags();
 
 	public void SetFactionTags(EnumSet<Tag> tags);
-	
-	public Set<Actor> getMembers();
-	
-	public int membership();
-	
-	public boolean addMember(Actor actor);
-	
-	public boolean addAllMembers(Collection<Actor> actors);
-	
-	public void setMembers(Set<Actor> members);
-	
+		
 	public List<String> nameList();
 
 	/*
