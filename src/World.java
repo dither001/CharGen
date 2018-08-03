@@ -437,9 +437,6 @@ public interface World {
 		if (type.equals(Type.EMPTY))
 			isWorld = false;
 
-		if (type.equals(Type.ASTEROID))
-			isWorld = false;
-
 		if (type.equals(Type.RING))
 			isWorld = false;
 
@@ -454,9 +451,6 @@ public interface World {
 		Type type = getType();
 
 		if (type.equals(Type.EMPTY))
-			nameable = false;
-
-		if (type.equals(Type.ASTEROID))
 			nameable = false;
 
 		if (type.equals(Type.RING))
@@ -526,8 +520,12 @@ public interface World {
 		return getType().equals(Type.RING) != true;
 	}
 
-	public default boolean isAsteroidBelt() {
+	public default boolean isAsteroid() {
 		return getType().equals(Type.ASTEROID);
+	}
+
+	public default boolean notAsteroid() {
+		return getType().equals(Type.ASTEROID) != true;
 	}
 
 	public default boolean hasMoons() {

@@ -109,6 +109,15 @@ public abstract class Dice {
 		return choice;
 	}
 
+	public static <T> List<T> arrayToList(T[] array) {
+		List<T> list = new ArrayList<T>();
+
+		for (T el : array)
+			list.add(el);
+
+		return list;
+	}
+
 	public static <T> List<T> mapToList(Map<T, Integer> map) {
 		List<T> list = new ArrayList<T>();
 

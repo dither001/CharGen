@@ -90,24 +90,70 @@ public class Pantheon implements Faction {
 		return pantheons;
 	}
 
-	public static List<String> getNameList() {
-		return Dice.randomFromSet(pantheons).nameList();
+	public List<String> nameList() {
+		List<String> nameList = new ArrayList<String>();
+		String name;
+		for (Iterator<Immortal.Instance> it = members.iterator(); it.hasNext();) {
+			name = it.next().getName();
+			if (name != null)
+				nameList.add(name);
+		}
+
+		return nameList;
 	}
 
-	/*
-	 * INTERFACE METHODS
-	 * 
-	 */
 	@Override
-	public World getHomeworld() {
+	public boolean addCurrentMember(Actor actor) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addAllCurrentMembers(Collection<Actor> c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setCurrentMembers(Collection<Actor> c) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Set<Actor> currentMemberSet() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setHomeworld(World homeworld) {
+	public boolean addFormerMember(Actor actor) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addAllFormerMembers(Collection<Actor> c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setFormerMembers(Collection<Actor> c) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Set<Actor> formerMemberSet() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public World getHomeworld() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -122,46 +168,9 @@ public class Pantheon implements Faction {
 
 	}
 
-	@Override
-	public Set<Actor> getMembers() {
-		return new HashSet<Actor>(members);
-	}
-
-	@Override
-	public int membership() {
-		return membership;
-	}
-
-	@Override
-	public boolean addMember(Actor actor) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAllMembers(Collection<Actor> actors) {
-		// TODO Auto-generated method stub
-
-		return false;
-	}
-
-	@Override
-	public void setMembers(Set<Actor> members) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<String> nameList() {
-		List<String> nameList = new ArrayList<String>();
-		String name;
-		for (Iterator<Immortal.Instance> it = members.iterator(); it.hasNext();) {
-			name = it.next().getName();
-			if (name != null)
-				nameList.add(name);
-		}
-
-		return nameList;
-	}
+	/*
+	 * INTERFACE METHODS
+	 * 
+	 */
 
 }

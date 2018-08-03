@@ -11,6 +11,12 @@ public abstract class Names {
 	 * STATIC METHODS
 	 * 
 	 */
+	public static List<String> worldNameList() {
+		Pantheon pantheon = Dice.randomFromSet(Pantheon.getPantheons());
+
+		return pantheon.nameList();
+	}
+
 	public static String nameShorten(String name) {
 		String string = "";
 

@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Group {
+	private static final String[] POPULATIONS = { "Scattered or no inhabitants", "Dozens of inhabitants",
+			"Hundreds of inhabitants", "Thousands of inhabitants", "Tens of thousands", "Hundreds of thousands",
+			"Millions of inhabitants", "Tens of millions", "Hundreds of millions", "Billions of inhabitants",
+			"Tens of billions" };
+
 	/*
 	 * INSTANCE FIELDS
 	 * 
@@ -341,7 +346,7 @@ public class Group {
 		for (it = pops.iterator(); it.hasNext();) {
 			World.pruneWorldTags(commonTags, it.next());
 		}
-		
+
 		/*
 		 * NAMING CONVENTIONS
 		 */
@@ -460,7 +465,7 @@ public class Group {
 	public int asteroids() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
-			if (it.next().isAsteroidBelt())
+			if (it.next().isAsteroid())
 				++counter;
 		}
 
@@ -515,7 +520,8 @@ public class Group {
 		String star = "";
 		star += String.format("Main world: %s", mainWorld.getName());
 		star += (commonTags.size() > 0) ? String.format("%n%s", commonTags) : "";
-		star += String.format("%nStarport: %s || Tech Level: %d", starport, mainWorld.getTechLevel());
+		star += String.format("%nStarport: %s || Tech Level: %d || %s", starport, mainWorld.getTechLevel(),
+				POPULATIONS[mainWorld.getPopulation()]);
 		star += String.format("%nGovernment: %s", mainWorld.governmentType());
 		star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
 		star += String.format("%n%s", mainWorld);
@@ -546,14 +552,14 @@ public class Group {
 		}
 
 		String pops = "";
-//		List<Faction> factionList = Dice.setToList(factions);
-//		Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
-//		Collections.sort(factionList, factionSort);
-//		if (factionList.size() > 0) {
-//			pops += "\n- - -";
-//			for (Faction el : factionList)
-//				pops += "\n" + el.toString();
-//		}
+		// List<Faction> factionList = Dice.setToList(factions);
+		// Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
+		// Collections.sort(factionList, factionSort);
+		// if (factionList.size() > 0) {
+		// pops += "\n- - -";
+		// for (Faction el : factionList)
+		// pops += "\n" + el.toString();
+		// }
 
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,
@@ -699,9 +705,10 @@ public class Group {
 	}
 
 	private static void nameSetup(Group group) {
-		List<String> nameList = Pantheon.getNameList();
+		List<String> nameList = Names.worldNameList();
+		//
 		while (nameList.size() < group.namedObjects) {
-			nameList = Pantheon.getNameList();
+			nameList = Names.worldNameList();
 		}
 
 		Collections.shuffle(nameList);

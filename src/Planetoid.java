@@ -43,12 +43,12 @@ public class Planetoid implements World {
 	}
 
 	public Planetoid(Type type, int orbit, Group group, Planetoid home) {
-		this.name = String.format("%s (%s)", type, orbit);
 		this.group = group;
 		this.parent = home;
 		this.type = type;
 		this.orbit = orbit;
 		this.subOrbit = orbit;
+		this.name = type.toString();
 
 		/*
 		 * INITIALIZE NEW WORLD
@@ -79,11 +79,15 @@ public class Planetoid implements World {
 				scores[0] = (byte) (home.getSize() - Dice.roll(6));
 
 			// validation step
-			if (type.equals(Type.SATELLITE) && scores[0] == 0)
+			if (type.equals(Type.SATELLITE) && scores[0] == 0) {
 				this.type = Type.RING;
+				this.name = type.toString();
+			}
 
-			if (scores[0] < 0)
+			if (isAsteroid())
 				scores[0] = 0;
+			else if (notRing() && scores[0] < 1)
+				scores[0] = 1;
 
 			/*
 			 * ATMOSPHERE
@@ -147,7 +151,7 @@ public class Planetoid implements World {
 		 * SATELLITES
 		 */
 		totalMoons = 0;
-		if (type.equals(Type.SATELLITE)) {
+		if (type.equals(Type.SATELLITE) || type.equals(Type.ASTEROID)) {
 			moons = new HashSet<Planetoid>();
 
 		} else {
@@ -226,21 +230,37 @@ public class Planetoid implements World {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public String nameString() {
+		String string;
+
+		string = String.format("%s", (notAsteroid()) ? name : "The " + name + " belt");
+		string = String.format("%s (%s)", string, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
+
+		return string;
+	}
+
+	public String scoreString() {
+		String string;
+		//
+		int size = scores[0], atmo = scores[1];
+		int hydro = scores[2], pop = scores[3];
+		int gov = scores[4], law = scores[5];
+
+		string = String.format("[%2d,%2d,%2d, %2d,%2d,%2d]", size, atmo, hydro, pop, gov, law);
+
+		return string;
+	}
+
 	@Override
 	public String toString() {
-		String string = String.format("%s (%s)", name, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
+		String string = nameString();
 
 		if (isWorld()) {
-			int size = scores[0], atmo = scores[1];
-			int hydro = scores[2], pop = scores[3];
-			int gov = scores[4], law = scores[5];
-
-			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
-
 			if (type.equals(Type.SATELLITE))
-				string = String.format("%-32s %s", "* " + string, world);
+				string = String.format("%-28s %s", "* " + string, scoreString());
 			else
-				string = String.format("%-32s %s", string, world);
+				string = String.format("%-28s %s", string, scoreString());
+
 		} else if (isRing()) {
 
 			string = String.format("%-32s", "* " + string);
@@ -250,25 +270,19 @@ public class Planetoid implements World {
 		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
 		// world tags
 		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
-		string += String.format("%-20s %s", facilities, tags);
+		string += String.format("%-24s %s", facilities, tags);
 
 		return string;
 	}
 
 	public String toStringDetailed() {
-		String string = String.format("%s (%s)", name, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
+		String string = nameString();
 
 		if (isWorld()) {
-			int size = scores[0], atmo = scores[1];
-			int hydro = scores[2], pop = scores[3];
-			int gov = scores[4], law = scores[5];
-
-			String world = String.format("[%2d, %2d, %2d, %2d, %2d, %2d]", size, atmo, hydro, pop, gov, law);
-
 			if (type.equals(Type.SATELLITE))
-				string = String.format("%-32s %s", "* " + string, world);
+				string = String.format("%-28s %s", "* " + string, scoreString());
 			else
-				string = String.format("%-32s %s", string, world);
+				string = String.format("%-28s %s", string, scoreString());
 		} else if (isRing()) {
 
 			string = String.format("%-32s", "* " + string);
@@ -278,7 +292,7 @@ public class Planetoid implements World {
 		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
 		// world tags
 		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
-		string += String.format("%-20s %s", facilities, tags);
+		string += String.format("%-24s %s", facilities, tags);
 
 		if (hasMoons()) {
 			List<Planetoid> moonList = Dice.setToList(moons);
