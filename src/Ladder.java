@@ -40,8 +40,6 @@ public class Ladder implements Faction {
 	private Map<Actor, Status> standing;
 	private Set<Actor> currentMembers;
 	private Set<Actor> formerMembers;
-	//
-	private byte[] scores;
 
 	/*
 	 * CONSTRUCTORS
@@ -51,7 +49,6 @@ public class Ladder implements Faction {
 		this.currentMembers = new HashSet<Actor>();
 		this.standing = new HashMap<Actor, Status>();
 		//
-		this.scores = Dice.rollAbilities();
 	}
 
 	/*
@@ -89,8 +86,12 @@ public class Ladder implements Faction {
 		// methods
 		@Override
 		public String toString() {
-			String string = String.format("", owner.toString());
+			String string;
+			//
+			String name = owner.toString();
+			String active = (this.active) ? "(active)" : "(inactive)";
 
+			string = String.format("%s %s || Age: %d", name, active, memberID);
 			return string;
 		}
 
@@ -273,11 +274,8 @@ public class Ladder implements Faction {
 		return standing.keySet();
 	}
 
-	public Set<Status> standingValueSet() {
-		return (Set<Status>) standing.values();
+	public Collection<Status> standingValueSet() {
+		return standing.values();
 	}
-	/*
-	 * STATIC METHODS
-	 */
 
 }
