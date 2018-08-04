@@ -1,7 +1,5 @@
-import java.awt.Point;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -16,6 +14,14 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		// Locale.Cluster cluster = Locale.cluster();
+		//
+		// for (Iterator<Locale> it = cluster.localeList().iterator(); it.hasNext();) {
+		// System.out.println(it.next().toStringDetailed());
+		// }
+
+		// ladderSetup();
+
 		// rollCharacters();
 		// rollOneCharacter();
 		// rollCharactersOfClass(Class.BARBARIAN);
@@ -24,26 +30,6 @@ public class Main {
 
 		// for (int i = 0; i < 50; ++i) {
 		// levelUpTestDisplayOnly(20, Class.WIZARD);
-		// }
-
-		// Ladder ladder = new Ladder();
-		// Set<Actor> actors = new HashSet<Actor>();
-		// for (int i = 0; i < PCS_TO_ROLL; ++i) {
-		// actors.add(new Player());
-		// }
-		//
-		// ladder.addAllCurrentMembers(actors);
-		//
-		// for (Iterator<?> it = ladder.standingValueSet().iterator(); it.hasNext();) {
-		// System.out.println(it.next().toString());
-		// }
-
-		// Locale.Cluster cluster = Locale.cluster();
-		// System.out.println(locale.toStringDetailed());
-		// System.out.println(cluster.pointSet.size());
-
-		// for (Iterator<Locale> it = cluster.localeList().iterator(); it.hasNext();) {
-		// System.out.println(it.next().toStringDetailed());
 		// }
 
 		//
@@ -63,6 +49,21 @@ public class Main {
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
+
+	}
+
+	public static void ladderSetup() {
+		Ladder ladder = new Ladder();
+
+		Set<Actor> actors = new HashSet<Actor>();
+		for (int i = 0; i < PCS_TO_ROLL; ++i) {
+			actors.add(new Player());
+		}
+
+		ladder.addAllCurrentMembers(actors);
+
+		//
+		Locale.Cluster cluster = Locale.cluster();
 
 	}
 
@@ -93,9 +94,9 @@ public class Main {
 
 	public static void testMainWorld() {
 		Group group = new Group();
-		while (group.getMainWorld() == null || group.getMainWorld().getPopulation() < 5) {
-			group = new Group();
-		}
+//		while (group.getMainWorld() == null || group.getMainWorld().getPopulation() < 5) {
+//			group = new Group();
+//		}
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();

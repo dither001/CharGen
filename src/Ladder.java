@@ -9,13 +9,18 @@ import java.util.Set;
 
 public class Ladder implements Faction {
 	public enum Estate {
-		POLITICAL, MILITARY, ACADEMIC, SPIRITUAL, BUSINESS, CRIMINAL
 		// soldier (Military)
+		MILITARY,
 		// noble (Political)
+		POLITICAL,
 		// scholar (Academic),
+		ACADEMIC,
 		// priest (Spiritual)
+		SPIRITUAL,
 		// clerk (Business)
+		BUSINESS,
 		// outlaw (Criminal)
+		CRIMINAL
 
 		// artist, farmer, worker
 		// nomad, drifter, sailor

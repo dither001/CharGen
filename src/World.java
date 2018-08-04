@@ -84,6 +84,10 @@ public interface World {
 
 	public void setFactions(Set<Faction> factions);
 
+	public Locale.Cluster getLocaleCluster();
+
+	public void setCluster(Locale.Cluster cluster);
+
 	public EnumSet<Tag> getWorldTags();
 
 	public void setWorldTags(EnumSet<Tag> set);
@@ -420,12 +424,13 @@ public interface World {
 	public default void factionSetup() {
 		// TODO
 		HashSet<Faction> factions = new HashSet<Faction>();
-		int pop = getPopulation();
 
+		int pop = getPopulation();
 		for (int i = 0; i < pop; ++i) {
 			factions.add(new Society(this));
 
 		}
+		
 
 		setFactions(factions);
 	}
