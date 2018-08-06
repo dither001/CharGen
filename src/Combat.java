@@ -21,7 +21,7 @@ public class Combat implements Option {
 	 * 
 	 */
 	// inventory get
-	private Inventory gear;;
+	private Inventory gear;
 
 	// feature get
 	private EnumSet<Feature> features;

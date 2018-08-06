@@ -33,16 +33,16 @@ public class Main {
 		// }
 
 		//
-		testMainWorld();
+//		testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
 		// System.out.println(el.toString() + " (" + el.membership() + ")");
 		// }
 
-		// System.out.println(Immortal.beingsByGridToString());
-		// System.out.println(Immortal.alignmentGridStatsToString());
-		// System.out.println(Immortal.domainStatsToString());
+		 System.out.println(Immortal.beingsByGridToString());
+		 System.out.println(Immortal.alignmentGridStatsToString());
+		 System.out.println(Immortal.domainStatsToString());
 
 		// jobProportions();
 		// raceProportions();
@@ -94,9 +94,9 @@ public class Main {
 
 	public static void testMainWorld() {
 		Group group = new Group();
-//		while (group.getMainWorld() == null || group.getMainWorld().getPopulation() < 5) {
-//			group = new Group();
-//		}
+		while (group.getMainWorld() == null) { // || group.getMainWorld().getPopulation() < 5) {
+			group = new Group();
+		}
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();
