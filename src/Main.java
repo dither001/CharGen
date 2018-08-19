@@ -33,37 +33,22 @@ public class Main {
 		// }
 
 		//
-//		testMainWorld();
+		testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
 		// System.out.println(el.toString() + " (" + el.membership() + ")");
 		// }
 
-		 System.out.println(Immortal.beingsByGridToString());
-		 System.out.println(Immortal.alignmentGridStatsToString());
-		 System.out.println(Immortal.domainStatsToString());
+		// System.out.println(Immortal.beingsByGridToString());
+		// System.out.println(Immortal.alignmentGridStatsToString());
+		// System.out.println(Immortal.domainStatsToString());
 
 		// jobProportions();
 		// raceProportions();
 		// alignmentProportions();
 		// deityProportions();
 		// rollCharacters();
-
-	}
-
-	public static void ladderSetup() {
-		Ladder ladder = new Ladder();
-
-		Set<Actor> actors = new HashSet<Actor>();
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			actors.add(new Player());
-		}
-
-		ladder.addAllCurrentMembers(actors);
-
-		//
-		Locale.Cluster cluster = Locale.cluster();
 
 	}
 
@@ -100,47 +85,6 @@ public class Main {
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();
-	}
-
-	public static void testMissionDetail() {
-		Group group = new Group();
-		while (group.getMainWorld() == null || group.getMainWorld().getPopulation() < 5) {
-			group = new Group();
-		}
-
-		System.out.println(group.toStringDetailed());
-		System.out.println();
-
-		String line;
-		World.Tag tag;
-		int counter = 1;
-		while (proceed == 1) {
-			System.out.println(" - - - - - - - - score: " + counter++);
-
-			tag = Dice.randomFromSet(group.getMainWorld().getWorldTags());
-			System.out.print("(" + tag + ") ");
-			System.out.println(Mission.completeMissionDetail(tag));
-
-			// System.out.println(Mission.mission(counter++,
-			// group.getMainWorld().getWorldTags()));
-
-			line = INPUT.nextLine();
-			try {
-				proceed = Integer.parseInt(line);
-			} catch (NumberFormatException e) {
-				proceed = 1;
-			}
-
-			// if (proceed != 0) {
-			// if (proceed == 2) {
-			// // "option two"
-			// System.out.println();
-			// }
-			//
-			// proceed = 1;
-			// }
-		}
-
 	}
 
 	public static void trinarySystem() {
@@ -453,34 +397,6 @@ public class Main {
 					(0.0 + array[i]) / PCS_TO_ROLL * 100);
 			System.out.println(string);
 		}
-	}
-
-	public static void agendaReaction() {
-		System.out.println("Agenda: " + Encounter.randomAgenda());
-		System.out.println("Reaction: " + Encounter.reaction());
-		System.out.println();
-	}
-
-	public static void encounterSpread() {
-		int one, two, three, seven, eleven, fifteen;
-		for (int i = 1; i <= 20; ++i) {
-			one = Encounter.mediumEncounter(i, 1);
-			two = Encounter.mediumEncounter(i, 2);
-			three = Encounter.mediumEncounter(i, 3);
-			seven = Encounter.mediumEncounter(i, 7);
-			eleven = Encounter.mediumEncounter(i, 11);
-			fifteen = Encounter.mediumEncounter(i, 15);
-			// System.out.println("One " + one + " || Two " + two);
-			System.out.printf("level %2d: one %2d || two %2d || three %2d || seven %2d || eleven %2d || fifteen %2d%n",
-					i, one, two, three, seven, eleven, fifteen);
-		}
-	}
-
-	public static void rollVillainousPlot() {
-		System.out.println(Career.randomMeans());
-		System.out.println(Career.randomMotive());
-		System.out.println(Career.randomOpportunity());
-		System.out.println();
 	}
 
 }

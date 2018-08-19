@@ -1,12 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class Pantheon implements Faction {
+public class Pantheon implements Faction<Actor> {
 	/*
 	 * STATIC FIELDS
 	 */
@@ -155,22 +154,5 @@ public class Pantheon implements Faction {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Set<Tag> getFactionTags() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void SetFactionTags(EnumSet<Tag> tags) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * INTERFACE METHODS
-	 * 
-	 */
 
 }

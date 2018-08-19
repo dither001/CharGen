@@ -223,7 +223,6 @@ public abstract class Immortal {
 			prototypes = new HashMap<Entity, Prototype>();
 
 			Entity[] array = null;
-			Entity entity = null;
 			Lesser lesser = null;
 			Actor.Alignment ali = null;
 			Domain domain = null;

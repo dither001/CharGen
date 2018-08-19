@@ -551,20 +551,10 @@ public class Group {
 				worlds += "\n" + el.toStringDetailed();
 		}
 
-		String pops = "";
-		List<Faction> factionList = Dice.setToList(factions);
-		Faction.OrbitAscending factionSort = new Faction.OrbitAscending();
-//		Collections.sort(factionList, factionSort);
-		if (factionList.size() > 0) {
-			pops += "\n- - -" + "\nNumber of factions: " + factionList.size();
-			for (Faction el : factionList)
-				pops += "\n" + el.toString();
-		}
-
 		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
 		// Captured: %d", maxOrbits, gasGiants,
 		// asteroids, capturedPlanets);
-		return string + worlds + pops;
+		return string + worlds;
 	}
 
 	/*

@@ -14,10 +14,163 @@ public interface World {
 		NAVY, SCOUT, FARM, MINE, COLONY, LAB, MILITARY
 	}
 
+	public enum TradeCodes {
+		AG, AS, BA, DE, FL, HI, IC, IN, LO, NA, NI, PO, RI, VA, WA;
+
+		public static void setupTradeCodes(World world) {
+			EnumSet<TradeCodes> set = EnumSet.noneOf(TradeCodes.class);
+
+			int size = world.getSize();
+			int atmo = world.getAtmosphere();
+			int hydro = world.getHydrosphere();
+			int pop = world.getPopulation();
+			int gov = world.getGovernment();
+			int law = world.getLawLevel();
+
+			/*
+			 * AGRICULTURE (AG)
+			 */
+			boolean idealAtmo = false;
+			if (atmo >= 4 && atmo <= 9)
+				idealAtmo = true;
+
+			boolean idealHydro = false;
+			if (hydro >= 4 && hydro <= 8)
+				idealHydro = true;
+
+			boolean idealPop = false;
+			if (pop >= 5 && pop <= 7)
+				idealPop = true;
+
+			if (idealAtmo && idealHydro && idealPop)
+				set.add(AG);
+
+			/*
+			 * ASTEROID (AS)
+			 */
+			if (size == 0 && atmo == 0 && hydro == 0)
+				set.add(AS);
+
+			/*
+			 * BARREN (BA)
+			 */
+			if (pop == 0 && gov == 0 && law == 0)
+				set.add(BA);
+
+			/*
+			 * DESERT (DE)
+			 */
+			if (atmo >= 2 && hydro == 0)
+				set.add(DE);
+
+			/*
+			 * FLUID OCEANS (FL)
+			 */
+			if (atmo >= 10 && hydro >= 1)
+				set.add(FL);
+
+			/*
+			 * HIGH POPULATION (HI)
+			 */
+			if (pop >= 9)
+				set.add(HI);
+
+			/*
+			 * ICE-CAPPED (IC)
+			 */
+			if (atmo <= 1 && hydro >= 1)
+				set.add(IC);
+
+			/*
+			 * INDUSTRIAL (IN)
+			 */
+			idealAtmo = false;
+			if (atmo <= 2 || atmo == 4 || atmo == 7 || atmo == 9)
+				idealAtmo = true;
+
+			if (idealAtmo && pop >= 9)
+				set.add(IN);
+
+			/*
+			 * LOW POPULATION (LO)
+			 */
+			if (pop <= 3)
+				set.add(LO);
+
+			/*
+			 * NON-AGRICULTURAL (NA)
+			 */
+			idealAtmo = false;
+			if (atmo <= 3)
+				idealAtmo = true;
+
+			idealHydro = false;
+			if (hydro <= 3)
+				idealHydro = true;
+
+			idealPop = false;
+			if (pop >= 6)
+				idealPop = true;
+
+			if (idealAtmo && idealHydro && idealPop)
+				set.add(NA);
+
+			/*
+			 * POOR WORLD (PO)
+			 */
+			idealAtmo = false;
+			if (atmo >= 2 && atmo <= 5)
+				idealAtmo = true;
+
+			idealHydro = false;
+			if (hydro <= 3)
+				idealHydro = true;
+
+			if (idealAtmo && idealHydro)
+				set.add(PO);
+
+			/*
+			 * RICH WORLD (RI)
+			 */
+			idealAtmo = false;
+			if (atmo == 6 || atmo == 8)
+				idealAtmo = true;
+
+			idealPop = false;
+			if (pop == 6 || pop == 7 || pop == 8)
+				idealPop = true;
+
+			boolean idealGov = false;
+			if (gov >= 4 && gov <= 9)
+				idealGov = true;
+
+			if (idealAtmo && idealPop && idealGov)
+				set.add(RI);
+
+			/*
+			 * VACUUM WORLD (VA)
+			 */
+			if (atmo == 0)
+				set.add(VA);
+
+			/*
+			 * WATER WORLD (WA)
+			 */
+			if (hydro == 10)
+				set.add(WA);
+
+			world.setTradeCodes(set);
+		}
+	}
+
 	public enum Tag {
 		ABANDONED_COLONY, ALIEN_RUINS, ALTERED_HUMANITY, AREA_51, BADLANDS_WORLD, BUBBLE_CITIES, CIVIL_WAR, COLD_WAR, COLONIZED_POPULATION, DESERT_WORLD, EUGENIC_CULT, EXCHANGE_CONSULATE, FERAL_WORLD, FLYING_CITIES, FORBIDDEN_TECH, FREAK_GEOLOGY, FREAK_WEATHER, FRIENDLY_FOE, GOLD_RUSH, RADICAL_RACISM, HEAVY_INDUSTRY, HEAVY_MINING, HOSTILE_BIOSPHERE, HOSTILE_SPACE, LOCAL_SPECIALTY, LOCAL_TECH, MAJOR_SPACEYARD, MINIMAL_CONTACT, RADICAL_SEXISM, OCEANIC_WORLD, OUT_OF_CONTACT, OUTPOST_WORLD, PERIMETER_AGENCY, PILGRIMAGE_SITE, POLICE_STATE, PRECEPTOR_ARCHIVE, PRETECH_CULTISTS, PRIMITIVE_ALIENS, PSIONICS_FEAR, PSIONICS_WORSHIP, PSIONICS_ACADEMY, QUARANTINE_WORLD, RADIOACTIVE_WORLD, REGIONAL_HEGEMON, RESTRICTIVE_LAWS, RIGID_CULTURE, SEAGOING_CITIES, SEALED_MENACE, SECTARIANS, SEISMIC_INSTABILITY, SECRET_MASTERS, THEOCRACY, TOMB_WORLD, TRADE_HUB, TYRANNY, UNBRAKED_AI, WARLORDS, XENOPHILES, XENOPHOBES, ZOMBIES
 	}
 
+	/*
+	 * STATIC FIELDS
+	 * 
+	 */
 	public static final Tag[] ALL_TAGS = { Tag.ABANDONED_COLONY, Tag.ALIEN_RUINS, Tag.ALTERED_HUMANITY, Tag.AREA_51,
 			Tag.BADLANDS_WORLD, Tag.BUBBLE_CITIES, Tag.CIVIL_WAR, Tag.COLD_WAR, Tag.COLONIZED_POPULATION,
 			Tag.DESERT_WORLD, Tag.EUGENIC_CULT, Tag.EXCHANGE_CONSULATE, Tag.FERAL_WORLD, Tag.FLYING_CITIES,
@@ -83,10 +236,6 @@ public interface World {
 	public Set<Faction> getFactions();
 
 	public void setFactions(Set<Faction> factions);
-
-	public Locale.Cluster getLocaleCluster();
-
-	public void setCluster(Locale.Cluster cluster);
 
 	public EnumSet<Tag> getWorldTags();
 
@@ -425,12 +574,11 @@ public interface World {
 		// TODO
 		HashSet<Faction> factions = new HashSet<Faction>();
 
-		int pop = getPopulation();
-		for (int i = 0; i < pop; ++i) {
-			factions.add(new Society(this));
-
-		}
-		
+		// int pop = getPopulation();
+		// for (int i = 0; i < pop; ++i) {
+		// factions.add(new Society(this));
+		//
+		// }
 
 		setFactions(factions);
 	}
@@ -611,7 +759,7 @@ public interface World {
 	public static Tag randomTag() {
 		return Dice.randomFromArray(ALL_TAGS);
 	}
-	
+
 	public static void setupWorldTags(World world) {
 		if (world.isWorld() != true)
 			return;

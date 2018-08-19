@@ -15,7 +15,6 @@ public class Planetoid implements World {
 
 	private EnumSet<TradeCodes> tradeCodes;
 	private HashSet<Faction> factions;
-	private Locale.Cluster cluster;
 	private EnumSet<Tag> worldTags;
 	private EnumSet<Base> worldFacilities;
 
@@ -147,10 +146,6 @@ public class Planetoid implements World {
 			if (isRing() || scores[3] < 0)
 				scores[3] = 0;
 			
-			/*
-			 * LOCALE CLUSTER
-			 */
-			this.cluster = Locale.cluster();
 		}
 
 		/*
@@ -384,16 +379,6 @@ public class Planetoid implements World {
 	@Override
 	public void setFactions(Set<Faction> factions) {
 		this.factions = (HashSet<Faction>) factions;
-	}
-
-	@Override
-	public Locale.Cluster getLocaleCluster() {
-		return cluster;
-	}
-
-	@Override
-	public void setCluster(Locale.Cluster cluster) {
-		this.cluster = cluster;
 	}
 
 	@Override
