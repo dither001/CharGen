@@ -1,3 +1,5 @@
+package rules;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,17 +52,6 @@ public abstract class Dice {
 		int secondRoll = roll(1, faces);
 
 		return (firstRoll < secondRoll) ? firstRoll : secondRoll;
-	}
-
-	public static byte[] rollHitDice(Class job) {
-		int hitDieSize = Class.getHitDie(job);
-
-		byte[] hitDice = new byte[20];
-		for (int i = 0; i < hitDice.length; ++i) {
-			hitDice[i] = (byte) roll(hitDieSize);
-		}
-
-		return hitDice;
 	}
 
 	public static int[] fortune() {

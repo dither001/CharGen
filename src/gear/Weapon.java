@@ -1,3 +1,4 @@
+package gear;
 
 import java.util.Comparator;
 import java.util.ArrayList;
@@ -6,7 +7,14 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+
+import actor.Actor;
+import actor.Class;
+import actor.Option;
+import actor.Player;
+import milieu.Names;
+import rules.Dice;
+import rules.Energy;
 
 public enum Weapon {
 	UNARMED, CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE, QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING, BATTLEAXE, FLAIL, GLAIVE, GREATAXE, GREATSWORD, HALBERD, LANCE, LONGSWORD, MAUL, MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD, TRIDENT, WAR_PICK, WARHAMMER, WHIP, BLOWGUN, HAND_CROSSBOW, HEAVY_CROSSBOW, LONGBOW, NET, SHIELD, ARROW, BOLT, BULLET, NEEDLE, CRYSTAL, ORB, ROD, ARCANE_STAFF, WAND, MISTLETOE, TOTEM, WOODEN_STAFF, YEW_WAND, AMULET, EMBLEM, RELIQUARY;
@@ -381,7 +389,7 @@ public enum Weapon {
 	 * STATIC METHODS
 	 * 
 	 */
-	public static Instance unarmed(Actor actor) {
+	public static Instance unarmed(Player actor) {
 		Instance weapon;
 		if (actor.getJob().equals(Class.MONK))
 			weapon = monkUnarmedStrike(actor);
@@ -391,7 +399,7 @@ public enum Weapon {
 		return weapon;
 	}
 
-	public static Instance monkUnarmedStrike(Actor actor) {
+	public static Instance monkUnarmedStrike(Player actor) {
 		Instance weapon = new Instance(UNARMED);
 		weapon.traits.add(Trait.FINESSE);
 
@@ -459,7 +467,7 @@ public enum Weapon {
 		return ammunition;
 	}
 
-	private static void setupSimpleWeapons(Actor actor) {
+	private static void setupSimpleWeapons(Player actor) {
 		EnumSet<Weapon> set;
 		if (actor.getWeaponProficiency() == null)
 			set = EnumSet.noneOf(Weapon.class);
@@ -474,7 +482,7 @@ public enum Weapon {
 		actor.setWeaponProficiency(set);
 	}
 
-	private static void setupAllWeapons(Actor actor) {
+	private static void setupAllWeapons(Player actor) {
 		EnumSet<Weapon> set;
 		if (actor.getWeaponProficiency() == null)
 			set = EnumSet.noneOf(Weapon.class);
@@ -489,7 +497,7 @@ public enum Weapon {
 		actor.setWeaponProficiency(set);
 	}
 
-	private static void setupMageWeapons(Actor actor) {
+	private static void setupMageWeapons(Player actor) {
 		EnumSet<Weapon> set;
 		if (actor.getWeaponProficiency() == null)
 			set = EnumSet.noneOf(Weapon.class);
@@ -504,7 +512,7 @@ public enum Weapon {
 		actor.setWeaponProficiency(set);
 	}
 
-	private static void setupDruidWeapons(Actor actor) {
+	private static void setupDruidWeapons(Player actor) {
 		EnumSet<Weapon> set;
 		if (actor.getWeaponProficiency() == null)
 			set = EnumSet.noneOf(Weapon.class);
@@ -519,7 +527,7 @@ public enum Weapon {
 		actor.setWeaponProficiency(set);
 	}
 
-	private static void setupRogueWeapons(Actor actor) {
+	private static void setupRogueWeapons(Player actor) {
 		EnumSet<Weapon> set;
 		if (actor.getWeaponProficiency() == null)
 			set = EnumSet.noneOf(Weapon.class);
@@ -534,7 +542,7 @@ public enum Weapon {
 		actor.setWeaponProficiency(set);
 	}
 
-	public static void setupWeaponProficiency(Actor actor) {
+	public static void setupWeaponProficiency(Player actor) {
 
 		// basic stuff
 		Class job = actor.getJob();
@@ -745,7 +753,7 @@ public enum Weapon {
 	public static class SortByUseability implements Comparator<Weapon.Instance> {
 		EnumSet<Weapon> weaponProf;
 
-		public SortByUseability(Actor actor) {
+		public SortByUseability(Player actor) {
 			this.weaponProf = actor.getWeaponProficiency();
 		}
 

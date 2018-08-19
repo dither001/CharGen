@@ -1,3 +1,4 @@
+package actor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -6,6 +7,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import gear.Inventory;
+import gear.Weapon;
+import gear.Weapon.Instance;
+import magic.Spell;
 
 public class Combat implements Option {
 	public enum Role {
@@ -31,7 +37,7 @@ public class Combat implements Option {
 	private int strengthBonus, dexterityBonus, constitutionBonus;
 	private int intelligenceBonus, wisdomBonus, charismaBonus;
 
-	private Actor owner;
+	private Player owner;
 	private Role role;
 	private AttackMode preferredAttack;
 	private Weapon.Instance preferredWeapon;
@@ -47,7 +53,7 @@ public class Combat implements Option {
 	 * CONSTRUCTORS
 	 * 
 	 */
-	public Combat(Actor owner) {
+	public Combat(Player owner) {
 		this.owner = owner;
 	}
 
@@ -85,7 +91,7 @@ public class Combat implements Option {
 		bounty = toStringCR();
 	}
 
-	public static void setupCombat(Actor actor) {
+	public static void setupCombat(Player actor) {
 		// initialization
 		Combat combat = new Combat(actor);
 
@@ -406,7 +412,7 @@ public class Combat implements Option {
 	 * 
 	 */
 	public class Attack {
-		private Actor subject;
+		private Player subject;
 		//
 		private boolean isWeaponAttack;
 		private boolean proficient;
@@ -421,7 +427,7 @@ public class Combat implements Option {
 		/*
 		 * CONSTRUCTORS
 		 */
-		public Attack(Actor subject, Weapon.Instance weapon) {
+		public Attack(Player subject, Weapon.Instance weapon) {
 			this.subject = subject;
 			this.weapon = weapon;
 			//
@@ -436,7 +442,7 @@ public class Combat implements Option {
 			calcAverageDamage();
 		}
 
-		public Attack(Actor subject, Spell spell) {
+		public Attack(Player subject, Spell spell) {
 			this.subject = subject;
 			this.spell = spell;
 			//
@@ -681,7 +687,7 @@ public class Combat implements Option {
 				90000, 105000, 120000, 135000, 155000 };
 
 		// methods
-		public static int evaluateCR(Actor actor) {
+		public static int evaluateCR(Player actor) {
 			Combat.Attack bestAttack;
 			if (actor.combat() != null)
 				bestAttack = actor.combat().bestAttack();

@@ -1,6 +1,16 @@
+package actor;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+
+import gear.Armor;
+import gear.Inventory;
+import gear.Weapon;
+import magic.Spell;
+import milieu.Names;
+import milieu.Names.AlphabeticalDescending;
+import rules.Dice;
+import rules.Energy;
 
 public class Player implements Actor {
 
@@ -63,7 +73,15 @@ public class Player implements Actor {
 		//
 		this.level = 1;
 		this.experience = 0;
-		this.hitDice = Dice.rollHitDice(job);
+
+		// pre-roll hit dice
+		int hitDieSize = Class.getHitDie(job);
+		byte[] rolls = new byte[20];
+		for (int i = 0; i < rolls.length; ++i) {
+			rolls[i] = (byte) Dice.roll(hitDieSize);
+		}
+
+		this.hitDice = rolls;
 
 		// always setup class skills first b/c they're the least flexible
 		// Skill.setupClassSkills(this);
@@ -82,6 +100,32 @@ public class Player implements Actor {
 		// inventory setup
 		Inventory.setupStartingGear(this);
 		Combat.setupCombat(this);
+	}
+
+	/*
+	 * INSTANCE METHODS
+	 * 
+	 */
+	public void advance() {
+		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,
+				165000, 195000, 225000, 265000, 305000, 355000 };
+		int currentLevel = getLevel(), currentEXP = getExperience();
+
+		boolean advanced = false;
+		if (currentLevel < 20 && currentEXP >= requires[currentLevel]) {
+			setLevel(currentLevel + 1);
+			advanced = true;
+
+			if (currentLevel < 19 && currentEXP >= requires[currentLevel + 1])
+				currentEXP = requires[currentLevel + 1] - 1;
+		}
+
+		if (advanced) {
+			// TODO
+			Class.updateClassFeatures(this);
+			combat().update();
+
+		}
 	}
 
 	@Override
@@ -192,7 +236,6 @@ public class Player implements Actor {
 		return alignment;
 	}
 
-	@Override
 	public Deity getDeity() {
 		return god;
 	}
@@ -202,47 +245,38 @@ public class Player implements Actor {
 		return hitDice;
 	}
 
-	@Override
 	public EnumSet<Option.Feature> getFeatures() {
 		return features;
 	}
 
-	@Override
 	public void setFeatures(EnumSet<Option.Feature> features) {
 		this.features = features;
 	}
 
-	@Override
 	public Class getJob() {
 		return job;
 	}
 
-	@Override
 	public Class.Subclass getArchetype() {
 		return archetype;
 	}
 
-	@Override
 	public Race getRace() {
 		return race;
 	}
 
-	@Override
 	public void setRace(Race race) {
 		this.race = race;
 	}
 
-	@Override
 	public EnumSet<Spell> getSpellsKnown() {
 		return spellsKnown;
 	}
 
-	@Override
 	public void setSpellsKnown(EnumSet<Spell> spellsKnown) {
 		this.spellsKnown = spellsKnown;
 	}
 
-	@Override
 	public Career.Profile getCareer() {
 		return career;
 	}
@@ -289,32 +323,26 @@ public class Player implements Actor {
 		return null;
 	}
 
-	@Override
 	public EnumSet<Skill> getSkills() {
 		return skills;
 	}
 
-	@Override
 	public void setSkills(EnumSet<Skill> skills) {
 		this.skills = skills;
 	}
 
-	@Override
 	public EnumSet<Armor> getArmorProficiency() {
 		return armor;
 	}
 
-	@Override
 	public void setArmorProficiency(EnumSet<Armor> armor) {
 		this.armor = armor;
 	}
 
-	@Override
 	public EnumSet<Weapon> getWeaponProficiency() {
 		return weapons;
 	}
 
-	@Override
 	public void setWeaponProficiency(EnumSet<Weapon> weapons) {
 		this.weapons = weapons;
 	}
@@ -349,34 +377,138 @@ public class Player implements Actor {
 		return null;
 	}
 
-	@Override
 	public EnumSet<Race.Language> getLanguages() {
 		return languages;
 	}
 
-	@Override
 	public void setLanguages(EnumSet<Race.Language> languages) {
 		this.languages = languages;
 	}
 
-	@Override
 	public Combat combat() {
 		return combat;
 	}
 
-	@Override
 	public void setCombat(Combat combat) {
 		this.combat = combat;
 	}
 
-	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
 
-	@Override
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
+	}
+
+	/*
+	 * 
+	 */
+	public boolean wearingArmor() {
+		return (getInventory().wearingArmor());
+	}
+
+	public boolean notWearingArmor() {
+		return (getInventory().wearingArmor() != true);
+	}
+
+	public boolean usingShield() {
+		return (getInventory().usingShield());
+	}
+
+	public boolean notUsingShield() {
+		return (getInventory().usingShield() != true);
+	}
+
+	public int getArmorClass() {
+		return combat().getArmorClass();
+	}
+
+	public int getHitPoints() {
+		return combat().getHitPoints();
+	}
+
+	/*
+	 * 
+	 */
+	public boolean hasJob(Class job) {
+		boolean hasJob = false;
+		if (getJob() != null && getJob().equals(job))
+			hasJob = true;
+
+		return hasJob;
+	}
+
+	public boolean isBarbarian() {
+		Class job = Class.BARBARIAN;
+
+		return hasJob(job);
+	}
+
+	public boolean isBard() {
+		Class job = Class.BARD;
+
+		return hasJob(job);
+	}
+
+	public boolean isCleric() {
+		Class job = Class.CLERIC;
+
+		return hasJob(job);
+	}
+
+	public boolean isDruid() {
+		Class job = Class.DRUID;
+
+		return hasJob(job);
+	}
+
+	public boolean isFighter() {
+		Class job = Class.FIGHTER;
+
+		return hasJob(job);
+	}
+
+	public boolean isMonk() {
+		Class job = Class.MONK;
+
+		return hasJob(job);
+	}
+
+	public boolean isPaladin() {
+		Class job = Class.PALADIN;
+
+		return hasJob(job);
+	}
+
+	public boolean isRanger() {
+		Class job = Class.RANGER;
+
+		return hasJob(job);
+	}
+
+	public boolean isRogue() {
+		Class job = Class.ROGUE;
+
+		return hasJob(job);
+	}
+
+	public boolean isSorcerer() {
+		Class job = Class.SORCERER;
+
+		return hasJob(job);
+	}
+
+	public boolean isWarlock() {
+		Class job = Class.WARLOCK;
+
+		return hasJob(job);
+	}
+
+	public boolean isWizard() {
+		Class job = Class.WIZARD;
+
+		return hasJob(job);
 	}
 
 }

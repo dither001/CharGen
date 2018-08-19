@@ -1,3 +1,4 @@
+package gear;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -6,12 +7,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import actor.Actor;
+import actor.Class;
+import actor.Combat;
+import actor.Player;
+import rules.Dice;
+
 public class Inventory {
 	/*
 	 * INSTANCE FIELDS
 	 * 
 	 */
-	private Actor owner;
+	private Player owner;
 
 	private ArrayList<Armor.Instance> armorList;
 	private Weapon.WeaponSet weaponSet;
@@ -26,7 +33,7 @@ public class Inventory {
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Inventory(Actor owner) {
+	public Inventory(Player owner) {
 		this.owner = owner;
 	}
 
@@ -249,7 +256,7 @@ public class Inventory {
 		return offHand.getArmorBonus();
 	}
 
-	private static Set<Weapon.Instance> filterWeaponsForUseable(Actor actor) {
+	private static Set<Weapon.Instance> filterWeaponsForUseable(Player actor) {
 		Set<Weapon.Instance> set, filteredList = new HashSet<Weapon.Instance>();
 		set = actor.getInventory().getWeapons();
 
@@ -264,7 +271,7 @@ public class Inventory {
 		return filteredList;
 	}
 
-	private static List<Armor.Instance> filterArmorForUseable(Actor actor) {
+	private static List<Armor.Instance> filterArmorForUseable(Player actor) {
 		List<Armor.Instance> armorList, filteredList = new ArrayList<Armor.Instance>();
 		armorList = actor.getInventory().getArmor();
 
@@ -311,7 +318,7 @@ public class Inventory {
 			list.add(Weapon.getAmmunition(weapon.getWeapon()));
 	}
 
-	public static void setupStartingGear(Actor actor) {
+	public static void setupStartingGear(Player actor) {
 		Inventory inventory = new Inventory(actor);
 
 		// create lists

@@ -1,4 +1,8 @@
+package actor;
 import java.util.EnumSet;
+
+import magic.Spell;
+import rules.Dice;
 
 public interface Option {
 	public enum Feature {
@@ -278,7 +282,7 @@ public interface Option {
 	 * STATIC METHODS
 	 * 
 	 */
-	public static void dragonbornAncestry(Actor actor) {
+	public static void dragonbornAncestry(Player actor) {
 		EnumSet<Feature> features;
 		if (actor.getFeatures() != null)
 			features = actor.getFeatures();
@@ -319,7 +323,7 @@ public interface Option {
 		actor.setFeatures(features);
 	}
 
-	public static void addElementalDiscipline(int toAdd, Actor actor) {
+	public static void addElementalDiscipline(int toAdd, Player actor) {
 		int level = actor.getLevel();
 
 		EnumSet<Feature> features;
@@ -350,7 +354,7 @@ public interface Option {
 		actor.setFeatures(features);
 	}
 
-	public static void addHunterTechnique(int toAdd, Actor actor) {
+	public static void addHunterTechnique(int toAdd, Player actor) {
 		int level = actor.getLevel();
 
 		EnumSet<Feature> features;
@@ -381,7 +385,7 @@ public interface Option {
 		actor.setFeatures(features);
 	}
 
-	public static void addMetamagic(int toAdd, Actor actor) {
+	public static void addMetamagic(int toAdd, Player actor) {
 		Feature[] array = Feature.METAMAGIC_FEATS;
 
 		EnumSet<Feature> features;
@@ -402,7 +406,7 @@ public interface Option {
 		actor.setFeatures(features);
 	}
 
-	public static void dragonSorcererAncestry(Actor actor) {
+	public static void dragonSorcererAncestry(Player actor) {
 		Feature[] array = Feature.DRAGON_ANCESTRY;
 
 		EnumSet<Feature> features;
@@ -419,7 +423,7 @@ public interface Option {
 		return Dice.randomFromArray(Feature.WARLOCK_PACTS);
 	}
 
-	public static void addWarlockInvocations(int toAdd, Actor actor) {
+	public static void addWarlockInvocations(int toAdd, Player actor) {
 		int level = actor.getLevel(), added = 0;
 
 		EnumSet<Spell> spells;

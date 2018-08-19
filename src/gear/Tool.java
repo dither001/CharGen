@@ -1,3 +1,5 @@
+package gear;
+import rules.Dice;
 
 public enum Tool {
 	// professions

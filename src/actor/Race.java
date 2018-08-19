@@ -1,4 +1,10 @@
+package actor;
 import java.util.EnumSet;
+
+import gear.Armor;
+import gear.Weapon;
+import magic.Spell;
+import rules.Dice;
 
 public enum Race implements Option {
 	HUMAN, DRAGONBORN, HALF_ELF, HALF_ORC, TIEFLING,
@@ -45,7 +51,7 @@ public enum Race implements Option {
 			return Dice.randomFromArray(EXOTIC_LANGUAGES);
 		}
 
-		public static void addLanguage(Language language, Actor actor) {
+		public static void addLanguage(Language language, Player actor) {
 			EnumSet<Language> languages;
 			if (actor.getLanguages() != null)
 				languages = actor.getLanguages();
@@ -56,7 +62,7 @@ public enum Race implements Option {
 			actor.setLanguages(languages);
 		}
 
-		public static void learnNonsecretLanguage(Actor actor) {
+		public static void learnNonsecretLanguage(Player actor) {
 			EnumSet<Language> languages;
 			if (actor.getLanguages() != null)
 				languages = actor.getLanguages();
@@ -67,7 +73,7 @@ public enum Race implements Option {
 			actor.setLanguages(languages);
 		}
 
-		public static void learnCommonLanguage(Actor actor) {
+		public static void learnCommonLanguage(Player actor) {
 			EnumSet<Language> languages;
 			if (actor.getLanguages() != null)
 				languages = actor.getLanguages();
@@ -78,7 +84,7 @@ public enum Race implements Option {
 			actor.setLanguages(languages);
 		}
 
-		public static void learnExoticLanguage(Actor actor) {
+		public static void learnExoticLanguage(Player actor) {
 			EnumSet<Language> languages;
 			if (actor.getLanguages() == null)
 				languages = EnumSet.noneOf(Language.class);
@@ -89,7 +95,7 @@ public enum Race implements Option {
 			actor.setLanguages(languages);
 		}
 
-//		public static void setupLanguages(Actor actor) {
+//		public static void setupLanguages(Player actor) {
 //			EnumSet<Language> languages;
 //			if (actor.getLanguages() == null)
 //				languages = EnumSet.noneOf(Language.class);
@@ -307,11 +313,11 @@ public enum Race implements Option {
 		return race;
 	}
 
-	public static void applyRacialFeatures(Actor actor) {
+	public static void applyRacialFeatures(Player actor) {
 		applyRacialFeatures(selectRace(), actor);
 	}
 
-	private static void applyRacialFeatures(Race race, Actor actor) {
+	private static void applyRacialFeatures(Race race, Player actor) {
 		actor.setRace(race);
 
 		// all races grant languages

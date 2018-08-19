@@ -1,5 +1,8 @@
+package actor;
 import java.util.EnumSet;
 import java.util.HashMap;
+
+import rules.Dice;
 
 /*
  * I want to implement a slightly choosier strategy for assigning (even) random backgrounds to characters. I want to organize
@@ -881,11 +884,11 @@ public enum Career {
 	 * STATIC METHODS
 	 * 
 	 */
-	public static void applyCareerFeatures(Actor actor) {
+	public static void applyCareerFeatures(Player actor) {
 		applyCareerFeatures(Career.randomCareer(), actor);
 	}
 
-	public static void applyCareerFeatures(Career career, Actor actor) {
+	public static void applyCareerFeatures(Career career, Player actor) {
 		// background skills
 		Skill[] acolyte = { Skill.INSIGHT, Skill.RELIGION };
 		Skill[] charlatan = { Skill.DECEPTION, Skill.SLEIGHT_OF_HAND };
@@ -998,7 +1001,7 @@ public enum Career {
 		return Dice.randomFromArray(ALL_CAREERS);
 	}
 
-	public static Career selectCareer(Actor actor) {
+	public static Career selectCareer(Player actor) {
 		// TODO - additional selection methods
 		Career candidate;
 		candidate = ALL_CAREERS[Dice.roll(ALL_CAREERS.length) - 1];

@@ -1,9 +1,14 @@
+package actor;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import milieu.Names;
+import rules.Dice;
+import rules.Energy;
 
 public abstract class Immortal {
 	/*
@@ -631,73 +636,13 @@ public abstract class Immortal {
 		}
 
 		@Override
-		public Actor.Alignment alignment() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Deity getDeity() {
+		public Alignment alignment() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public byte[] getHitDice() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public EnumSet<Option.Feature> getFeatures() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setFeatures(EnumSet<Option.Feature> features) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Class getJob() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Class.Subclass getArchetype() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Race getRace() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setRace(Race race) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public EnumSet<Spell> getSpellsKnown() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setSpellsKnown(EnumSet<Spell> spellsKnown) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Career.Profile getCareer() {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -711,7 +656,7 @@ public abstract class Immortal {
 		@Override
 		public void setLevel(int level) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
@@ -723,7 +668,7 @@ public abstract class Immortal {
 		@Override
 		public void setExp(int exp) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
@@ -748,42 +693,6 @@ public abstract class Immortal {
 		public byte[] getSavingThrows() {
 			// TODO Auto-generated method stub
 			return null;
-		}
-
-		@Override
-		public EnumSet<Skill> getSkills() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setSkills(EnumSet<Skill> skills) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public EnumSet<Armor> getArmorProficiency() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setArmorProficiency(EnumSet<Armor> armor) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public EnumSet<Weapon> getWeaponProficiency() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setWeaponProficiency(EnumSet<Weapon> weapons) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
@@ -814,42 +723,6 @@ public abstract class Immortal {
 		public EnumSet<Sense> getSenses() {
 			// TODO Auto-generated method stub
 			return null;
-		}
-
-		@Override
-		public EnumSet<Race.Language> getLanguages() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setLanguages(EnumSet<Race.Language> languages) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Combat combat() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setCombat(Combat combat) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Inventory getInventory() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setInventory(Inventory inventory) {
-			// TODO Auto-generated method stub
-
 		}
 
 	}

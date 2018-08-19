@@ -1,3 +1,5 @@
+package actor;
+import rules.Dice;
 
 public enum Deity {
 	ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR;
@@ -27,7 +29,7 @@ public enum Deity {
 	private static final Deity[] WAR_GODS = { BAHAMUT, BANE, GRUUMSH, MORADIN, TIAMAT };
 
 	// static methods
-	public static Deity selectDeity(Actor actor) {
+	public static Deity selectDeity(Player actor) {
 		Actor.Alignment ali = actor.alignment();
 		Class job = actor.getJob();
 		Race race = actor.getRace();
@@ -43,7 +45,7 @@ public enum Deity {
 		return deity;
 	}
 
-	public static Deity domainToDeity(Actor actor) {
+	public static Deity domainToDeity(Player actor) {
 		Deity[] array = null;
 		Class.Subclass domain = actor.getArchetype();
 

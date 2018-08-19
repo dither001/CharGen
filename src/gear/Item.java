@@ -1,3 +1,4 @@
+package gear;
 import java.util.Set;
 
 public interface Item {

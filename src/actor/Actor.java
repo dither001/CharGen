@@ -1,6 +1,13 @@
+package actor;
+
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
+
+import rules.Dice;
+import rules.Energy;
+
+//
 
 public interface Actor {
 	public enum Ability {
@@ -64,27 +71,7 @@ public interface Actor {
 
 	public Alignment alignment();
 
-	public Deity getDeity();
-
 	public byte[] getHitDice();
-
-	public EnumSet<Option.Feature> getFeatures();
-
-	public void setFeatures(EnumSet<Option.Feature> features);
-
-	public Class getJob();
-
-	public Class.Subclass getArchetype();
-
-	public Race getRace();
-	
-	public void setRace(Race race);
-
-	public EnumSet<Spell> getSpellsKnown();
-
-	public void setSpellsKnown(EnumSet<Spell> spellsKnown);
-
-	public Career.Profile getCareer();
 
 	public int getLevel();
 
@@ -102,18 +89,6 @@ public interface Actor {
 
 	public byte[] getSavingThrows();
 
-	public EnumSet<Skill> getSkills();
-
-	public void setSkills(EnumSet<Skill> skills);
-
-	public EnumSet<Armor> getArmorProficiency();
-
-	public void setArmorProficiency(EnumSet<Armor> armor);
-
-	public EnumSet<Weapon> getWeaponProficiency();
-
-	public void setWeaponProficiency(EnumSet<Weapon> weapons);
-
 	public EnumSet<Energy> getResistance();
 
 	public EnumSet<Energy> getImmunity();
@@ -124,44 +99,10 @@ public interface Actor {
 
 	public EnumSet<Sense> getSenses();
 
-	public EnumSet<Race.Language> getLanguages();
-
-	public void setLanguages(EnumSet<Race.Language> languages);
-
-	public Combat combat();
-
-	public void setCombat(Combat combat);
-
-	public Inventory getInventory();
-
-	public void setInventory(Inventory inventory);
-
 	/*
 	 * DEFAULT METHODS
 	 * 
 	 */
-	public default void advance() {
-		int[] requires = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000,
-				165000, 195000, 225000, 265000, 305000, 355000 };
-		int currentLevel = getLevel(), currentEXP = getExperience();
-
-		boolean advanced = false;
-		if (currentLevel < 20 && currentEXP >= requires[currentLevel]) {
-			setLevel(currentLevel + 1);
-			advanced = true;
-
-			if (currentLevel < 19 && currentEXP >= requires[currentLevel + 1])
-				currentEXP = requires[currentLevel + 1] - 1;
-		}
-
-		if (advanced) {
-			// TODO
-			Class.updateClassFeatures(this);
-			combat().update();
-
-		}
-	}
-
 	public default int proficiency() {
 		int bonus, level = getLevel();
 		if (level > 16)
@@ -184,86 +125,6 @@ public interface Actor {
 
 	public default boolean hasAllConditions(Collection<Condition> c) {
 		return getConditions().containsAll(c);
-	}
-
-	public default boolean hasJob(Class job) {
-		boolean hasJob = false;
-		if (getJob() != null && getJob().equals(job))
-			hasJob = true;
-
-		return hasJob;
-	}
-
-	public default boolean isBarbarian() {
-		Class job = Class.BARBARIAN;
-
-		return hasJob(job);
-	}
-
-	public default boolean isBard() {
-		Class job = Class.BARD;
-
-		return hasJob(job);
-	}
-
-	public default boolean isCleric() {
-		Class job = Class.CLERIC;
-
-		return hasJob(job);
-	}
-
-	public default boolean isDruid() {
-		Class job = Class.DRUID;
-
-		return hasJob(job);
-	}
-
-	public default boolean isFighter() {
-		Class job = Class.FIGHTER;
-
-		return hasJob(job);
-	}
-
-	public default boolean isMonk() {
-		Class job = Class.MONK;
-
-		return hasJob(job);
-	}
-
-	public default boolean isPaladin() {
-		Class job = Class.PALADIN;
-
-		return hasJob(job);
-	}
-
-	public default boolean isRanger() {
-		Class job = Class.RANGER;
-
-		return hasJob(job);
-	}
-
-	public default boolean isRogue() {
-		Class job = Class.ROGUE;
-
-		return hasJob(job);
-	}
-
-	public default boolean isSorcerer() {
-		Class job = Class.SORCERER;
-
-		return hasJob(job);
-	}
-
-	public default boolean isWarlock() {
-		Class job = Class.WARLOCK;
-
-		return hasJob(job);
-	}
-
-	public default boolean isWizard() {
-		Class job = Class.WIZARD;
-
-		return hasJob(job);
 	}
 
 	public default int getStrength() {
@@ -419,58 +280,58 @@ public interface Actor {
 		return getSavingThrow(5);
 	}
 
-	public default Set<Weapon.Instance> getWeapons() {
-		return getInventory().getWeapons();
-	}
-
-	public default Weapon.Instance getHeldWeapon() {
-		return getInventory().getMainHand();
-	}
-
-	public default boolean wearingArmor() {
-		return (getInventory().wearingArmor());
-	}
-
-	public default boolean notWearingArmor() {
-		return (getInventory().wearingArmor() != true);
-	}
-
-	public default boolean usingShield() {
-		return (getInventory().usingShield());
-	}
-
-	public default boolean notUsingShield() {
-		return (getInventory().usingShield() != true);
-	}
-
-	public default int getArmorClass() {
-		return combat().getArmorClass();
-	}
-
-	public default int getHitPoints() {
-		return combat().getHitPoints();
-	}
-
-	public default Combat.AttackMode getPreferredAttackType() {
-		return combat().getPreferredAttackType();
-	}
-
-	public default int getAttackBonus() {
-		return combat().getAttackBonus();
-	}
-
-	public default int getAverageDamage() {
-		return combat().getAverageDamage();
-	}
-
-	public default int getHighestSpellDamage() {
-		Spell s = Spell.highestDamagingSpell(getSpellsKnown());
-
-		return Spell.getAverageDamage(s);
-	}
-
-	public default int getChallengeRating() {
-		return combat().getChallengeRating();
-	}
+//	public default Set<Weapon.Instance> getWeapons() {
+//		return getInventory().getWeapons();
+//	}
+//
+//	public default Weapon.Instance getHeldWeapon() {
+//		return getInventory().getMainHand();
+//	}
+//
+//	public default boolean wearingArmor() {
+//		return (getInventory().wearingArmor());
+//	}
+//
+//	public default boolean notWearingArmor() {
+//		return (getInventory().wearingArmor() != true);
+//	}
+//
+//	public default boolean usingShield() {
+//		return (getInventory().usingShield());
+//	}
+//
+//	public default boolean notUsingShield() {
+//		return (getInventory().usingShield() != true);
+//	}
+//
+//	public default int getArmorClass() {
+//		return combat().getArmorClass();
+//	}
+//
+//	public default int getHitPoints() {
+//		return combat().getHitPoints();
+//	}
+//
+//	public default Combat.AttackMode getPreferredAttackType() {
+//		return combat().getPreferredAttackType();
+//	}
+//
+//	public default int getAttackBonus() {
+//		return combat().getAttackBonus();
+//	}
+//
+//	public default int getAverageDamage() {
+//		return combat().getAverageDamage();
+//	}
+//
+//	public default int getHighestSpellDamage() {
+//		Spell s = Spell.highestDamagingSpell(getSpellsKnown());
+//
+//		return Spell.getAverageDamage(s);
+//	}
+//
+//	public default int getChallengeRating() {
+//		return combat().getChallengeRating();
+//	}
 
 }

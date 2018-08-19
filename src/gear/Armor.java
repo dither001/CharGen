@@ -1,8 +1,13 @@
+package gear;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import actor.Actor;
+import actor.Class;
+import actor.Player;
 
 public enum Armor {
 	UNARMORED, BARBARIAN, MAGE, MONK, PADDED_ARMOR, LEATHER_ARMOR, STUDDED_LEATHER, HIDE_ARMOR, CHAIN_SHIRT, SCALE_MAIL, BREASTPLATE, HALF_PLATE, RING_MAIL, CHAIN_MAIL, SPLINT_MAIL, PLATE_MAIL;
@@ -214,7 +219,7 @@ public enum Armor {
 		return maxDex;
 	}
 
-	private static void setupLightArmor(Actor actor) {
+	private static void setupLightArmor(Player actor) {
 		EnumSet<Armor> set;
 		if (actor.getArmorProficiency() == null)
 			set = EnumSet.noneOf(Armor.class);
@@ -229,7 +234,7 @@ public enum Armor {
 		actor.setArmorProficiency(set);
 	}
 
-	private static void setupMediumArmor(Actor actor) {
+	private static void setupMediumArmor(Player actor) {
 		EnumSet<Armor> set;
 		if (actor.getArmorProficiency() == null)
 			set = EnumSet.noneOf(Armor.class);
@@ -244,7 +249,7 @@ public enum Armor {
 		actor.setArmorProficiency(set);
 	}
 
-	private static void setupHeavyArmor(Actor actor) {
+	private static void setupHeavyArmor(Player actor) {
 		EnumSet<Armor> set;
 		if (actor.getArmorProficiency() == null)
 			set = EnumSet.noneOf(Armor.class);
@@ -259,7 +264,7 @@ public enum Armor {
 		actor.setArmorProficiency(set);
 	}
 
-	public static void setupArmorProficiency(Actor actor) {
+	public static void setupArmorProficiency(Player actor) {
 		Class job = actor.getJob();
 
 		if (job.equals(Class.BARBARIAN))

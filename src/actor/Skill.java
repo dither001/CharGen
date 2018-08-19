@@ -1,4 +1,7 @@
+package actor;
 import java.util.EnumSet;
+
+import rules.Dice;
 
 public enum Skill {
 	/*
@@ -119,7 +122,7 @@ public enum Skill {
 		return WATER_VEHICLES;
 	}
 
-	public static boolean testSkillFromArray(Skill[] array, Actor actor) {
+	public static boolean testSkillFromArray(Skill[] array, Player actor) {
 		boolean canAdd = false, added = false;
 
 		EnumSet<Skill> skills = actor.getSkills();
@@ -143,7 +146,7 @@ public enum Skill {
 		return added;
 	}
 
-	public static Skill testRandomSkill(Actor actor) {
+	public static Skill testRandomSkill(Player actor) {
 		// FIXME - broken method; it becomes infinite if you have all class skills
 		EnumSet<Skill> skills = actor.getSkills();
 		Class job = actor.getJob();
@@ -192,7 +195,7 @@ public enum Skill {
 		return Dice.randomFromArray(array);
 	}
 
-	public static void setupClassSkills(Actor actor) {
+	public static void setupClassSkills(Player actor) {
 		EnumSet<Skill> skills;
 		if (actor.getSkills() == null)
 			skills = EnumSet.noneOf(Skill.class);
@@ -244,7 +247,7 @@ public enum Skill {
 		actor.setSkills(skills);
 	}
 
-	// public static void setupCareerSkills(Actor actor) {
+	// public static void setupCareerSkills(Player actor) {
 	// EnumSet<Skill> skills;
 	// if (actor.getSkills() == null)
 	// skills = EnumSet.noneOf(Skill.class);
@@ -307,7 +310,7 @@ public enum Skill {
 	// actor.setSkills(skills);
 	// }
 
-	// public static void setupRacialSkills(Actor actor) {
+	// public static void setupRacialSkills(Player actor) {
 	// EnumSet<Skill> skills;
 	// if (actor.getSkills() == null)
 	// skills = EnumSet.noneOf(Skill.class);

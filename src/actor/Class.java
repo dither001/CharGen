@@ -1,4 +1,10 @@
+package actor;
 import java.util.EnumSet;
+
+import gear.Armor;
+import gear.Weapon;
+import magic.Spell;
+import rules.Dice;
 
 public enum Class implements Option {
 	BARBARIAN, BARD, CLERIC, DRUID, FIGHTER, MONK, PALADIN, RANGER, ROGUE, SORCERER, WARLOCK, WIZARD;
@@ -116,7 +122,7 @@ public enum Class implements Option {
 		return ability;
 	}
 
-	public static Class selectClass(Actor actor) {
+	public static Class selectClass(Player actor) {
 		Class job;
 		Actor.Alignment ali = actor.alignment();
 
@@ -155,7 +161,7 @@ public enum Class implements Option {
 		return job;
 	}
 
-	public static float getPrimeRequisite(Actor actor) {
+	public static float getPrimeRequisite(Player actor) {
 		float expRate = 1.00f;
 		int prime;
 		Class job = actor.getJob();
@@ -250,7 +256,7 @@ public enum Class implements Option {
 		}
 
 		// static methods
-		public static Subclass selectSubclass(Actor actor) {
+		public static Subclass selectSubclass(Player actor) {
 			Class job = actor.getJob();
 
 			Subclass Subclass = null;
@@ -344,7 +350,7 @@ public enum Class implements Option {
 	 * SETUP CLASS FEATURES & UPDATE CLASS FEATURES
 	 * 
 	 */
-	public static void updateClassFeatures(Actor actor) {
+	public static void updateClassFeatures(Player actor) {
 		EnumSet<Feature> features;
 		if (actor.getFeatures() != null)
 			features = actor.getFeatures();
@@ -382,7 +388,7 @@ public enum Class implements Option {
 		actor.setFeatures(features);
 	}
 
-	public static void setupClassFeatures(Actor actor) {
+	public static void setupClassFeatures(Player actor) {
 		EnumSet<Feature> features;
 		if (actor.getFeatures() != null)
 			features = actor.getFeatures();
@@ -424,7 +430,7 @@ public enum Class implements Option {
 	 * BARBARIAN ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> barbarian(Actor actor) {
+	public static EnumSet<Feature> barbarian(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -538,7 +544,7 @@ public enum Class implements Option {
 	 * BARD ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> bard(Actor actor) {
+	public static EnumSet<Feature> bard(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		EnumSet<Skill> skills = actor.getSkills();
@@ -676,7 +682,7 @@ public enum Class implements Option {
 	 * CLERIC ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> cleric(Actor actor) {
+	public static EnumSet<Feature> cleric(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -912,7 +918,7 @@ public enum Class implements Option {
 	 * DRUID ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> druid(Actor actor) {
+	public static EnumSet<Feature> druid(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -1039,7 +1045,7 @@ public enum Class implements Option {
 	 * FIGHTER ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> fighter(Actor actor) {
+	public static EnumSet<Feature> fighter(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -1230,7 +1236,7 @@ public enum Class implements Option {
 	 * MONK
 	 * 
 	 */
-	public static EnumSet<Feature> monk(Actor actor) {
+	public static EnumSet<Feature> monk(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -1381,7 +1387,7 @@ public enum Class implements Option {
 	 * PALADIN ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> paladin(Actor actor) {
+	public static EnumSet<Feature> paladin(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -1516,7 +1522,7 @@ public enum Class implements Option {
 	 * RANGER ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> ranger(Actor actor) {
+	public static EnumSet<Feature> ranger(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -1630,7 +1636,7 @@ public enum Class implements Option {
 	 * ROGUE ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> rogue(Actor actor) {
+	public static EnumSet<Feature> rogue(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -1811,7 +1817,7 @@ public enum Class implements Option {
 	 * SORCERER ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> sorcerer(Actor actor) {
+	public static EnumSet<Feature> sorcerer(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -1936,7 +1942,7 @@ public enum Class implements Option {
 	 * WARLOCK ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> warlock(Actor actor) {
+	public static EnumSet<Feature> warlock(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -2089,7 +2095,7 @@ public enum Class implements Option {
 	 * WIZARD ADVANCEMENT
 	 * 
 	 */
-	public static EnumSet<Feature> wizard(Actor actor) {
+	public static EnumSet<Feature> wizard(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -2302,7 +2308,7 @@ public enum Class implements Option {
 	 * CLASS TEMPLATE
 	 * 
 	 */
-	public static EnumSet<Feature> blank(Actor actor) {
+	public static EnumSet<Feature> blank(Player actor) {
 		Class.Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
@@ -2368,7 +2374,7 @@ public enum Class implements Option {
 	 * SETUP HELPER METHODS & UPDATE HELPER METHODS
 	 * 
 	 */
-	private static Feature abilityImprove(Actor actor) {
+	private static Feature abilityImprove(Player actor) {
 		Feature[] improvement = null;
 
 		// determines index of improvement to return
@@ -2518,7 +2524,7 @@ public enum Class implements Option {
 		return improvement[index];
 	}
 
-	public static EnumSet<Feature> addRandomExpertise(int toAdd, Actor actor) {
+	public static EnumSet<Feature> addRandomExpertise(int toAdd, Player actor) {
 		EnumSet<Skill> skills;
 		if (actor.getSkills() != null)
 			skills = actor.getSkills();
@@ -2555,31 +2561,31 @@ public enum Class implements Option {
 		return expertise;
 	}
 
-	private static EnumSet<Feature> fighterFightingStyle(int toAdd, Actor actor) {
+	private static EnumSet<Feature> fighterFightingStyle(int toAdd, Player actor) {
 		return addFromArray(toAdd, Option.Feature.FIGHTER_STYLE, actor);
 	}
 
-	private static EnumSet<Feature> addFighterManeuver(int toAdd, Actor actor) {
+	private static EnumSet<Feature> addFighterManeuver(int toAdd, Player actor) {
 		return addFromArray(toAdd, Option.Feature.FIGHTER_MANEUVERS, actor);
 	}
 
-	private static EnumSet<Feature> paladinFightingStyle(int toAdd, Actor actor) {
+	private static EnumSet<Feature> paladinFightingStyle(int toAdd, Player actor) {
 		return addFromArray(toAdd, Option.Feature.PALADIN_STYLE, actor);
 	}
 
-	private static EnumSet<Feature> rangerFightingStyle(int toAdd, Actor actor) {
+	private static EnumSet<Feature> rangerFightingStyle(int toAdd, Player actor) {
 		return addFromArray(toAdd, Option.Feature.RANGER_STYLE, actor);
 	}
 
-	private static EnumSet<Feature> rangerFavoredEnemy(int toAdd, Actor actor) {
+	private static EnumSet<Feature> rangerFavoredEnemy(int toAdd, Player actor) {
 		return addFromArray(toAdd, Option.Feature.RANGER_ENEMY, actor);
 	}
 
-	private static EnumSet<Feature> rangerTerrainExplorer(int toAdd, Actor actor) {
+	private static EnumSet<Feature> rangerTerrainExplorer(int toAdd, Player actor) {
 		return addFromArray(toAdd, Option.Feature.RANGER_TERRAIN, actor);
 	}
 
-	private static EnumSet<Feature> addFromArray(int toAdd, Feature[] array, Actor actor) {
+	private static EnumSet<Feature> addFromArray(int toAdd, Feature[] array, Player actor) {
 		EnumSet<Feature> features;
 		if (actor.getFeatures() != null)
 			features = actor.getFeatures();

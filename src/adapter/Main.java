@@ -1,7 +1,15 @@
+package adapter;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
+
+import actor.Actor;
+import actor.Class;
+import actor.Immortal;
+import actor.Player;
+import actor.Race;
+import milieu.Group;
 
 public class Main {
 	private static int PCS_TO_ROLL = 50;
@@ -14,26 +22,19 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		// Locale.Cluster cluster = Locale.cluster();
-		//
-		// for (Iterator<Locale> it = cluster.localeList().iterator(); it.hasNext();) {
-		// System.out.println(it.next().toStringDetailed());
-		// }
-
-		// ladderSetup();
 
 		// rollCharacters();
-		// rollOneCharacter();
+//		 rollOneCharacter();
 		// rollCharactersOfClass(Class.BARBARIAN);
 		// rollCharactersOfArchetype(Class.Subclass.KNOWLEDGE);
-		// levelUpTest(20);
+		 levelUpTest(20);
 
 		// for (int i = 0; i < 50; ++i) {
 		// levelUpTestDisplayOnly(20, Class.WIZARD);
 		// }
 
 		//
-		testMainWorld();
+//		testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
@@ -220,64 +221,69 @@ public class Main {
 		System.out.println();
 	}
 
-	public static void deityProportions() {
-		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		Deity[] gods = new Deity[] { Deity.ASMODEUS, Deity.AVANDRA, Deity.BAHAMUT, Deity.BANE, Deity.CORELLON,
-				Deity.ERATHIS, Deity.GRUUMSH, Deity.IOUN, Deity.KORD, Deity.LOLTH, Deity.MELORA, Deity.MORADIN,
-				Deity.PELOR, Deity.RAVEN_QUEEN, Deity.SEHANINE, Deity.THARIZDUN, Deity.TIAMAT, Deity.TOROG, Deity.VECNA,
-				Deity.ZEHIR };
-
-		Player player;
-		for (int i = 0; i < PCS_TO_ROLL; ++i) {
-			player = new Player();
-
-			if (player.getDeity().equals(Deity.ASMODEUS))
-				++array[0];
-			else if (player.getDeity().equals(Deity.AVANDRA))
-				++array[1];
-			else if (player.getDeity().equals(Deity.BAHAMUT))
-				++array[2];
-			else if (player.getDeity().equals(Deity.BANE))
-				++array[3];
-			else if (player.getDeity().equals(Deity.CORELLON))
-				++array[4];
-			else if (player.getDeity().equals(Deity.ERATHIS))
-				++array[5];
-			else if (player.getDeity().equals(Deity.GRUUMSH))
-				++array[6];
-			else if (player.getDeity().equals(Deity.IOUN))
-				++array[7];
-			else if (player.getDeity().equals(Deity.KORD))
-				++array[8];
-			else if (player.getDeity().equals(Deity.LOLTH))
-				++array[9];
-			else if (player.getDeity().equals(Deity.MELORA))
-				++array[10];
-			else if (player.getDeity().equals(Deity.MORADIN))
-				++array[11];
-			else if (player.getDeity().equals(Deity.PELOR))
-				++array[12];
-			else if (player.getDeity().equals(Deity.RAVEN_QUEEN))
-				++array[13];
-			else if (player.getDeity().equals(Deity.SEHANINE))
-				++array[14];
-			else if (player.getDeity().equals(Deity.THARIZDUN))
-				++array[15];
-			else if (player.getDeity().equals(Deity.TIAMAT))
-				++array[16];
-			else if (player.getDeity().equals(Deity.TOROG))
-				++array[17];
-			else if (player.getDeity().equals(Deity.VECNA))
-				++array[18];
-			else if (player.getDeity().equals(Deity.ZEHIR))
-				++array[19];
-		}
-
-		for (int i = 0; i < gods.length; ++i) {
-			String string = String.format("%12s %5d (%5.1f)", gods[i], array[i], (0.0 + array[i]) / PCS_TO_ROLL * 100);
-			System.out.println(string);
-		}
-	}
+	// public static void deityProportions() {
+	// int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	// 0, 0, 0 };
+	// Deity[] gods = new Deity[] { Deity.ASMODEUS, Deity.AVANDRA, Deity.BAHAMUT,
+	// Deity.BANE, Deity.CORELLON,
+	// Deity.ERATHIS, Deity.GRUUMSH, Deity.IOUN, Deity.KORD, Deity.LOLTH,
+	// Deity.MELORA, Deity.MORADIN,
+	// Deity.PELOR, Deity.RAVEN_QUEEN, Deity.SEHANINE, Deity.THARIZDUN,
+	// Deity.TIAMAT, Deity.TOROG, Deity.VECNA,
+	// Deity.ZEHIR };
+	//
+	// Player player;
+	// for (int i = 0; i < PCS_TO_ROLL; ++i) {
+	// player = new Player();
+	//
+	// if (player.getDeity().equals(Deity.ASMODEUS))
+	// ++array[0];
+	// else if (player.getDeity().equals(Deity.AVANDRA))
+	// ++array[1];
+	// else if (player.getDeity().equals(Deity.BAHAMUT))
+	// ++array[2];
+	// else if (player.getDeity().equals(Deity.BANE))
+	// ++array[3];
+	// else if (player.getDeity().equals(Deity.CORELLON))
+	// ++array[4];
+	// else if (player.getDeity().equals(Deity.ERATHIS))
+	// ++array[5];
+	// else if (player.getDeity().equals(Deity.GRUUMSH))
+	// ++array[6];
+	// else if (player.getDeity().equals(Deity.IOUN))
+	// ++array[7];
+	// else if (player.getDeity().equals(Deity.KORD))
+	// ++array[8];
+	// else if (player.getDeity().equals(Deity.LOLTH))
+	// ++array[9];
+	// else if (player.getDeity().equals(Deity.MELORA))
+	// ++array[10];
+	// else if (player.getDeity().equals(Deity.MORADIN))
+	// ++array[11];
+	// else if (player.getDeity().equals(Deity.PELOR))
+	// ++array[12];
+	// else if (player.getDeity().equals(Deity.RAVEN_QUEEN))
+	// ++array[13];
+	// else if (player.getDeity().equals(Deity.SEHANINE))
+	// ++array[14];
+	// else if (player.getDeity().equals(Deity.THARIZDUN))
+	// ++array[15];
+	// else if (player.getDeity().equals(Deity.TIAMAT))
+	// ++array[16];
+	// else if (player.getDeity().equals(Deity.TOROG))
+	// ++array[17];
+	// else if (player.getDeity().equals(Deity.VECNA))
+	// ++array[18];
+	// else if (player.getDeity().equals(Deity.ZEHIR))
+	// ++array[19];
+	// }
+	//
+	// for (int i = 0; i < gods.length; ++i) {
+	// String string = String.format("%12s %5d (%5.1f)", gods[i], array[i], (0.0 +
+	// array[i]) / PCS_TO_ROLL * 100);
+	// System.out.println(string);
+	// }
+	// }
 
 	public static void jobProportions() {
 		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
