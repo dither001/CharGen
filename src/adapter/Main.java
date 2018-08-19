@@ -1,19 +1,16 @@
 package adapter;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
-import actor.Actor;
+import actor.*;
 import actor.Class;
-import actor.Immortal;
-import actor.Player;
-import actor.Race;
-import milieu.Group;
+import milieu.StarSystem;
 
 public class Main {
 	private static int PCS_TO_ROLL = 50;
-	private static int SPELLBOOK_LEVEL = 17;
 
 	//
 	private static final Scanner INPUT = new Scanner(System.in);
@@ -27,14 +24,14 @@ public class Main {
 //		 rollOneCharacter();
 		// rollCharactersOfClass(Class.BARBARIAN);
 		// rollCharactersOfArchetype(Class.Subclass.KNOWLEDGE);
-		 levelUpTest(20);
+//		 levelUpTest(20);
 
 		// for (int i = 0; i < 50; ++i) {
 		// levelUpTestDisplayOnly(20, Class.WIZARD);
 		// }
 
 		//
-//		testMainWorld();
+		testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
@@ -54,14 +51,14 @@ public class Main {
 	}
 
 	public static void starsOfColor() {
-		System.out.println(new Group().toStringDetailed());
+		System.out.println(new StarSystem().toStringDetailed());
 		System.out.println();
 	}
 
 	public static void starsOfColor(char color) {
-		Group group = new Group();
+		StarSystem group = new StarSystem();
 		while (group.getPrimaryStarColor() != color) {
-			group = new Group();
+			group = new StarSystem();
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -69,9 +66,9 @@ public class Main {
 	}
 
 	public static void unavailableZones() {
-		Group group = new Group();
+		StarSystem group = new StarSystem();
 		while (group.numberOfUnavailableZones() < 1) {
-			group = new Group();
+			group = new StarSystem();
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -79,9 +76,9 @@ public class Main {
 	}
 
 	public static void testMainWorld() {
-		Group group = new Group();
+		StarSystem group = new StarSystem();
 		while (group.getMainWorld() == null) { // || group.getMainWorld().getPopulation() < 5) {
-			group = new Group();
+			group = new StarSystem();
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -89,9 +86,9 @@ public class Main {
 	}
 
 	public static void trinarySystem() {
-		Group group = new Group();
+		StarSystem group = new StarSystem();
 		while (group.isTrinary() != true) {
-			group = new Group();
+			group = new StarSystem();
 		}
 
 		System.out.println(group.toStringDetailed());

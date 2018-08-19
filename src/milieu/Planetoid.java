@@ -21,7 +21,7 @@ public class Planetoid implements World {
 	private EnumSet<Tag> worldTags;
 	private EnumSet<Base> worldFacilities;
 
-	private Group group;
+	private StarSystem group;
 	private Planetoid parent;
 	private Type type;
 	private int orbit;
@@ -37,15 +37,15 @@ public class Planetoid implements World {
 	 * CONSTRUCTORS
 	 * 
 	 */
-	public Planetoid(int orbit, Group group) {
+	public Planetoid(int orbit, StarSystem group) {
 		this(Type.STANDARD, orbit, group);
 	}
 
-	public Planetoid(Type type, int orbit, Group group) {
+	public Planetoid(Type type, int orbit, StarSystem group) {
 		this(type, orbit, group, null);
 	}
 
-	public Planetoid(Type type, int orbit, Group group, Planetoid home) {
+	public Planetoid(Type type, int orbit, StarSystem group, Planetoid home) {
 		this.group = group;
 		this.parent = home;
 		this.type = type;
@@ -405,7 +405,7 @@ public class Planetoid implements World {
 	}
 
 	@Override
-	public Group getGroup() {
+	public StarSystem getGroup() {
 		return group;
 	}
 

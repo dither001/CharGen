@@ -1,4 +1,5 @@
 package milieu;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 import rules.Dice;
 
-public class Group {
+public class StarSystem {
 	private static final String[] POPULATIONS = { "Scattered or no inhabitants", "Dozens of inhabitants",
 			"Hundreds of inhabitants", "Thousands of inhabitants", "Tens of thousands", "Hundreds of thousands",
 			"Millions of inhabitants", "Tens of millions", "Hundreds of millions", "Billions of inhabitants",
@@ -39,7 +40,7 @@ public class Group {
 	 * CONSTRUCTOR
 	 * 
 	 */
-	public Group() {
+	public StarSystem() {
 		namedObjects = 0;
 		int dice = Dice.roll(2, 6);
 
@@ -697,7 +698,7 @@ public class Group {
 		return workingSet;
 	}
 
-	private static void nameSetup(Group group) {
+	private static void nameSetup(StarSystem group) {
 		List<String> nameList = Names.worldNameList();
 		//
 		while (nameList.size() < group.namedObjects) {

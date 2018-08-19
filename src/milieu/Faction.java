@@ -1,10 +1,25 @@
 package milieu;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 public interface Faction<T> {
+	/*
+	 * A faction might form around a person, place, or thing (as in, a physical
+	 * object), but time has taught us (mainly me) that 3 things to choose from just
+	 * isn't interesting enough for a game.
+	 */
 
+	/*
+	 * Think of cultural groups like the Jews who were separated and displaced from
+	 * their homelands and whatnot; they centered around ideals and religion instead
+	 * of people. "People" might be an example of a chief or family or tribe whereas
+	 * "thing" might be a ship or a big pile of money (company or corporation).
+	 */
+
+	// person, people, place, thing, goal, ideal
+	
 	public boolean addCurrentMember(T member);
 
 	public boolean addAllCurrentMembers(Collection<T> c);
@@ -13,6 +28,7 @@ public interface Faction<T> {
 
 	public Set<T> currentMemberSet();
 
+	//
 	public boolean addFormerMember(T member);
 
 	public boolean addAllFormerMembers(Collection<T> c);
@@ -21,9 +37,9 @@ public interface Faction<T> {
 
 	public Set<T> formerMemberSet();
 
+	//
 	public World getHomeworld();
 
-	//
 	public List<String> nameList();
 
 }

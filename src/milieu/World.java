@@ -248,7 +248,7 @@ public interface World {
 
 	public void setWorldFacilities(EnumSet<Base> set);
 
-	public Group getGroup();
+	public StarSystem getGroup();
 
 	public int getOrbit();
 
