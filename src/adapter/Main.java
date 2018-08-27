@@ -8,6 +8,8 @@ import java.util.Set;
 import actor.*;
 import actor.Class;
 import milieu.StarSystem;
+import vessel.MDrive;
+import vessel.Spaceship;
 
 public class Main {
 	private static int PCS_TO_ROLL = 50;
@@ -19,19 +21,24 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
+		// MDrive.prototypePrint();
+		for (int i = 0; i < 50; ++i) {
+			System.out.println(Spaceship.randomSpaceship().toStringDetailed());
+			System.out.println();
+		}
 
 		// rollCharacters();
-//		 rollOneCharacter();
+		// rollOneCharacter();
 		// rollCharactersOfClass(Class.BARBARIAN);
 		// rollCharactersOfArchetype(Class.Subclass.KNOWLEDGE);
-//		 levelUpTest(20);
+		// levelUpTest(20);
 
 		// for (int i = 0; i < 50; ++i) {
 		// levelUpTestDisplayOnly(20, Class.WIZARD);
 		// }
 
 		//
-		testMainWorld();
+		// testMainWorld();
 		// testMissionDetail();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
