@@ -22,10 +22,10 @@ public class Main {
 		// TODO
 
 		// MDrive.prototypePrint();
-		for (int i = 0; i < 50; ++i) {
-			System.out.println(Spaceship.randomSpaceship().toStringDetailed());
-			System.out.println();
-		}
+		// for (int i = 0; i < 50; ++i) {
+		// System.out.println(Spaceship.randomSpaceship().toStringDetailed());
+		// System.out.println();
+		// }
 
 		// rollCharacters();
 		// rollOneCharacter();
@@ -38,8 +38,7 @@ public class Main {
 		// }
 
 		//
-		// testMainWorld();
-		// testMissionDetail();
+		testMainWorld();
 
 		// for (Pantheon el : Pantheon.getPantheons()) {
 		// System.out.println(el.toString() + " (" + el.membership() + ")");
@@ -48,6 +47,7 @@ public class Main {
 		// System.out.println(Immortal.beingsByGridToString());
 		// System.out.println(Immortal.alignmentGridStatsToString());
 		// System.out.println(Immortal.domainStatsToString());
+		// Immortal.nameLength();
 
 		// jobProportions();
 		// raceProportions();
