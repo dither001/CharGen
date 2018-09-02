@@ -20,8 +20,8 @@ public class Pantheon implements Faction<Actor> {
 		pantheons = new HashSet<Pantheon>();
 
 		Immortal.Lesser[] array = Immortal.getPantheons();
-		Set<Immortal.Instance> set;
-		Immortal.Instance god;
+		Set<Immortal> set;
+		Immortal god;
 		Pantheon pantheon;
 
 		for (int i = 0; i < array.length; ++i) {
@@ -29,7 +29,7 @@ public class Pantheon implements Faction<Actor> {
 			pantheons.add(pantheon);
 
 			set = Immortal.filterByPantheon(array[i]);
-			for (Iterator<Immortal.Instance> it = set.iterator(); it.hasNext();) {
+			for (Iterator<Immortal> it = set.iterator(); it.hasNext();) {
 				god = it.next();
 				pantheon.add(god);
 
@@ -44,24 +44,24 @@ public class Pantheon implements Faction<Actor> {
 	 */
 	private Immortal.Lesser affiliation;
 	private String name;
-	private Immortal.Instance leader;
+	private Immortal leader;
 
-	private Set<Immortal.Instance> members;
+	private Set<Immortal> members;
 	private int membership;
 
 	/*
 	 * CONSTRUCTORS
 	 */
 	public Pantheon(Immortal.Lesser affiliation) {
-		this.members = new HashSet<Immortal.Instance>();
+		this.members = new HashSet<Immortal>();
 		membership = 0;
 
 		//
 		this.name = Names.stringToName(affiliation.toString());
 
-		Set<Immortal.Instance> set = Immortal.filterByPantheon(affiliation);
-		Immortal.Instance instance;
-		for (Iterator<Immortal.Instance> it = set.iterator(); it.hasNext();) {
+		Set<Immortal> set = Immortal.filterByPantheon(affiliation);
+		Immortal instance;
+		for (Iterator<Immortal> it = set.iterator(); it.hasNext();) {
 			instance = it.next();
 
 			add(instance);
@@ -71,7 +71,7 @@ public class Pantheon implements Faction<Actor> {
 	/*
 	 * 
 	 */
-	public void add(Immortal.Instance immortal) {
+	public void add(Immortal immortal) {
 		if (immortal != null && members.contains(immortal) != true) {
 			members.add(immortal);
 			++membership;
@@ -97,7 +97,7 @@ public class Pantheon implements Faction<Actor> {
 	public List<String> nameList() {
 		List<String> nameList = new ArrayList<String>();
 		String name;
-		for (Iterator<Immortal.Instance> it = members.iterator(); it.hasNext();) {
+		for (Iterator<Immortal> it = members.iterator(); it.hasNext();) {
 			name = it.next().getName();
 			if (name != null)
 				nameList.add(name);

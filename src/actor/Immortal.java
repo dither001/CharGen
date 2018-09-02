@@ -11,7 +11,7 @@ import milieu.Names;
 import rules.Dice;
 import rules.Energy;
 
-public abstract class Immortal {
+public class Immortal implements Actor {
 	/*
 	 * Many, many gods exist, and comparatively few classed "primordials." It's my
 	 * intent to class the majority of entities that are either abstract, elemental
@@ -223,537 +223,11 @@ public abstract class Immortal {
 
 	}
 
-	public static class Prototype {
-		/*
-		 * STATIC FIELDS
-		 */
-		private static Map<Entity, Prototype> prototypes;
-
-		static {
-			prototypes = new HashMap<Entity, Prototype>();
-
-			Entity[] array = null;
-			Lesser lesser = null;
-			Actor.Alignment ali = null;
-			Domain domain = null;
-
-			/*
-			 * SUMERIAN - UBAID
-			 */
-			array = UBAID_KINGS;
-			lesser = Lesser.UBAID;
-			ali = Actor.Alignment.LAWFUL;
-			domain = Domain.LIFE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * CANAANITE - ELOHIM
-			 */
-			array = ELOHIM;
-			lesser = Lesser.ELOHIM;
-			ali = Actor.Alignment.LAWFUL;
-			domain = Domain.LIFE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * JEWISH ANGELS & DEMONS
-			 */
-			array = JEWISH_ANGELS;
-			lesser = Lesser.ANGEL;
-			ali = Actor.Alignment.LAWFUL;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			array = JEWISH_DEMONS;
-			lesser = Lesser.DEMON;
-			ali = Actor.Alignment.EVIL;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * HELLENIC GODS & SPIRITS
-			 */
-
-			// TALOS is a bronze giant built by Hephaestus to guard Crete
-			domain = Domain.DEATH;
-			Prototype.prototypes.put(Entity.TALOS,
-					new Prototype(Entity.TALOS, Lesser.ABOMINATION, Actor.Alignment.NEUTRAL, domain));
-
-			// HELLENIC - PRIMORDIALS (Uranus et al.)
-			array = Immortal.GREEK_PRIMORDIALS;
-			lesser = Lesser.ELEMENTAL;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - TITANS (Cronus et al.)
-			array = Immortal.TITANS;
-			lesser = Lesser.TITAN;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.KNOWLEDGE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - OLYMPIANS (Zeus et al.)
-			array = Immortal.OLYMPIANS;
-			lesser = Lesser.OLYMPIAN;
-			ali = Actor.Alignment.LAWFUL;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - CHTHONIANS (Hades et al.)
-			array = Immortal.CHTHONIANS;
-			lesser = Lesser.CHTHONIAN;
-			ali = Actor.Alignment.EVIL;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - OCEANIC (Poseidon et al.)
-			array = Immortal.OCEANIC;
-			lesser = Lesser.OCEANIC;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.TEMPEST;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - Miscellaneous SPIRITS
-			array = Immortal.HELLENIC_SPIRITS;
-			lesser = Lesser.ELEMENTAL;
-			ali = Actor.Alignment.NEUTRAL;
-			domain = Domain.TRICKERY;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - AMAZONS (war spirits)
-			array = Immortal.AMAZONS;
-			lesser = Lesser.ELEMENTAL;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.WAR;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - ERIC (conflict spirits)
-			array = Immortal.ERIS;
-			lesser = Lesser.ELEMENTAL;
-			ali = Actor.Alignment.EVIL;
-			domain = Domain.WAR;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - NYMPHS (nature spirits)
-			array = NYMPHS;
-			lesser = Lesser.NYMPH;
-			ali = Actor.Alignment.GOOD;
-			domain = Domain.LIFE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - NYMPHS (nature spirits)
-			array = CENTAURS;
-			lesser = Lesser.CENTAUR;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.NATURE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - CYCLOPES
-			array = CYCLOPES;
-			lesser = Lesser.CYCLOPS;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.KNOWLEDGE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			// HELLENIC - NYMPHS (nature spirits)
-			array = GREEK_WITCHES;
-			lesser = Lesser.WITCH;
-			ali = Actor.Alignment.EVIL;
-			domain = Domain.TRICKERY;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * CHRISTIAN ANGELS & DEMONS
-			 */
-			array = CHRISTIAN_ANGELS;
-			lesser = Lesser.ANGEL;
-			ali = Actor.Alignment.GOOD;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			array = CHRISTIAN_DEMONS;
-			lesser = Lesser.DEMON;
-			ali = Actor.Alignment.EVIL;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * ISLAMIC ANGELS & DEMONS
-			 */
-			array = ISLAMIC_ANGELS;
-			lesser = Lesser.ANGEL;
-			ali = Actor.Alignment.GOOD;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			array = ISLAMIC_DEMONS;
-			lesser = Lesser.DEMON;
-			ali = Actor.Alignment.EVIL;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * ARABIC STAR NAMES (~900 CE)
-			 */
-			array = ARABIC_STARS;
-			lesser = Lesser.ANGEL;
-			ali = Actor.Alignment.GOOD;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * NORSE - GODS & JOTNAR (800 ~ 1300 CE)
-			 */
-			array = AESIR;
-			lesser = Lesser.AESIR;
-			ali = Actor.Alignment.LAWFUL;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			array = VANIR;
-			lesser = Lesser.VANIR;
-			ali = Actor.Alignment.LAWFUL;
-			domain = Domain.LIFE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			array = NORSE_DWARVES;
-			lesser = Lesser.DWARF;
-			ali = Actor.Alignment.NEUTRAL;
-			domain = Domain.KNOWLEDGE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			array = JOTNAR;
-			lesser = Lesser.JOTUNN;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.KNOWLEDGE;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * ENOCHIAN ANGELS
-			 */
-			array = ENOCHIAN_ANGELS;
-			lesser = Lesser.ANGEL;
-			ali = Actor.Alignment.LAWFUL;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * LOA
-			 */
-			array = LOA;
-			lesser = Lesser.LOA;
-			ali = Actor.Alignment.NEUTRAL;
-			domain = Domain.TRICKERY;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * CTHULHU MYTHOS
-			 */
-			array = OUTER_GODS;
-			lesser = Lesser.ABOMINATION;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			array = ELDER_GODS;
-			lesser = Lesser.ABOMINATION;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * TOLKIEN ELVES
-			 */
-			array = ELDAR;
-			lesser = Lesser.ANGEL;
-			ali = Actor.Alignment.GOOD;
-			domain = Domain.LIGHT;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * LUCASITE (Star Wars worlds as demigods; "Sith" or Sidhe)
-			 */
-			array = LUCASITE;
-			lesser = Lesser.SIDHE;
-			ali = Actor.Alignment.CHAOTIC;
-			domain = Domain.TRICKERY;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-			/*
-			 * RICHEST AMERICANS
-			 */
-			array = RICHEST;
-			lesser = Lesser.PLUTOCRAT;
-			ali = Actor.Alignment.EVIL;
-			domain = Domain.DEATH;
-			for (int i = 0; i < array.length; ++i) {
-				Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
-			}
-
-		}
-
-		/*
-		 * INSTANCE FIELDS
-		 */
-		private Entity entity;
-		private Lesser affiliation;
-		private EnumSet<Domain> domains;
-		private EnumSet<Actor.Alignment> alignment;
-
-		/*
-		 * CONSTRUCTOR
-		 */
-		public Prototype(Entity entity, Lesser affiliation, Actor.Alignment alignment, Domain domain) {
-			this.entity = entity;
-			this.affiliation = affiliation;
-
-			Actor.Alignment[] ali = alignmentRandomizer(alignment);
-			this.alignment = EnumSet.noneOf(Actor.Alignment.class);
-			if (ali.length > 0) {
-				for (Actor.Alignment el : ali) {
-					this.alignment.add(el);
-				}
-			}
-
-			Domain[] domains = domainRandomizer(domain);
-			this.domains = EnumSet.noneOf(Domain.class);
-			if (domains.length > 0) {
-				for (Domain el : domains)
-					this.domains.add(el);
-			}
-		}
-
-	}
-
-	public static class Instance implements Actor {
-		private static Set<Instance> instances;
-
-		static {
-			instances = new HashSet<Instance>();
-
-			for (Iterator<Prototype> it = Prototype.prototypes.values().iterator(); it.hasNext();) {
-				instances.add(new Instance(it.next()));
-			}
-		}
-
-		private Prototype prototype;
-		//
-		private String name;
-		private Entity entity;
-		private Lesser affiliation;
-
-		private Greater greater;
-		private EnumSet<Domain> domains;
-		private EnumSet<Actor.Alignment> alignment;
-
-		public Instance(Prototype prototype) {
-			this.prototype = prototype;
-			//
-			this.name = Names.stringToName(prototype.entity.toString());
-			this.entity = prototype.entity;
-			this.affiliation = prototype.affiliation;
-
-			//
-			this.domains = EnumSet.copyOf(prototype.domains);
-			this.alignment = EnumSet.copyOf(prototype.alignment);
-
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public boolean greater() {
-			return (greater != null);
-		}
-
-		public boolean lesser() {
-			return (greater == null);
-		}
-
-		@Override
-		public String toString() {
-			String string = String.format("%s", name);
-
-			return string;
-		}
-
-		@Override
-		public String toStringDetailed() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Size creatureSize() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Creature creatureType() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Alignment alignment() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public byte[] getHitDice() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public int getLevel() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void setLevel(int level) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public int getExperience() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void setExp(int exp) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public EnumSet<Speed> getSpeed() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public byte[] getAbilityScores() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public byte[] getAbilityCeiling() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public byte[] getSavingThrows() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public EnumSet<Energy> getResistance() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public EnumSet<Energy> getImmunity() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public EnumSet<Condition> getConditionImmunity() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public EnumSet<Condition> getConditions() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public EnumSet<Sense> getSenses() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-	}
-
 	/*
 	 * STATIC FIELDS
 	 */
+	private static Set<Immortal> instances;
+
 	private static final Domain[] DOMAINS = { Domain.DEATH, Domain.KNOWLEDGE, Domain.LIFE, Domain.LIGHT, Domain.NATURE,
 			Domain.TEMPEST, Domain.TRICKERY, Domain.WAR };
 
@@ -1504,13 +978,348 @@ public abstract class Immortal {
 			Entity.WINNIE_JOHNSON_MARQUART };
 
 	/*
+	 * INITIALIZATION
+	 */
+	static {
+		Prototype.prototypes = new HashMap<Entity, Prototype>();
+
+		Entity[] array = null;
+		Lesser lesser = null;
+		Actor.Alignment ali = null;
+		Domain domain = null;
+
+		/*
+		 * SUMERIAN - UBAID
+		 */
+		array = UBAID_KINGS;
+		lesser = Lesser.UBAID;
+		ali = Actor.Alignment.LAWFUL;
+		domain = Domain.LIFE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * CANAANITE - ELOHIM
+		 */
+		array = ELOHIM;
+		lesser = Lesser.ELOHIM;
+		ali = Actor.Alignment.LAWFUL;
+		domain = Domain.LIFE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * JEWISH ANGELS & DEMONS
+		 */
+		array = JEWISH_ANGELS;
+		lesser = Lesser.ANGEL;
+		ali = Actor.Alignment.LAWFUL;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		array = JEWISH_DEMONS;
+		lesser = Lesser.DEMON;
+		ali = Actor.Alignment.EVIL;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * HELLENIC GODS & SPIRITS
+		 */
+
+		// TALOS is a bronze giant built by Hephaestus to guard Crete
+		domain = Domain.DEATH;
+		Prototype.prototypes.put(Entity.TALOS,
+				new Prototype(Entity.TALOS, Lesser.ABOMINATION, Actor.Alignment.NEUTRAL, domain));
+
+		// HELLENIC - PRIMORDIALS (Uranus et al.)
+		array = Immortal.GREEK_PRIMORDIALS;
+		lesser = Lesser.ELEMENTAL;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - TITANS (Cronus et al.)
+		array = Immortal.TITANS;
+		lesser = Lesser.TITAN;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.KNOWLEDGE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - OLYMPIANS (Zeus et al.)
+		array = Immortal.OLYMPIANS;
+		lesser = Lesser.OLYMPIAN;
+		ali = Actor.Alignment.LAWFUL;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - CHTHONIANS (Hades et al.)
+		array = Immortal.CHTHONIANS;
+		lesser = Lesser.CHTHONIAN;
+		ali = Actor.Alignment.EVIL;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - OCEANIC (Poseidon et al.)
+		array = Immortal.OCEANIC;
+		lesser = Lesser.OCEANIC;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.TEMPEST;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - Miscellaneous SPIRITS
+		array = Immortal.HELLENIC_SPIRITS;
+		lesser = Lesser.ELEMENTAL;
+		ali = Actor.Alignment.NEUTRAL;
+		domain = Domain.TRICKERY;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - AMAZONS (war spirits)
+		array = Immortal.AMAZONS;
+		lesser = Lesser.ELEMENTAL;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.WAR;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - ERIC (conflict spirits)
+		array = Immortal.ERIS;
+		lesser = Lesser.ELEMENTAL;
+		ali = Actor.Alignment.EVIL;
+		domain = Domain.WAR;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - NYMPHS (nature spirits)
+		array = NYMPHS;
+		lesser = Lesser.NYMPH;
+		ali = Actor.Alignment.GOOD;
+		domain = Domain.LIFE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - NYMPHS (nature spirits)
+		array = CENTAURS;
+		lesser = Lesser.CENTAUR;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.NATURE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - CYCLOPES
+		array = CYCLOPES;
+		lesser = Lesser.CYCLOPS;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.KNOWLEDGE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		// HELLENIC - NYMPHS (nature spirits)
+		array = GREEK_WITCHES;
+		lesser = Lesser.WITCH;
+		ali = Actor.Alignment.EVIL;
+		domain = Domain.TRICKERY;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * CHRISTIAN ANGELS & DEMONS
+		 */
+		array = CHRISTIAN_ANGELS;
+		lesser = Lesser.ANGEL;
+		ali = Actor.Alignment.GOOD;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		array = CHRISTIAN_DEMONS;
+		lesser = Lesser.DEMON;
+		ali = Actor.Alignment.EVIL;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * ISLAMIC ANGELS & DEMONS
+		 */
+		array = ISLAMIC_ANGELS;
+		lesser = Lesser.ANGEL;
+		ali = Actor.Alignment.GOOD;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		array = ISLAMIC_DEMONS;
+		lesser = Lesser.DEMON;
+		ali = Actor.Alignment.EVIL;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * ARABIC STAR NAMES (~900 CE)
+		 */
+		array = ARABIC_STARS;
+		lesser = Lesser.ANGEL;
+		ali = Actor.Alignment.GOOD;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * NORSE - GODS & JOTNAR (800 ~ 1300 CE)
+		 */
+		array = AESIR;
+		lesser = Lesser.AESIR;
+		ali = Actor.Alignment.LAWFUL;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		array = VANIR;
+		lesser = Lesser.VANIR;
+		ali = Actor.Alignment.LAWFUL;
+		domain = Domain.LIFE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		array = NORSE_DWARVES;
+		lesser = Lesser.DWARF;
+		ali = Actor.Alignment.NEUTRAL;
+		domain = Domain.KNOWLEDGE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		array = JOTNAR;
+		lesser = Lesser.JOTUNN;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.KNOWLEDGE;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * ENOCHIAN ANGELS
+		 */
+		array = ENOCHIAN_ANGELS;
+		lesser = Lesser.ANGEL;
+		ali = Actor.Alignment.LAWFUL;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * LOA
+		 */
+		array = LOA;
+		lesser = Lesser.LOA;
+		ali = Actor.Alignment.NEUTRAL;
+		domain = Domain.TRICKERY;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * CTHULHU MYTHOS
+		 */
+		array = OUTER_GODS;
+		lesser = Lesser.ABOMINATION;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		array = ELDER_GODS;
+		lesser = Lesser.ABOMINATION;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * TOLKIEN ELVES
+		 */
+		array = ELDAR;
+		lesser = Lesser.ANGEL;
+		ali = Actor.Alignment.GOOD;
+		domain = Domain.LIGHT;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * LUCASITE (Star Wars worlds as demigods; "Sith" or Sidhe)
+		 */
+		array = LUCASITE;
+		lesser = Lesser.SIDHE;
+		ali = Actor.Alignment.CHAOTIC;
+		domain = Domain.TRICKERY;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		/*
+		 * RICHEST AMERICANS
+		 */
+		array = RICHEST;
+		lesser = Lesser.PLUTOCRAT;
+		ali = Actor.Alignment.EVIL;
+		domain = Domain.DEATH;
+		for (int i = 0; i < array.length; ++i) {
+			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
+		}
+
+		instances = new HashSet<Immortal>();
+
+		for (Iterator<Prototype> it = Prototype.prototypes.values().iterator(); it.hasNext();) {
+			instances.add(new Immortal(it.next()));
+		}
+
+	}
+
+	/*
 	 * STATIC METHODS
 	 */
-	public static Set<Instance> filterByPantheon(Lesser lesser) {
-		Set<Instance> workingSet = new HashSet<Instance>();
+	public static Set<Immortal> filterByPantheon(Lesser lesser) {
+		Set<Immortal> workingSet = new HashSet<Immortal>();
 
-		Instance candidate;
-		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+		Immortal candidate;
+		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			candidate = it.next();
 
 			if (candidate.affiliation.equals(lesser))
@@ -1529,11 +1338,11 @@ public abstract class Immortal {
 		return Dice.randomFromArray(PANTHEONS);
 	}
 
-	public static Set<Instance> powersOfAlignment(Actor.Alignment alignment) {
-		Set<Instance> set = new HashSet<Instance>();
+	public static Set<Immortal> powersOfAlignment(Actor.Alignment alignment) {
+		Set<Immortal> set = new HashSet<Immortal>();
 
-		Instance instance;
-		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+		Immortal instance;
+		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 			if (instance.alignment.contains(alignment))
 				set.add(instance);
@@ -1545,8 +1354,8 @@ public abstract class Immortal {
 	public static String alignmentToString() {
 		int[] array = new int[] { 0, 0, 0, 0, 0 };
 
-		Instance instance;
-		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+		Immortal instance;
+		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
 			if (instance.alignment.contains(Actor.Alignment.LAWFUL))
@@ -1572,10 +1381,10 @@ public abstract class Immortal {
 
 	public static String alignmentGridStatsToString() {
 		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		double total = Instance.instances.size();
+		double total = Immortal.instances.size();
 
-		Instance instance;
-		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+		Immortal instance;
+		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
 			if (instance.alignment.contains(Actor.Alignment.LAWFUL)
@@ -1625,13 +1434,13 @@ public abstract class Immortal {
 
 	@SuppressWarnings("unchecked")
 	public static String beingsByGridToString() {
-		Set<Instance>[] array = (Set<Instance>[]) new HashSet[9];
+		Set<Immortal>[] array = (Set<Immortal>[]) new HashSet[9];
 		for (int i = 0; i < array.length; ++i) {
-			array[i] = new HashSet<Instance>();
+			array[i] = new HashSet<Immortal>();
 		}
 
-		Instance instance;
-		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+		Immortal instance;
+		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
 			if (instance.alignment.contains(Actor.Alignment.LAWFUL)
@@ -1675,10 +1484,36 @@ public abstract class Immortal {
 		return string;
 	}
 
+	public static void nameLength() {
+		int length, average = 0, total = 0, maximum = 0;
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0 };
+
+		Immortal immortal;
+		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
+			immortal = it.next();
+			length = immortal.name.length();
+
+			average += length;
+			maximum = length > maximum ? length : maximum;
+			++array[length];
+
+			++total;
+		}
+
+		System.out.println("Average name length: " + average / total);
+		System.out.println("Maximum name length: " + maximum);
+		System.out.println();
+
+		for (int i = 0; i < array.length; ++i)
+			System.out.println(String.format("%2d: %d", i, array[i]));
+
+	}
+
 	public static String domainStatsToString() {
 		int[] array = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		Instance instance;
-		for (Iterator<Instance> it = Instance.instances.iterator(); it.hasNext();) {
+		Immortal instance;
+		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
 			if (instance.domains.contains(Domain.DEATH))
@@ -1709,7 +1544,7 @@ public abstract class Immortal {
 		String[] domains = { "Death", "Knowledge", "Life", "Light", "Nature", "Tempest", "Trickery", "War" };
 		String string = "";
 
-		int total = Instance.instances.size();
+		int total = Immortal.instances.size();
 		for (int i = 0; i < array.length; ++i) {
 			string += String.format("%10s: %4d%n", domains[i], array[i]);
 		}
@@ -1836,6 +1671,204 @@ public abstract class Immortal {
 		}
 
 		return array;
+	}
+
+	/*
+	 * INNER CLASS - PROTOTYPE
+	 * 
+	 */
+	public static class Prototype {
+		/*
+		 * STATIC FIELDS
+		 */
+		private static Map<Entity, Prototype> prototypes;
+
+		/*
+		 * INSTANCE FIELDS
+		 */
+		private Entity entity;
+		private Lesser affiliation;
+		private EnumSet<Domain> domains;
+		private EnumSet<Actor.Alignment> alignment;
+
+		/*
+		 * CONSTRUCTOR
+		 */
+		public Prototype(Entity entity, Lesser affiliation, Actor.Alignment alignment, Domain domain) {
+			this.entity = entity;
+			this.affiliation = affiliation;
+
+			Actor.Alignment[] ali = alignmentRandomizer(alignment);
+			this.alignment = EnumSet.noneOf(Actor.Alignment.class);
+			if (ali.length > 0) {
+				for (Actor.Alignment el : ali) {
+					this.alignment.add(el);
+				}
+			}
+
+			Domain[] domains = domainRandomizer(domain);
+			this.domains = EnumSet.noneOf(Domain.class);
+			if (domains.length > 0) {
+				for (Domain el : domains)
+					this.domains.add(el);
+			}
+		}
+
+	}
+
+	/*
+	 * IMMORTAL - INSTANCE DATA
+	 * 
+	 */
+	private Prototype prototype;
+
+	//
+	private String name;
+	private Entity entity;
+	private Lesser affiliation;
+
+	private Greater greater;
+	private EnumSet<Domain> domains;
+	private EnumSet<Actor.Alignment> alignment;
+
+	public Immortal(Prototype prototype) {
+		this.prototype = prototype;
+		//
+		this.name = Names.stringToName(prototype.entity.toString());
+		this.entity = prototype.entity;
+		this.affiliation = prototype.affiliation;
+
+		//
+		this.domains = EnumSet.copyOf(prototype.domains);
+		this.alignment = EnumSet.copyOf(prototype.alignment);
+
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public boolean greater() {
+		return (greater != null);
+	}
+
+	public boolean lesser() {
+		return (greater == null);
+	}
+
+	@Override
+	public String toString() {
+		String string = String.format("%s", name);
+
+		return string;
+	}
+
+	@Override
+	public String toStringDetailed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Size creatureSize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Creature creatureType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Alignment alignment() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getHitDice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getLevel() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setLevel(int level) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public int getExperience() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setExp(int exp) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public EnumSet<Speed> getSpeed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getAbilityScores() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getAbilityCeiling() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getSavingThrows() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Energy> getResistance() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Energy> getImmunity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Condition> getConditionImmunity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Condition> getConditions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EnumSet<Sense> getSenses() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
