@@ -7,6 +7,7 @@ import java.util.Set;
 
 import actor.*;
 import actor.Class;
+import milieu.Star;
 import milieu.StarSystem;
 import vessel.MDrive;
 import vessel.Spaceship;
@@ -20,6 +21,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO
+
+		// databaseStart();
+		//
+		testStarAdd();
+
+		// testMainWorld();
 
 		// MDrive.prototypePrint();
 		// for (int i = 0; i < 50; ++i) {
@@ -37,9 +44,6 @@ public class Main {
 		// levelUpTestDisplayOnly(20, Class.WIZARD);
 		// }
 
-		//
-		testMainWorld();
-
 		// for (Pantheon el : Pantheon.getPantheons()) {
 		// System.out.println(el.toString() + " (" + el.membership() + ")");
 		// }
@@ -55,6 +59,29 @@ public class Main {
 		// deityProportions();
 		// rollCharacters();
 
+	}
+
+	public static void databaseStart() {
+		Controller controller = new Controller();
+		controller.start();
+	}
+
+	public static void testStarAdd() {
+		Controller controller = new Controller();
+		controller.start();
+
+		//
+		StarSystem group = new StarSystem();
+		while (group.getMainWorld() == null) {
+			group = new StarSystem();
+		}
+
+		for (Iterator<Star> it = group.starList().iterator(); it.hasNext();) {
+			
+		}
+
+		System.out.println(group.toStringDetailed());
+		System.out.println();
 	}
 
 	public static void starsOfColor() {

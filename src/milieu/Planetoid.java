@@ -1,4 +1,5 @@
 package milieu;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -14,24 +15,28 @@ public class Planetoid implements World {
 	 * INSTANCE FIELDS
 	 * 
 	 */
+	private int index;
+	private boolean isPersistent;
+
 	private String name;
-
-	private EnumSet<TradeCodes> tradeCodes;
-	private HashSet<Faction> factions;
-	private EnumSet<Tag> worldTags;
-	private EnumSet<Base> worldFacilities;
-
-	private StarSystem group;
-	private Planetoid parent;
 	private Type type;
 	private int orbit;
 	private int subOrbit;
-
+	//
 	private byte[] scores;
 	private char spaceport;
 	private byte techLevel;
+	//
+	private EnumSet<Base> worldFacilities;
+	private EnumSet<Tag> worldTags;
+	private HashSet<Faction> factions;
+
+	// convenience
+	private StarSystem group;
+	private Planetoid parent;
 	private Set<Planetoid> moons;
 	private int totalMoons;
+	private EnumSet<TradeCodes> tradeCodes;
 
 	/*
 	 * CONSTRUCTORS
@@ -148,7 +153,7 @@ public class Planetoid implements World {
 			// validation step
 			if (isRing() || scores[3] < 0)
 				scores[3] = 0;
-			
+
 		}
 
 		/*
@@ -354,6 +359,16 @@ public class Planetoid implements World {
 	 * FIXME - INTERFACE MATHODS (move later)
 	 * 
 	 */
+	@Override
+	public int getIndex() {
+		return index;
+	}
+
+	@Override
+	public boolean isPersistent() {
+		return isPersistent;
+	}
+
 	@Override
 	public String getName() {
 		return name;

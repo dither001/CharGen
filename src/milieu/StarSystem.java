@@ -57,7 +57,7 @@ public class StarSystem {
 		++namedObjects;
 		stars[0] = primary;
 		for (int i = 1; i < stars.length; ++i) {
-			stars[i] = new Star(primary, i);
+			stars[i] = new Star(primary, i, false);
 			++namedObjects;
 		}
 
@@ -378,6 +378,10 @@ public class StarSystem {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public List<Star> starList() {
+		return Dice.arrayToList(stars);
+	}
+	
 	public char getStarport() {
 		return starport;
 	}

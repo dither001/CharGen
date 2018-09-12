@@ -7,20 +7,26 @@ public class Star {
 	 * INSTANCE FIELDS
 	 */
 	protected int index;
-	protected String name;
-	protected int sizeRoll, typeRoll;
+	protected boolean isPersistent;
+	protected boolean hasChanged;
 
-	protected char size, color;
+	protected String name;
 	protected int orbit;
+	protected char size, color;
+
+	protected int sizeRoll, typeRoll;
 
 	/*
 	 * CONSTRUCTORS
 	 */
 	public Star() {
-		this(null, 0);
+		this(null, 0, false);
 	}
 
-	public Star(Star primary, int index) {
+	public Star(Star primary, int index, boolean isPersistent) {
+		this.isPersistent = isPersistent;
+		this.hasChanged = false;
+
 		int dice;
 
 		// determine spectral class
@@ -99,12 +105,20 @@ public class Star {
 		 */
 	}
 
+	public boolean isPersistent() {
+		return isPersistent;
+	}
+	
+	public boolean hasChanged() {
+		return hasChanged;
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+		this.hasChanged = true;
 	}
 }
-

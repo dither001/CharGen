@@ -1,4 +1,5 @@
 package milieu;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -174,6 +175,8 @@ public interface World {
 	 * STATIC FIELDS
 	 * 
 	 */
+	public static int worldIndex = 0;
+
 	public static final Tag[] ALL_TAGS = { Tag.ABANDONED_COLONY, Tag.ALIEN_RUINS, Tag.ALTERED_HUMANITY, Tag.AREA_51,
 			Tag.BADLANDS_WORLD, Tag.BUBBLE_CITIES, Tag.CIVIL_WAR, Tag.COLD_WAR, Tag.COLONIZED_POPULATION,
 			Tag.DESERT_WORLD, Tag.EUGENIC_CULT, Tag.EXCHANGE_CONSULATE, Tag.FERAL_WORLD, Tag.FLYING_CITIES,
@@ -228,6 +231,10 @@ public interface World {
 	 * 
 	 * 
 	 */
+	public int getIndex();
+
+	public boolean isPersistent();
+
 	public String getName();
 
 	public void setName(String name);
