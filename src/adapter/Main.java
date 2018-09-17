@@ -22,9 +22,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		// databaseStart();
-		//
-		testStarAdd();
+		databaseStart();
 
 		// testMainWorld();
 
@@ -71,28 +69,28 @@ public class Main {
 		controller.start();
 
 		//
-		StarSystem group = new StarSystem();
-		while (group.getMainWorld() == null) {
-			group = new StarSystem();
-		}
+		// StarSystem group = new StarSystem();
+		// while (group.getMainWorld() == null) {
+		// group = new StarSystem();
+		// }
 
-		for (Iterator<Star> it = group.starList().iterator(); it.hasNext();) {
-			
-		}
+		// for (Iterator<Star> it = group.starList().iterator(); it.hasNext();) {
+		//
+		// }
 
-		System.out.println(group.toStringDetailed());
-		System.out.println();
+		// System.out.println(group.toStringDetailed());
+		// System.out.println();
 	}
 
 	public static void starsOfColor() {
-		System.out.println(new StarSystem().toStringDetailed());
+		System.out.println(new StarSystem(0).toStringDetailed());
 		System.out.println();
 	}
 
 	public static void starsOfColor(char color) {
-		StarSystem group = new StarSystem();
+		StarSystem group = new StarSystem(0);
 		while (group.getPrimaryStarColor() != color) {
-			group = new StarSystem();
+			group = new StarSystem(0);
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -100,9 +98,9 @@ public class Main {
 	}
 
 	public static void unavailableZones() {
-		StarSystem group = new StarSystem();
+		StarSystem group = new StarSystem(0);
 		while (group.numberOfUnavailableZones() < 1) {
-			group = new StarSystem();
+			group = new StarSystem(0);
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -110,9 +108,9 @@ public class Main {
 	}
 
 	public static void testMainWorld() {
-		StarSystem group = new StarSystem();
+		StarSystem group = new StarSystem(0);
 		while (group.getMainWorld() == null) { // || group.getMainWorld().getPopulation() < 5) {
-			group = new StarSystem();
+			group = new StarSystem(0);
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -120,9 +118,9 @@ public class Main {
 	}
 
 	public static void trinarySystem() {
-		StarSystem group = new StarSystem();
+		StarSystem group = new StarSystem(0);
 		while (group.isTrinary() != true) {
-			group = new StarSystem();
+			group = new StarSystem(0);
 		}
 
 		System.out.println(group.toStringDetailed());

@@ -18,6 +18,7 @@ public class Planetoid implements World {
 	private int index;
 	private boolean isPersistent;
 
+	private int hexAddress;
 	private String name;
 	private Type type;
 	private int orbit;
@@ -42,15 +43,16 @@ public class Planetoid implements World {
 	 * CONSTRUCTORS
 	 * 
 	 */
-	public Planetoid(int orbit, StarSystem group) {
-		this(Type.STANDARD, orbit, group);
+	public Planetoid(int hexAddress, int orbit, StarSystem group) {
+		this(hexAddress, Type.STANDARD, orbit, group);
 	}
 
-	public Planetoid(Type type, int orbit, StarSystem group) {
-		this(type, orbit, group, null);
+	public Planetoid(int hexAddress, Type type, int orbit, StarSystem group) {
+		this(hexAddress, type, orbit, group, null);
 	}
 
-	public Planetoid(Type type, int orbit, StarSystem group, Planetoid home) {
+	public Planetoid(int hexAddress, Type type, int orbit, StarSystem group, Planetoid home) {
+		this.hexAddress = hexAddress;
 		this.group = group;
 		this.parent = home;
 		this.type = type;
@@ -179,7 +181,7 @@ public class Planetoid implements World {
 				satellites = 0;
 
 			while (satellites > 0) {
-				moons.add(new Planetoid(Type.SATELLITE, orbit, group, this));
+				moons.add(new Planetoid(hexAddress, Type.SATELLITE, orbit, group, this));
 				--satellites;
 
 			}

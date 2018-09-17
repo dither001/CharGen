@@ -7,11 +7,15 @@ package adapter;
 
 import java.io.File;
 import java.sql.ResultSet;
+import java.util.Iterator;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import milieu.*;
 import model.SQLiteData;
+import rules.Dice;
 import view.Frame;
 
 public class Controller {
@@ -19,16 +23,62 @@ public class Controller {
 	public int dataRequested;
 
 	//
-	public static String[] worldProfileHeader = { "Name", "Orbit", "Suborbit", "Size", "Atmo", "Hydro%", "Pop", "Gov#", "Law" };
+	public static String[] starProfileHeader = { "Name", "Orbit", "Size", "Color" };
+	public static String[] worldProfileHeader = { "Name", "Orbit", "Suborbit", "Size", "Atmo", "Hydro%", "Pop", "Gov#",
+			"Law" };
 	private SQLiteData database;
 	private Frame frame;
-	
+
+	/*
+	 * INSTANCE METHODS
+	 */
 	public void start() {
 		errorPanel = new JPanel();
 		dataRequested = 0;
 		//
-		database = new SQLiteData(this);
-		
+
+		//
+		System.out.println("Adding stars.");
+		databaseSetup();
+		System.out.println("Finished stars.");
+
+		/*
+		 * So, this creates the visible frame that can be interacted with by a user
+		 */
+		// frame = new Frame(this);
+
 	}
-	
+
+	public ResultSet getStarData() {
+		return database.getStarData();
+	}
+
+	private void databaseSetup() {
+		database = new SQLiteData(this);
+
+		int counter = 0;
+		int starIndex = 0, worldIndex = 0;
+
+		StarSystem group;
+		for (int i = 0; i < 80; ++i) {
+			if (Dice.roll(2) == 2) {
+				group = new StarSystem(i);
+				++counter;
+
+				// yeah, really two loops within a loop
+				while (group.getMainWorld() == null) {
+					group = new StarSystem(i);
+					++counter;
+				}
+
+				for (Iterator<Star> it = group.starList().iterator(); it.hasNext();) {
+					database.addStar(starIndex++, it.next());
+				}
+			}
+
+		}
+
+		System.out.println("Systems generated: " + counter);
+	}
+
 }

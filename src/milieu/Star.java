@@ -10,6 +10,7 @@ public class Star {
 	protected boolean isPersistent;
 	protected boolean hasChanged;
 
+	protected int hexAddress;
 	protected String name;
 	protected int orbit;
 	protected char size, color;
@@ -19,11 +20,12 @@ public class Star {
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Star() {
-		this(null, 0, false);
+	public Star(int hexAddress) {
+		this(hexAddress, null, 0, false);
 	}
 
-	public Star(Star primary, int index, boolean isPersistent) {
+	public Star(int hexAddress, Star primary, int index, boolean isPersistent) {
+		this.hexAddress = hexAddress;
 		this.isPersistent = isPersistent;
 		this.hasChanged = false;
 
@@ -108,9 +110,17 @@ public class Star {
 	public boolean isPersistent() {
 		return isPersistent;
 	}
-	
+
 	public boolean hasChanged() {
 		return hasChanged;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public int hexAddress() {
+		return hexAddress;
 	}
 
 	public String getName() {
@@ -120,5 +130,17 @@ public class Star {
 	public void setName(String name) {
 		this.name = name;
 		this.hasChanged = true;
+	}
+
+	public int getOrbit() {
+		return orbit;
+	}
+
+	public char getSize() {
+		return size;
+	}
+
+	public char getColor() {
+		return color;
 	}
 }

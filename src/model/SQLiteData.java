@@ -38,30 +38,40 @@ public class SQLiteData {
 	/*
 	 * PUBLIC METHODS
 	 */
-	public boolean addStar(Star star) {
+	public boolean addStar(int suppliedIndex, Star star) {
 		boolean add = false;
 
 		if (connection == null)
 			connect();
 
+		int starIndex;
+		if (star.isPersistent())
+			starIndex = star.getIndex();
+		else
+			starIndex = suppliedIndex;
+
 		try {
-			if (star.isPersistent()) {
-				// FIXME - this should perform update instead of insert
-				JOptionPane.showMessageDialog(Controller.errorPanel, "Star already exists.", "Error",
-						JOptionPane.ERROR_MESSAGE);
+			// FIXME - this performs insert
+			PreparedStatement statement;
+			int pos = 1;
 
-			} else {
-				// FIXME - this performs insert
-				PreparedStatement statement;
-				int pos = 1;
+			statement = connection.prepareStatement("INSERT INTO STARS VALUES( ?, ?, ?, ?, ?, ? );");
+			statement.setString(pos++, String.valueOf(starIndex));
+			statement.setString(pos++, String.valueOf(star.hexAddress()));
+			statement.setString(pos++, star.getName());
+			statement.setString(pos++, String.valueOf(star.getOrbit()));
+			statement.setString(pos++, String.valueOf(star.getSize()));
+			statement.setString(pos++, String.valueOf(star.getColor()));
 
-				statement = connection.prepareStatement("INSERT INTO STARS VALUES( ?, ?, ?, ? );");
-				// statement.setString(pos++, "star_num");
-				statement.setString(pos++, "Name");
-				statement.setString(pos++, "Orbit");
-				statement.setString(pos++, "Size");
-				statement.setString(pos++, "Color");
-			}
+			statement.execute();
+
+			// if (star.isPersistent()) {
+			// JOptionPane.showMessageDialog(Controller.errorPanel, "Star already exists.",
+			// "Error",
+			// JOptionPane.ERROR_MESSAGE);
+			//
+			// } else {
+			// }
 		} catch (SQLException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -78,32 +88,34 @@ public class SQLiteData {
 			connect();
 
 		try {
-			if (worldExists(world.getIndex())) {
-				JOptionPane.showMessageDialog(Controller.errorPanel, "World already exists.", "Error",
-						JOptionPane.ERROR_MESSAGE);
+			PreparedStatement statement;
+			int pos = 1;
 
-			} else {
-				PreparedStatement statement;
-				int pos = 1;
+			statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+			statement.setString(pos++, String.valueOf(world.getIndex()));
+			statement.setString(pos++, String.valueOf(world.getName()));
+			statement.setString(pos++, String.valueOf(world.getOrbit()));
+			statement.setString(pos++, String.valueOf(world.getSubOrbit()));
 
-				statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-				statement.setString(pos++, String.valueOf(world.getIndex()));
-				statement.setString(pos++, String.valueOf(world.getName()));
-				statement.setString(pos++, String.valueOf(world.getOrbit()));
-				statement.setString(pos++, String.valueOf(world.getSubOrbit()));
+			// scores
+			statement.setString(pos++, String.valueOf(world.getSize()));
+			statement.setString(pos++, String.valueOf(world.getAtmosphere()));
+			statement.setString(pos++, String.valueOf(world.getHydrosphere()));
+			statement.setString(pos++, String.valueOf(world.getPopulation()));
+			statement.setString(pos++, String.valueOf(world.getGovernment()));
+			statement.setString(pos++, String.valueOf(world.getLawLevel()));
 
-				// scores
-				statement.setString(pos++, String.valueOf(world.getSize()));
-				statement.setString(pos++, String.valueOf(world.getAtmosphere()));
-				statement.setString(pos++, String.valueOf(world.getHydrosphere()));
-				statement.setString(pos++, String.valueOf(world.getPopulation()));
-				statement.setString(pos++, String.valueOf(world.getGovernment()));
-				statement.setString(pos++, String.valueOf(world.getLawLevel()));
+			statement.execute();
+			add = true;
 
-				statement.execute();
-				add = true;
-
-			}
+			// if (worldExists(world.getIndex())) {
+			// JOptionPane.showMessageDialog(Controller.errorPanel, "World already exists.",
+			// "Error",
+			// JOptionPane.ERROR_MESSAGE);
+			//
+			// } else {
+			//
+			// }
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -112,6 +124,31 @@ public class SQLiteData {
 		}
 
 		return add;
+	}
+
+	/*
+	 * GETTERS
+	 */
+	public ResultSet getStarData() {
+		ResultSet results = null;
+
+		PreparedStatement statement;
+		String query;
+		if (connection == null)
+			connect();
+
+		try {
+			// TODO
+			query = "SELECT * FROM STARS ORDER BY star_num";
+			statement = connection.prepareStatement(query);
+			results = statement.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+
+		return results;
 	}
 
 	/*
@@ -191,8 +228,8 @@ public class SQLiteData {
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 
-					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, " + "name CHAR(40), "
-							+ "orbit INTEGER(2), " + "suborbit INTEGER(2), " + "size INTEGER(2), "
+					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, " + "hexAddress INTEGER(2), "
+							+ "name CHAR(40), " + "orbit INTEGER(2), " + "suborbit INTEGER(2), " + "size INTEGER(2), "
 							+ "atmosphere INTEGER(2), " + "hydrosphere INTEGER(2), " + "population INTEGER(2), "
 							+ "government INTEGER(2), " + "law INTEGER(2) " + ");";
 					// + "PRIMARY KEY (world_num));";
@@ -203,8 +240,8 @@ public class SQLiteData {
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARS'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
-					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, " + "name CHAR(40), "
-							+ "orbit INTEGER(2), " + "size CHAR(2), " + "color CHAR(2) " + ");";
+					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, " + "hexAddress INTEGER(2), "
+							+ "name CHAR(40), " + "orbit INTEGER(2), " + "size CHAR(2), " + "color CHAR(2) " + ");";
 					// + "PRIMARY KEY (star_num));";
 					statement.executeUpdate(string);
 

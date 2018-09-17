@@ -26,7 +26,7 @@ public class Frame extends JFrame {
 	 */
 	private Controller controller;
 	private JPanel panel;
-	private Default setting;
+//	private Default setting;
 	private Dimension size;
 
 	/*
@@ -36,7 +36,7 @@ public class Frame extends JFrame {
 		this.controller = controller;
 
 		//
-		setting = new Default(controller);
+		panel = new Default(controller);
 
 		//
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
