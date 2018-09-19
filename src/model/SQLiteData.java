@@ -16,6 +16,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 import adapter.Controller;
+import milieu.Address;
 import milieu.Star;
 import milieu.World;
 
@@ -55,11 +56,12 @@ public class SQLiteData {
 			PreparedStatement statement;
 			int pos = 1;
 
-			statement = connection.prepareStatement("INSERT INTO STARS VALUES( ?, ?, ?, ?, ?, ? );");
+			statement = connection.prepareStatement("INSERT INTO STARS VALUES( ?, ?, ?, ?, ?, ?, ? );");
 			statement.setString(pos++, String.valueOf(starIndex));
-			statement.setString(pos++, String.valueOf(star.hexAddress()));
+			statement.setString(pos++, String.valueOf(star.sector()));
+			statement.setString(pos++, String.valueOf(star.subsector()));
+			statement.setString(pos++, String.valueOf(star.orbit()));
 			statement.setString(pos++, star.getName());
-			statement.setString(pos++, String.valueOf(star.getOrbit()));
 			statement.setString(pos++, String.valueOf(star.getSize()));
 			statement.setString(pos++, String.valueOf(star.getColor()));
 
@@ -94,8 +96,10 @@ public class SQLiteData {
 			statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 			statement.setString(pos++, String.valueOf(world.getIndex()));
 			statement.setString(pos++, String.valueOf(world.getName()));
-			statement.setString(pos++, String.valueOf(world.getOrbit()));
-			statement.setString(pos++, String.valueOf(world.getSubOrbit()));
+			statement.setString(pos++, String.valueOf(((Address) world).sector()));
+			statement.setString(pos++, String.valueOf(((Address) world).subsector()));
+			statement.setString(pos++, String.valueOf(((Address) world).orbit()));
+			statement.setString(pos++, String.valueOf(((Address) world).suborbit()));
 
 			// scores
 			statement.setString(pos++, String.valueOf(world.getSize()));
@@ -228,10 +232,11 @@ public class SQLiteData {
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 
-					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, " + "hexAddress INTEGER(2), "
-							+ "name CHAR(40), " + "orbit INTEGER(2), " + "suborbit INTEGER(2), " + "size INTEGER(2), "
-							+ "atmosphere INTEGER(2), " + "hydrosphere INTEGER(2), " + "population INTEGER(2), "
-							+ "government INTEGER(2), " + "law INTEGER(2) " + ");";
+					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, " + "sector INTEGER, "
+							+ "subsector INTEGER(2), " + "orbit INTEGER(2), " + "suborbit INTEGER(2), "
+							+ "name CHAR(40), " + "size INTEGER(2), " + "atmosphere INTEGER(2), "
+							+ "hydrosphere INTEGER(2), " + "population INTEGER(2), " + "government INTEGER(2), "
+							+ "law INTEGER(2) " + ");";
 					// + "PRIMARY KEY (world_num));";
 					statement.executeUpdate(string);
 				}
@@ -240,8 +245,9 @@ public class SQLiteData {
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARS'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
-					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, " + "hexAddress INTEGER(2), "
-							+ "name CHAR(40), " + "orbit INTEGER(2), " + "size CHAR(2), " + "color CHAR(2) " + ");";
+					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, " + "sector INTEGER, "
+							+ "subsector INTEGER(2), " + "orbit INTEGER(2), " + "name CHAR(40), " + "size CHAR(2), "
+							+ "color CHAR(2) " + ");";
 					// + "PRIMARY KEY (star_num));";
 					statement.executeUpdate(string);
 

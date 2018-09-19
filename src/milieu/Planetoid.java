@@ -10,7 +10,7 @@ import java.util.Set;
 
 import rules.Dice;
 
-public class Planetoid implements World {
+public class Planetoid implements Address, World {
 	/*
 	 * INSTANCE FIELDS
 	 * 
@@ -18,11 +18,14 @@ public class Planetoid implements World {
 	private int index;
 	private boolean isPersistent;
 
-	private int hexAddress;
+	private int sector;
+	private int subsector;
+	private int orbit;
+	private int suborbit;
+
 	private String name;
 	private Type type;
-	private int orbit;
-	private int subOrbit;
+	private boolean habitable;
 	//
 	private byte[] scores;
 	private char spaceport;
@@ -43,21 +46,21 @@ public class Planetoid implements World {
 	 * CONSTRUCTORS
 	 * 
 	 */
-	public Planetoid(int hexAddress, int orbit, StarSystem group) {
-		this(hexAddress, Type.STANDARD, orbit, group);
+	public Planetoid(int subsector, int orbit, StarSystem group) {
+		this(subsector, Type.STANDARD, orbit, group);
 	}
 
-	public Planetoid(int hexAddress, Type type, int orbit, StarSystem group) {
-		this(hexAddress, type, orbit, group, null);
+	public Planetoid(int subsector, Type type, int orbit, StarSystem group) {
+		this(subsector, type, orbit, group, null);
 	}
 
-	public Planetoid(int hexAddress, Type type, int orbit, StarSystem group, Planetoid home) {
-		this.hexAddress = hexAddress;
+	public Planetoid(int subsector, Type type, int orbit, StarSystem group, Planetoid home) {
+		this.subsector = subsector;
 		this.group = group;
 		this.parent = home;
 		this.type = type;
 		this.orbit = orbit;
-		this.subOrbit = orbit;
+		this.suborbit = orbit;
 		this.name = type.toString();
 
 		/*
@@ -65,6 +68,8 @@ public class Planetoid implements World {
 		 */
 		if (isWorld()) {
 			int habitableZone = group.getHabitableZone();
+			this.habitable = this.orbit == habitableZone;
+
 			this.scores = new byte[] { 0, 0, 0, 0, 0, 0 };
 
 			/*
@@ -181,7 +186,7 @@ public class Planetoid implements World {
 				satellites = 0;
 
 			while (satellites > 0) {
-				moons.add(new Planetoid(hexAddress, Type.SATELLITE, orbit, group, this));
+				moons.add(new Planetoid(subsector, Type.SATELLITE, orbit, group, this));
 				--satellites;
 
 			}
@@ -195,18 +200,18 @@ public class Planetoid implements World {
 				if (moon.isRing()) {
 					dice = Dice.roll(6);
 					if (dice < 4 && orbits.contains(1) != true)
-						orbits.add(moon.subOrbit = 1);
+						orbits.add(moon.suborbit = 1);
 					else if ((dice == 4 || dice == 5) && orbits.contains(2) != true)
-						orbits.add(moon.subOrbit = 2);
+						orbits.add(moon.suborbit = 2);
 					else if ((dice == 6) && orbits.contains(3) != true)
-						orbits.add(moon.subOrbit = 3);
+						orbits.add(moon.suborbit = 3);
 					else {
 						int i = 1;
 						while (orbits.contains(i)) {
 							++i;
 						}
 
-						orbits.add(moon.subOrbit = i);
+						orbits.add(moon.suborbit = i);
 					}
 
 				} else {
@@ -218,14 +223,14 @@ public class Planetoid implements World {
 							dice = Dice.roll(2, 6) + 1;
 						}
 
-						orbits.add(moon.subOrbit = dice);
+						orbits.add(moon.suborbit = dice);
 					} else {
 						dice = (Dice.roll(2, 6) + 1) * 5;
 						while (orbits.contains(dice)) {
 							dice = (Dice.roll(2, 6) + 1) * 5;
 						}
 
-						orbits.add(moon.subOrbit = dice);
+						orbits.add(moon.suborbit = dice);
 					}
 
 					++totalMoons;
@@ -245,7 +250,7 @@ public class Planetoid implements World {
 		String string;
 
 		string = String.format("%s", (notAsteroid()) ? name : "The " + name + " belt");
-		string = String.format("%s (%s)", string, (isMoon() || isRing()) ? orbit + "." + subOrbit : orbit);
+		string = String.format("%s (%s)", string, (isMoon() || isRing()) ? orbit + "." + suborbit : orbit);
 
 		return string;
 	}
@@ -362,6 +367,26 @@ public class Planetoid implements World {
 	 * 
 	 */
 	@Override
+	public int sector() {
+		return orbit;
+	}
+
+	@Override
+	public int subsector() {
+		return orbit;
+	}
+
+	@Override
+	public int orbit() {
+		return orbit;
+	}
+
+	@Override
+	public int suborbit() {
+		return suborbit;
+	}
+
+	@Override
 	public int getIndex() {
 		return index;
 	}
@@ -369,6 +394,11 @@ public class Planetoid implements World {
 	@Override
 	public boolean isPersistent() {
 		return isPersistent;
+	}
+
+	@Override
+	public boolean habitable() {
+		return habitable;
 	}
 
 	@Override
@@ -424,16 +454,6 @@ public class Planetoid implements World {
 	@Override
 	public StarSystem getGroup() {
 		return group;
-	}
-
-	@Override
-	public int getOrbit() {
-		return orbit;
-	}
-
-	@Override
-	public int getSubOrbit() {
-		return subOrbit;
 	}
 
 	@Override

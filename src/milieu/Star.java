@@ -2,7 +2,7 @@ package milieu;
 
 import rules.Dice;
 
-public class Star {
+public class Star implements Address {
 	/*
 	 * INSTANCE FIELDS
 	 */
@@ -10,9 +10,12 @@ public class Star {
 	protected boolean isPersistent;
 	protected boolean hasChanged;
 
-	protected int hexAddress;
-	protected String name;
+	protected int sector;
+	protected int subsector;
 	protected int orbit;
+	protected int suborbit;
+
+	protected String name;
 	protected char size, color;
 
 	protected int sizeRoll, typeRoll;
@@ -20,12 +23,13 @@ public class Star {
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Star(int hexAddress) {
-		this(hexAddress, null, 0, false);
+	public Star(int sector, int subsector) {
+		this(sector, subsector, null, 0, false);
 	}
 
-	public Star(int hexAddress, Star primary, int index, boolean isPersistent) {
-		this.hexAddress = hexAddress;
+	public Star(int sector, int subsector, Star primary, int index, boolean isPersistent) {
+		this.sector = sector;
+		this.subsector = subsector;
 		this.isPersistent = isPersistent;
 		this.hasChanged = false;
 
@@ -119,8 +123,24 @@ public class Star {
 		return index;
 	}
 
-	public int hexAddress() {
-		return hexAddress;
+	@Override
+	public int sector() {
+		return sector;
+	}
+
+	@Override
+	public int subsector() {
+		return subsector;
+	}
+
+	@Override
+	public int orbit() {
+		return orbit;
+	}
+
+	@Override
+	public int suborbit() {
+		return 0;
 	}
 
 	public String getName() {
@@ -130,10 +150,6 @@ public class Star {
 	public void setName(String name) {
 		this.name = name;
 		this.hasChanged = true;
-	}
-
-	public int getOrbit() {
-		return orbit;
 	}
 
 	public char getSize() {

@@ -204,7 +204,7 @@ public interface World {
 
 		@Override
 		public int compare(Planetoid left, Planetoid right) {
-			return left.getOrbit() - right.getOrbit();
+			return left.orbit() - right.orbit();
 		}
 
 	}
@@ -213,7 +213,7 @@ public interface World {
 
 		@Override
 		public int compare(Planetoid left, Planetoid right) {
-			return left.getSubOrbit() - right.getSubOrbit();
+			return left.suborbit() - right.suborbit();
 		}
 
 	}
@@ -234,6 +234,8 @@ public interface World {
 	public int getIndex();
 
 	public boolean isPersistent();
+	
+	public boolean habitable();
 
 	public String getName();
 
@@ -256,10 +258,6 @@ public interface World {
 	public void setWorldFacilities(EnumSet<Base> set);
 
 	public StarSystem getGroup();
-
-	public int getOrbit();
-
-	public int getSubOrbit();
 
 	public Type getType();
 
@@ -517,7 +515,7 @@ public interface World {
 			if (pop >= 2)
 				idealPop = true;
 
-			if (idealAtmo && idealHydro && idealPop && getOrbit() == getHabitableZone())
+			if (idealAtmo && idealHydro && idealPop && habitable())
 				facilities.add(Base.FARM);
 
 			/*
@@ -787,7 +785,6 @@ public interface World {
 		int size = world.getSize(), atmo = world.getAtmosphere();
 		int hydro = world.getHydrosphere(), pop = world.getPopulation();
 		int gov = world.getGovernment(), law = world.getLawLevel();
-		int orbit = world.getOrbit(), habitableZone = world.getHabitableZone();
 
 		char spaceport = world.getSpaceport();
 		int techLevel = world.getTechLevel();
@@ -795,7 +792,7 @@ public interface World {
 		EnumSet<Base> bases = world.getWorldFacilities();
 
 		// quick booleans
-		boolean habitable = (orbit == habitableZone) ? true : false;
+		boolean habitable = world.habitable();
 		boolean tainted = (atmo == 2 || atmo == 4 || atmo == 7 || atmo > 8) ? true : false;
 		boolean noColony = (bases.contains(Base.COLONY) != true) ? true : false;
 		boolean militaryLab = (bases.contains(Base.LAB) || bases.contains(Base.MILITARY)) ? true : false;
@@ -976,7 +973,7 @@ public interface World {
 			set.add(Tag.RADICAL_SEXISM);
 
 		// RADIOACTIVE_WORLD
-		if (orbit < habitableZone && atmo < 4)
+		if (!world.habitable() && atmo < 4)
 			set.add(Tag.RADIOACTIVE_WORLD);
 
 		// REGIONAL_HEGEMON

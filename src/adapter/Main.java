@@ -83,14 +83,14 @@ public class Main {
 	}
 
 	public static void starsOfColor() {
-		System.out.println(new StarSystem(0).toStringDetailed());
+		System.out.println(new StarSystem(0, 0).toStringDetailed());
 		System.out.println();
 	}
 
 	public static void starsOfColor(char color) {
-		StarSystem group = new StarSystem(0);
+		StarSystem group = new StarSystem(0, 0);
 		while (group.getPrimaryStarColor() != color) {
-			group = new StarSystem(0);
+			group = new StarSystem(0, 0);
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -98,9 +98,9 @@ public class Main {
 	}
 
 	public static void unavailableZones() {
-		StarSystem group = new StarSystem(0);
+		StarSystem group = new StarSystem(0, 0);
 		while (group.numberOfUnavailableZones() < 1) {
-			group = new StarSystem(0);
+			group = new StarSystem(0, 0);
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -108,9 +108,9 @@ public class Main {
 	}
 
 	public static void testMainWorld() {
-		StarSystem group = new StarSystem(0);
+		StarSystem group = new StarSystem(0, 0);
 		while (group.getMainWorld() == null) { // || group.getMainWorld().getPopulation() < 5) {
-			group = new StarSystem(0);
+			group = new StarSystem(0, 0);
 		}
 
 		System.out.println(group.toStringDetailed());
@@ -118,9 +118,9 @@ public class Main {
 	}
 
 	public static void trinarySystem() {
-		StarSystem group = new StarSystem(0);
+		StarSystem group = new StarSystem(0, 0);
 		while (group.isTrinary() != true) {
-			group = new StarSystem(0);
+			group = new StarSystem(0, 0);
 		}
 
 		System.out.println(group.toStringDetailed());

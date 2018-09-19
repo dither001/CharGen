@@ -40,7 +40,7 @@ public class StarSystem {
 	 * CONSTRUCTOR
 	 * 
 	 */
-	public StarSystem(int hexAddress) {
+	public StarSystem(int sector, int subsector) {
 		namedObjects = 0;
 		int dice = Dice.roll(2, 6);
 
@@ -53,11 +53,11 @@ public class StarSystem {
 			stars = new Star[3];
 
 		// generate stars
-		Star primary = new Star(hexAddress);
+		Star primary = new Star(sector, subsector);
 		++namedObjects;
 		stars[0] = primary;
 		for (int i = 1; i < stars.length; ++i) {
-			stars[i] = new Star(hexAddress, primary, i, false);
+			stars[i] = new Star(sector, subsector, primary, i, false);
 			++namedObjects;
 		}
 
@@ -213,14 +213,14 @@ public class StarSystem {
 		// empty orbit placement
 		planet = World.Type.EMPTY;
 		while (emptyOrbits > 0) {
-			planets.add(new Planetoid(hexAddress, planet, available.remove(0), this));
+			planets.add(new Planetoid(subsector, planet, available.remove(0), this));
 			--emptyOrbits;
 		}
 
 		// captured world placement
 		planet = World.Type.CAPTURED;
 		while (capturedPlanets > 0) {
-			planets.add(new Planetoid(hexAddress, planet, Dice.roll(2, 6), this));
+			planets.add(new Planetoid(subsector, planet, Dice.roll(2, 6), this));
 			++namedObjects;
 			--capturedPlanets;
 		}
@@ -231,14 +231,14 @@ public class StarSystem {
 			planet = (Dice.roll(2) == 1) ? World.Type.LARGE_GIANT : World.Type.SMALL_GIANT;
 
 			if (contains && available.get(0) >= habitableZone) {
-				planets.add(new Planetoid(hexAddress, planet, available.remove(0), this));
+				planets.add(new Planetoid(subsector, planet, available.remove(0), this));
 				++namedObjects;
 				--gasGiants;
 			} else if (contains && available.get(0) < habitableZone) {
 				Collections.rotate(available, 1);
 
 			} else {
-				planets.add(new Planetoid(hexAddress, planet, ++outerMostOrbit, this));
+				planets.add(new Planetoid(subsector, planet, ++outerMostOrbit, this));
 				++namedObjects;
 				--gasGiants;
 			}
@@ -257,14 +257,14 @@ public class StarSystem {
 			while (it.hasNext()) {
 				prospective = it.next();
 				// System.out.println("Gas giant orbit: " + prospective.getOrbit());
-				candidate = prospective.getOrbit() - 1;
+				candidate = prospective.orbit() - 1;
 				// System.out.println("Prospective orbit: " + candidate);
 				contains = available.contains(candidate);
 				// System.out.println("Contains candidate: " + contains);
 
 				if (contains) {
 					int index = available.indexOf(candidate);
-					planets.add(new Planetoid(hexAddress, planet, available.remove(index), this));
+					planets.add(new Planetoid(subsector, planet, available.remove(index), this));
 					// System.out.println("Placed asteroid at: " + candidate);
 					++namedObjects;
 					--asteroids;
@@ -272,7 +272,7 @@ public class StarSystem {
 			}
 
 			if (available.size() > 0 && asteroids > 0) {
-				planets.add(new Planetoid(hexAddress, planet, available.remove(0), this));
+				planets.add(new Planetoid(subsector, planet, available.remove(0), this));
 				++namedObjects;
 				--asteroids;
 
@@ -282,7 +282,7 @@ public class StarSystem {
 		// remaining available orbits
 		planet = World.Type.STANDARD;
 		while (available.size() > 0) {
-			planets.add(new Planetoid(hexAddress, planet, available.remove(0), this));
+			planets.add(new Planetoid(subsector, planet, available.remove(0), this));
 			++namedObjects;
 		}
 

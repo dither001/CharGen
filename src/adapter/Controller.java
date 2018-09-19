@@ -56,29 +56,28 @@ public class Controller {
 	private void databaseSetup() {
 		database = new SQLiteData(this);
 
-		int counter = 0;
-		int starIndex = 0, worldIndex = 0;
+		sectorSetup(0);
+	}
 
+	private void sectorSetup(int sector) {
+		int starIndex = 0, worldIndex = 0;
 		StarSystem group;
+
+		// subsector level
 		for (int i = 0; i < 80; ++i) {
 			if (Dice.roll(2) == 2) {
-				group = new StarSystem(i);
-				++counter;
+				group = new StarSystem(sector, i);
 
-				// yeah, really two loops within a loop
-				while (group.getMainWorld() == null) {
-					group = new StarSystem(i);
-					++counter;
-				}
+				// system level
+				while (group.getMainWorld() == null)
+					group = new StarSystem(sector, i);
 
-				for (Iterator<Star> it = group.starList().iterator(); it.hasNext();) {
+				for (Iterator<Star> it = group.starList().iterator(); it.hasNext();)
 					database.addStar(starIndex++, it.next());
-				}
 			}
 
 		}
 
-		System.out.println("Systems generated: " + counter);
 	}
 
 }
