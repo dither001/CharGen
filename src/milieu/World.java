@@ -10,10 +10,6 @@ import java.util.Set;
 import rules.Dice;
 
 public interface World {
-	public enum Type {
-		EMPTY, STANDARD, ASTEROID, CAPTURED, SATELLITE, RING, SMALL_GIANT, LARGE_GIANT
-	}
-
 	public enum Base {
 		NAVY, SCOUT, FARM, MINE, COLONY, LAB, MILITARY
 	}
@@ -237,6 +233,8 @@ public interface World {
 	
 	public boolean habitable();
 
+	public boolean mainWorld();
+
 	public String getName();
 
 	public void setName(String name);
@@ -257,7 +255,7 @@ public interface World {
 
 	public void setWorldFacilities(EnumSet<Base> set);
 
-	public StarSystem getGroup();
+//	public StarSystem getGroup();
 
 	public Type getType();
 
@@ -269,7 +267,7 @@ public interface World {
 
 	public void setTechLevel(int techLevel);
 
-	public byte[] getAttributes();
+	public int[] getAttributes();
 
 	public void setAttribute(int index, int value);
 
@@ -286,297 +284,6 @@ public interface World {
 	 * Planetoid object because it represents "implementation"
 	 * 
 	 */
-	public default void governmentSetup() {
-		int size = getSize();
-		int atmo = getAtmosphere();
-		int hydro = getHydrosphere();
-		int pop = getPopulation();
-
-		int dice;
-
-		/*
-		 * GOVERNMENT, LAW LEVEL
-		 */
-		int gov, law;
-		if (isMainWorld()) {
-			/*
-			 * GOVERNMENT
-			 */
-			dice = Dice.roll(2, 6) - 7 + pop;
-
-			// validation step
-			dice = (dice < 0) ? 0 : (dice > 14) ? 14 : dice;
-
-			gov = dice;
-
-			/*
-			 * LAW LEVEL
-			 */
-			dice = Dice.roll(2, 6) - 7 + gov;
-
-			// validation step
-			if (dice < 0)
-				dice = 0;
-
-			law = dice;
-		} else {
-			Planetoid main = getMainWorld();
-			int mainGov = main.getGovernment(), mainLaw = main.getLawLevel();
-
-			/*
-			 * GOVERNMENT
-			 */
-			gov = Dice.roll(6);
-
-			if (mainGov == 6)
-				gov += pop;
-			else if (mainGov >= 7)
-				gov += 1;
-
-			if (gov == 1)
-				gov = 0;
-			else if (gov == 2)
-				gov = 1;
-			else if (gov == 3)
-				gov = 2;
-			else if (gov == 4)
-				gov = 3;
-			else if (gov >= 5)
-				gov = 6;
-
-			// validation step
-			if (pop == 0)
-				gov = 0;
-
-			/*
-			 * LAW LEVEL
-			 */
-			law = Dice.roll(6) - 3 + mainLaw;
-
-			// validation step
-			if (gov == 0 || law < 0)
-				law = 0;
-
-		}
-
-		setGovernment(gov);
-		setLawLevel(law);
-
-		/*
-		 * STARPORT / SPACEPORT
-		 */
-		char starport = 'X';
-		if (isMainWorld()) {
-			dice = Dice.roll(2, 6);
-
-			if (dice >= 10)
-				starport = 'A';
-			else if (dice == 8 || dice == 9)
-				starport = 'B';
-			else if (dice == 6 || dice == 7)
-				starport = 'C';
-			else if (dice == 5)
-				starport = 'D';
-			else if (dice == 3 || dice == 4)
-				starport = 'E';
-			else
-				starport = 'X';
-
-			setSpaceport(starport);
-			getGroup().setStarPort(starport);
-		} else {
-			dice = Dice.roll(6);
-
-			if (pop >= 6)
-				dice += 2;
-			else if (pop <= 1)
-				dice -= 2;
-
-			if (dice >= 10)
-				starport = 'A';
-			else if (dice == 8 || dice == 9)
-				starport = 'B';
-			else if (dice == 6 || dice == 7)
-				starport = 'C';
-			else if (dice == 5)
-				starport = 'D';
-			else if (dice == 3 || dice == 4)
-				starport = 'E';
-			else
-				starport = 'X';
-
-			setSpaceport(starport);
-		}
-
-		/*
-		 * TECH LEVEL
-		 */
-		int techLevel;
-		if (isMainWorld()) {
-			techLevel = Dice.roll(6);
-
-			// starport bonus
-			if (starport == 'A')
-				techLevel += 6;
-			else if (starport == 'B')
-				techLevel += 4;
-			else if (starport == 'C')
-				techLevel += 2;
-			else if (starport == 'X')
-				techLevel -= 4;
-
-			// size bonus
-			if (size == 0 || size == 1)
-				techLevel += 2;
-			else if (size == 2 || size == 3 || size == 4)
-				techLevel += 1;
-
-			// atmosphere bonus
-			if (atmo >= 0 && atmo <= 3)
-				techLevel += 1;
-			else if (atmo >= 10 && atmo <= 14)
-				techLevel += 1;
-
-			// hydrosphere bonus
-			if (hydro == 9)
-				techLevel += 1;
-			else if (hydro == 10)
-				techLevel += 2;
-
-			// population bonus
-			if (pop >= 1 && pop <= 5)
-				techLevel += 1;
-			else if (pop == 9)
-				techLevel += 2;
-			else if (pop == 10)
-				techLevel += 4;
-
-			// government bonus
-			if (gov == 0 || gov == 5)
-				techLevel += 1;
-			else if (gov == 13)
-				techLevel -= 2;
-
-			setTechLevel(techLevel);
-		} else {
-			int mainTechLevel = getMainWorld().getTechLevel();
-			setTechLevel(mainTechLevel - 1);
-
-		}
-
-		/*
-		 * TRADE CODES
-		 */
-		TradeCodes.setupTradeCodes(this);
-
-		/*
-		 * WORLD FACILITIES
-		 */
-		EnumSet<Base> facilities = EnumSet.noneOf(Base.class);
-
-		if (isMainWorld()) {
-			// NAVAL BASE
-			dice = Dice.roll(2, 6);
-			if (starport != 'A' && starport != 'B')
-				dice -= 12;
-
-			if (dice > 7)
-				facilities.add(Base.NAVY);
-
-			// SCOUT BASE
-			dice = Dice.roll(2, 6);
-
-			if (starport == 'A')
-				dice -= 3;
-			else if (starport == 'B')
-				dice -= 2;
-			else if (starport == 'C')
-				dice -= 1;
-			else if (starport == 'E' || starport == 'X')
-				dice -= 12;
-
-			if (dice > 6)
-				facilities.add(Base.SCOUT);
-
-		} else {
-			Planetoid main = getMainWorld();
-
-			/*
-			 * FARM
-			 */
-			boolean idealAtmo = false, idealHydro = false, idealPop = false;
-
-			if (atmo >= 4 && atmo <= 9)
-				idealAtmo = true;
-
-			if (hydro >= 4 && hydro <= 8)
-				idealHydro = true;
-
-			if (pop >= 2)
-				idealPop = true;
-
-			if (idealAtmo && idealHydro && idealPop && habitable())
-				facilities.add(Base.FARM);
-
-			/*
-			 * MINE
-			 */
-			boolean mainIndustrial = main.getTradeCodes().contains(TradeCodes.IN);
-
-			idealPop = false;
-			if (pop >= 2)
-				idealPop = true;
-
-			if (mainIndustrial && idealPop)
-				facilities.add(Base.MINE);
-
-			/*
-			 * COLONY
-			 */
-			if (gov == 6 && pop >= 5)
-				facilities.add(Base.COLONY);
-
-			/*
-			 * LABORATORY
-			 */
-			int mainTechLevel = main.getTechLevel();
-
-			dice = Dice.roll(2, 6);
-			if (main.getTechLevel() >= 10)
-				dice += 2;
-			else if (mainTechLevel <= 8)
-				dice -= 12;
-
-			if (dice >= 11) {
-				facilities.add(Base.LAB);
-				setTechLevel(mainTechLevel);
-			}
-
-			/*
-			 * MILITARY
-			 */
-			boolean mainPoor = main.getTradeCodes().contains(TradeCodes.PO);
-
-			dice = Dice.roll(2, 6);
-			if (main.getPopulation() >= 8)
-				dice += 1;
-
-			if (atmo == main.getAtmosphere())
-				dice += 2;
-
-			if (mainPoor != true && dice >= 12)
-				facilities.add(Base.MILITARY);
-
-		}
-
-		setWorldFacilities(facilities);
-
-		/*
-		 * FIXME - WORLD TAGS
-		 */
-		World.setupWorldTags(this);
-
-	}
 
 	public default void factionSetup() {
 		// TODO
@@ -620,22 +327,22 @@ public interface World {
 		return nameable;
 	}
 
-	public default boolean isMainWorld() {
-		boolean isMainWorld = false;
-		Planetoid mainWorld = getGroup().getMainWorld();
-		if (this.equals(mainWorld))
-			isMainWorld = true;
+//	public boolean isMainWorld() {
+//		boolean isMainWorld = false;
+//		Planetoid mainWorld = getGroup().getMainWorld();
+//		if (this.equals(mainWorld))
+//			isMainWorld = true;
+//
+//		return isMainWorld;
+//	}
 
-		return isMainWorld;
-	}
+//	public default Planetoid getMainWorld() {
+//		return getGroup().getMainWorld();
+//	}
 
-	public default Planetoid getMainWorld() {
-		return getGroup().getMainWorld();
-	}
-
-	public default int getHabitableZone() {
-		return getGroup().getHabitableZone();
-	}
+//	public default int getHabitableZone() {
+//		return getGroup().getHabitableZone();
+//	}
 
 	public default boolean isEmpty() {
 		return getType().equals(Type.EMPTY);

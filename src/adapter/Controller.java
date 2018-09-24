@@ -19,6 +19,9 @@ import rules.Dice;
 import view.Frame;
 
 public class Controller {
+	private static final int NUM_OF_SUBSECTORS = 16;
+	private static int starIndex = 0, worldIndex = 0;
+
 	public static JPanel errorPanel;
 	public int dataRequested;
 
@@ -56,24 +59,23 @@ public class Controller {
 	private void databaseSetup() {
 		database = new SQLiteData(this);
 
-		sectorSetup(0);
+		// NUM_OF_SUBSECTORS
+		for (int i = 0; i < 1; ++i)
+			subsectorSetup(0, i);
 	}
 
-	private void sectorSetup(int sector) {
-		int starIndex = 0, worldIndex = 0;
-		StarSystem group;
+	private void subsectorSetup(int sector, int subsector) {
+		StarSystem starSystem;
 
-		// subsector level
 		for (int i = 0; i < 80; ++i) {
 			if (Dice.roll(2) == 2) {
-				group = new StarSystem(sector, i);
+				starSystem = new StarSystem(sector, subsector, i);
 
-				// system level
-				while (group.getMainWorld() == null)
-					group = new StarSystem(sector, i);
-
-				for (Iterator<Star> it = group.starList().iterator(); it.hasNext();)
+				for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
 					database.addStar(starIndex++, it.next());
+				
+				for (Iterator<Planetoid> it = starSystem.worldSet().iterator(); it.hasNext();)
+					database.addWorld(worldIndex++, it.next());
 			}
 
 		}

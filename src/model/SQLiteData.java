@@ -56,24 +56,24 @@ public class SQLiteData {
 			PreparedStatement statement;
 			int pos = 1;
 
-			statement = connection.prepareStatement("INSERT INTO STARS VALUES( ?, ?, ?, ?, ?, ?, ? );");
+			statement = connection.prepareStatement("INSERT INTO STARS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+
+			// address (doesn't use sub-orbit)
 			statement.setString(pos++, String.valueOf(starIndex));
 			statement.setString(pos++, String.valueOf(star.sector()));
 			statement.setString(pos++, String.valueOf(star.subsector()));
+			statement.setString(pos++, String.valueOf(star.cluster()));
 			statement.setString(pos++, String.valueOf(star.orbit()));
+
+			// attributes
 			statement.setString(pos++, star.getName());
 			statement.setString(pos++, String.valueOf(star.getSize()));
 			statement.setString(pos++, String.valueOf(star.getColor()));
+			statement.setString(pos++, String.valueOf(star.maxOrbits()));
 
 			statement.execute();
+			add = true;
 
-			// if (star.isPersistent()) {
-			// JOptionPane.showMessageDialog(Controller.errorPanel, "Star already exists.",
-			// "Error",
-			// JOptionPane.ERROR_MESSAGE);
-			//
-			// } else {
-			// }
 		} catch (SQLException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -83,25 +83,34 @@ public class SQLiteData {
 		return add;
 	}
 
-	public boolean addWorld(World world) {
+	public boolean addWorld(int suppliedIndex, World world) {
 		boolean add = false;
 
 		if (connection == null)
 			connect();
 
+		int worldIndex;
+		if (world.isPersistent())
+			worldIndex = world.getIndex();
+		else
+			worldIndex = suppliedIndex;
+
 		try {
 			PreparedStatement statement;
 			int pos = 1;
 
-			statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-			statement.setString(pos++, String.valueOf(world.getIndex()));
-			statement.setString(pos++, String.valueOf(world.getName()));
+			statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+
+			// cast world as "address" to access these methods
+			statement.setString(pos++, String.valueOf(worldIndex));
 			statement.setString(pos++, String.valueOf(((Address) world).sector()));
 			statement.setString(pos++, String.valueOf(((Address) world).subsector()));
 			statement.setString(pos++, String.valueOf(((Address) world).orbit()));
 			statement.setString(pos++, String.valueOf(((Address) world).suborbit()));
 
-			// scores
+			// attributes
+			statement.setString(pos++, String.valueOf(world.getName()));
+
 			statement.setString(pos++, String.valueOf(world.getSize()));
 			statement.setString(pos++, String.valueOf(world.getAtmosphere()));
 			statement.setString(pos++, String.valueOf(world.getHydrosphere()));
@@ -111,15 +120,6 @@ public class SQLiteData {
 
 			statement.execute();
 			add = true;
-
-			// if (worldExists(world.getIndex())) {
-			// JOptionPane.showMessageDialog(Controller.errorPanel, "World already exists.",
-			// "Error",
-			// JOptionPane.ERROR_MESSAGE);
-			//
-			// } else {
-			//
-			// }
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -233,10 +233,10 @@ public class SQLiteData {
 					statement = connection.createStatement();
 
 					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, " + "sector INTEGER, "
-							+ "subsector INTEGER(2), " + "orbit INTEGER(2), " + "suborbit INTEGER(2), "
-							+ "name CHAR(40), " + "size INTEGER(2), " + "atmosphere INTEGER(2), "
-							+ "hydrosphere INTEGER(2), " + "population INTEGER(2), " + "government INTEGER(2), "
-							+ "law INTEGER(2) " + ");";
+							+ "subsector INTEGER(2), " + "cluster INTEGER, " + "orbit INTEGER(2), "
+							+ "suborbit INTEGER(2), " + "name CHAR(40), " + "size INTEGER(2), "
+							+ "atmosphere INTEGER(2), " + "hydrosphere INTEGER(2), " + "population INTEGER(2), "
+							+ "government INTEGER(2), " + "law INTEGER(2) " + ");";
 					// + "PRIMARY KEY (world_num));";
 					statement.executeUpdate(string);
 				}
@@ -246,8 +246,8 @@ public class SQLiteData {
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, " + "sector INTEGER, "
-							+ "subsector INTEGER(2), " + "orbit INTEGER(2), " + "name CHAR(40), " + "size CHAR(2), "
-							+ "color CHAR(2) " + ");";
+							+ "subsector INTEGER(2), " + "cluster INTEGER, " + "orbit INTEGER(2), " + "name CHAR(40), "
+							+ "size CHAR(1), " + "color CHAR(1), " + "maxOrbits INTEGER(2) " + ");";
 					// + "PRIMARY KEY (star_num));";
 					statement.executeUpdate(string);
 

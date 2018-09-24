@@ -4,7 +4,7 @@ import rules.Dice;
 
 public class Star implements Address {
 	/*
-	 * INSTANCE FIELDS
+	 * PERSISTENT FIELDS
 	 */
 	protected int index;
 	protected boolean isPersistent;
@@ -12,28 +12,33 @@ public class Star implements Address {
 
 	protected int sector;
 	protected int subsector;
+	protected int cluster;
 	protected int orbit;
 	protected int suborbit;
 
 	protected String name;
 	protected char size, color;
+	protected int maxOrbits;
 
+	/*
+	 * NON-PERSISTENT FIELDS
+	 */
 	protected int sizeRoll, typeRoll;
 
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Star(int sector, int subsector) {
-		this(sector, subsector, null, 0, false);
+	public Star(int sector, int subsector, int cluster, int orbit) {
+		this(sector, subsector, cluster, orbit, null);
 	}
 
-	public Star(int sector, int subsector, Star primary, int index, boolean isPersistent) {
+	public Star(int sector, int subsector, int cluster, int orbit, Star primary) {
 		this.sector = sector;
 		this.subsector = subsector;
-		this.isPersistent = isPersistent;
+		this.cluster = cluster;
+		this.orbit = orbit;
+		this.isPersistent = false;
 		this.hasChanged = false;
-
-		int dice;
 
 		// determine spectral class
 		typeRoll = ((primary == null) ? Dice.roll(2, 6) : Dice.roll(2, 6) + primary.typeRoll);
@@ -90,25 +95,27 @@ public class Star implements Address {
 
 		}
 
-		// determine orbit
-		orbit = 0;
-		if (primary != null) {
-			dice = (index == 1) ? Dice.roll(2, 6) : Dice.roll(2, 6) + 4;
-			if (dice < 4)
-				orbit = 0;
-			else if (dice < 7)
-				orbit = (dice - 3);
-			else if (dice < 12)
-				orbit = (dice - 3 + Dice.roll(6));
-			else
-				orbit = 49;
-
-		}
-
 		/*
 		 * WORK IN PROGRESS
 		 * 
 		 */
+		maxOrbits = Dice.roll(2, 6);
+		if (size == 2)
+			maxOrbits += 8;
+		else if (size == 3)
+			maxOrbits += 4;
+
+		if (color == 'K')
+			maxOrbits -= 2;
+		else if (color == 'M')
+			maxOrbits -= 4;
+
+		if (primary != null && orbit > 0 && maxOrbits > orbit / 2)
+			maxOrbits /= 2;
+
+		maxOrbits = (maxOrbits < 0) ? 0 : maxOrbits;
+		// int[] orbits = new int[maxOrbits];
+
 	}
 
 	public boolean isPersistent() {
@@ -131,6 +138,11 @@ public class Star implements Address {
 	@Override
 	public int subsector() {
 		return subsector;
+	}
+
+	@Override
+	public int cluster() {
+		return cluster;
 	}
 
 	@Override
@@ -158,5 +170,94 @@ public class Star implements Address {
 
 	public char getColor() {
 		return color;
+	}
+
+	public int maxOrbits() {
+		return maxOrbits;
+	}
+
+	/*
+	 * STATIC METHODS
+	 * 
+	 */
+	public static int habitableZone(Star star) {
+		int habitableZone = 12;
+		int sizeMod = 0;
+
+		if (star.size == '0')
+			sizeMod = 0;
+		else if (star.size == '1')
+			sizeMod = 1;
+		else if (star.size == '2')
+			sizeMod = 2;
+		else if (star.size == '3')
+			sizeMod = 3;
+		else if (star.size == '4')
+			sizeMod = 4;
+		else if (star.size == '5')
+			sizeMod = 5;
+		else if (star.size == '6')
+			sizeMod = 6;
+		else if (star.size == 'D')
+			sizeMod = 7;
+
+		if (star.color == 'B')
+			habitableZone -= sizeMod / 2;
+		else if (star.color == 'A')
+			habitableZone -= (sizeMod > 3) ? 6 : sizeMod * 2;
+		else if (star.color == 'F')
+			habitableZone -= (sizeMod + 3);
+		else if (star.color == 'G')
+			habitableZone -= (sizeMod < 5) ? (2 * sizeMod) - 1 : (2 * sizeMod);
+		else if (star.color == 'K')
+			habitableZone -= (sizeMod > 3) ? (2 * sizeMod) + 2 : sizeMod + 1;
+		else if (star.color == 'M')
+			habitableZone -= (sizeMod > 3) ? (2 * sizeMod) + 2 : sizeMod;
+
+		if (habitableZone < 0)
+			habitableZone = -1;
+
+		return habitableZone;
+	}
+
+	public static int unavailableZone(Star star) {
+		int unavailableZones = 7;
+		int sizeMod = 0;
+
+		if (star.size == '0')
+			sizeMod = 0;
+		else if (star.size == '1')
+			sizeMod = 1;
+		else if (star.size == '2')
+			sizeMod = 2;
+		else if (star.size == '3')
+			sizeMod = 3;
+		else if (star.size == '4')
+			sizeMod = 4;
+		else if (star.size == '5')
+			sizeMod = 5;
+		else if (star.size == '6')
+			sizeMod = 6;
+		else if (star.size == 'D')
+			sizeMod = 7;
+
+		if (star.color == 'M')
+			unavailableZones -= (sizeMod > 3) ? sizeMod * 2 : sizeMod;
+		else
+			unavailableZones -= sizeMod * 2;
+
+		if (unavailableZones < 0)
+			unavailableZones = 0;
+
+		return unavailableZones;
+	}
+
+	public static int innerZone(Star star) {
+		int innerZoneStart = unavailableZone(star);
+
+		if (habitableZone(star) <= 0)
+			innerZoneStart = -1;
+
+		return innerZoneStart;
 	}
 }

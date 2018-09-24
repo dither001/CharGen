@@ -8,35 +8,39 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import milieu.World.Base;
+import milieu.World.TradeCodes;
 import rules.Dice;
 
 public class Planetoid implements Address, World {
 	/*
-	 * INSTANCE FIELDS
-	 * 
+	 * PERSISTENT FIELDS
 	 */
 	private int index;
 	private boolean isPersistent;
+	private boolean hasChanged;
 
 	private int sector;
 	private int subsector;
+	private int cluster;
 	private int orbit;
 	private int suborbit;
 
+	private boolean isMainWorld;
 	private String name;
 	private Type type;
 	private boolean habitable;
 	//
-	private byte[] scores;
+	private int[] scores;
 	private char spaceport;
-	private byte techLevel;
+	private int techLevel;
 	//
 	private EnumSet<Base> worldFacilities;
 	private EnumSet<Tag> worldTags;
 	private HashSet<Faction> factions;
 
 	// convenience
-	private StarSystem group;
+//	private StarSystem starSystem;
 	private Planetoid parent;
 	private Set<Planetoid> moons;
 	private int totalMoons;
@@ -46,17 +50,18 @@ public class Planetoid implements Address, World {
 	 * CONSTRUCTORS
 	 * 
 	 */
-	public Planetoid(int subsector, int orbit, StarSystem group) {
-		this(subsector, Type.STANDARD, orbit, group);
+	public Planetoid(int subsector, int orbit, Star homeStar) {
+		this(subsector, orbit, homeStar, Type.STANDARD);
 	}
 
-	public Planetoid(int subsector, Type type, int orbit, StarSystem group) {
-		this(subsector, type, orbit, group, null);
+	public Planetoid(int subsector, int orbit, Star homeStar, Type type) {
+		this(subsector, orbit, homeStar, null, type);
 	}
 
-	public Planetoid(int subsector, Type type, int orbit, StarSystem group, Planetoid home) {
+	public Planetoid(int subsector, int orbit, Star homeStar, Planetoid home, Type type) {
 		this.subsector = subsector;
-		this.group = group;
+		this.cluster = cluster;
+
 		this.parent = home;
 		this.type = type;
 		this.orbit = orbit;
@@ -67,15 +72,15 @@ public class Planetoid implements Address, World {
 		 * INITIALIZE NEW WORLD
 		 */
 		if (isWorld()) {
-			int habitableZone = group.getHabitableZone();
+			int habitableZone = Star.habitableZone(homeStar);
 			this.habitable = this.orbit == habitableZone;
 
-			this.scores = new byte[] { 0, 0, 0, 0, 0, 0 };
+			this.scores = new int[] { 0, 0, 0, 0, 0, 0 };
 
 			/*
 			 * SIZE
 			 */
-			scores[0] = (byte) (Dice.roll(2, 6) - 2);
+			scores[0] = (Dice.roll(2, 6) - 2);
 			if (orbit == 0)
 				scores[0] -= 5;
 			else if (orbit == 1)
@@ -83,15 +88,15 @@ public class Planetoid implements Address, World {
 			else if (orbit == 1)
 				scores[0] -= 2;
 
-			if (group.getPrimaryStarColor() == 'M')
+			if (homeStar.color == 'M')
 				scores[0] -= 2;
 
 			if (isMoon() && home.largeGiant())
-				scores[0] = (byte) (Dice.roll(2, 6) - 4);
+				scores[0] = (Dice.roll(2, 6) - 4);
 			else if (isMoon() && home.smallGiant())
-				scores[0] = (byte) (Dice.roll(2, 6) - 6);
+				scores[0] = (Dice.roll(2, 6) - 6);
 			else if (isMoon())
-				scores[0] = (byte) (home.getSize() - Dice.roll(6));
+				scores[0] = (home.getSize() - Dice.roll(6));
 
 			// validation step
 			if (type.equals(Type.SATELLITE) && scores[0] == 0) {
@@ -107,7 +112,7 @@ public class Planetoid implements Address, World {
 			/*
 			 * ATMOSPHERE
 			 */
-			scores[1] = (byte) (Dice.roll(2, 6) - 7 + scores[0]);
+			scores[1] = (Dice.roll(2, 6) - 7 + scores[0]);
 			if (isMoon() && orbit < habitableZone)
 				scores[1] -= 4;
 			else if (orbit < habitableZone)
@@ -130,7 +135,7 @@ public class Planetoid implements Address, World {
 			/*
 			 * HYDROGRAPHY
 			 */
-			scores[2] = (byte) (Dice.roll(2, 6) - 7 + scores[0]);
+			scores[2] = (Dice.roll(2, 6) - 7 + scores[0]);
 			if (orbit < habitableZone || scores[0] < 2)
 				scores[2] = 0;
 			else if (isMoon() && orbit > habitableZone)
@@ -148,7 +153,7 @@ public class Planetoid implements Address, World {
 			/*
 			 * POPULATION
 			 */
-			scores[3] = (byte) (Dice.roll(2, 6) - 2);
+			scores[3] = (Dice.roll(2, 6) - 2);
 			if (orbit < habitableZone)
 				scores[3] -= 5;
 			else if (orbit > habitableZone)
@@ -186,7 +191,7 @@ public class Planetoid implements Address, World {
 				satellites = 0;
 
 			while (satellites > 0) {
-				moons.add(new Planetoid(subsector, Type.SATELLITE, orbit, group, this));
+				moons.add(new Planetoid(subsector, orbit, homeStar, this, Type.SATELLITE));
 				--satellites;
 
 			}
@@ -246,6 +251,299 @@ public class Planetoid implements Address, World {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public void governmentSetup(World mainWorld) {
+		if (mainWorld.equals(this))
+			this.isMainWorld = true;
+		
+		int size = getSize();
+		int atmo = getAtmosphere();
+		int hydro = getHydrosphere();
+		int pop = getPopulation();
+
+		int dice;
+
+		/*
+		 * GOVERNMENT, LAW LEVEL
+		 */
+		int gov, law;
+		if (mainWorld()) {
+			/*
+			 * GOVERNMENT
+			 */
+			dice = Dice.roll(2, 6) - 7 + pop;
+
+			// validation step
+			dice = (dice < 0) ? 0 : (dice > 14) ? 14 : dice;
+
+			gov = dice;
+
+			/*
+			 * LAW LEVEL
+			 */
+			dice = Dice.roll(2, 6) - 7 + gov;
+
+			// validation step
+			if (dice < 0)
+				dice = 0;
+
+			law = dice;
+		} else {
+			int mainGov = mainWorld.getGovernment(), mainLaw = mainWorld.getLawLevel();
+
+			/*
+			 * GOVERNMENT
+			 */
+			gov = Dice.roll(6);
+
+			if (mainGov == 6)
+				gov += pop;
+			else if (mainGov >= 7)
+				gov += 1;
+
+			if (gov == 1)
+				gov = 0;
+			else if (gov == 2)
+				gov = 1;
+			else if (gov == 3)
+				gov = 2;
+			else if (gov == 4)
+				gov = 3;
+			else if (gov >= 5)
+				gov = 6;
+
+			// validation step
+			if (pop == 0)
+				gov = 0;
+
+			/*
+			 * LAW LEVEL
+			 */
+			law = Dice.roll(6) - 3 + mainLaw;
+
+			// validation step
+			if (gov == 0 || law < 0)
+				law = 0;
+
+		}
+
+		setGovernment(gov);
+		setLawLevel(law);
+
+		/*
+		 * STARPORT / SPACEPORT
+		 */
+		char starport = 'X';
+		if (mainWorld()) {
+			dice = Dice.roll(2, 6);
+
+			if (dice >= 10)
+				starport = 'A';
+			else if (dice == 8 || dice == 9)
+				starport = 'B';
+			else if (dice == 6 || dice == 7)
+				starport = 'C';
+			else if (dice == 5)
+				starport = 'D';
+			else if (dice == 3 || dice == 4)
+				starport = 'E';
+			else
+				starport = 'X';
+
+			this.spaceport = starport;
+			// setSpaceport(starport);
+		} else {
+			dice = Dice.roll(6);
+
+			if (pop >= 6)
+				dice += 2;
+			else if (pop <= 1)
+				dice -= 2;
+
+			if (dice >= 10)
+				starport = 'A';
+			else if (dice == 8 || dice == 9)
+				starport = 'B';
+			else if (dice == 6 || dice == 7)
+				starport = 'C';
+			else if (dice == 5)
+				starport = 'D';
+			else if (dice == 3 || dice == 4)
+				starport = 'E';
+			else
+				starport = 'X';
+
+			this.spaceport = starport;
+//			setSpaceport(starport);
+		}
+
+		/*
+		 * TECH LEVEL
+		 */
+		int techLevel;
+		if (mainWorld()) {
+			techLevel = Dice.roll(6);
+
+			// starport bonus
+			if (starport == 'A')
+				techLevel += 6;
+			else if (starport == 'B')
+				techLevel += 4;
+			else if (starport == 'C')
+				techLevel += 2;
+			else if (starport == 'X')
+				techLevel -= 4;
+
+			// size bonus
+			if (size == 0 || size == 1)
+				techLevel += 2;
+			else if (size == 2 || size == 3 || size == 4)
+				techLevel += 1;
+
+			// atmosphere bonus
+			if (atmo >= 0 && atmo <= 3)
+				techLevel += 1;
+			else if (atmo >= 10 && atmo <= 14)
+				techLevel += 1;
+
+			// hydrosphere bonus
+			if (hydro == 9)
+				techLevel += 1;
+			else if (hydro == 10)
+				techLevel += 2;
+
+			// population bonus
+			if (pop >= 1 && pop <= 5)
+				techLevel += 1;
+			else if (pop == 9)
+				techLevel += 2;
+			else if (pop == 10)
+				techLevel += 4;
+
+			// government bonus
+			if (gov == 0 || gov == 5)
+				techLevel += 1;
+			else if (gov == 13)
+				techLevel -= 2;
+
+			setTechLevel(techLevel);
+		} else {
+			int mainTechLevel = mainWorld.getTechLevel();
+			setTechLevel(mainTechLevel - 1);
+
+		}
+
+		/*
+		 * TRADE CODES
+		 */
+		TradeCodes.setupTradeCodes(this);
+
+		/*
+		 * WORLD FACILITIES
+		 */
+		EnumSet<Base> facilities = EnumSet.noneOf(Base.class);
+
+		if (mainWorld()) {
+			// NAVAL BASE
+			dice = Dice.roll(2, 6);
+			if (starport != 'A' && starport != 'B')
+				dice -= 12;
+
+			if (dice > 7)
+				facilities.add(Base.NAVY);
+
+			// SCOUT BASE
+			dice = Dice.roll(2, 6);
+
+			if (starport == 'A')
+				dice -= 3;
+			else if (starport == 'B')
+				dice -= 2;
+			else if (starport == 'C')
+				dice -= 1;
+			else if (starport == 'E' || starport == 'X')
+				dice -= 12;
+
+			if (dice > 6)
+				facilities.add(Base.SCOUT);
+
+		} else {
+			/*
+			 * FARM
+			 */
+			boolean idealAtmo = false, idealHydro = false, idealPop = false;
+
+			if (atmo >= 4 && atmo <= 9)
+				idealAtmo = true;
+
+			if (hydro >= 4 && hydro <= 8)
+				idealHydro = true;
+
+			if (pop >= 2)
+				idealPop = true;
+
+			if (idealAtmo && idealHydro && idealPop && habitable())
+				facilities.add(Base.FARM);
+
+			/*
+			 * MINE
+			 */
+			boolean mainIndustrial = mainWorld.getTradeCodes().contains(TradeCodes.IN);
+
+			idealPop = false;
+			if (pop >= 2)
+				idealPop = true;
+
+			if (mainIndustrial && idealPop)
+				facilities.add(Base.MINE);
+
+			/*
+			 * COLONY
+			 */
+			if (gov == 6 && pop >= 5)
+				facilities.add(Base.COLONY);
+
+			/*
+			 * LABORATORY
+			 */
+			int mainTechLevel = mainWorld.getTechLevel();
+
+			dice = Dice.roll(2, 6);
+			if (mainWorld.getTechLevel() >= 10)
+				dice += 2;
+			else if (mainTechLevel <= 8)
+				dice -= 12;
+
+			if (dice >= 11) {
+				facilities.add(Base.LAB);
+				setTechLevel(mainTechLevel);
+			}
+
+			/*
+			 * MILITARY
+			 */
+			boolean mainPoor = mainWorld.getTradeCodes().contains(TradeCodes.PO);
+
+			dice = Dice.roll(2, 6);
+			if (mainWorld.getPopulation() >= 8)
+				dice += 1;
+
+			if (atmo == mainWorld.getAtmosphere())
+				dice += 2;
+
+			if (mainPoor != true && dice >= 12)
+				facilities.add(Base.MILITARY);
+
+		}
+
+		setWorldFacilities(facilities);
+
+		/*
+		 * FIXME - WORLD TAGS
+		 */
+		World.setupWorldTags(this);
+
+	}
+
 	public String nameString() {
 		String string;
 
@@ -342,13 +640,11 @@ public class Planetoid implements Address, World {
 
 			// next try habitable zone
 			if (compare == 0) {
-				int habitable = right.group.getHabitableZone();
-
 				if (left.orbit == right.orbit)
 					compare = 0;
-				else if (left.orbit == habitable)
+				else if (left.habitable())
 					compare = -1;
-				else if (right.orbit == habitable)
+				else if (right.habitable())
 					compare = 1;
 
 			}
@@ -377,6 +673,11 @@ public class Planetoid implements Address, World {
 	}
 
 	@Override
+	public int cluster() {
+		return cluster;
+	}
+
+	@Override
 	public int orbit() {
 		return orbit;
 	}
@@ -399,6 +700,11 @@ public class Planetoid implements Address, World {
 	@Override
 	public boolean habitable() {
 		return habitable;
+	}
+
+	@Override
+	public boolean mainWorld() {
+		return isMainWorld;
 	}
 
 	@Override
@@ -451,10 +757,10 @@ public class Planetoid implements Address, World {
 		this.worldFacilities = set;
 	}
 
-	@Override
-	public StarSystem getGroup() {
-		return group;
-	}
+//	@Override
+//	public StarSystem getGroup() {
+//		return group;
+//	}
 
 	@Override
 	public Type getType() {
@@ -478,17 +784,17 @@ public class Planetoid implements Address, World {
 
 	@Override
 	public void setTechLevel(int techLevel) {
-		this.techLevel = (byte) techLevel;
+		this.techLevel = techLevel;
 	}
 
 	@Override
-	public byte[] getAttributes() {
+	public int[] getAttributes() {
 		return scores;
 	}
 
 	@Override
 	public void setAttribute(int index, int value) {
-		this.scores[index] = (byte) value;
+		this.scores[index] = value;
 	}
 
 	@Override
