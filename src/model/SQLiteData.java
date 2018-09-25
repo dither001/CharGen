@@ -99,12 +99,13 @@ public class SQLiteData {
 			PreparedStatement statement;
 			int pos = 1;
 
-			statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+			statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 
 			// cast world as "address" to access these methods
 			statement.setString(pos++, String.valueOf(worldIndex));
 			statement.setString(pos++, String.valueOf(((Address) world).sector()));
 			statement.setString(pos++, String.valueOf(((Address) world).subsector()));
+			statement.setString(pos++, String.valueOf(((Address) world).cluster()));
 			statement.setString(pos++, String.valueOf(((Address) world).orbit()));
 			statement.setString(pos++, String.valueOf(((Address) world).suborbit()));
 
@@ -115,8 +116,12 @@ public class SQLiteData {
 			statement.setString(pos++, String.valueOf(world.getAtmosphere()));
 			statement.setString(pos++, String.valueOf(world.getHydrosphere()));
 			statement.setString(pos++, String.valueOf(world.getPopulation()));
+
+			//
 			statement.setString(pos++, String.valueOf(world.getGovernment()));
 			statement.setString(pos++, String.valueOf(world.getLawLevel()));
+			statement.setString(pos++, String.valueOf(world.getTechLevel()));
+			statement.setString(pos++, String.valueOf(world.getSpaceport()));
 
 			statement.execute();
 			add = true;
@@ -227,30 +232,38 @@ public class SQLiteData {
 			try {
 				statement = connection.createStatement();
 
+				// STARS table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARS'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, "
+							// address
+							+ "sector INTEGER, " + "subsector INTEGER(2), " //
+							+ "cluster INTEGER, " + "orbit INTEGER(2), "
+							//
+							+ "name CHAR(40), " + "size CHAR(1), " + "color CHAR(1), " + "maxOrbits INTEGER(2) " + ");";
+					statement.executeUpdate(string);
+
+				}
+
 				// WORLDS table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLDS'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 
-					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, " + "sector INTEGER, "
-							+ "subsector INTEGER(2), " + "cluster INTEGER, " + "orbit INTEGER(2), "
-							+ "suborbit INTEGER(2), " + "name CHAR(40), " + "size INTEGER(2), "
-							+ "atmosphere INTEGER(2), " + "hydrosphere INTEGER(2), " + "population INTEGER(2), "
-							+ "government INTEGER(2), " + "law INTEGER(2) " + ");";
-					// + "PRIMARY KEY (world_num));";
+					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, "
+							// address
+							+ "sector INTEGER, " + "subsector INTEGER(2), " //
+							+ "cluster INTEGER, " + "orbit INTEGER(2), " + "suborbit INTEGER(2), "
+							//
+							+ "name CHAR(40), "
+							//
+							+ "size INTEGER(2), " + "atmosphere INTEGER(2), " + "hydrosphere INTEGER(2), "
+							+ "population INTEGER(2), "
+							//
+							+ "government INTEGER(2), " + "law INTEGER(2), " + "techLevel INTEGER(2), "
+							+ "spaceport CHAR(1) " + ");";
 					statement.executeUpdate(string);
-				}
-
-				// STARS table setup
-				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARS'";
-				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
-					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, " + "sector INTEGER, "
-							+ "subsector INTEGER(2), " + "cluster INTEGER, " + "orbit INTEGER(2), " + "name CHAR(40), "
-							+ "size CHAR(1), " + "color CHAR(1), " + "maxOrbits INTEGER(2) " + ");";
-					// + "PRIMARY KEY (star_num));";
-					statement.executeUpdate(string);
-
 				}
 
 			} catch (SQLException e) {
