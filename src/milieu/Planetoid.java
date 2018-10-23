@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import milieu.World.Base;
-import milieu.World.TradeCodes;
+import milieu.Base;
+import milieu.TradeCodes;
 import rules.Dice;
 
 public class Planetoid implements Address, World {
@@ -36,7 +36,7 @@ public class Planetoid implements Address, World {
 	private int techLevel;
 	//
 	private EnumSet<Base> worldFacilities;
-	private EnumSet<Tag> worldTags;
+	private EnumSet<WorldTag> worldTags;
 	private HashSet<Faction> factions;
 
 	// convenience
@@ -738,12 +738,12 @@ public class Planetoid implements Address, World {
 	}
 
 	@Override
-	public EnumSet<Tag> getWorldTags() {
+	public EnumSet<WorldTag> getWorldTags() {
 		return worldTags;
 	}
 
 	@Override
-	public void setWorldTags(EnumSet<Tag> set) {
+	public void setWorldTags(EnumSet<WorldTag> set) {
 		this.worldTags = set;
 	}
 

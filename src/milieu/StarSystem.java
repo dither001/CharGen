@@ -40,7 +40,7 @@ public class StarSystem {
 	private Planetoid mainWorld;
 	private Set<Faction> factions;
 
-	private Set<World.Tag> commonTags;
+	private Set<WorldTag> commonTags;
 
 	/*
 	 * CONSTRUCTOR
@@ -346,7 +346,7 @@ public class StarSystem {
 		// space objects
 		spaceObjects = spaceObjectSet(planets);
 
-		List<Planetoid> pops = worldSet();
+		List<Planetoid> pops = worldList();
 		Planetoid.MainWorldSort mainSort = new Planetoid.MainWorldSort();
 		Collections.sort(pops, mainSort);
 		this.populousWorlds = pops.size();
@@ -363,9 +363,9 @@ public class StarSystem {
 		 * CULL WORLD TAGS
 		 */
 		// count world tags
-		HashMap<World.Tag, Integer> tagCount = new HashMap<World.Tag, Integer>();
-		Set<World.Tag> tags;
-		World.Tag tag;
+		HashMap<WorldTag, Integer> tagCount = new HashMap<WorldTag, Integer>();
+		Set<WorldTag> tags;
+		WorldTag tag;
 		int value;
 
 		Planetoid prospective;
@@ -373,7 +373,7 @@ public class StarSystem {
 			prospective = it.next();
 			tags = prospective.getWorldTags();
 
-			for (Iterator<World.Tag> its = tags.iterator(); its.hasNext();) {
+			for (Iterator<WorldTag> its = tags.iterator(); its.hasNext();) {
 				tag = its.next();
 
 				if (tagCount.containsKey(tag)) {
@@ -386,10 +386,10 @@ public class StarSystem {
 		}
 
 		// establish common tags
-		commonTags = EnumSet.noneOf(World.Tag.class);
+		commonTags = EnumSet.noneOf(WorldTag.class);
 		double percent = pops.size();
 		double threshold = (percent < 11) ? 0.4 : (percent < 21) ? 0.34 : 0.2;
-		for (Iterator<World.Tag> its = tagCount.keySet().iterator(); its.hasNext();) {
+		for (Iterator<WorldTag> its = tagCount.keySet().iterator(); its.hasNext();) {
 			tag = its.next();
 
 			value = tagCount.get(tag);
@@ -438,45 +438,29 @@ public class StarSystem {
 		return stars;
 	}
 
-	// public char getStarport() {
-	// return starport;
-	// }
-	//
-	// public void setStarPort(char starPort) {
-	// this.starport = starPort;
-	// }
-
-	// public Planetoid getMainWorld() {
-	// return mainWorld;
-	// }
-
-	// public boolean hasInnerZone() {
-	// return innerZone != -1;
-	// }
-
-	public List<Planetoid> spaceObjectSet() {
+	public List<Planetoid> spaceObjectList() {
 		return spaceObjects;
 	}
 
-	public List<Planetoid> gasGiantSet() {
-		List<Planetoid> workingSet;
-		workingSet = filterForGasGiants(spaceObjectSet());
+	public List<Planetoid> gasGiantList() {
+		List<Planetoid> workingList;
+		workingList = filterForGasGiants(spaceObjectList());
 
-		return workingSet;
+		return workingList;
 	}
 
-	public List<Planetoid> worldSet() {
-		List<Planetoid> workingSet;
-		workingSet = filterForWorlds(spaceObjectSet());
+	public List<Planetoid> worldList() {
+		List<Planetoid> workingList;
+		workingList = filterForWorlds(spaceObjectList());
 
-		return workingSet;
+		return workingList;
 	}
 
-	public List<Planetoid> populatedSet() {
-		List<Planetoid> workingSet;
-		workingSet = filterForPopulous(spaceObjectSet());
+	public List<Planetoid> populatedList() {
+		List<Planetoid> workingList;
+		workingList = filterForPopulous(spaceObjectList());
 
-		return workingSet;
+		return workingList;
 	}
 
 	/*
@@ -484,7 +468,7 @@ public class StarSystem {
 	 * 
 	 */
 
-	public int emptyOrbits() {
+	public int numEmptyOrbits() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			if (it.next().isEmpty())
@@ -494,7 +478,7 @@ public class StarSystem {
 		return counter;
 	}
 
-	public int gasGiants() {
+	public int numGasGiants() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			if (it.next().isGasGiant())
@@ -504,21 +488,21 @@ public class StarSystem {
 		return counter;
 	}
 
-	public Set<Planetoid> getGasGiants() {
-		Set<Planetoid> set = new HashSet<Planetoid>();
+//	public Set<Planetoid> getGasGiants() {
+//		Set<Planetoid> set = new HashSet<Planetoid>();
+//
+//		Planetoid candidate;
+//		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+//			candidate = it.next();
+//
+//			if (candidate.isGasGiant())
+//				set.add(candidate);
+//		}
+//
+//		return set;
+//	}
 
-		Planetoid candidate;
-		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
-			candidate = it.next();
-
-			if (candidate.isGasGiant())
-				set.add(candidate);
-		}
-
-		return set;
-	}
-
-	public int asteroids() {
+	public int numAsteroids() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			if (it.next().isAsteroid())
@@ -528,7 +512,7 @@ public class StarSystem {
 		return counter;
 	}
 
-	public int capturedPlanets() {
+	public int numCaptured() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			if (it.next().isCaptured())
@@ -538,34 +522,18 @@ public class StarSystem {
 		return counter;
 	}
 
-	public int populousWorlds() {
+	public int numPopulated() {
 		// FIXME - not sure if working
-		return populatedSet().size();
+		return populatedList().size();
 	}
 
 	public char getPrimaryStarColor() {
 		return stars.get(0).color;
 	}
 
-	// public int numberOfUnavailableZones() {
-	// return unavailableZones;
-	// }
-
-	// public int getHabitableZone() {
-	// return habitableZone;
-	// }
-
-	// public int innerZone() {
-	// int innerZoneStart = unavailableZones;
-	//
-	// if (habitableZone <= 0)
-	// innerZoneStart = -1;
-	//
-	// return innerZoneStart;
-	// }
-
 	private List<Planetoid> orderedPlanetList() {
 		List<Planetoid> planetList = new ArrayList<Planetoid>(planets);
+
 		World.OrbitAscending worldSort = new World.OrbitAscending();
 		Collections.sort(planetList, worldSort);
 

@@ -74,7 +74,7 @@ public class Controller {
 				for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
 					database.addStar(starIndex++, it.next());
 				
-				for (Iterator<Planetoid> it = starSystem.worldSet().iterator(); it.hasNext();)
+				for (Iterator<Planetoid> it = starSystem.worldList().iterator(); it.hasNext();)
 					database.addWorld(worldIndex++, it.next());
 			}
 
