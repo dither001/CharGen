@@ -65,16 +65,16 @@ public class Controller {
 	}
 
 	private void subsectorSetup(int sector, int subsector) {
-		StarSystem starSystem;
+		Cluster starSystem;
 
 		for (int i = 0; i < 80; ++i) {
 			if (Dice.roll(2) == 2) {
-				starSystem = new StarSystem(sector, subsector, i);
+				starSystem = new Cluster(sector, subsector, i);
 
 				for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
 					database.addStar(starIndex++, it.next());
 				
-				for (Iterator<Planetoid> it = starSystem.worldList().iterator(); it.hasNext();)
+				for (Iterator<Planetoid> it = starSystem.listWorlds().iterator(); it.hasNext();)
 					database.addWorld(worldIndex++, it.next());
 			}
 

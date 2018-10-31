@@ -1,6 +1,7 @@
 package model;
 
 /*
+ * @author	Nick Foster
  * Adapted from code by Ariana Fairbanks
  * 
  */
@@ -12,15 +13,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
 import adapter.Controller;
 import milieu.Address;
+import milieu.Planetoid;
 import milieu.Star;
+import milieu.Cluster;
 import milieu.World;
+import rules.Dice;
 
 public class SQLiteData {
+	private static final String[] TABLE_NAMES = { "STAR", "WORLD" };
+	private static final String[] TABLE_INDICES = { "star_num", "world_num" };
+
 	private Controller controller;
 	private static Connection connection;
 	public static boolean hasData;
@@ -39,6 +47,79 @@ public class SQLiteData {
 	/*
 	 * PUBLIC METHODS
 	 */
+	public int getLastStarIndex() throws SQLException {
+		return getLastIndex(TABLE_INDICES[0], TABLE_NAMES[0]);
+	}
+
+	public int getLastWorldIndex() throws SQLException {
+		return getLastIndex(TABLE_INDICES[1], TABLE_NAMES[1]);
+	}
+
+	private int getLastIndex(String column, String table) throws SQLException {
+		String string = String.format("SELECT %s FROM %s ORDER BY %s DESC LIMIT 1;", column, table, column);
+		PreparedStatement statement = connection.prepareStatement(string);
+
+		ResultSet results;
+		int index = 0;
+		try {
+			results = statement.executeQuery(string);
+			index = results.getInt(column);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return index;
+	}
+
+	public boolean addSubsector(int sector, int subsector) throws SQLException {
+		boolean add = false;
+
+		if (connection == null)
+			connect();
+
+		int starIndex = getLastStarIndex();
+		int worldIndex = getLastWorldIndex();
+
+		try {
+			connection.setAutoCommit(false);
+			Cluster starSystem;
+
+			for (int i = 0; i < 80; ++i) {
+				if (Dice.roll(2) == 2) {
+					starSystem = new Cluster(sector, subsector, i);
+
+					for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();) {
+						/*
+						 * TODO - contains entire statement thing from addStar
+						 * 
+						 */
+
+					}
+
+					// listWorlds() doesn't return RINGS or GAS GIANTS
+					for (Iterator<Planetoid> it = starSystem.listWorlds().iterator(); it.hasNext();) {
+						/*
+						 * TODO - contains entire statement thing from addWorld
+						 * 
+						 */
+
+					}
+				}
+
+				connection.commit();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			connection.setAutoCommit(true);
+
+		}
+
+		return add;
+	}
+
 	public boolean addStar(int suppliedIndex, Star star) {
 		boolean add = false;
 
@@ -51,12 +132,12 @@ public class SQLiteData {
 		else
 			starIndex = suppliedIndex;
 
+		PreparedStatement statement;
+		String string = String.format("INSERT INTO %s VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? );", TABLE_NAMES[0]);
 		try {
 			// FIXME - this performs insert
-			PreparedStatement statement;
 			int pos = 1;
-
-			statement = connection.prepareStatement("INSERT INTO STARS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+			statement = connection.prepareStatement(string);
 
 			// address (doesn't use sub-orbit)
 			statement.setString(pos++, String.valueOf(starIndex));
@@ -99,7 +180,8 @@ public class SQLiteData {
 			PreparedStatement statement;
 			int pos = 1;
 
-			statement = connection.prepareStatement("INSERT INTO WORLDS VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+			statement = connection
+					.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 
 			// cast world as "address" to access these methods
 			statement.setString(pos++, String.valueOf(worldIndex));
@@ -148,7 +230,7 @@ public class SQLiteData {
 
 		try {
 			// TODO
-			query = "SELECT * FROM STARS ORDER BY star_num";
+			query = String.format("SELECT * FROM %s ORDER BY %s", TABLE_NAMES[0], TABLE_INDICES[0]);
 			statement = connection.prepareStatement(query);
 			results = statement.executeQuery();
 
@@ -164,11 +246,11 @@ public class SQLiteData {
 	 * PRIVATE METHODS
 	 */
 	private boolean starExists(int index) {
-		return recordExists(index, "STARS");
+		return recordExists(index, TABLE_NAMES[0]);
 	}
 
 	private boolean worldExists(int index) {
-		return recordExists(index, "WORLDS");
+		return recordExists(index, TABLE_NAMES[1]);
 	}
 
 	private boolean recordExists(int index, String table) {
@@ -228,30 +310,33 @@ public class SQLiteData {
 
 			Statement statement;
 			String string;
+			String key, address, data;
+			String i = "INTEGER(2)";
 
 			try {
 				statement = connection.createStatement();
 
 				// STARS table setup
-				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARS'";
+				string = String.format("SELECT name FROM sqlite_master WHERE type='table' AND name='%s'",
+						TABLE_NAMES[0]);
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
-					string = "CREATE TABLE STARS(star_num INTEGER PRIMARY KEY, "
-							// address
-							+ "sector INTEGER, " + "subsector INTEGER(2), " //
-							+ "cluster INTEGER, " + "orbit INTEGER(2), "
-							//
-							+ "name CHAR(40), " + "size CHAR(1), " + "color CHAR(1), " + "maxOrbits INTEGER(2) " + ");";
+
+					key = "star_num INTEGER(11) PRIMARY KEY";
+					address = String.format("sector INTEGER, subsector %s, cluster %s, orbit %s", i, i, i);
+					data = String.format("name CHAR(40), size CHAR(1), color CHAR(1), maxOrbits %s", i);
+					string = String.format("CREATE TABLE %s (%s, %s, %s);", TABLE_NAMES[0], key, address, data);
+
 					statement.executeUpdate(string);
 
 				}
 
 				// WORLDS table setup
-				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLDS'";
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 
-					string = "CREATE TABLE WORLDS(world_num INTEGER PRIMARY KEY, "
+					string = "CREATE TABLE WORLD(world_num INTEGER PRIMARY KEY, "
 							// address
 							+ "sector INTEGER, " + "subsector INTEGER(2), " //
 							+ "cluster INTEGER, " + "orbit INTEGER(2), " + "suborbit INTEGER(2), "

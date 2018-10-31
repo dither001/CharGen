@@ -1,6 +1,9 @@
 package milieu;
 
 import java.util.EnumSet;
+import java.util.Set;
+
+import rules.Dice;
 
 public enum TradeCodes {
 	AG, AS, BA, DE, FL, HI, IC, IN, LO, NA, NI, PO, RI, VA, WA;
@@ -149,4 +152,5 @@ public enum TradeCodes {
 
 		world.setTradeCodes(set);
 	}
+
 }

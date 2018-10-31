@@ -40,7 +40,7 @@ public class Planetoid implements Address, World {
 	private HashSet<Faction> factions;
 
 	// convenience
-//	private StarSystem starSystem;
+	// private StarSystem starSystem;
 	private Planetoid parent;
 	private Set<Planetoid> moons;
 	private int totalMoons;
@@ -60,7 +60,7 @@ public class Planetoid implements Address, World {
 
 	public Planetoid(int subsector, int orbit, Star homeStar, Planetoid home, Type type) {
 		this.subsector = subsector;
-		this.cluster = cluster;
+		// this.cluster = cluster;
 
 		this.parent = home;
 		this.type = type;
@@ -85,7 +85,7 @@ public class Planetoid implements Address, World {
 				scores[0] -= 5;
 			else if (orbit == 1)
 				scores[0] -= 4;
-			else if (orbit == 1)
+			else if (orbit == 2)
 				scores[0] -= 2;
 
 			if (homeStar.color == 'M')
@@ -101,7 +101,7 @@ public class Planetoid implements Address, World {
 			// validation step
 			if (type.equals(Type.SATELLITE) && scores[0] == 0) {
 				this.type = Type.RING;
-				this.name = type.toString();
+				name = this.type.toString();
 			}
 
 			if (isAsteroid())
@@ -254,7 +254,7 @@ public class Planetoid implements Address, World {
 	public void governmentSetup(World mainWorld) {
 		if (mainWorld.equals(this))
 			this.isMainWorld = true;
-		
+
 		int size = getSize();
 		int atmo = getAtmosphere();
 		int hydro = getHydrosphere();
@@ -356,24 +356,22 @@ public class Planetoid implements Address, World {
 
 			if (pop >= 6)
 				dice += 2;
-			else if (pop <= 1)
+			else if (pop == 1)
 				dice -= 2;
+			else if (pop == 0)
+				dice -= 3;
 
-			if (dice >= 10)
-				starport = 'A';
-			else if (dice == 8 || dice == 9)
-				starport = 'B';
-			else if (dice == 6 || dice == 7)
-				starport = 'C';
-			else if (dice == 5)
-				starport = 'D';
-			else if (dice == 3 || dice == 4)
-				starport = 'E';
+			if (dice >= 6)
+				starport = 'F';
+			else if (dice == 4 || dice == 5)
+				starport = 'G';
+			else if (dice == 3)
+				starport = 'H';
 			else
-				starport = 'X';
+				starport = 'Y';
 
 			this.spaceport = starport;
-//			setSpaceport(starport);
+			// setSpaceport(starport);
 		}
 
 		/*
@@ -540,7 +538,7 @@ public class Planetoid implements Address, World {
 		/*
 		 * FIXME - WORLD TAGS
 		 */
-		World.setupWorldTags(this);
+		WorldTag.setupWorldTags(this);
 
 	}
 
@@ -757,10 +755,10 @@ public class Planetoid implements Address, World {
 		this.worldFacilities = set;
 	}
 
-//	@Override
-//	public StarSystem getGroup() {
-//		return group;
-//	}
+	// @Override
+	// public StarSystem getGroup() {
+	// return group;
+	// }
 
 	@Override
 	public Type getType() {

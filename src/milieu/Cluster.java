@@ -11,7 +11,7 @@ import java.util.Set;
 
 import rules.Dice;
 
-public class StarSystem {
+public class Cluster {
 	private static int FAR_ORBIT = 32;
 
 	private static final String[] POPULATIONS = { "Scattered or no inhabitants", "Dozens of inhabitants",
@@ -46,7 +46,7 @@ public class StarSystem {
 	 * CONSTRUCTOR
 	 * 
 	 */
-	public StarSystem(int sector, int subsector, int cluster) {
+	public Cluster(int sector, int subsector, int cluster) {
 		namedObjects = 0;
 		int dice;
 
@@ -344,9 +344,9 @@ public class StarSystem {
 		 * MAIN WORLD & GOVERNMENT DESIGNATION
 		 */
 		// space objects
-		spaceObjects = spaceObjectSet(planets);
+		spaceObjects = spaceObjectList(planets);
 
-		List<Planetoid> pops = worldList();
+		List<Planetoid> pops = listWorlds();
 		Planetoid.MainWorldSort mainSort = new Planetoid.MainWorldSort();
 		Collections.sort(pops, mainSort);
 		this.populousWorlds = pops.size();
@@ -404,7 +404,7 @@ public class StarSystem {
 
 		// world tag cleanup
 		for (Iterator<Planetoid> it = pops.iterator(); it.hasNext();) {
-			World.pruneWorldTags(commonTags, it.next());
+			WorldTag.pruneWorldTags(commonTags, it.next());
 		}
 
 		/*
@@ -438,29 +438,20 @@ public class StarSystem {
 		return stars;
 	}
 
-	public List<Planetoid> spaceObjectList() {
+	public List<Planetoid> getSpaceObjects() {
 		return spaceObjects;
 	}
 
-	public List<Planetoid> gasGiantList() {
-		List<Planetoid> workingList;
-		workingList = filterForGasGiants(spaceObjectList());
-
-		return workingList;
+	public List<Planetoid> listGasGiants() {
+		return filterForGasGiants(new ArrayList<Planetoid>(getSpaceObjects()));
 	}
 
-	public List<Planetoid> worldList() {
-		List<Planetoid> workingList;
-		workingList = filterForWorlds(spaceObjectList());
-
-		return workingList;
+	public List<Planetoid> listWorlds() {
+		return filterForWorlds(new ArrayList<Planetoid>(getSpaceObjects()));
 	}
 
-	public List<Planetoid> populatedList() {
-		List<Planetoid> workingList;
-		workingList = filterForPopulous(spaceObjectList());
-
-		return workingList;
+	public List<Planetoid> listPopulated() {
+		return filterForPopulous(new ArrayList<Planetoid>(getSpaceObjects()));
 	}
 
 	/*
@@ -488,19 +479,19 @@ public class StarSystem {
 		return counter;
 	}
 
-//	public Set<Planetoid> getGasGiants() {
-//		Set<Planetoid> set = new HashSet<Planetoid>();
-//
-//		Planetoid candidate;
-//		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
-//			candidate = it.next();
-//
-//			if (candidate.isGasGiant())
-//				set.add(candidate);
-//		}
-//
-//		return set;
-//	}
+	// public Set<Planetoid> getGasGiants() {
+	// Set<Planetoid> set = new HashSet<Planetoid>();
+	//
+	// Planetoid candidate;
+	// for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+	// candidate = it.next();
+	//
+	// if (candidate.isGasGiant())
+	// set.add(candidate);
+	// }
+	//
+	// return set;
+	// }
 
 	public int numAsteroids() {
 		int counter = 0;
@@ -524,7 +515,7 @@ public class StarSystem {
 
 	public int numPopulated() {
 		// FIXME - not sure if working
-		return populatedList().size();
+		return listPopulated().size();
 	}
 
 	public char getPrimaryStarColor() {
@@ -585,68 +576,68 @@ public class StarSystem {
 	 * STATIC METHODS
 	 * 
 	 */
-	private static List<Planetoid> spaceObjectSet(List<Planetoid> planets) {
-		List<Planetoid> workingSet = new ArrayList<Planetoid>();
+	private static List<Planetoid> spaceObjectList(List<Planetoid> planets) {
+		List<Planetoid> workingList = new ArrayList<Planetoid>();
 
 		Planetoid candidate;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 
 			candidate = it.next();
-			workingSet.add(candidate);
+			workingList.add(candidate);
 			if (candidate.hasMoons()) {
 				for (Iterator<Planetoid> its = candidate.getMoons().iterator(); its.hasNext();) {
 
-					workingSet.add(its.next());
+					workingList.add(its.next());
 				}
 			}
 		}
 
-		return workingSet;
+		return workingList;
 	}
 
 	private static List<Planetoid> filterForGasGiants(List<Planetoid> planets) {
-		List<Planetoid> workingSet = new ArrayList<Planetoid>();
+		List<Planetoid> workingList = new ArrayList<Planetoid>();
 
 		Planetoid candidate;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
 			if (candidate.isGasGiant())
-				workingSet.add(candidate);
+				workingList.add(candidate);
 		}
 
-		return workingSet;
+		return workingList;
 	}
 
 	private static List<Planetoid> filterForWorlds(List<Planetoid> planets) {
-		List<Planetoid> workingSet = new ArrayList<Planetoid>();
+		List<Planetoid> workingList = new ArrayList<Planetoid>();
 
 		Planetoid candidate;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
 			if (candidate.isWorld())
-				workingSet.add(candidate);
+				workingList.add(candidate);
 		}
 
-		return workingSet;
+		return workingList;
 	}
 
 	private static List<Planetoid> filterForPopulous(List<Planetoid> planets) {
-		List<Planetoid> workingSet = new ArrayList<Planetoid>();
+		List<Planetoid> workingList = new ArrayList<Planetoid>();
 
 		Planetoid candidate;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
 			if (candidate.isWorld() && candidate.getPopulation() > 0)
-				workingSet.add(candidate);
+				workingList.add(candidate);
 		}
 
-		return workingSet;
+		return workingList;
 	}
 
-	private static void nameSetup(StarSystem group) {
+	private static void nameSetup(Cluster group) {
 		List<String> nameList = Names.worldNameList();
 		//
 		while (nameList.size() < group.namedObjects) {
