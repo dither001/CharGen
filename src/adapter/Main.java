@@ -22,9 +22,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		databaseStart();
+//		databaseStart();
 
-//		 testMainWorld();
+		 testMainWorld();
 
 		// MDrive.prototypePrint();
 		// for (int i = 0; i < 50; ++i) {
