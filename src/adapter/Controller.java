@@ -59,27 +59,39 @@ public class Controller {
 	private void databaseSetup() {
 		database = new SQLiteData(this);
 
+		starSystemSetup(0);
 		// NUM_OF_SUBSECTORS
-		for (int i = 0; i < 1; ++i)
-			subsectorSetup(0, i);
+		// for (int i = 0; i < 1; ++i)
+		// subsectorSetup(0, i);
 	}
 
-	private void subsectorSetup(int sector, int subsector) {
-		Cluster starSystem;
+	private void starSystemSetup(int starsystem) {
+		StarSystem starSystem = new StarSystem(0, 0, 0);
 
-		for (int i = 0; i < 80; ++i) {
-			if (Dice.roll(2) == 2) {
-				starSystem = new Cluster(sector, subsector, i);
+		for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
+			database.addStar(starIndex++, it.next());
 
-				for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
-					database.addStar(starIndex++, it.next());
-				
-				for (Iterator<Planetoid> it = starSystem.listWorlds().iterator(); it.hasNext();)
-					database.addWorld(worldIndex++, it.next());
-			}
-
-		}
-
+		for (Iterator<Planetoid> it = starSystem.listWorlds().iterator(); it.hasNext();)
+			database.addWorld(worldIndex++, starsystem, it.next());
 	}
+
+	// private void subsectorSetup(int sector, int subsector) {
+	// StarSystem starSystem;
+	//
+	// for (int i = 0; i < 80; ++i) {
+	// if (Dice.roll(2) == 2) {
+	// starSystem = new StarSystem(sector, subsector, i);
+	//
+	// for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
+	// database.addStar(starIndex++, it.next());
+	//
+	// for (Iterator<Planetoid> it = starSystem.listWorlds().iterator();
+	// it.hasNext();)
+	// database.addWorld(worldIndex++, it.next());
+	// }
+	//
+	// }
+	//
+	// }
 
 }

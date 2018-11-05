@@ -21,13 +21,12 @@ import adapter.Controller;
 import milieu.Address;
 import milieu.Planetoid;
 import milieu.Star;
-import milieu.Cluster;
+import milieu.StarSystem;
 import milieu.World;
 import rules.Dice;
 
 public class SQLiteData {
-	private static final String[] TABLE_NAMES = { "STAR", "WORLD" };
-	private static final String[] TABLE_INDICES = { "star_num", "world_num" };
+	private static final String[] TABLE_NAMES = { "STAR", "WORLD", "STARSYSTEM", "SPACEPORT", "ECONOMY" };
 
 	private Controller controller;
 	private static Connection connection;
@@ -48,11 +47,11 @@ public class SQLiteData {
 	 * PUBLIC METHODS
 	 */
 	public int getLastStarIndex() throws SQLException {
-		return getLastIndex(TABLE_INDICES[0], TABLE_NAMES[0]);
+		return getLastIndex("id", "STAR");
 	}
 
 	public int getLastWorldIndex() throws SQLException {
-		return getLastIndex(TABLE_INDICES[1], TABLE_NAMES[1]);
+		return getLastIndex("id", "WORLD");
 	}
 
 	private int getLastIndex(String column, String table) throws SQLException {
@@ -82,11 +81,11 @@ public class SQLiteData {
 
 		try {
 			connection.setAutoCommit(false);
-			Cluster starSystem;
+			StarSystem starSystem;
 
 			for (int i = 0; i < 80; ++i) {
 				if (Dice.roll(2) == 2) {
-					starSystem = new Cluster(sector, subsector, i);
+					starSystem = new StarSystem(sector, subsector, i);
 
 					for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();) {
 						/*
@@ -164,7 +163,7 @@ public class SQLiteData {
 		return add;
 	}
 
-	public boolean addWorld(int suppliedIndex, World world) {
+	public boolean addWorld(int suppliedIndex, int starsystem, World world) {
 		boolean add = false;
 
 		if (connection == null)
@@ -184,12 +183,17 @@ public class SQLiteData {
 					.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 
 			// cast world as "address" to access these methods
+			// statement.setString(pos++, String.valueOf(((Address) world).sector()));
+			// statement.setString(pos++, String.valueOf(((Address) world).subsector()));
+			// statement.setString(pos++, String.valueOf(((Address) world).cluster()));
+			// statement.setString(pos++, String.valueOf(((Address) world).orbit()));
+			// statement.setString(pos++, String.valueOf(((Address) world).suborbit()));
+
 			statement.setString(pos++, String.valueOf(worldIndex));
-			statement.setString(pos++, String.valueOf(((Address) world).sector()));
-			statement.setString(pos++, String.valueOf(((Address) world).subsector()));
-			statement.setString(pos++, String.valueOf(((Address) world).cluster()));
-			statement.setString(pos++, String.valueOf(((Address) world).orbit()));
-			statement.setString(pos++, String.valueOf(((Address) world).suborbit()));
+			// cast world as "planetoid" to access these methods
+//			statement.setString(pos++, String.valueOf(((Planetoid) world).starsystem()));
+			statement.setString(pos++, String.valueOf(((Planetoid) world).orbit()));
+			statement.setString(pos++, String.valueOf(((Planetoid) world).suborbit()));
 
 			// attributes
 			statement.setString(pos++, String.valueOf(world.getName()));
@@ -230,7 +234,7 @@ public class SQLiteData {
 
 		try {
 			// TODO
-			query = String.format("SELECT * FROM %s ORDER BY %s", TABLE_NAMES[0], TABLE_INDICES[0]);
+			query = String.format("SELECT * FROM %s ORDER BY %s", TABLE_NAMES[0], "id");
 			statement = connection.prepareStatement(query);
 			results = statement.executeQuery();
 
@@ -310,23 +314,23 @@ public class SQLiteData {
 
 			Statement statement;
 			String string;
-			String key, address, data;
+			String tableName, key, address, data;
 			String i = "INTEGER(2)";
 
 			try {
 				statement = connection.createStatement();
 
 				// STARS table setup
-				string = String.format("SELECT name FROM sqlite_master WHERE type='table' AND name='%s'",
-						TABLE_NAMES[0]);
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STAR'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 
-					key = "star_num INTEGER(11) PRIMARY KEY";
-					address = String.format("sector INTEGER, subsector %s, cluster %s, orbit %s", i, i, i);
+					tableName = "STAR";
+					key = "star_num INTEGER(8) PRIMARY KEY";
+					address = String.format("star_system INTEGER(8), orbit %s", i);
 					data = String.format("name CHAR(40), size CHAR(1), color CHAR(1), maxOrbits %s", i);
-					string = String.format("CREATE TABLE %s (%s, %s, %s);", TABLE_NAMES[0], key, address, data);
 
+					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address, data);
 					statement.executeUpdate(string);
 
 				}

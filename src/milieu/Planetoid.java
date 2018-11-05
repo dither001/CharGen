@@ -12,7 +12,7 @@ import milieu.Base;
 import milieu.TradeCodes;
 import rules.Dice;
 
-public class Planetoid implements Address, World {
+public class Planetoid implements World {
 	/*
 	 * PERSISTENT FIELDS
 	 */
@@ -23,6 +23,9 @@ public class Planetoid implements Address, World {
 	private int sector;
 	private int subsector;
 	private int cluster;
+
+	//
+	private int starSystem;
 	private int orbit;
 	private int suborbit;
 
@@ -660,27 +663,29 @@ public class Planetoid implements Address, World {
 	 * FIXME - INTERFACE MATHODS (move later)
 	 * 
 	 */
-	@Override
-	public int sector() {
-		return orbit;
-	}
+//	@Override
+//	public int sector() {
+//		return orbit;
+//	}
+//
+//	@Override
+//	public int subsector() {
+//		return orbit;
+//	}
+//
+//	@Override
+//	public int cluster() {
+//		return cluster;
+//	}
 
-	@Override
-	public int subsector() {
-		return orbit;
+	public int starsystem() {
+		return starSystem;
 	}
-
-	@Override
-	public int cluster() {
-		return cluster;
-	}
-
-	@Override
+	
 	public int orbit() {
 		return orbit;
 	}
 
-	@Override
 	public int suborbit() {
 		return suborbit;
 	}

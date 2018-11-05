@@ -11,7 +11,7 @@ import java.util.Set;
 
 import rules.Dice;
 
-public class Cluster {
+public class StarSystem {
 	private static int FAR_ORBIT = 32;
 
 	private static final String[] POPULATIONS = { "Scattered or no inhabitants", "Dozens of inhabitants",
@@ -46,7 +46,7 @@ public class Cluster {
 	 * CONSTRUCTOR
 	 * 
 	 */
-	public Cluster(int sector, int subsector, int cluster) {
+	public StarSystem(int sector, int subsector, int starSystem) {
 		namedObjects = 0;
 		int dice;
 
@@ -65,7 +65,7 @@ public class Cluster {
 			numberOfStars = 3;
 
 		// primary star
-		Star primary = new Star(sector, subsector, cluster, 0);
+		Star primary = new Star(sector, subsector, starSystem, 0);
 		stars.add(primary);
 		++namedObjects;
 
@@ -85,7 +85,7 @@ public class Cluster {
 				else
 					orbit = FAR_ORBIT;
 
-				stars.add(new Star(sector, subsector, cluster, orbit, primary));
+				stars.add(new Star(sector, subsector, starSystem, orbit, primary));
 				++namedObjects;
 			}
 		}
@@ -118,7 +118,7 @@ public class Cluster {
 					else
 						orbit = orbit + (dice - 3 + Dice.roll(6));
 
-					stars.add(new Star(sector, subsector, cluster, orbit, primary));
+					stars.add(new Star(sector, subsector, starSystem, orbit, primary));
 					++namedObjects;
 
 				}
@@ -637,7 +637,7 @@ public class Cluster {
 		return workingList;
 	}
 
-	private static void nameSetup(Cluster group) {
+	private static void nameSetup(StarSystem group) {
 		List<String> nameList = Names.worldNameList();
 		//
 		while (nameList.size() < group.namedObjects) {

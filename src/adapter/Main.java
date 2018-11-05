@@ -8,7 +8,7 @@ import java.util.Set;
 import actor.*;
 import actor.Class;
 import milieu.Star;
-import milieu.Cluster;
+import milieu.StarSystem;
 import vessel.MDrive;
 import vessel.Spaceship;
 
@@ -22,9 +22,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-//		databaseStart();
+		databaseStart();
 
-		 testMainWorld();
+//		 testMainWorld();
 
 		// MDrive.prototypePrint();
 		// for (int i = 0; i < 50; ++i) {
@@ -83,7 +83,7 @@ public class Main {
 	}
 
 	public static void testMainWorld() {
-		Cluster group = new Cluster(0, 0, 0);
+		StarSystem group = new StarSystem(0, 0, 0);
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();
