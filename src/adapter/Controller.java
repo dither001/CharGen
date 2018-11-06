@@ -68,8 +68,10 @@ public class Controller {
 	private void starSystemSetup(int starsystem) {
 		StarSystem starSystem = new StarSystem(0, 0, 0);
 
+		database.addStarSystem(starsystem, 0, starSystem);
+		
 		for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
-			database.addStar(starIndex++, it.next());
+			database.addStar(starIndex++, 0, it.next());
 
 		for (Iterator<Planetoid> it = starSystem.listWorlds().iterator(); it.hasNext();)
 			database.addWorld(worldIndex++, starsystem, it.next());

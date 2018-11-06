@@ -13,6 +13,8 @@ public class Star implements Address {
 	protected int sector;
 	protected int subsector;
 	protected int cluster;
+	
+	protected int starsystem;
 	protected int orbit;
 	protected int suborbit;
 
@@ -130,6 +132,10 @@ public class Star implements Address {
 		return index;
 	}
 
+	public int starsystem() {
+		return starsystem;
+	}
+	
 	@Override
 	public int sector() {
 		return sector;

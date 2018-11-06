@@ -119,7 +119,44 @@ public class SQLiteData {
 		return add;
 	}
 
-	public boolean addStar(int suppliedIndex, Star star) {
+	public boolean addStarSystem(int suppliedIndex, int ssIndex, StarSystem ss) {
+		boolean add = false;
+
+		if (connection == null)
+			connect();
+
+		int systemIndex;
+		if (ss.isPersistent())
+			systemIndex = ss.getIndex();
+		else
+			systemIndex = suppliedIndex;
+
+		PreparedStatement statement;
+		String string = String.format("INSERT INTO %s VALUES( ?, ?, ?, ?, ?, ?, ? );", TABLE_NAMES[0]);
+		try {
+			// FIXME - this performs insert
+			int pos = 1;
+			statement = connection.prepareStatement(string);
+
+			// address (doesn't use sub-orbit)
+			statement.setString(pos++, String.valueOf(systemIndex));
+
+			// attributes
+			// TODO
+
+			statement.execute();
+			add = true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
+
+		}
+
+		return add;
+	}
+
+	public boolean addStar(int suppliedIndex, int starsystem, Star star) {
 		boolean add = false;
 
 		if (connection == null)
@@ -132,7 +169,7 @@ public class SQLiteData {
 			starIndex = suppliedIndex;
 
 		PreparedStatement statement;
-		String string = String.format("INSERT INTO %s VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? );", TABLE_NAMES[0]);
+		String string = String.format("INSERT INTO %s VALUES( ?, ?, ?, ?, ?, ?, ? );", TABLE_NAMES[0]);
 		try {
 			// FIXME - this performs insert
 			int pos = 1;
@@ -140,9 +177,8 @@ public class SQLiteData {
 
 			// address (doesn't use sub-orbit)
 			statement.setString(pos++, String.valueOf(starIndex));
-			statement.setString(pos++, String.valueOf(star.sector()));
-			statement.setString(pos++, String.valueOf(star.subsector()));
-			statement.setString(pos++, String.valueOf(star.cluster()));
+			statement.setString(pos++, String.valueOf(starsystem));
+			// statement.setString(pos++, String.valueOf(star.starsystem()));
 			statement.setString(pos++, String.valueOf(star.orbit()));
 
 			// attributes
@@ -191,7 +227,7 @@ public class SQLiteData {
 
 			statement.setString(pos++, String.valueOf(worldIndex));
 			// cast world as "planetoid" to access these methods
-//			statement.setString(pos++, String.valueOf(((Planetoid) world).starsystem()));
+			// statement.setString(pos++, String.valueOf(((Planetoid) world).starsystem()));
 			statement.setString(pos++, String.valueOf(((Planetoid) world).orbit()));
 			statement.setString(pos++, String.valueOf(((Planetoid) world).suborbit()));
 
@@ -315,10 +351,24 @@ public class SQLiteData {
 			Statement statement;
 			String string;
 			String tableName, key, address, data;
-			String i = "INTEGER(2)";
 
 			try {
 				statement = connection.createStatement();
+
+				// STAR-SYSTEM table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARSYSTEM'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "STARSYSTEM";
+					key = "id INTEGER PRIMARY KEY";
+					address = String.format("sector INTEGER, subsector INTEGER");
+					// data = String.format("name CHAR, size CHAR, color CHAR, maxOrbits %s");
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address);
+					statement.executeUpdate(string);
+
+				}
 
 				// STARS table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STAR'";
@@ -326,9 +376,9 @@ public class SQLiteData {
 					statement = connection.createStatement();
 
 					tableName = "STAR";
-					key = "star_num INTEGER(8) PRIMARY KEY";
-					address = String.format("star_system INTEGER(8), orbit %s", i);
-					data = String.format("name CHAR(40), size CHAR(1), color CHAR(1), maxOrbits %s", i);
+					key = "id INTEGER PRIMARY KEY";
+					address = String.format("FOREIGN KEY (star_system) INTEGER, orbit INTEGER");
+					data = String.format("name CHAR, size CHAR, color CHAR, maxOrbits INTEGER");
 
 					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address, data);
 					statement.executeUpdate(string);
@@ -352,6 +402,24 @@ public class SQLiteData {
 							//
 							+ "government INTEGER(2), " + "law INTEGER(2), " + "techLevel INTEGER(2), "
 							+ "spaceport CHAR(1) " + ");";
+
+					String fk = "FOREIGN KEY(spaceport) REFERENCES SPACEPORT(id)";
+
+					statement.executeUpdate(string);
+				}
+
+				// SPACEPORT table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='SPACEPORT'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "SPACEPORT";
+					key = "id INTEGER(8) PRIMARY KEY";
+					address = String.format("star_system INTEGER(8), orbit INTEGER");
+					data = String.format("name CHAR(40), size CHAR(1), color CHAR(1), maxOrbits INTEGER");
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address, data);
+
 					statement.executeUpdate(string);
 				}
 

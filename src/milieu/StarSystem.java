@@ -23,6 +23,10 @@ public class StarSystem {
 	 * INSTANCE FIELDS
 	 * 
 	 */
+	protected int index;
+	protected boolean isPersistent;
+	protected boolean hasChanged;
+
 	private List<Star> stars;
 
 	private int maxOrbits;
@@ -434,6 +438,18 @@ public class StarSystem {
 	 * INSTANCE METHODS
 	 * 
 	 */
+	public boolean isPersistent() {
+		return isPersistent;
+	}
+
+	public boolean hasChanged() {
+		return hasChanged;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+	
 	public List<Star> starList() {
 		return stars;
 	}
