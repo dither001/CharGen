@@ -19,10 +19,12 @@ import javax.swing.JOptionPane;
 
 import adapter.Controller;
 import milieu.Address;
+import milieu.Base;
 import milieu.Planetoid;
 import milieu.Star;
 import milieu.StarSystem;
 import milieu.World;
+import milieu.WorldTag;
 import milieu.WorldType;
 import rules.Dice;
 
@@ -81,12 +83,16 @@ public class SQLiteData {
 		int systemIndex = 0;
 		int starIndex = 0;
 		int worldIndex = 0;
+		int baseIndex = 0;
 
 		try {
 			// connection.setAutoCommit(false);
 			StarSystem starSystem;
 			PreparedStatement statement;
 
+			Star star;
+			World world;
+			Base base;
 			for (int i = 0; i < SYSTEMS_PER_SUBSECTOR; ++i) {
 				int pos;
 				if (Dice.roll(2) == 2) {
@@ -108,7 +114,7 @@ public class SQLiteData {
 					statement = connection.prepareStatement("INSERT INTO STAR VALUES( ?, ?, ?, ?, ?, ?, ? );");
 					for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();) {
 						pos = 1;
-						Star star = it.next();
+						star = it.next();
 
 						try {
 							statement.setString(pos++, String.valueOf(starIndex));
@@ -131,12 +137,12 @@ public class SQLiteData {
 						// last step
 						++starIndex;
 					}
-
-					statement = connection
-							.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+					
 					for (Iterator<Planetoid> it = starSystem.getSpaceObjects().iterator(); it.hasNext();) {
+						statement = connection
+								.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 						pos = 1;
-						World world = it.next();
+						world = it.next();
 
 						try {
 							statement.setString(pos++, String.valueOf(worldIndex));
@@ -156,6 +162,17 @@ public class SQLiteData {
 							//
 							statement.setString(pos++, String.valueOf(world.getTechLevel()));
 							statement.execute();
+							
+							statement = connection
+									.prepareStatement("INSERT INTO BASE VALUES( ?, ?, ? );");
+							for (Iterator<Base> its = world.getWorldFacilities().iterator(); it.hasNext();) {
+								pos = 1;
+								base = its.next();
+								
+								statement.setString(pos++, String.valueOf(baseIndex));
+								statement.setString(pos++, String.valueOf(worldIndex));
+								statement.setString(pos++, String.valueOf(worldIndex));
+							}
 						} catch (SQLException e) {
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error",
@@ -511,6 +528,25 @@ public class SQLiteData {
 					statement.executeUpdate(string);
 				}
 
+				// BASE table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='BASE'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "BASE";
+					key = "id INTEGER PRIMARY KEY";
+					address = "world_id INTEGER";
+
+					//
+					data = "type VARCHAR";
+
+					//
+					fk = "FOREIGN KEY (world_id) REFERENCES WORLD(id)";
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, key, address, data, fk);
+					statement.executeUpdate(string);
+				}
+
 				// SPACEPORT table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='SPACEPORT'";
 				if (!statement.executeQuery(string).next()) {
@@ -545,6 +581,75 @@ public class SQLiteData {
 					statement.executeUpdate(string);
 
 				}
+
+				/*
+				 * STATIC TABLE INITIALIZATION 
+				 * 
+				 */
+				PreparedStatement prep;
+
+				// GOV_TYPE table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='GOV_TYPE'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "GOV_TYPE";
+					key = "id INTEGER PRIMARY KEY";
+					data = "type TEXT";
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+				}
+
+				string = String.format("INSERT INTO GOV_TYPE VALUES( ?, ? );");
+				try {
+					int length = World.GOVERNMENT_TYPES.length;
+					prep= connection.prepareStatement(string);
+
+					for (int i = 0; i < length; ++i) {
+						prep.setString(1, String.valueOf(i));
+						prep.setString(2, String.valueOf(World.GOVERNMENT_TYPES[i]));
+						prep.execute();
+					}
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
+
+				}				
+
+				// WORLD_TAG table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_TAG'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "WORLD_TAG";
+					key = "id INTEGER PRIMARY KEY";
+					data = "tag VARCHAR";
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+				}
+
+				string = String.format("INSERT INTO WORLD_TAG VALUES( ?, ? );");
+				try {
+					int length = WorldTag.ALL_TAGS.length;
+					prep= connection.prepareStatement(string);
+
+					for (int i = 0; i < length; ++i) {
+						prep.setString(1, String.valueOf(i));
+						prep.setString(2, String.valueOf(WorldTag.ALL_TAGS[i]));
+						prep.execute();
+					}
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
+
+				}				
+
+
+
 
 			} catch (SQLException e) {
 				e.printStackTrace();

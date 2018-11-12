@@ -3,6 +3,9 @@ package milieu;
 public enum WorldType {
 	EMPTY, STANDARD, ASTEROID, CAPTURED, SATELLITE, RING, SMALL_GIANT, LARGE_GIANT;
 
+	// static fields
+	public static final WorldType[] WORLD_TYPES = { EMPTY, STANDARD, ASTEROID, CAPTURED, SATELLITE, RING, SMALL_GIANT, LARGE_GIANT };
+	
 	/*
 	 * STATIC METHODS
 	 */

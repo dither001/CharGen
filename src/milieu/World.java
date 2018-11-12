@@ -14,8 +14,13 @@ public interface World {
 	 * STATIC FIELDS
 	 * 
 	 */
-	public static int worldIndex = 0;
+	public static final String[] GOVERNMENT_TYPES = { "No Government", "Corporation",
+			"Democracy, Participating", "Oligarchy, Self-perpetuating", "Democracy, Representative",
+			"Technocracy, Feudal", "Captive Government", "Balkanization", "Bureaucracy, Civil Service",
+			"Bureaucracy, Impersonal", "Dictatorship, Charismatic", "Dictatorship, Non-charismatic",
+			"Oligarchy, Charismatic", "Dictatorship, Religious" };
 
+	public static int worldIndex = 0;
 
 	/*
 	 * COMPARATOR CLASSES
@@ -55,7 +60,7 @@ public interface World {
 	public int getIndex();
 
 	public boolean isPersistent();
-	
+
 	public boolean habitable();
 
 	public boolean mainWorld();
@@ -76,7 +81,7 @@ public interface World {
 
 	public void setWorldFacilities(EnumSet<Base> set);
 
-//	public StarSystem getGroup();
+	// public StarSystem getGroup();
 
 	public WorldType getType();
 
@@ -130,22 +135,22 @@ public interface World {
 		return nameable;
 	}
 
-//	public boolean isMainWorld() {
-//		boolean isMainWorld = false;
-//		Planetoid mainWorld = getGroup().getMainWorld();
-//		if (this.equals(mainWorld))
-//			isMainWorld = true;
-//
-//		return isMainWorld;
-//	}
+	// public boolean isMainWorld() {
+	// boolean isMainWorld = false;
+	// Planetoid mainWorld = getGroup().getMainWorld();
+	// if (this.equals(mainWorld))
+	// isMainWorld = true;
+	//
+	// return isMainWorld;
+	// }
 
-//	public default Planetoid getMainWorld() {
-//		return getGroup().getMainWorld();
-//	}
+	// public default Planetoid getMainWorld() {
+	// return getGroup().getMainWorld();
+	// }
 
-//	public default int getHabitableZone() {
-//		return getGroup().getHabitableZone();
-//	}
+	// public default int getHabitableZone() {
+	// return getGroup().getHabitableZone();
+	// }
 
 	public default boolean isEmpty() {
 		return getType().equals(WorldType.EMPTY);

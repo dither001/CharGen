@@ -6,10 +6,10 @@ import rules.Dice;
 
 public enum Base {
 	NAVY, SCOUT, FARM, MINE, COLONY, LAB, MILITARY;
-	
+
 	public static void setupFacilities(World world, World mainWorld) {
 		EnumSet<Base> set = EnumSet.noneOf(Base.class);
-		
+
 		int size = world.getSize();
 		int atmo = world.getAtmosphere();
 		int hydro = world.getHydrosphere();
@@ -17,7 +17,7 @@ public enum Base {
 		int gov = world.getGovernment();
 		int law = world.getLawLevel();
 		char starport = world.getSpaceport();
-		
+
 		int dice;
 		if (world.mainWorld()) {
 			// NAVAL BASE
@@ -114,5 +114,37 @@ public enum Base {
 
 		world.setWorldFacilities(set);
 	}
-	
+
+	public static int baseIndex(Base base) {
+		int index = 0;
+
+		switch (base) {
+		case NAVY:
+			index = 0;
+			break;
+		case SCOUT:
+			index = 1;
+			break;
+		case FARM:
+			index = 2;
+			break;
+		case MINE:
+			index = 3;
+			break;
+		case COLONY:
+			index = 4;
+			break;
+		case LAB:
+			index = 5;
+			break;
+		case MILITARY:
+			index = 6;
+			break;
+		default:
+			break;
+		}
+
+		return index;
+	}
+
 }
