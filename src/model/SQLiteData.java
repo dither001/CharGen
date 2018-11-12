@@ -23,10 +23,11 @@ import milieu.Planetoid;
 import milieu.Star;
 import milieu.StarSystem;
 import milieu.World;
+import milieu.WorldType;
 import rules.Dice;
 
 public class SQLiteData {
-	private static final String[] TABLE_NAMES = { "STAR", "WORLD", "STARSYSTEM", "SPACEPORT", "ECONOMY" };
+	private static final int SYSTEMS_PER_SUBSECTOR = 80;
 
 	private Controller controller;
 	private static Connection connection;
@@ -50,6 +51,10 @@ public class SQLiteData {
 		return getLastIndex("id", "STAR");
 	}
 
+	public int getLastSystemIndex() throws SQLException {
+		return getLastIndex("id", "STARSYSTEM");
+	}
+
 	public int getLastWorldIndex() throws SQLException {
 		return getLastIndex("id", "WORLD");
 	}
@@ -58,68 +63,132 @@ public class SQLiteData {
 		String string = String.format("SELECT %s FROM %s ORDER BY %s DESC LIMIT 1;", column, table, column);
 		PreparedStatement statement = connection.prepareStatement(string);
 
-		ResultSet results;
 		int index = 0;
-		try {
-			results = statement.executeQuery(string);
+		ResultSet results = statement.executeQuery(string);
+		if (results.next()) {
 			index = results.getInt(column);
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
 		return index;
 	}
 
-	public boolean addSubsector(int sector, int subsector) throws SQLException {
+	public boolean addSubsector(int sector) {
 		boolean add = false;
 
 		if (connection == null)
 			connect();
 
-		int starIndex = getLastStarIndex();
-		int worldIndex = getLastWorldIndex();
+		int systemIndex = 0;
+		int starIndex = 0;
+		int worldIndex = 0;
 
 		try {
-			connection.setAutoCommit(false);
+			// connection.setAutoCommit(false);
 			StarSystem starSystem;
+			PreparedStatement statement;
 
-			for (int i = 0; i < 80; ++i) {
+			for (int i = 0; i < SYSTEMS_PER_SUBSECTOR; ++i) {
+				int pos;
 				if (Dice.roll(2) == 2) {
-					starSystem = new StarSystem(sector, subsector, i);
+					pos = 1;
+					starSystem = new StarSystem(sector, i, systemIndex);
 
+					String string = String.format("INSERT INTO STARSYSTEM VALUES( ?, ?, ? );");
+					statement = connection.prepareStatement(string);
+
+					//
+					statement.setString(pos++, String.valueOf(systemIndex));
+					statement.setString(pos++, String.valueOf(sector));
+					statement.setString(pos++, String.valueOf(i));
+					statement.execute();
+
+					/*
+					 * INSERT STARS
+					 */
+					statement = connection.prepareStatement("INSERT INTO STAR VALUES( ?, ?, ?, ?, ?, ?, ? );");
 					for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();) {
-						/*
-						 * TODO - contains entire statement thing from addStar
-						 * 
-						 */
+						pos = 1;
+						Star star = it.next();
 
+						try {
+							statement.setString(pos++, String.valueOf(starIndex));
+							statement.setString(pos++, String.valueOf(systemIndex));
+
+							statement.setString(pos++, String.valueOf(star.orbit()));
+							statement.setString(pos++, star.getName());
+							statement.setString(pos++, String.valueOf(star.getSize()));
+							statement.setString(pos++, String.valueOf(star.getColor()));
+							statement.setString(pos++, String.valueOf(star.maxOrbits()));
+							statement.execute();
+
+						} catch (SQLException e) {
+							e.printStackTrace();
+							JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error",
+									JOptionPane.ERROR_MESSAGE);
+
+						}
+
+						// last step
+						++starIndex;
 					}
 
-					// listWorlds() doesn't return RINGS or GAS GIANTS
-					for (Iterator<Planetoid> it = starSystem.listWorlds().iterator(); it.hasNext();) {
-						/*
-						 * TODO - contains entire statement thing from addWorld
-						 * 
-						 */
+					statement = connection
+							.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+					for (Iterator<Planetoid> it = starSystem.getSpaceObjects().iterator(); it.hasNext();) {
+						pos = 1;
+						World world = it.next();
 
+						try {
+							statement.setString(pos++, String.valueOf(worldIndex));
+							statement.setString(pos++, String.valueOf(systemIndex));
+
+							statement.setString(pos++, String.valueOf(((Planetoid) world).orbit()));
+							statement.setString(pos++, String.valueOf(world.getName()));
+							statement.setString(pos++, String.valueOf(WorldType.typeIndex(world.getType())));
+
+							statement.setString(pos++, String.valueOf(world.getSize()));
+							statement.setString(pos++, String.valueOf(world.getAtmosphere()));
+							statement.setString(pos++, String.valueOf(world.getHydrosphere()));
+							statement.setString(pos++, String.valueOf(world.getPopulation()));
+							statement.setString(pos++, String.valueOf(world.getGovernment()));
+							statement.setString(pos++, String.valueOf(world.getLawLevel()));
+
+							//
+							statement.setString(pos++, String.valueOf(world.getTechLevel()));
+							statement.execute();
+						} catch (SQLException e) {
+							e.printStackTrace();
+							JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error",
+									JOptionPane.ERROR_MESSAGE);
+
+						}
+
+						// last step
+						++worldIndex;
 					}
+					// connection.commit();
+					++systemIndex;
 				}
 
-				connection.commit();
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 
 		} finally {
-			connection.setAutoCommit(true);
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 
 		return add;
 	}
 
-	public boolean addStarSystem(int suppliedIndex, int ssIndex, StarSystem ss) {
+	public boolean insertStarSystem(int ssIndex, StarSystem ss) {
 		boolean add = false;
 
 		if (connection == null)
@@ -129,10 +198,10 @@ public class SQLiteData {
 		if (ss.isPersistent())
 			systemIndex = ss.getIndex();
 		else
-			systemIndex = suppliedIndex;
+			systemIndex = 0;
 
 		PreparedStatement statement;
-		String string = String.format("INSERT INTO %s VALUES( ?, ?, ?, ?, ?, ?, ? );", TABLE_NAMES[0]);
+		String string = String.format("INSERT INTO STARSYSTEM VALUES( ?, ?, ? );");
 		try {
 			// FIXME - this performs insert
 			int pos = 1;
@@ -156,7 +225,7 @@ public class SQLiteData {
 		return add;
 	}
 
-	public boolean addStar(int suppliedIndex, int starsystem, Star star) {
+	public boolean insertStar(int starsystem, Star star) {
 		boolean add = false;
 
 		if (connection == null)
@@ -166,10 +235,10 @@ public class SQLiteData {
 		if (star.isPersistent())
 			starIndex = star.getIndex();
 		else
-			starIndex = suppliedIndex;
+			starIndex = 0;
 
 		PreparedStatement statement;
-		String string = String.format("INSERT INTO %s VALUES( ?, ?, ?, ?, ?, ?, ? );", TABLE_NAMES[0]);
+		String string = String.format("INSERT INTO STAR VALUES( ?, ?, ?, ?, ?, ?, ? );");
 		try {
 			// FIXME - this performs insert
 			int pos = 1;
@@ -199,7 +268,7 @@ public class SQLiteData {
 		return add;
 	}
 
-	public boolean addWorld(int suppliedIndex, int starsystem, World world) {
+	public boolean insertWorld(int starsystem, World world) {
 		boolean add = false;
 
 		if (connection == null)
@@ -209,7 +278,7 @@ public class SQLiteData {
 		if (world.isPersistent())
 			worldIndex = world.getIndex();
 		else
-			worldIndex = suppliedIndex;
+			worldIndex = 0;
 
 		try {
 			PreparedStatement statement;
@@ -270,7 +339,7 @@ public class SQLiteData {
 
 		try {
 			// TODO
-			query = String.format("SELECT * FROM %s ORDER BY %s", TABLE_NAMES[0], "id");
+			query = String.format("SELECT * FROM STAR ORDER BY id");
 			statement = connection.prepareStatement(query);
 			results = statement.executeQuery();
 
@@ -286,11 +355,11 @@ public class SQLiteData {
 	 * PRIVATE METHODS
 	 */
 	private boolean starExists(int index) {
-		return recordExists(index, TABLE_NAMES[0]);
+		return recordExists(index, "STAR");
 	}
 
 	private boolean worldExists(int index) {
-		return recordExists(index, TABLE_NAMES[1]);
+		return recordExists(index, "WORLD");
 	}
 
 	private boolean recordExists(int index, String table) {
@@ -315,6 +384,10 @@ public class SQLiteData {
 		return recordExists;
 	}
 
+	/*
+	 * CONNECT TO DATABASE
+	 * 
+	 */
 	private void connect() {
 		String filename = "Project.db";
 
@@ -333,6 +406,13 @@ public class SQLiteData {
 				String databaseFilePath = "jdbc:sqlite:" + homedir + filename;
 
 				connection = DriverManager.getConnection(databaseFilePath);
+				Statement statement = connection.createStatement();
+				ResultSet test = statement.executeQuery("PRAGMA foreign_keys = ON;");
+
+				if (test == null)
+					System.out.println("Null");
+				else
+					System.out.println("Not null");
 
 			} catch (SQLException | ClassNotFoundException e2) {
 				e2.printStackTrace();
@@ -350,12 +430,12 @@ public class SQLiteData {
 
 			Statement statement;
 			String string;
-			String tableName, key, address, data;
+			String tableName, key, address, data, fk;
 
 			try {
 				statement = connection.createStatement();
 
-				// STAR-SYSTEM table setup
+				// STARSYSTEM table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARSYSTEM'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
@@ -365,46 +445,69 @@ public class SQLiteData {
 					address = String.format("sector INTEGER, subsector INTEGER");
 					// data = String.format("name CHAR, size CHAR, color CHAR, maxOrbits %s");
 
-					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address);
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, address);
 					statement.executeUpdate(string);
 
 				}
 
-				// STARS table setup
+				// ECONOMY table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='ECONOMY'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "ECONOMY";
+					key = "id INTEGER PRIMARY KEY";
+					data = String.format("resources INTEGER, labor INTEGER, infrastructure INTEGER, culture INTEGER");
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+
+				}
+
+				// STAR table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STAR'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 
 					tableName = "STAR";
 					key = "id INTEGER PRIMARY KEY";
-					address = String.format("FOREIGN KEY (star_system) INTEGER, orbit INTEGER");
-					data = String.format("name CHAR, size CHAR, color CHAR, maxOrbits INTEGER");
+					address = "system_id INTEGER";
 
-					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address, data);
+					data = "orbit INTEGER, name VARCHAR, size VARCHAR, color VARCHAR, maxOrbits INTEGER";
+
+					fk = "FOREIGN KEY (system_id) REFERENCES STARSYSTEM(id)";
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, key, address, data, fk);
 					statement.executeUpdate(string);
-
 				}
 
-				// WORLDS table setup
+				// WORLDTYPE table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLDTYPE'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+					string = "CREATE TABLE WORLDTYPE(id INTEGER PRIMARY KEY, name VARCHAR);";
+					statement.executeUpdate(string);
+				}
+
+				// WORLD table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD'";
 				if (!statement.executeQuery(string).next()) {
 					statement = connection.createStatement();
 
-					string = "CREATE TABLE WORLD(world_num INTEGER PRIMARY KEY, "
-							// address
-							+ "sector INTEGER, " + "subsector INTEGER(2), " //
-							+ "cluster INTEGER, " + "orbit INTEGER(2), " + "suborbit INTEGER(2), "
-							//
-							+ "name CHAR(40), "
-							//
-							+ "size INTEGER(2), " + "atmosphere INTEGER(2), " + "hydrosphere INTEGER(2), "
-							+ "population INTEGER(2), "
-							//
-							+ "government INTEGER(2), " + "law INTEGER(2), " + "techLevel INTEGER(2), "
-							+ "spaceport CHAR(1) " + ");";
+					tableName = "WORLD";
+					key = "id INTEGER PRIMARY KEY";
+					address = "system_id INTEGER";
 
-					String fk = "FOREIGN KEY(spaceport) REFERENCES SPACEPORT(id)";
+					//
+					data = "orbit INTEGER, name VARCHAR, world_type INTEGER";
+					data += ", size INTEGER, atmosphere INTEGER, hydrosphere INTEGER, population INTEGER, government INTEGER, lawLevel INTEGER";
+					data += ", techLevel INTEGER";
 
+					//
+					fk = "FOREIGN KEY (system_id) REFERENCES STARSYSTEM(id)";
+					// fk += ", FOREIGN KEY (world_type) REFERENCES WORLDTYPE(id)";
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, key, address, data, fk);
 					statement.executeUpdate(string);
 				}
 
@@ -414,13 +517,33 @@ public class SQLiteData {
 					statement = connection.createStatement();
 
 					tableName = "SPACEPORT";
-					key = "id INTEGER(8) PRIMARY KEY";
-					address = String.format("star_system INTEGER(8), orbit INTEGER");
-					data = String.format("name CHAR(40), size CHAR(1), color CHAR(1), maxOrbits INTEGER");
+					key = "id INTEGER PRIMARY KEY";
+					address = "system_id INTEGER";
+
+					//
+					data = "world_id INTEGER, class VARCHAR, docking_fee INTEGER";
+
+					//
+					fk = "FOREIGN KEY (system_id) REFERENCES STARSYSTEM(id)";
+					fk += ", FOREIGN KEY (world_id) REFERENCES WORLD(id)";
 
 					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address, data);
 
 					statement.executeUpdate(string);
+				}
+
+				// WORLD_ECONOMY table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_ECONOMY'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "WORLD_ECONOMY";
+					key = "id INTEGER PRIMARY KEY";
+					data = String.format("resources INTEGER, labor INTEGER, infrastructure INTEGER, culture INTEGER");
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+
 				}
 
 			} catch (SQLException e) {

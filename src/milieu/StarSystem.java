@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -38,12 +37,7 @@ public class StarSystem {
 	/*
 	 * CONVENIENCE
 	 */
-
-	// private char starport;
-	// private int habitableZone, unavailableZones, innerZone;
 	private Planetoid mainWorld;
-	private Set<Faction> factions;
-
 	private Set<WorldTag> commonTags;
 
 	/*
@@ -266,20 +260,20 @@ public class StarSystem {
 			 * KNOWN OBJECT PLACEMENT
 			 */
 			planets = new ArrayList<Planetoid>();
-			Type planet;
+			WorldType planet;
 			boolean contains = Dice.containsIntegerOrGreater(habitableZone, available);
 
 			// empty orbit placement
-			planet = Type.EMPTY;
+			planet = WorldType.EMPTY;
 			while (emptyOrbits > 0) {
-				planets.add(new Planetoid(subsector, available.remove(0), star, planet));
+				planets.add(new Planetoid(available.remove(0), star, planet));
 				--emptyOrbits;
 			}
 
 			// captured world placement
-			planet = Type.CAPTURED;
+			planet = WorldType.CAPTURED;
 			while (capturedPlanets > 0) {
-				planets.add(new Planetoid(subsector, Dice.roll(2, 6), star, planet));
+				planets.add(new Planetoid(Dice.roll(2, 6), star, planet));
 				++namedObjects;
 				--capturedPlanets;
 			}
@@ -287,17 +281,17 @@ public class StarSystem {
 			// gas giant placement
 			while (gasGiants > 0) {
 				contains = Dice.containsIntegerOrGreater(habitableZone, available);
-				planet = (Dice.roll(2) == 1) ? Type.LARGE_GIANT : Type.SMALL_GIANT;
+				planet = (Dice.roll(2) == 1) ? WorldType.LARGE_GIANT : WorldType.SMALL_GIANT;
 
 				if (contains && available.get(0) >= habitableZone) {
-					planets.add(new Planetoid(subsector, available.remove(0), star, planet));
+					planets.add(new Planetoid(available.remove(0), star, planet));
 					++namedObjects;
 					--gasGiants;
 				} else if (contains && available.get(0) < habitableZone) {
 					Collections.rotate(available, 1);
 
 				} else {
-					planets.add(new Planetoid(subsector, ++outermostOrbit, star, planet));
+					planets.add(new Planetoid(++outermostOrbit, star, planet));
 					++namedObjects;
 					--gasGiants;
 				}
@@ -308,7 +302,7 @@ public class StarSystem {
 			Collections.shuffle(worldlist);
 
 			int candidate;
-			planet = Type.ASTEROID;
+			planet = WorldType.ASTEROID;
 
 			Iterator<Planetoid> it = worldlist.iterator();
 			Planetoid prospective;
@@ -320,14 +314,14 @@ public class StarSystem {
 
 					if (contains) {
 						int index = available.indexOf(candidate);
-						planets.add(new Planetoid(subsector, available.remove(index), star, planet));
+						planets.add(new Planetoid(available.remove(index), star, planet));
 						++namedObjects;
 						--asteroids;
 					}
 				}
 
 				if (available.size() > 0 && asteroids > 0) {
-					planets.add(new Planetoid(subsector, available.remove(0), star, planet));
+					planets.add(new Planetoid(available.remove(0), star, planet));
 					++namedObjects;
 					--asteroids;
 
@@ -335,9 +329,9 @@ public class StarSystem {
 			}
 
 			// remaining available orbits
-			planet = Type.STANDARD;
+			planet = WorldType.STANDARD;
 			while (available.size() > 0) {
-				planets.add(new Planetoid(subsector, available.remove(0), star, planet));
+				planets.add(new Planetoid(available.remove(0), star, planet));
 				++namedObjects;
 			}
 
@@ -419,15 +413,6 @@ public class StarSystem {
 		/*
 		 * FACTION SETUP
 		 */
-		factions = new HashSet<Faction>();
-
-		for (Iterator<Planetoid> it = pops.iterator(); it.hasNext();) {
-			it.next().factionSetup();
-		}
-
-		for (Iterator<Planetoid> it = pops.iterator(); it.hasNext();) {
-			factions.addAll(it.next().getFactions());
-		}
 
 		/*
 		 * END OF CONSTRUCTOR
@@ -449,7 +434,7 @@ public class StarSystem {
 	public int getIndex() {
 		return index;
 	}
-	
+
 	public List<Star> starList() {
 		return stars;
 	}
@@ -462,8 +447,16 @@ public class StarSystem {
 		return filterForGasGiants(new ArrayList<Planetoid>(getSpaceObjects()));
 	}
 
+	public List<Planetoid> listAllWorlds() {
+		return new ArrayList<Planetoid>(getSpaceObjects());
+	}
+
 	public List<Planetoid> listWorlds() {
 		return filterForWorlds(new ArrayList<Planetoid>(getSpaceObjects()));
+	}
+
+	public List<Planetoid> listNonWorlds() {
+		return filterForNonWorlds(new ArrayList<Planetoid>(getSpaceObjects()));
 	}
 
 	public List<Planetoid> listPopulated() {
@@ -633,6 +626,20 @@ public class StarSystem {
 			candidate = it.next();
 
 			if (candidate.isWorld())
+				workingList.add(candidate);
+		}
+
+		return workingList;
+	}
+
+	private static List<Planetoid> filterForNonWorlds(List<Planetoid> planets) {
+		List<Planetoid> workingList = new ArrayList<Planetoid>();
+
+		Planetoid candidate;
+		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
+			candidate = it.next();
+
+			if (!candidate.isWorld())
 				workingList.add(candidate);
 		}
 

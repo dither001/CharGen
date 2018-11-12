@@ -20,10 +20,6 @@ public class Planetoid implements World {
 	private boolean isPersistent;
 	private boolean hasChanged;
 
-	private int sector;
-	private int subsector;
-	private int cluster;
-
 	//
 	private int starSystem;
 	private int orbit;
@@ -31,7 +27,7 @@ public class Planetoid implements World {
 
 	private boolean isMainWorld;
 	private String name;
-	private Type type;
+	private WorldType type;
 	private boolean habitable;
 	//
 	private int[] scores;
@@ -40,7 +36,6 @@ public class Planetoid implements World {
 	//
 	private EnumSet<Base> worldFacilities;
 	private EnumSet<WorldTag> worldTags;
-	private HashSet<Faction> factions;
 
 	// convenience
 	// private StarSystem starSystem;
@@ -53,16 +48,15 @@ public class Planetoid implements World {
 	 * CONSTRUCTORS
 	 * 
 	 */
-	public Planetoid(int subsector, int orbit, Star homeStar) {
-		this(subsector, orbit, homeStar, Type.STANDARD);
+	public Planetoid(int orbit, Star homeStar) {
+		this(orbit, homeStar, WorldType.STANDARD);
 	}
 
-	public Planetoid(int subsector, int orbit, Star homeStar, Type type) {
-		this(subsector, orbit, homeStar, null, type);
+	public Planetoid(int orbit, Star homeStar, WorldType type) {
+		this(orbit, homeStar, null, type);
 	}
 
-	public Planetoid(int subsector, int orbit, Star homeStar, Planetoid home, Type type) {
-		this.subsector = subsector;
+	public Planetoid(int orbit, Star homeStar, Planetoid home, WorldType type) {
 		// this.cluster = cluster;
 
 		this.parent = home;
@@ -102,8 +96,8 @@ public class Planetoid implements World {
 				scores[0] = (home.getSize() - Dice.roll(6));
 
 			// validation step
-			if (type.equals(Type.SATELLITE) && scores[0] == 0) {
-				this.type = Type.RING;
+			if (type.equals(WorldType.SATELLITE) && scores[0] == 0) {
+				this.type = WorldType.RING;
 				name = this.type.toString();
 			}
 
@@ -175,16 +169,16 @@ public class Planetoid implements World {
 		 * SATELLITES
 		 */
 		totalMoons = 0;
-		if (type.equals(Type.SATELLITE) || type.equals(Type.ASTEROID)) {
+		if (type.equals(WorldType.SATELLITE) || type.equals(WorldType.ASTEROID)) {
 			moons = new HashSet<Planetoid>();
 
 		} else {
 			moons = new HashSet<Planetoid>();
 
 			int satellites = 0;
-			if (type.equals(Type.LARGE_GIANT))
+			if (type.equals(WorldType.LARGE_GIANT))
 				satellites = Dice.roll(2, 6);
-			else if (type.equals(Type.SMALL_GIANT))
+			else if (type.equals(WorldType.SMALL_GIANT))
 				satellites = Dice.roll(2, 6) - 4;
 			else if (isWorld() && scores[0] > 0)
 				satellites = Dice.roll(1, 6) - 3;
@@ -194,7 +188,7 @@ public class Planetoid implements World {
 				satellites = 0;
 
 			while (satellites > 0) {
-				moons.add(new Planetoid(subsector, orbit, homeStar, this, Type.SATELLITE));
+				moons.add(new Planetoid(orbit, homeStar, this, WorldType.SATELLITE));
 				--satellites;
 
 			}
@@ -441,102 +435,8 @@ public class Planetoid implements World {
 		/*
 		 * WORLD FACILITIES
 		 */
-		EnumSet<Base> facilities = EnumSet.noneOf(Base.class);
-
-		if (mainWorld()) {
-			// NAVAL BASE
-			dice = Dice.roll(2, 6);
-			if (starport != 'A' && starport != 'B')
-				dice -= 12;
-
-			if (dice > 7)
-				facilities.add(Base.NAVY);
-
-			// SCOUT BASE
-			dice = Dice.roll(2, 6);
-
-			if (starport == 'A')
-				dice -= 3;
-			else if (starport == 'B')
-				dice -= 2;
-			else if (starport == 'C')
-				dice -= 1;
-			else if (starport == 'E' || starport == 'X')
-				dice -= 12;
-
-			if (dice > 6)
-				facilities.add(Base.SCOUT);
-
-		} else {
-			/*
-			 * FARM
-			 */
-			boolean idealAtmo = false, idealHydro = false, idealPop = false;
-
-			if (atmo >= 4 && atmo <= 9)
-				idealAtmo = true;
-
-			if (hydro >= 4 && hydro <= 8)
-				idealHydro = true;
-
-			if (pop >= 2)
-				idealPop = true;
-
-			if (idealAtmo && idealHydro && idealPop && habitable())
-				facilities.add(Base.FARM);
-
-			/*
-			 * MINE
-			 */
-			boolean mainIndustrial = mainWorld.getTradeCodes().contains(TradeCodes.IN);
-
-			idealPop = false;
-			if (pop >= 2)
-				idealPop = true;
-
-			if (mainIndustrial && idealPop)
-				facilities.add(Base.MINE);
-
-			/*
-			 * COLONY
-			 */
-			if (gov == 6 && pop >= 5)
-				facilities.add(Base.COLONY);
-
-			/*
-			 * LABORATORY
-			 */
-			int mainTechLevel = mainWorld.getTechLevel();
-
-			dice = Dice.roll(2, 6);
-			if (mainWorld.getTechLevel() >= 10)
-				dice += 2;
-			else if (mainTechLevel <= 8)
-				dice -= 12;
-
-			if (dice >= 11) {
-				facilities.add(Base.LAB);
-				setTechLevel(mainTechLevel);
-			}
-
-			/*
-			 * MILITARY
-			 */
-			boolean mainPoor = mainWorld.getTradeCodes().contains(TradeCodes.PO);
-
-			dice = Dice.roll(2, 6);
-			if (mainWorld.getPopulation() >= 8)
-				dice += 1;
-
-			if (atmo == mainWorld.getAtmosphere())
-				dice += 2;
-
-			if (mainPoor != true && dice >= 12)
-				facilities.add(Base.MILITARY);
-
-		}
-
-		setWorldFacilities(facilities);
+		Base.setupFacilities(this, mainWorld);
+//		EnumSet<Base> facilities = EnumSet.noneOf(Base.class);
 
 		/*
 		 * FIXME - WORLD TAGS
@@ -571,7 +471,7 @@ public class Planetoid implements World {
 		String string = nameString();
 
 		if (isWorld()) {
-			if (type.equals(Type.SATELLITE))
+			if (type.equals(WorldType.SATELLITE))
 				string = String.format("%-28s %s", "* " + string, scoreString());
 			else
 				string = String.format("%-28s %s", string, scoreString());
@@ -594,7 +494,7 @@ public class Planetoid implements World {
 		String string = nameString();
 
 		if (isWorld()) {
-			if (type.equals(Type.SATELLITE))
+			if (type.equals(WorldType.SATELLITE))
 				string = String.format("%-28s %s", "* " + string, scoreString());
 			else
 				string = String.format("%-28s %s", string, scoreString());
@@ -663,21 +563,6 @@ public class Planetoid implements World {
 	 * FIXME - INTERFACE MATHODS (move later)
 	 * 
 	 */
-//	@Override
-//	public int sector() {
-//		return orbit;
-//	}
-//
-//	@Override
-//	public int subsector() {
-//		return orbit;
-//	}
-//
-//	@Override
-//	public int cluster() {
-//		return cluster;
-//	}
-
 	public int starsystem() {
 		return starSystem;
 	}
@@ -731,16 +616,6 @@ public class Planetoid implements World {
 	}
 
 	@Override
-	public Set<Faction> getFactions() {
-		return factions;
-	}
-
-	@Override
-	public void setFactions(Set<Faction> factions) {
-		this.factions = (HashSet<Faction>) factions;
-	}
-
-	@Override
 	public EnumSet<WorldTag> getWorldTags() {
 		return worldTags;
 	}
@@ -760,13 +635,8 @@ public class Planetoid implements World {
 		this.worldFacilities = set;
 	}
 
-	// @Override
-	// public StarSystem getGroup() {
-	// return group;
-	// }
-
 	@Override
-	public Type getType() {
+	public WorldType getType() {
 		return type;
 	}
 

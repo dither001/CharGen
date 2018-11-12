@@ -68,10 +68,6 @@ public interface World {
 
 	public void setTradeCodes(EnumSet<TradeCodes> set);
 
-	public Set<Faction> getFactions();
-
-	public void setFactions(Set<Faction> factions);
-
 	public EnumSet<WorldTag> getWorldTags();
 
 	public void setWorldTags(EnumSet<WorldTag> set);
@@ -82,7 +78,7 @@ public interface World {
 
 //	public StarSystem getGroup();
 
-	public Type getType();
+	public WorldType getType();
 
 	public char getSpaceport();
 
@@ -103,37 +99,19 @@ public interface World {
 	public int totalMoons();
 
 	/*
-	 * TODO - this is the first big automated initialization of a world after it has
-	 * been generated; there will probably have to be another step afterward, which
-	 * creates the factions. I'm not actually sure why this is here and not in the
-	 * Planetoid object because it represents "implementation"
-	 * 
+	 * DEFAULT METHODS
 	 */
-
-	public default void factionSetup() {
-		// TODO
-		HashSet<Faction> factions = new HashSet<Faction>();
-
-		// int pop = getPopulation();
-		// for (int i = 0; i < pop; ++i) {
-		// factions.add(new Society(this));
-		//
-		// }
-
-		setFactions(factions);
-	}
-
 	public default boolean isWorld() {
 		boolean isWorld = true;
-		Type type = getType();
+		WorldType type = getType();
 
-		if (type.equals(Type.EMPTY))
+		if (type.equals(WorldType.EMPTY))
 			isWorld = false;
 
-		if (type.equals(Type.RING))
+		if (type.equals(WorldType.RING))
 			isWorld = false;
 
-		if (type.equals(Type.SMALL_GIANT) || type.equals(Type.LARGE_GIANT))
+		if (type.equals(WorldType.SMALL_GIANT) || type.equals(WorldType.LARGE_GIANT))
 			isWorld = false;
 
 		return isWorld;
@@ -141,12 +119,12 @@ public interface World {
 
 	public default boolean nameable() {
 		boolean nameable = true;
-		Type type = getType();
+		WorldType type = getType();
 
-		if (type.equals(Type.EMPTY))
+		if (type.equals(WorldType.EMPTY))
 			nameable = false;
 
-		if (type.equals(Type.RING))
+		if (type.equals(WorldType.RING))
 			nameable = false;
 
 		return nameable;
@@ -170,55 +148,55 @@ public interface World {
 //	}
 
 	public default boolean isEmpty() {
-		return getType().equals(Type.EMPTY);
+		return getType().equals(WorldType.EMPTY);
 	}
 
 	public default boolean notEmpty() {
-		return getType().equals(Type.EMPTY) != true;
+		return getType().equals(WorldType.EMPTY) != true;
 	}
 
 	public default boolean isGasGiant() {
-		return getType().equals(Type.SMALL_GIANT) || getType().equals(Type.LARGE_GIANT);
+		return getType().equals(WorldType.SMALL_GIANT) || getType().equals(WorldType.LARGE_GIANT);
 	}
 
 	public default boolean largeGiant() {
-		return getType().equals(Type.LARGE_GIANT);
+		return getType().equals(WorldType.LARGE_GIANT);
 	}
 
 	public default boolean smallGiant() {
-		return getType().equals(Type.SMALL_GIANT);
+		return getType().equals(WorldType.SMALL_GIANT);
 	}
 
 	public default boolean notGasGiant() {
-		return getType().equals(Type.SMALL_GIANT) != true && getType().equals(Type.LARGE_GIANT) != true;
+		return getType().equals(WorldType.SMALL_GIANT) != true && getType().equals(WorldType.LARGE_GIANT) != true;
 	}
 
 	public default boolean isCaptured() {
-		return getType().equals(Type.CAPTURED);
+		return getType().equals(WorldType.CAPTURED);
 	}
 
 	public default boolean isMoon() {
-		return getType().equals(Type.SATELLITE);
+		return getType().equals(WorldType.SATELLITE);
 	}
 
 	public default boolean notMoon() {
-		return getType().equals(Type.SATELLITE) != true;
+		return getType().equals(WorldType.SATELLITE) != true;
 	}
 
 	public default boolean isRing() {
-		return getType().equals(Type.RING);
+		return getType().equals(WorldType.RING);
 	}
 
 	public default boolean notRing() {
-		return getType().equals(Type.RING) != true;
+		return getType().equals(WorldType.RING) != true;
 	}
 
 	public default boolean isAsteroid() {
-		return getType().equals(Type.ASTEROID);
+		return getType().equals(WorldType.ASTEROID);
 	}
 
 	public default boolean notAsteroid() {
-		return getType().equals(Type.ASTEROID) != true;
+		return getType().equals(WorldType.ASTEROID) != true;
 	}
 
 	public default boolean hasMoons() {
