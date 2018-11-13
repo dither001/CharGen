@@ -27,6 +27,16 @@ public enum WorldTag {
 	/*
 	 * STATIC METHODS
 	 */
+	public static String[] tagsToStrings() {
+		int length = ALL_TAGS.length;
+		String[] array = new String[length];
+		for (int i = 0; i < length; ++i) {
+			array[i] = ALL_TAGS[i].toString();
+		}
+
+		return array;
+	}
+
 	public static WorldTag getTagByIndex(int index) {
 		WorldTag tag = null;
 		if (index < ALL_TAGS.length)

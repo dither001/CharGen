@@ -482,7 +482,7 @@ public class Planetoid implements World {
 		}
 
 		// facilities
-		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
+		String facilities = (getWorldFacilities() != null) ? String.format(" %s", getWorldFacilities()) : "";
 		// world tags
 		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
 		string += String.format("%-24s %s", facilities, tags);
@@ -504,7 +504,7 @@ public class Planetoid implements World {
 		}
 
 		// facilities
-		String facilities = (worldFacilities != null) ? String.format(" %s", worldFacilities) : "";
+		String facilities = (getWorldFacilities() != null) ? String.format(" %s", getWorldFacilities()) : "";
 		// world tags
 		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
 		string += String.format("%-24s %s", facilities, tags);

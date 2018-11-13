@@ -137,10 +137,10 @@ public class SQLiteData {
 						// last step
 						++starIndex;
 					}
-					
+
 					for (Iterator<Planetoid> it = starSystem.getSpaceObjects().iterator(); it.hasNext();) {
 						statement = connection
-								.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+								.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 						pos = 1;
 						world = it.next();
 
@@ -149,6 +149,7 @@ public class SQLiteData {
 							statement.setString(pos++, String.valueOf(systemIndex));
 
 							statement.setString(pos++, String.valueOf(((Planetoid) world).orbit()));
+							statement.setString(pos++, String.valueOf(((Planetoid) world).suborbit()));
 							statement.setString(pos++, String.valueOf(world.getName()));
 							statement.setString(pos++, String.valueOf(WorldType.typeIndex(world.getType())));
 
@@ -162,16 +163,21 @@ public class SQLiteData {
 							//
 							statement.setString(pos++, String.valueOf(world.getTechLevel()));
 							statement.execute();
-							
-							statement = connection
-									.prepareStatement("INSERT INTO BASE VALUES( ?, ?, ? );");
-							for (Iterator<Base> its = world.getWorldFacilities().iterator(); it.hasNext();) {
-								pos = 1;
-								base = its.next();
-								
-								statement.setString(pos++, String.valueOf(baseIndex));
-								statement.setString(pos++, String.valueOf(worldIndex));
-								statement.setString(pos++, String.valueOf(worldIndex));
+
+							if (world.getWorldFacilities() != null) {
+								statement = connection.prepareStatement("INSERT INTO BASE VALUES( ?, ?, ? );");
+								for (Iterator<Base> its = world.getWorldFacilities().iterator(); its.hasNext();) {
+									pos = 1;
+									base = its.next();
+
+									statement.setString(pos++, String.valueOf(baseIndex));
+									statement.setString(pos++, String.valueOf(worldIndex));
+									statement.setString(pos++, String.valueOf(base.typeIndex()));
+
+									statement.execute();
+									++baseIndex;
+								}
+
 							}
 						} catch (SQLException e) {
 							e.printStackTrace();
@@ -452,6 +458,68 @@ public class SQLiteData {
 			try {
 				statement = connection.createStatement();
 
+				/*
+				 * STATIC TABLE INITIALIZATION
+				 * 
+				 */
+
+				// BASE_TYPE table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='BASE_TYPE'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "BASE_TYPE";
+					key = "id INTEGER PRIMARY KEY";
+					data = "type TEXT";
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+				}
+
+				// GOV_TYPE table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='GOV_TYPE'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "GOV_TYPE";
+					key = "id INTEGER PRIMARY KEY";
+					data = "type TEXT";
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+				}
+
+				// WORLD_TAG table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_TAG'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "WORLD_TAG";
+					key = "id INTEGER PRIMARY KEY";
+					data = "tag VARCHAR";
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+				}
+
+				// WORLD_TYPE table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_TYPE'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+					string = "CREATE TABLE WORLD_TYPE(id INTEGER PRIMARY KEY, name VARCHAR);";
+					statement.executeUpdate(string);
+				}
+
+				initializeTable("BASE_TYPE", Base.BASE_TYPES);
+				initializeTable("GOV_TYPE", World.GOVERNMENT_TYPES);
+				initializeTable("WORLD_TAG", WorldTag.ALL_TAGS);
+				initializeTable("WORLD_TYPE", WorldType.WORLD_TYPES);
+
+				/*
+				 * PROCEDURAL TABLE SETUP
+				 * 
+				 */
+
 				// STARSYSTEM table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARSYSTEM'";
 				if (!statement.executeQuery(string).next()) {
@@ -498,14 +566,6 @@ public class SQLiteData {
 					statement.executeUpdate(string);
 				}
 
-				// WORLDTYPE table setup
-				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLDTYPE'";
-				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
-					string = "CREATE TABLE WORLDTYPE(id INTEGER PRIMARY KEY, name VARCHAR);";
-					statement.executeUpdate(string);
-				}
-
 				// WORLD table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD'";
 				if (!statement.executeQuery(string).next()) {
@@ -516,13 +576,13 @@ public class SQLiteData {
 					address = "system_id INTEGER";
 
 					//
-					data = "orbit INTEGER, name VARCHAR, world_type INTEGER";
+					data = "orbit INTEGER, suborbit INTEGER, name VARCHAR, world_type INTEGER";
 					data += ", size INTEGER, atmosphere INTEGER, hydrosphere INTEGER, population INTEGER, government INTEGER, lawLevel INTEGER";
 					data += ", techLevel INTEGER";
 
 					//
 					fk = "FOREIGN KEY (system_id) REFERENCES STARSYSTEM(id)";
-					// fk += ", FOREIGN KEY (world_type) REFERENCES WORLDTYPE(id)";
+					// fk += ", FOREIGN KEY (world_type) REFERENCES WORLD_TYPE(id)";
 
 					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, key, address, data, fk);
 					statement.executeUpdate(string);
@@ -538,10 +598,11 @@ public class SQLiteData {
 					address = "world_id INTEGER";
 
 					//
-					data = "type VARCHAR";
+					data = "base_type INTEGER";
 
 					//
 					fk = "FOREIGN KEY (world_id) REFERENCES WORLD(id)";
+					fk += ", FOREIGN KEY (base_type) REFERENCES BASE_TYPE(id)";
 
 					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, key, address, data, fk);
 					statement.executeUpdate(string);
@@ -575,86 +636,38 @@ public class SQLiteData {
 
 					tableName = "WORLD_ECONOMY";
 					key = "id INTEGER PRIMARY KEY";
-					data = String.format("resources INTEGER, labor INTEGER, infrastructure INTEGER, culture INTEGER");
+					data = "resources INTEGER, labor INTEGER, infrastructure INTEGER, culture INTEGER";
 
 					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
 					statement.executeUpdate(string);
 
 				}
-
-				/*
-				 * STATIC TABLE INITIALIZATION 
-				 * 
-				 */
-				PreparedStatement prep;
-
-				// GOV_TYPE table setup
-				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='GOV_TYPE'";
-				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
-
-					tableName = "GOV_TYPE";
-					key = "id INTEGER PRIMARY KEY";
-					data = "type TEXT";
-
-					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
-					statement.executeUpdate(string);
-				}
-
-				string = String.format("INSERT INTO GOV_TYPE VALUES( ?, ? );");
-				try {
-					int length = World.GOVERNMENT_TYPES.length;
-					prep= connection.prepareStatement(string);
-
-					for (int i = 0; i < length; ++i) {
-						prep.setString(1, String.valueOf(i));
-						prep.setString(2, String.valueOf(World.GOVERNMENT_TYPES[i]));
-						prep.execute();
-					}
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
-
-				}				
-
-				// WORLD_TAG table setup
-				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_TAG'";
-				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
-
-					tableName = "WORLD_TAG";
-					key = "id INTEGER PRIMARY KEY";
-					data = "tag VARCHAR";
-
-					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
-					statement.executeUpdate(string);
-				}
-
-				string = String.format("INSERT INTO WORLD_TAG VALUES( ?, ? );");
-				try {
-					int length = WorldTag.ALL_TAGS.length;
-					prep= connection.prepareStatement(string);
-
-					for (int i = 0; i < length; ++i) {
-						prep.setString(1, String.valueOf(i));
-						prep.setString(2, String.valueOf(WorldTag.ALL_TAGS[i]));
-						prep.execute();
-					}
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
-
-				}				
-
-
-
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 
 			}
+		}
+	}
+
+	private static void initializeTable(String tableName, Object[] array) {
+		PreparedStatement statement;
+
+		String string = String.format("INSERT INTO %s VALUES( ?, ? );", tableName);
+		try {
+			int length = array.length;
+			statement = connection.prepareStatement(string);
+
+			for (int i = 0; i < length; ++i) {
+				statement.setString(1, String.valueOf(i));
+				statement.setString(2, String.valueOf(array[i].toString()));
+				statement.execute();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(Controller.errorPanel, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
+
 		}
 	}
 

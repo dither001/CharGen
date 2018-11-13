@@ -7,6 +7,17 @@ import rules.Dice;
 public enum Base {
 	NAVY, SCOUT, FARM, MINE, COLONY, LAB, MILITARY;
 
+	// static fields
+	public static final Base[] BASE_TYPES = { NAVY, SCOUT, FARM, MINE, COLONY, LAB, MILITARY };
+
+	// instance methods
+	public int typeIndex() {
+		return getBaseIndex(this);
+	}
+
+	/*
+	 * STATIC METHODS
+	 */
 	public static void setupFacilities(World world, World mainWorld) {
 		EnumSet<Base> set = EnumSet.noneOf(Base.class);
 
@@ -115,7 +126,7 @@ public enum Base {
 		world.setWorldFacilities(set);
 	}
 
-	public static int baseIndex(Base base) {
+	public static int getBaseIndex(Base base) {
 		int index = 0;
 
 		switch (base) {

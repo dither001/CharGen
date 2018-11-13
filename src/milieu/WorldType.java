@@ -4,14 +4,15 @@ public enum WorldType {
 	EMPTY, STANDARD, ASTEROID, CAPTURED, SATELLITE, RING, SMALL_GIANT, LARGE_GIANT;
 
 	// static fields
-	public static final WorldType[] WORLD_TYPES = { EMPTY, STANDARD, ASTEROID, CAPTURED, SATELLITE, RING, SMALL_GIANT, LARGE_GIANT };
-	
+	public static final WorldType[] WORLD_TYPES = { EMPTY, STANDARD, ASTEROID, CAPTURED, SATELLITE, RING, SMALL_GIANT,
+			LARGE_GIANT };
+
 	/*
 	 * STATIC METHODS
 	 */
 	public static WorldType matchType(String string) {
 		WorldType match = null;
-		WorldType[] array = new WorldType[] { EMPTY, STANDARD, ASTEROID, CAPTURED, SATELLITE, RING, SMALL_GIANT, LARGE_GIANT };
+		WorldType[] array = WORLD_TYPES;
 
 		for (int i = 0; i < array.length; ++i) {
 			if (array[i].toString().compareToIgnoreCase(string) == 0) {
@@ -23,7 +24,7 @@ public enum WorldType {
 
 		return match;
 	}
-	
+
 	public static int typeIndex(WorldType type) {
 		int index = 0;
 
@@ -55,7 +56,7 @@ public enum WorldType {
 		default:
 			break;
 		}
-		
+
 		return index;
 	}
 }
