@@ -18,7 +18,6 @@ import java.util.Iterator;
 import javax.swing.JOptionPane;
 
 import adapter.Controller;
-import milieu.Address;
 import milieu.Base;
 import milieu.Planetoid;
 import milieu.Star;
@@ -49,26 +48,38 @@ public class SQLiteData {
 	/*
 	 * PUBLIC METHODS
 	 */
-	public int getLastStarIndex() throws SQLException {
-		return getLastIndex("id", "STAR");
+	public int getNextBaseIndex() {
+		return 1 + getLastIndex("id", "BASE");
 	}
 
-	public int getLastSystemIndex() throws SQLException {
-		return getLastIndex("id", "STARSYSTEM");
+	public int getNextStarIndex() {
+		return 1 + getLastIndex("id", "STAR");
 	}
 
-	public int getLastWorldIndex() throws SQLException {
-		return getLastIndex("id", "WORLD");
+	public int getNextSystemIndex() {
+		return 1 + getLastIndex("id", "STARSYSTEM");
 	}
 
-	private int getLastIndex(String column, String table) throws SQLException {
+	public int getNextWorldIndex() {
+		return 1 + getLastIndex("id", "WORLD");
+	}
+
+	private int getLastIndex(String column, String table) {
 		String string = String.format("SELECT %s FROM %s ORDER BY %s DESC LIMIT 1;", column, table, column);
-		PreparedStatement statement = connection.prepareStatement(string);
+		PreparedStatement statement;
 
 		int index = 0;
-		ResultSet results = statement.executeQuery(string);
-		if (results.next()) {
-			index = results.getInt(column);
+		try {
+			statement = connection.prepareStatement(string);
+			ResultSet results = statement.executeQuery(string);
+
+			if (results.next()) {
+				index = results.getInt(column);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return index;
@@ -80,10 +91,10 @@ public class SQLiteData {
 		if (connection == null)
 			connect();
 
-		int systemIndex = 0;
-		int starIndex = 0;
-		int worldIndex = 0;
-		int baseIndex = 0;
+		int systemIndex = getNextSystemIndex();
+		int starIndex = getNextStarIndex();
+		int worldIndex = getNextWorldIndex();
+		int baseIndex = getNextBaseIndex();
 
 		try {
 			// connection.setAutoCommit(false);
@@ -462,6 +473,7 @@ public class SQLiteData {
 				 * STATIC TABLE INITIALIZATION
 				 * 
 				 */
+				boolean init = false;
 
 				// BASE_TYPE table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='BASE_TYPE'";
@@ -474,6 +486,12 @@ public class SQLiteData {
 
 					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
 					statement.executeUpdate(string);
+					init = true;
+				}
+
+				if (init) {
+					initializeTable("BASE_TYPE", Base.BASE_TYPES);
+					init = false;
 				}
 
 				// GOV_TYPE table setup
@@ -487,6 +505,12 @@ public class SQLiteData {
 
 					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
 					statement.executeUpdate(string);
+					init = true;
+				}
+
+				if (init) {
+					initializeTable("GOV_TYPE", World.GOVERNMENT_TYPES);
+					init = false;
 				}
 
 				// WORLD_TAG table setup
@@ -500,6 +524,12 @@ public class SQLiteData {
 
 					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
 					statement.executeUpdate(string);
+					init = true;
+				}
+
+				if (init) {
+					initializeTable("WORLD_TAG", WorldTag.ALL_TAGS);
+					init = false;
 				}
 
 				// WORLD_TYPE table setup
@@ -508,12 +538,13 @@ public class SQLiteData {
 					statement = connection.createStatement();
 					string = "CREATE TABLE WORLD_TYPE(id INTEGER PRIMARY KEY, name VARCHAR);";
 					statement.executeUpdate(string);
+					init = true;
 				}
 
-				initializeTable("BASE_TYPE", Base.BASE_TYPES);
-				initializeTable("GOV_TYPE", World.GOVERNMENT_TYPES);
-				initializeTable("WORLD_TAG", WorldTag.ALL_TAGS);
-				initializeTable("WORLD_TYPE", WorldType.WORLD_TYPES);
+				if (init) {
+					initializeTable("WORLD_TYPE", WorldType.WORLD_TYPES);
+					init = false;
+				}
 
 				/*
 				 * PROCEDURAL TABLE SETUP
@@ -594,17 +625,18 @@ public class SQLiteData {
 					statement = connection.createStatement();
 
 					tableName = "BASE";
-					key = "id INTEGER PRIMARY KEY";
-					address = "world_id INTEGER";
 
 					//
-					data = "base_type INTEGER";
+					data = "world_id INTEGER NOT NULL, base_type INTEGER NOT NULL";
 
 					//
 					fk = "FOREIGN KEY (world_id) REFERENCES WORLD(id)";
 					fk += ", FOREIGN KEY (base_type) REFERENCES BASE_TYPE(id)";
 
-					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, key, address, data, fk);
+					//
+					key = "PRIMARY KEY (world_id, base_type)";
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, data, fk, key);
 					statement.executeUpdate(string);
 				}
 
@@ -625,6 +657,28 @@ public class SQLiteData {
 					fk += ", FOREIGN KEY (world_id) REFERENCES WORLD(id)";
 
 					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, key, address, data);
+
+					statement.executeUpdate(string);
+				}
+
+				// TAGGED WORLDS table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='TAGGED_WORLDS'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "TAGGED_WORLDS";
+
+					//
+					data = "world_id INTEGER NOT NULL, tag_id INTEGER NOT NULL";
+
+					//
+					fk = "FOREIGN KEY (world_id) REFERENCES WORLD(id)";
+					fk += ", FOREIGN KEY (tag_id) REFERENCES WORLD_TAG(id)";
+
+					//
+					key = "PRIMARY KEY (world_id, tag_id)";
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, data, fk, key);
 
 					statement.executeUpdate(string);
 				}

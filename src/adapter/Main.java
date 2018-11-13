@@ -24,7 +24,7 @@ public class Main {
 
 		databaseStart();
 
-		// testMainWorld();
+//		 testMainWorld();
 
 		// MDrive.prototypePrint();
 		// for (int i = 0; i < 50; ++i) {

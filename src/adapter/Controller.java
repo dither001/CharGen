@@ -59,38 +59,7 @@ public class Controller {
 	private void databaseSetup() {
 		database = new SQLiteData(this);
 
-		database.addSubsector(0);
+//		database.addSubsector(0);
 	}
-
-	private void starSystemSetup(int sector) {
-		StarSystem starSystem = new StarSystem(0, 0, 0);
-
-		database.insertStarSystem(sector, starSystem);
-		
-		for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
-			database.insertStar(0, it.next());
-
-		for (Iterator<Planetoid> it = starSystem.listWorlds().iterator(); it.hasNext();)
-			database.insertWorld(0, it.next());
-	}
-
-	// private void subsectorSetup(int sector, int subsector) {
-	// StarSystem starSystem;
-	//
-	// for (int i = 0; i < 80; ++i) {
-	// if (Dice.roll(2) == 2) {
-	// starSystem = new StarSystem(sector, subsector, i);
-	//
-	// for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();)
-	// database.addStar(starIndex++, it.next());
-	//
-	// for (Iterator<Planetoid> it = starSystem.listWorlds().iterator();
-	// it.hasNext();)
-	// database.addWorld(worldIndex++, it.next());
-	// }
-	//
-	// }
-	//
-	// }
 
 }

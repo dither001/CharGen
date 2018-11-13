@@ -25,6 +25,13 @@ public enum WorldTag {
 			SECTARIANS, XENOPHILES, XENOPHOBES, ZOMBIES };
 
 	/*
+	 * INSTANCE METHODS
+	 */
+	public int tagIndex() {
+		return tagIndex(this);
+	}
+
+	/*
 	 * STATIC METHODS
 	 */
 	public static String[] tagsToStrings() {
