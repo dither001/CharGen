@@ -55,28 +55,28 @@ public class Economy {
 	 * CONSTRUCTORS
 	 */
 	public Economy(World world) {
-		EnumSet<TradeCodes> tradeCodes = world.getTradeCodes();
+		EnumSet<TradeCode> tradeCodes = world.getTradeCodes();
 		starport = world.getSpaceport();
 		techLevel = world.getTechLevel();
 		population = world.getPopulation();
 
 		// AG(0), AS(1), BA(2), DE(3), FL(4), HI(5), IC(6), IN(7), LO(8), NA(9), NI(10),
 		// PO(11), RI(12), VA(13), WA(14);
-		agricultural = (tradeCodes.contains(TradeCodes.AG)) ? true : false;
-		asteroid = (tradeCodes.contains(TradeCodes.AS)) ? true : false;
-		barren = (tradeCodes.contains(TradeCodes.BA)) ? true : false;
-		desert = (tradeCodes.contains(TradeCodes.DE)) ? true : false;
-		fluidOceans = (tradeCodes.contains(TradeCodes.FL)) ? true : false;
-		highPopulation = (tradeCodes.contains(TradeCodes.HI)) ? true : false;
-		iceCapped = (tradeCodes.contains(TradeCodes.IC)) ? true : false;
-		industrial = (tradeCodes.contains(TradeCodes.IN)) ? true : false;
-		lowPopulation = (tradeCodes.contains(TradeCodes.LO)) ? true : false;
-		nonAgricultural = (tradeCodes.contains(TradeCodes.NA)) ? true : false;
-		nonIndustrial = (tradeCodes.contains(TradeCodes.NI)) ? true : false;
-		poor = (tradeCodes.contains(TradeCodes.PO)) ? true : false;
-		rich = (tradeCodes.contains(TradeCodes.RI)) ? true : false;
-		vacuum = (tradeCodes.contains(TradeCodes.VA)) ? true : false;
-		waterWorld = (tradeCodes.contains(TradeCodes.WA)) ? true : false;
+		agricultural = (tradeCodes.contains(TradeCode.AG)) ? true : false;
+		asteroid = (tradeCodes.contains(TradeCode.AS)) ? true : false;
+		barren = (tradeCodes.contains(TradeCode.BA)) ? true : false;
+		desert = (tradeCodes.contains(TradeCode.DE)) ? true : false;
+		fluidOceans = (tradeCodes.contains(TradeCode.FL)) ? true : false;
+		highPopulation = (tradeCodes.contains(TradeCode.HI)) ? true : false;
+		iceCapped = (tradeCodes.contains(TradeCode.IC)) ? true : false;
+		industrial = (tradeCodes.contains(TradeCode.IN)) ? true : false;
+		lowPopulation = (tradeCodes.contains(TradeCode.LO)) ? true : false;
+		nonAgricultural = (tradeCodes.contains(TradeCode.NA)) ? true : false;
+		nonIndustrial = (tradeCodes.contains(TradeCode.NI)) ? true : false;
+		poor = (tradeCodes.contains(TradeCode.PO)) ? true : false;
+		rich = (tradeCodes.contains(TradeCode.RI)) ? true : false;
+		vacuum = (tradeCodes.contains(TradeCode.VA)) ? true : false;
+		waterWorld = (tradeCodes.contains(TradeCode.WA)) ? true : false;
 
 		/*
 		 * RESOURCES

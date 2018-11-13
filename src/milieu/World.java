@@ -69,9 +69,9 @@ public interface World {
 
 	public void setName(String name);
 
-	public EnumSet<TradeCodes> getTradeCodes();
+	public EnumSet<TradeCode> getTradeCodes();
 
-	public void setTradeCodes(EnumSet<TradeCodes> set);
+	public void setTradeCodes(EnumSet<TradeCode> set);
 
 	public EnumSet<WorldTag> getWorldTags();
 

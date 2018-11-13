@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import milieu.Base;
-import milieu.TradeCodes;
+import milieu.TradeCode;
 import rules.Dice;
 
 public class Planetoid implements World {
@@ -42,7 +42,7 @@ public class Planetoid implements World {
 	private Planetoid parent;
 	private Set<Planetoid> moons;
 	private int totalMoons;
-	private EnumSet<TradeCodes> tradeCodes;
+	private EnumSet<TradeCode> tradeCodes;
 
 	/*
 	 * CONSTRUCTORS
@@ -430,7 +430,7 @@ public class Planetoid implements World {
 		/*
 		 * TRADE CODES
 		 */
-		TradeCodes.setupTradeCodes(this);
+		TradeCode.setupTradeCodes(this);
 
 		/*
 		 * WORLD FACILITIES
@@ -606,12 +606,12 @@ public class Planetoid implements World {
 	}
 
 	@Override
-	public EnumSet<TradeCodes> getTradeCodes() {
+	public EnumSet<TradeCode> getTradeCodes() {
 		return tradeCodes;
 	}
 
 	@Override
-	public void setTradeCodes(EnumSet<TradeCodes> set) {
+	public void setTradeCodes(EnumSet<TradeCode> set) {
 		this.tradeCodes = set;
 	}
 

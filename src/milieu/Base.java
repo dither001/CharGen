@@ -75,7 +75,7 @@ public enum Base {
 			/*
 			 * MINE
 			 */
-			boolean mainIndustrial = mainWorld.getTradeCodes().contains(TradeCodes.IN);
+			boolean mainIndustrial = mainWorld.getTradeCodes().contains(TradeCode.IN);
 
 			idealPop = false;
 			if (pop >= 2)
@@ -109,7 +109,7 @@ public enum Base {
 			/*
 			 * MILITARY
 			 */
-			boolean mainPoor = mainWorld.getTradeCodes().contains(TradeCodes.PO);
+			boolean mainPoor = mainWorld.getTradeCodes().contains(TradeCode.PO);
 
 			dice = Dice.roll(2, 6);
 			if (mainWorld.getPopulation() >= 8)

@@ -72,7 +72,7 @@ public enum WorldTag {
 
 		char spaceport = world.getSpaceport();
 		int techLevel = world.getTechLevel();
-		EnumSet<TradeCodes> tradeCodes = world.getTradeCodes();
+		EnumSet<TradeCode> tradeCodes = world.getTradeCodes();
 		EnumSet<Base> bases = world.getWorldFacilities();
 
 		// quick booleans
@@ -165,7 +165,7 @@ public enum WorldTag {
 			set.add(WorldTag.RADICAL_RACISM);
 
 		// HEAVY_INDUSTRY
-		if (tradeCodes.contains(TradeCodes.IN))
+		if (tradeCodes.contains(TradeCode.IN))
 			set.add(WorldTag.HEAVY_INDUSTRY);
 
 		// HEAVY_MINING
@@ -201,7 +201,7 @@ public enum WorldTag {
 			set.add(WorldTag.MINIMAL_CONTACT);
 
 		// OCEANIC_WORLD
-		if (tradeCodes.contains(TradeCodes.FL))
+		if (tradeCodes.contains(TradeCode.FL))
 			set.add(WorldTag.OCEANIC_WORLD);
 
 		// OUT_OF_CONTACT

@@ -5,11 +5,19 @@ import java.util.Set;
 
 import rules.Dice;
 
-public enum TradeCodes {
+public enum TradeCode {
 	AG, AS, BA, DE, FL, HI, IC, IN, LO, NA, NI, PO, RI, VA, WA;
 
+	/*
+	 * STATIC FIELDS
+	 */
+	public static final TradeCode[] TRADE_CODES = { AG, AS, BA, DE, FL, HI, IC, IN, LO, NA, NI, PO, RI, VA, WA };
+
+	/*
+	 * STATIC METHODS
+	 */
 	public static void setupTradeCodes(World world) {
-		EnumSet<TradeCodes> set = EnumSet.noneOf(TradeCodes.class);
+		EnumSet<TradeCode> set = EnumSet.noneOf(TradeCode.class);
 
 		int size = world.getSize();
 		int atmo = world.getAtmosphere();
@@ -153,4 +161,60 @@ public enum TradeCodes {
 		world.setTradeCodes(set);
 	}
 
+	public static int codeIndex(TradeCode code) {
+		int index = 0;
+		
+		switch (code) {
+		case AG:
+			index = 0;
+			break;
+		case AS:
+			index = 1;
+			break;
+		case BA:
+			index = 2;
+			break;
+		case DE:
+			index = 3;
+			break;
+		case FL:
+			index = 4;
+			break;
+		case HI:
+			index = 5;
+			break;
+		case IC:
+			index = 6;
+			break;
+		case IN:
+			index = 7;
+			break;
+		case LO:
+			index = 8;
+			break;
+		case NA:
+			index = 9;
+			break;
+		case NI:
+			index = 10;
+			break;
+		case PO:
+			index = 11;
+			break;
+		case RI:
+			index = 12;
+			break;
+		case VA:
+			index = 13;
+			break;
+		case WA:
+			index = 14;
+			break;
+		default:
+			break;
+		
+		}
+		
+		return index;
+	}
 }
