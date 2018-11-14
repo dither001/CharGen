@@ -22,6 +22,7 @@ import milieu.Base;
 import milieu.Planetoid;
 import milieu.Star;
 import milieu.StarSystem;
+import milieu.TradeCode;
 import milieu.World;
 import milieu.WorldTag;
 import milieu.WorldType;
@@ -48,10 +49,6 @@ public class SQLiteData {
 	/*
 	 * PUBLIC METHODS
 	 */
-	public int getNextBaseIndex() {
-		return 1 + getLastIndex("id", "BASE");
-	}
-
 	public int getNextStarIndex() {
 		return 1 + getLastIndex("id", "STAR");
 	}
@@ -71,7 +68,7 @@ public class SQLiteData {
 		int index = 0;
 		try {
 			statement = connection.prepareStatement(string);
-			ResultSet results = statement.executeQuery(string);
+			ResultSet results = statement.executeQuery();
 
 			if (results.next()) {
 				index = results.getInt(column);
@@ -94,7 +91,6 @@ public class SQLiteData {
 		int systemIndex = getNextSystemIndex();
 		int starIndex = getNextStarIndex();
 		int worldIndex = getNextWorldIndex();
-		int baseIndex = getNextBaseIndex();
 
 		try {
 			// connection.setAutoCommit(false);
@@ -104,6 +100,7 @@ public class SQLiteData {
 			Star star;
 			World world;
 			Base base;
+			TradeCode code;
 			for (int i = 0; i < SYSTEMS_PER_SUBSECTOR; ++i) {
 				int pos;
 				if (Dice.roll(2) == 2) {
@@ -175,18 +172,27 @@ public class SQLiteData {
 							statement.setString(pos++, String.valueOf(world.getTechLevel()));
 							statement.execute();
 
-							if (world.getWorldFacilities() != null) {
-								statement = connection.prepareStatement("INSERT INTO BASE VALUES( ?, ?, ? );");
-								for (Iterator<Base> its = world.getWorldFacilities().iterator(); its.hasNext();) {
-									pos = 1;
-									base = its.next();
+							if (world.mainWorld() && world.getTradeCodes() != null) {
+								statement = connection.prepareStatement("INSERT INTO TRADE_WORLDS VALUES( ?, ? );");
+								for (Iterator<TradeCode> its = world.getTradeCodes().iterator(); its.hasNext();) {
+									code = its.next();
 
-									statement.setString(pos++, String.valueOf(baseIndex));
-									statement.setString(pos++, String.valueOf(worldIndex));
-									statement.setString(pos++, String.valueOf(base.typeIndex()));
+									statement.setString(1, String.valueOf(worldIndex));
+									statement.setString(2, String.valueOf(code.codeIndex()));
 
 									statement.execute();
-									++baseIndex;
+								}
+							}
+
+							if (world.getWorldFacilities() != null) {
+								statement = connection.prepareStatement("INSERT INTO BASE VALUES( ?, ? );");
+								for (Iterator<Base> its = world.getWorldFacilities().iterator(); its.hasNext();) {
+									base = its.next();
+
+									statement.setString(1, String.valueOf(worldIndex));
+									statement.setString(2, String.valueOf(base.typeIndex()));
+
+									statement.execute();
 								}
 
 							}
@@ -513,6 +519,25 @@ public class SQLiteData {
 					init = false;
 				}
 
+				// TRADE_CODE table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='TRADE_CODE'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "TRADE_CODE";
+					key = "id INTEGER PRIMARY KEY";
+					data = "code VARCHAR";
+
+					string = String.format("CREATE TABLE %s (%s, %s);", tableName, key, data);
+					statement.executeUpdate(string);
+					init = true;
+				}
+
+				if (init) {
+					initializeTable("TRADE_CODE", TradeCode.TRADE_CODES);
+					init = false;
+				}
+
 				// WORLD_TAG table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_TAG'";
 				if (!statement.executeQuery(string).next()) {
@@ -619,6 +644,26 @@ public class SQLiteData {
 					statement.executeUpdate(string);
 				}
 
+				// TRADE_WORLDS table setup
+				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='TRADE_WORLDS'";
+				if (!statement.executeQuery(string).next()) {
+					statement = connection.createStatement();
+
+					tableName = "TRADE_WORLDS";
+					//
+					data = "world_id INTEGER NOT NULL, trade_type INTEGER NOT NULL";
+
+					//
+					fk = "FOREIGN KEY (world_id) REFERENCES WORLD(id)";
+					fk += ", FOREIGN KEY (trade_type) REFERENCES TRADE_CODE(id)";
+
+					//
+					key = "PRIMARY KEY (world_id, trade_type)";
+
+					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, data, fk, key);
+					statement.executeUpdate(string);
+				}
+
 				// BASE table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='BASE'";
 				if (!statement.executeQuery(string).next()) {
@@ -636,7 +681,7 @@ public class SQLiteData {
 					//
 					key = "PRIMARY KEY (world_id, base_type)";
 
-					string = String.format("CREATE TABLE %s (%s, %s, %s, %s);", tableName, data, fk, key);
+					string = String.format("CREATE TABLE %s (%s, %s, %s);", tableName, data, fk, key);
 					statement.executeUpdate(string);
 				}
 

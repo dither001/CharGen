@@ -54,7 +54,7 @@ public class Economy {
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Economy(World world) {
+	public Economy(World world, StarSystem starsystem) {
 		EnumSet<TradeCode> tradeCodes = world.getTradeCodes();
 		starport = world.getSpaceport();
 		techLevel = world.getTechLevel();
@@ -115,10 +115,10 @@ public class Economy {
 
 		// tech level / resource worlds
 		if (techLevel >= 8) {
-			// TODO - count gas giants + planetoid belts
-			// resources += resourceWorlds;
+			resources += starsystem.numAsteroids();
+			resources += starsystem.numGasGiants();
 
-			// but don't count the main world if it's an asteroid
+			// don't count main world if it's an asteroid
 			if (asteroid)
 				--resources;
 		}
@@ -225,9 +225,22 @@ public class Economy {
 		if (culture < 0)
 			culture = 0;
 
+		// last steps
+		this.calcPlanetaryDemand();
+		this.calcGrossWorldProduct();
 	}
 
-	private void planetaryDemand() {
+	/*
+	 * INSTANCE METHODS
+	 */
+	public double grossWorldProduct() {
+		return grossWorldProduct;
+	}
+
+	/*
+	 * PRIVATE METHODS
+	 */
+	private void calcPlanetaryDemand() {
 		//
 		int baseDemand = (population > 3) ? resources : population;
 		int totalDemand = Dice.roll(2, 6);
@@ -308,6 +321,31 @@ public class Economy {
 
 		// "Resource Trade Rules"
 		resourcesAvailable += tradeBenefit;
+	}
+
+	public void calcGrossWorldProduct() {
+		// resources exploitable
+		double resourcesExploitable = 0;
+		resourcesExploitable = techLevel * 0.1 * resourcesAvailable;
+
+		// labor factor
+		double laborFactor = LABOR_BASE[labor] * population;
+
+		grossWorldProduct = (resourcesExploitable * laborFactor * infrastructure) / (culture + 1);
+	}
+
+	// //
+	// private double resourcesAvailable;
+	// private double tradeBenefit;
+	// private double grossWorldProduct;
+
+	public String toStringDetailed() {
+		String s = String.format("Resources: %d || Labor: %d || Infrastructure: %d || Culture: %d", resources, labor,
+				infrastructure, culture);
+		String t = String.format("%nR/A: %.1f || Labor Base: %.3f || GWP: %.3f", resourcesAvailable, LABOR_BASE[labor],
+				grossWorldProduct);
+
+		return String.format("%s%s", s, t);
 	}
 
 }

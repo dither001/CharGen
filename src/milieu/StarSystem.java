@@ -39,6 +39,7 @@ public class StarSystem {
 	 */
 	private Planetoid mainWorld;
 	private Set<WorldTag> commonTags;
+	private Economy economy;
 
 	/*
 	 * CONSTRUCTOR
@@ -411,8 +412,11 @@ public class StarSystem {
 		nameSetup(this);
 
 		/*
-		 * FACTION SETUP
+		 * ECONOMY SETUP
 		 */
+		this.economy = null;
+		if (mainWorld != null && mainWorld.getPopulation() > 5)
+			this.economy = new Economy((World) mainWorld, this);
 
 		/*
 		 * END OF CONSTRUCTOR
@@ -467,6 +471,9 @@ public class StarSystem {
 	 * FIXME - BELOW ARE METHODS TO REFACTOR
 	 * 
 	 */
+	public World mainWorld() {
+		return mainWorld;
+	}
 
 	public int numEmptyOrbits() {
 		int counter = 0;
@@ -548,7 +555,12 @@ public class StarSystem {
 				mainWorld.getTechLevel(), POPULATIONS[mainWorld.getPopulation()]);
 		star += String.format("%nGovernment: %s", mainWorld.governmentType());
 		star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
-		star += String.format("%n%s", mainWorld);
+
+		if (economy != null)
+			star += "\n" + economy.toStringDetailed();
+
+		//
+		star += String.format("%n%n%s", mainWorld);
 		star += "\n- - -";
 
 		star += "\n" + stars.get(0).color + stars.get(0).size;

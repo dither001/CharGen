@@ -59,7 +59,7 @@ public class Controller {
 	private void databaseSetup() {
 		database = new SQLiteData(this);
 
-//		database.addSubsector(0);
+		database.addSubsector(0);
 	}
 
 }

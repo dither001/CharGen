@@ -22,9 +22,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO
 
-		databaseStart();
+		// databaseStart();
 
-//		 testMainWorld();
+		testMainWorld();
 
 		// MDrive.prototypePrint();
 		// for (int i = 0; i < 50; ++i) {
@@ -84,6 +84,10 @@ public class Main {
 
 	public static void testMainWorld() {
 		StarSystem group = new StarSystem(0, 0, 0);
+
+		while (group.mainWorld() == null) {
+			group = new StarSystem(0, 0, 0);
+		}
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();

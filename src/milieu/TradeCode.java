@@ -16,6 +16,10 @@ public enum TradeCode {
 	/*
 	 * STATIC METHODS
 	 */
+	public int codeIndex() {
+		return codeIndex(this);
+	}
+
 	public static void setupTradeCodes(World world) {
 		EnumSet<TradeCode> set = EnumSet.noneOf(TradeCode.class);
 
@@ -163,7 +167,7 @@ public enum TradeCode {
 
 	public static int codeIndex(TradeCode code) {
 		int index = 0;
-		
+
 		switch (code) {
 		case AG:
 			index = 0;
@@ -212,9 +216,66 @@ public enum TradeCode {
 			break;
 		default:
 			break;
+
+		}
+
+		return index;
+	}
+	
+	public static String codeName(TradeCode code) {
+		String string = "";
+		
+		switch (code) {
+		case AG:
+			string = "Agricultural";
+			break;
+		case AS:
+			string = "Asteroid";
+			break;
+		case BA:
+			string = "Barren";
+			break;
+		case DE:
+			string = "Desert";
+			break;
+		case FL:
+			string = "Fluid Oceans";
+			break;
+		case HI:
+			string = "High Population";
+			break;
+		case IC:
+			string = "Ice-Capped";
+			break;
+		case IN:
+			string = "Industrial";
+			break;
+		case LO:
+			string = "Low Population";
+			break;
+		case NA:
+			string = "Non-Agricultural";
+			break;
+		case NI:
+			string = "Non-Industrial";
+			break;
+		case PO:
+			string = "Poor";
+			break;
+		case RI:
+			string = "Rich";
+			break;
+		case VA:
+			string = "Vacuum";
+			break;
+		case WA:
+			string = "Watery";
+			break;
+		default:
+			break;
 		
 		}
 		
-		return index;
+		return string;
 	}
 }
