@@ -7,6 +7,7 @@ import java.util.Set;
 
 import actor.*;
 import actor.Class;
+import milieu.Figure;
 import milieu.Star;
 import milieu.StarSystem;
 import vessel.MDrive;
@@ -24,7 +25,8 @@ public class Main {
 
 		// databaseStart();
 
-		testMainWorld();
+//		testMainWorld();
+		testFigure();
 
 		// MDrive.prototypePrint();
 		// for (int i = 0; i < 50; ++i) {
@@ -64,22 +66,15 @@ public class Main {
 		controller.start();
 	}
 
-	public static void testStarAdd() {
-		Controller controller = new Controller();
-		controller.start();
+	public static void testFigure() {
+		Figure group = new Figure();
 
-		//
-		// StarSystem group = new StarSystem();
-		// while (group.getMainWorld() == null) {
-		// group = new StarSystem();
-		// }
+		while (group.getMainWorld() == null) {
+			group = new Figure();
+		}
 
-		// for (Iterator<Star> it = group.starList().iterator(); it.hasNext();) {
-		//
-		// }
-
-		// System.out.println(group.toStringDetailed());
-		// System.out.println();
+		System.out.println(group.toStringDetailed());
+		System.out.println();
 	}
 
 	public static void testMainWorld() {

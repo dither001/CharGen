@@ -53,7 +53,7 @@ public enum WorldTag {
 	}
 
 	public static void setupWorldTags(World world) {
-		if (world.isWorld() != true)
+		if (WorldType.isWorld(world) != true)
 			return;
 
 		EnumSet<WorldTag> set;
@@ -337,7 +337,7 @@ public enum WorldTag {
 	}
 
 	public static void pruneWorldTags(Set<WorldTag> common, World world) {
-		if (world.isWorld() != true)
+		if (WorldType.isWorld(world) != true)
 			return;
 
 		EnumSet<WorldTag> workingSet;

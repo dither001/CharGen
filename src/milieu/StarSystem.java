@@ -30,7 +30,7 @@ public class StarSystem {
 
 	private int maxOrbits;
 	private List<Planetoid> planets;
-	private List<Planetoid> spaceObjects;
+	// private List<Planetoid> spaceObjects;
 	private int namedObjects;
 	private int populousWorlds;
 
@@ -310,7 +310,7 @@ public class StarSystem {
 			while (available.size() > 0 && asteroids > 0) {
 				while (it.hasNext()) {
 					prospective = it.next();
-					candidate = prospective.orbit() - 1;
+					candidate = prospective.getOrbit() - 1;
 					contains = available.contains(candidate);
 
 					if (contains) {
@@ -343,7 +343,7 @@ public class StarSystem {
 		 * MAIN WORLD & GOVERNMENT DESIGNATION
 		 */
 		// space objects
-		spaceObjects = spaceObjectList(planets);
+		// spaceObjects = spaceObjectList(planets);
 
 		List<Planetoid> pops = listWorlds();
 		Planetoid.MainWorldSort mainSort = new Planetoid.MainWorldSort();
@@ -414,9 +414,9 @@ public class StarSystem {
 		/*
 		 * ECONOMY SETUP
 		 */
-		this.economy = null;
-		if (mainWorld != null && mainWorld.getPopulation() > 5)
-			this.economy = new Economy((World) mainWorld, this);
+//		this.economy = null;
+//		if (mainWorld != null && mainWorld.getPopulation() > 5)
+//			this.economy = new Economy((World) mainWorld, this);
 
 		/*
 		 * END OF CONSTRUCTOR
@@ -444,7 +444,7 @@ public class StarSystem {
 	}
 
 	public List<Planetoid> getSpaceObjects() {
-		return spaceObjects;
+		return null;
 	}
 
 	public List<Planetoid> listGasGiants() {
@@ -478,7 +478,7 @@ public class StarSystem {
 	public int numEmptyOrbits() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
-			if (it.next().isEmpty())
+			if (WorldType.isEmpty(it.next()))
 				++counter;
 		}
 
@@ -488,7 +488,7 @@ public class StarSystem {
 	public int numGasGiants() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
-			if (it.next().isGasGiant())
+			if (WorldType.isGasGiant(it.next()))
 				++counter;
 		}
 
@@ -512,7 +512,7 @@ public class StarSystem {
 	public int numAsteroids() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
-			if (it.next().isAsteroid())
+			if (WorldType.isAsteroid(it.next()))
 				++counter;
 		}
 
@@ -522,7 +522,7 @@ public class StarSystem {
 	public int numCaptured() {
 		int counter = 0;
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
-			if (it.next().isCaptured())
+			if (WorldType.isCaptured(it.next()))
 				++counter;
 		}
 
@@ -605,12 +605,13 @@ public class StarSystem {
 
 			candidate = it.next();
 			workingList.add(candidate);
-			if (candidate.hasMoons()) {
-				for (Iterator<Planetoid> its = candidate.getMoons().iterator(); its.hasNext();) {
-
-					workingList.add(its.next());
-				}
-			}
+			// if (candidate.hasMoons()) {
+			// for (Iterator<Planetoid> its = candidate.getMoons().iterator();
+			// its.hasNext();) {
+			//
+			// workingList.add(its.next());
+			// }
+			// }
 		}
 
 		return workingList;
@@ -623,7 +624,7 @@ public class StarSystem {
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
-			if (candidate.isGasGiant())
+			if (WorldType.isGasGiant(candidate))
 				workingList.add(candidate);
 		}
 
@@ -637,7 +638,7 @@ public class StarSystem {
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
-			if (candidate.isWorld())
+			if (WorldType.isWorld(candidate))
 				workingList.add(candidate);
 		}
 
@@ -651,7 +652,7 @@ public class StarSystem {
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
-			if (!candidate.isWorld())
+			if (!WorldType.isWorld(candidate))
 				workingList.add(candidate);
 		}
 
@@ -665,7 +666,7 @@ public class StarSystem {
 		for (Iterator<Planetoid> it = planets.iterator(); it.hasNext();) {
 			candidate = it.next();
 
-			if (candidate.isWorld() && candidate.getPopulation() > 0)
+			if (WorldType.isWorld(candidate) && candidate.getPopulation() > 0)
 				workingList.add(candidate);
 		}
 
@@ -695,7 +696,7 @@ public class StarSystem {
 		for (Iterator<Planetoid> it = group.orderedPlanetList().iterator(); it.hasNext();) {
 			planet = it.next();
 
-			if (planet.nameable() && planet.notMoon()) {
+			if (WorldType.nameable(planet) && WorldType.notMoon(planet)) {
 				current = Names.nameShorten(nameIt.next());
 				planet.setName(current);
 
@@ -703,13 +704,14 @@ public class StarSystem {
 				// System.out.println("Named world " + previous);
 
 				moonCounter = 2;
-				for (Iterator<Planetoid> moonIt = planet.orderedMoonList().iterator(); moonIt.hasNext();) {
-					moon = moonIt.next();
-
-					if (moon.nameable())
-						moon.setName(current + " " + Names.romanNumeral(moonCounter++));
-
-				}
+				// for (Iterator<Planetoid> moonIt = planet.orderedMoonList().iterator();
+				// moonIt.hasNext();) {
+				// moon = moonIt.next();
+				//
+				// if (moon.nameable())
+				// moon.setName(current + " " + Names.romanNumeral(moonCounter++));
+				//
+				// }
 
 			}
 

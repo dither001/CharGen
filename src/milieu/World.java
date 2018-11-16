@@ -9,16 +9,15 @@ import java.util.Set;
 
 import rules.Dice;
 
-public interface World {
+public interface World extends Persistent {
 	/*
 	 * STATIC FIELDS
 	 * 
 	 */
-	public static final String[] GOVERNMENT_TYPES = { "No Government", "Corporation",
-			"Democracy, Participating", "Oligarchy, Self-perpetuating", "Democracy, Representative",
-			"Technocracy, Feudal", "Captive Government", "Balkanization", "Bureaucracy, Civil Service",
-			"Bureaucracy, Impersonal", "Dictatorship, Charismatic", "Dictatorship, Non-charismatic",
-			"Oligarchy, Charismatic", "Dictatorship, Religious" };
+	public static final String[] GOVERNMENT_TYPES = { "No Government", "Corporation", "Democracy, Participating",
+			"Oligarchy, Self-perpetuating", "Democracy, Representative", "Technocracy, Feudal", "Captive Government",
+			"Balkanization", "Bureaucracy, Civil Service", "Bureaucracy, Impersonal", "Dictatorship, Charismatic",
+			"Dictatorship, Non-charismatic", "Oligarchy, Charismatic", "Dictatorship, Religious" };
 
 	public static int worldIndex = 0;
 
@@ -26,20 +25,20 @@ public interface World {
 	 * COMPARATOR CLASSES
 	 * 
 	 */
-	public static class OrbitAscending implements Comparator<Planetoid> {
+	public static class OrbitAscending implements Comparator<World> {
 
 		@Override
-		public int compare(Planetoid left, Planetoid right) {
-			return left.orbit() - right.orbit();
+		public int compare(World left, World right) {
+			return left.getOrbit() - right.getOrbit();
 		}
 
 	}
 
-	public static class SubOrbitAscending implements Comparator<Planetoid> {
+	public static class SubOrbitAscending implements Comparator<World> {
 
 		@Override
-		public int compare(Planetoid left, Planetoid right) {
-			return left.suborbit() - right.suborbit();
+		public int compare(World left, World right) {
+			return left.getSubOrbit() - right.getSubOrbit();
 		}
 
 	}
@@ -57,9 +56,13 @@ public interface World {
 	 * 
 	 * 
 	 */
-	public int getIndex();
+	public int getOrbit();
 
-	public boolean isPersistent();
+	public void setOrbit(int orbit);
+
+	public int getSubOrbit();
+
+	public void setSubOrbit(int subOrbit);
 
 	public boolean habitable();
 
@@ -99,126 +102,29 @@ public interface World {
 
 	public Planetoid getParent();
 
-	public Set<Planetoid> getMoons();
-
-	public int totalMoons();
+	// public Set<Planetoid> getMoons();
+	//
+	// public int totalMoons();
 
 	/*
 	 * DEFAULT METHODS
 	 */
-	public default boolean isWorld() {
-		boolean isWorld = true;
-		WorldType type = getType();
 
-		if (type.equals(WorldType.EMPTY))
-			isWorld = false;
-
-		if (type.equals(WorldType.RING))
-			isWorld = false;
-
-		if (type.equals(WorldType.SMALL_GIANT) || type.equals(WorldType.LARGE_GIANT))
-			isWorld = false;
-
-		return isWorld;
-	}
-
-	public default boolean nameable() {
-		boolean nameable = true;
-		WorldType type = getType();
-
-		if (type.equals(WorldType.EMPTY))
-			nameable = false;
-
-		if (type.equals(WorldType.RING))
-			nameable = false;
-
-		return nameable;
-	}
-
-	// public boolean isMainWorld() {
-	// boolean isMainWorld = false;
-	// Planetoid mainWorld = getGroup().getMainWorld();
-	// if (this.equals(mainWorld))
-	// isMainWorld = true;
+	// public default boolean hasMoons() {
+	// boolean hasMoons = false;
+	// if (getMoons().size() > 0)
+	// hasMoons = true;
 	//
-	// return isMainWorld;
+	// return hasMoons;
 	// }
 
-	// public default Planetoid getMainWorld() {
-	// return getGroup().getMainWorld();
+	// public default List<Planetoid> orderedMoonList() {
+	// List<Planetoid> moonList = Dice.setToList(getMoons());
+	// World.SubOrbitAscending moonSort = new World.SubOrbitAscending();
+	// Collections.sort(moonList, moonSort);
+	//
+	// return moonList;
 	// }
-
-	// public default int getHabitableZone() {
-	// return getGroup().getHabitableZone();
-	// }
-
-	public default boolean isEmpty() {
-		return getType().equals(WorldType.EMPTY);
-	}
-
-	public default boolean notEmpty() {
-		return getType().equals(WorldType.EMPTY) != true;
-	}
-
-	public default boolean isGasGiant() {
-		return getType().equals(WorldType.SMALL_GIANT) || getType().equals(WorldType.LARGE_GIANT);
-	}
-
-	public default boolean largeGiant() {
-		return getType().equals(WorldType.LARGE_GIANT);
-	}
-
-	public default boolean smallGiant() {
-		return getType().equals(WorldType.SMALL_GIANT);
-	}
-
-	public default boolean notGasGiant() {
-		return getType().equals(WorldType.SMALL_GIANT) != true && getType().equals(WorldType.LARGE_GIANT) != true;
-	}
-
-	public default boolean isCaptured() {
-		return getType().equals(WorldType.CAPTURED);
-	}
-
-	public default boolean isMoon() {
-		return getType().equals(WorldType.SATELLITE);
-	}
-
-	public default boolean notMoon() {
-		return getType().equals(WorldType.SATELLITE) != true;
-	}
-
-	public default boolean isRing() {
-		return getType().equals(WorldType.RING);
-	}
-
-	public default boolean notRing() {
-		return getType().equals(WorldType.RING) != true;
-	}
-
-	public default boolean isAsteroid() {
-		return getType().equals(WorldType.ASTEROID);
-	}
-
-	public default boolean notAsteroid() {
-		return getType().equals(WorldType.ASTEROID) != true;
-	}
-
-	public default boolean hasMoons() {
-		boolean hasMoons = false;
-		if (getMoons().size() > 0)
-			hasMoons = true;
-
-		return hasMoons;
-	}
-
-	public default List<Planetoid> orderedMoonList() {
-		List<Planetoid> moonList = Dice.setToList(getMoons());
-		World.SubOrbitAscending moonSort = new World.SubOrbitAscending();
-		Collections.sort(moonList, moonSort);
-
-		return moonList;
-	}
 
 	public default int getAttribute(int index) {
 		// used by other attribute getters

@@ -54,7 +54,7 @@ public class Economy {
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Economy(World world, StarSystem starsystem) {
+	public Economy(World world, Figure starsystem) {
 		EnumSet<TradeCode> tradeCodes = world.getTradeCodes();
 		starport = world.getSpaceport();
 		techLevel = world.getTechLevel();

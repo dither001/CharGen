@@ -128,11 +128,11 @@ public class SQLiteData {
 							statement.setString(pos++, String.valueOf(starIndex));
 							statement.setString(pos++, String.valueOf(systemIndex));
 
-							statement.setString(pos++, String.valueOf(star.orbit()));
+							statement.setString(pos++, String.valueOf(star.getOrbit()));
 							statement.setString(pos++, star.getName());
 							statement.setString(pos++, String.valueOf(star.getSize()));
 							statement.setString(pos++, String.valueOf(star.getColor()));
-							statement.setString(pos++, String.valueOf(star.maxOrbits()));
+							statement.setString(pos++, String.valueOf(star.getMaxOrbits()));
 							statement.execute();
 
 						} catch (SQLException e) {
@@ -156,8 +156,8 @@ public class SQLiteData {
 							statement.setString(pos++, String.valueOf(worldIndex));
 							statement.setString(pos++, String.valueOf(systemIndex));
 
-							statement.setString(pos++, String.valueOf(((Planetoid) world).orbit()));
-							statement.setString(pos++, String.valueOf(((Planetoid) world).suborbit()));
+							statement.setString(pos++, String.valueOf(((Planetoid) world).getOrbit()));
+							statement.setString(pos++, String.valueOf(((Planetoid) world).getSubOrbit()));
 							statement.setString(pos++, String.valueOf(world.getName()));
 							statement.setString(pos++, String.valueOf(WorldType.typeIndex(world.getType())));
 
@@ -288,13 +288,13 @@ public class SQLiteData {
 			statement.setString(pos++, String.valueOf(starIndex));
 			statement.setString(pos++, String.valueOf(starsystem));
 			// statement.setString(pos++, String.valueOf(star.starsystem()));
-			statement.setString(pos++, String.valueOf(star.orbit()));
+			statement.setString(pos++, String.valueOf(star.getOrbit()));
 
 			// attributes
 			statement.setString(pos++, star.getName());
 			statement.setString(pos++, String.valueOf(star.getSize()));
 			statement.setString(pos++, String.valueOf(star.getColor()));
-			statement.setString(pos++, String.valueOf(star.maxOrbits()));
+			statement.setString(pos++, String.valueOf(star.getMaxOrbits()));
 
 			statement.execute();
 			add = true;
@@ -337,8 +337,8 @@ public class SQLiteData {
 			statement.setString(pos++, String.valueOf(worldIndex));
 			// cast world as "planetoid" to access these methods
 			// statement.setString(pos++, String.valueOf(((Planetoid) world).starsystem()));
-			statement.setString(pos++, String.valueOf(((Planetoid) world).orbit()));
-			statement.setString(pos++, String.valueOf(((Planetoid) world).suborbit()));
+			statement.setString(pos++, String.valueOf(((Planetoid) world).getOrbit()));
+			statement.setString(pos++, String.valueOf(((Planetoid) world).getSubOrbit()));
 
 			// attributes
 			statement.setString(pos++, String.valueOf(world.getName()));
