@@ -1,7 +1,8 @@
 package actor;
+
 import java.util.EnumSet;
 
-import rules.Energy;
+import rules.*;
 
 public abstract class Monster implements Actor {
 
@@ -42,7 +43,7 @@ public abstract class Monster implements Actor {
 	 */
 	private byte[] abilityScores;
 	private Size size;
-	private Creature creature;
+	private CreatureType creature;
 	private byte[] hitDice;
 	private boolean isFemale;
 

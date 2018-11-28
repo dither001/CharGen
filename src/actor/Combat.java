@@ -527,7 +527,7 @@ public class Combat implements Option {
 
 		private void calcAttackBonus() {
 			Class job = owner.getJob();
-			Class.Subclass archetype = owner.getArchetype();
+			Subclass archetype = owner.getArchetype();
 
 			int abilityBonus = 0, proficiency = owner.proficiency();
 
@@ -549,8 +549,8 @@ public class Combat implements Option {
 				} else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID) || job.equals(Class.MONK)
 						|| job.equals(Class.RANGER)) {
 					abilityBonus = wisdomBonus;
-				} else if (job.equals(Class.WIZARD) || archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)
-						|| archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
+				} else if (job.equals(Class.WIZARD) || archetype.equals(Subclass.ELDRITCH_KNIGHT)
+						|| archetype.equals(Subclass.ARCANE_TRICKSTER)) {
 					abilityBonus = intelligenceBonus;
 				}
 
@@ -570,7 +570,7 @@ public class Combat implements Option {
 
 		private void calcAverageDamage() {
 			Class job = owner.getJob();
-			Class.Subclass archetype = owner.getArchetype();
+			Subclass archetype = owner.getArchetype();
 			EnumSet<Feature> features = owner.getFeatures();
 
 			int level = owner.getLevel(), abilityBonus = 0, baseDamage = 0;
@@ -598,8 +598,8 @@ public class Combat implements Option {
 				} else if (job.equals(Class.CLERIC) || job.equals(Class.DRUID) || job.equals(Class.MONK)
 						|| job.equals(Class.RANGER)) {
 					abilityBonus = wisdom;
-				} else if (job.equals(Class.WIZARD) || archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)
-						|| archetype.equals(Class.Subclass.ARCANE_TRICKSTER)) {
+				} else if (job.equals(Class.WIZARD) || archetype.equals(Subclass.ELDRITCH_KNIGHT)
+						|| archetype.equals(Subclass.ARCANE_TRICKSTER)) {
 					abilityBonus = intelligence;
 				}
 

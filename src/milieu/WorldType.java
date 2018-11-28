@@ -45,11 +45,14 @@ public enum WorldType {
 
 		if (type.equals(ASTEROID))
 			canHaveMoons = false;
-		else if (type.equals(EMPTY))
+
+		if (type.equals(EMPTY))
 			canHaveMoons = false;
-		else if (type.equals(RING))
+
+		if (type.equals(RING))
 			canHaveMoons = false;
-		else if (type.equals(SATELLITE))
+
+		if (type.equals(SATELLITE))
 			canHaveMoons = false;
 
 		return canHaveMoons;
@@ -59,9 +62,9 @@ public enum WorldType {
 		return world.getType().equals(EMPTY);
 	}
 
-	public static boolean notEmpty(World world) {
-		return world.getType().equals(EMPTY) != true;
-	}
+	// public static boolean notEmpty(World world) {
+	// return world.getType().equals(EMPTY) != true;
+	// }
 
 	public static boolean isGasGiant(World world) {
 		WorldType type = world.getType();
@@ -76,10 +79,10 @@ public enum WorldType {
 		return world.getType().equals(SMALL_GIANT);
 	}
 
-	public static boolean notGasGiant(World world) {
-		WorldType type = world.getType();
-		return !type.equals(SMALL_GIANT) && !type.equals(LARGE_GIANT);
-	}
+	// public static boolean notGasGiant(World world) {
+	// WorldType type = world.getType();
+	// return !type.equals(SMALL_GIANT) && !type.equals(LARGE_GIANT);
+	// }
 
 	public static boolean isCaptured(World world) {
 		return world.getType().equals(CAPTURED);
@@ -89,25 +92,25 @@ public enum WorldType {
 		return world.getType().equals(SATELLITE);
 	}
 
-	public static boolean notMoon(World world) {
-		return world.getType().equals(SATELLITE) != true;
-	}
+	// public static boolean notMoon(World world) {
+	// return world.getType().equals(SATELLITE) != true;
+	// }
 
 	public static boolean isRing(World world) {
 		return world.getType().equals(RING);
 	}
 
-	public static boolean notRing(World world) {
-		return world.getType().equals(RING) != true;
-	}
+	// public static boolean notRing(World world) {
+	// return world.getType().equals(RING) != true;
+	// }
 
 	public static boolean isAsteroid(World world) {
 		return world.getType().equals(ASTEROID);
 	}
 
-	public static boolean notAsteroid(World world) {
-		return world.getType().equals(ASTEROID) != true;
-	}
+	// public static boolean notAsteroid(World world) {
+	// return world.getType().equals(ASTEROID) != true;
+	// }
 
 	public static WorldType matchType(String string) {
 		WorldType match = null;

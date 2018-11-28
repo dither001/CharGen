@@ -1,10 +1,11 @@
 package actor;
+
 import java.util.EnumSet;
 
 import gear.Armor;
 import gear.Weapon;
 import magic.Spell;
-import rules.Dice;
+import rules.*;
 
 public enum Class implements Option {
 	BARBARIAN, BARD, CLERIC, DRUID, FIGHTER, MONK, PALADIN, RANGER, ROGUE, SORCERER, WARLOCK, WIZARD;
@@ -91,40 +92,40 @@ public enum Class implements Option {
 		return jobSkills;
 	}
 
-	public static Actor.Ability getPrimaryAbility(Class job) {
-		Actor.Ability ability = Actor.Ability.STRENGTH;
+	public static Ability getPrimaryAbility(Class job) {
+		Ability ability = Ability.STRENGTH;
 
 		if (job.equals(BARBARIAN))
-			ability = Actor.Ability.STRENGTH;
+			ability = Ability.STRENGTH;
 		else if (job.equals(BARD))
-			ability = Actor.Ability.CHARISMA;
+			ability = Ability.CHARISMA;
 		else if (job.equals(CLERIC))
-			ability = Actor.Ability.WISDOM;
+			ability = Ability.WISDOM;
 		else if (job.equals(DRUID))
-			ability = Actor.Ability.WISDOM;
+			ability = Ability.WISDOM;
 		else if (job.equals(FIGHTER))
-			ability = Actor.Ability.STRENGTH;
+			ability = Ability.STRENGTH;
 		else if (job.equals(MONK))
-			ability = Actor.Ability.DEXTERITY;
+			ability = Ability.DEXTERITY;
 		else if (job.equals(PALADIN))
-			ability = Actor.Ability.STRENGTH;
+			ability = Ability.STRENGTH;
 		else if (job.equals(RANGER))
-			ability = Actor.Ability.DEXTERITY;
+			ability = Ability.DEXTERITY;
 		else if (job.equals(ROGUE))
-			ability = Actor.Ability.DEXTERITY;
+			ability = Ability.DEXTERITY;
 		else if (job.equals(SORCERER))
-			ability = Actor.Ability.CHARISMA;
+			ability = Ability.CHARISMA;
 		else if (job.equals(WARLOCK))
-			ability = Actor.Ability.CHARISMA;
+			ability = Ability.CHARISMA;
 		else if (job.equals(WIZARD))
-			ability = Actor.Ability.INTELLIGENCE;
+			ability = Ability.INTELLIGENCE;
 
 		return ability;
 	}
 
 	public static Class selectClass(Player actor) {
 		Class job;
-		Actor.Alignment ali = actor.alignment();
+		Alignment ali = actor.alignment();
 
 		int dexterity, intelligence, wisdom, charisma;
 		dexterity = actor.getDexterity();
@@ -149,11 +150,11 @@ public enum Class implements Option {
 			job = WIZARD;
 		else if (dexterity > 11 && dice < 3)
 			job = RANGER;
-		else if (ali.equals(Actor.Alignment.GOOD))
+		else if (ali.equals(Alignment.GOOD))
 			job = PALADIN;
-		else if (ali.equals(Actor.Alignment.CHAOTIC))
+		else if (ali.equals(Alignment.CHAOTIC))
 			job = BARBARIAN;
-		else if (ali.equals(Actor.Alignment.LAWFUL) || dice < 4)
+		else if (ali.equals(Alignment.LAWFUL) || dice < 4)
 			job = FIGHTER;
 		else
 			job = ROGUE;
@@ -189,161 +190,6 @@ public enum Class implements Option {
 		}
 
 		return expRate;
-	}
-
-	public enum Subclass {
-		// barbarians
-		BERSERKER(BARBARIAN), BEAR_TOTEM(BARBARIAN), EAGLE_TOTEM(BARBARIAN), WOLF_TOTEM(BARBARIAN),
-		// bards
-		LORE_COLLEGE(BARD), VALOR_COLLEGE(BARD),
-		// clerics
-		DEATH(CLERIC), KNOWLEDGE(CLERIC), LIFE(CLERIC), LIGHT(CLERIC), NATURE(CLERIC), TEMPEST(CLERIC), TRICKERY(
-				CLERIC), WAR(CLERIC),
-		// druids
-		LAND_CIRCLE(DRUID), MOON_CIRCLE(DRUID),
-		// fighters
-		CHAMPION(FIGHTER), BATTLE_MASTER(FIGHTER), ELDRITCH_KNIGHT(FIGHTER),
-		// monks
-		OPEN_HAND(MONK), SHADOW_WAY(MONK), FOUR_ELEMENTS(MONK),
-		// paladins
-		DEVOTION_OATH(PALADIN), ANCIENTS_OATH(PALADIN), VENGEANCE_OATH(PALADIN), OATHBREAKER(PALADIN),
-		// rangers
-		HUNTER(RANGER), BEAST_MASTER(RANGER),
-		// rogues
-		THIEF(ROGUE), ASSASSIN(ROGUE), ARCANE_TRICKSTER(ROGUE),
-		// sorcerers
-		DRAGON_ORIGIN(SORCERER), CHAOS_ORIGIN(SORCERER),
-		// warlocks
-		FEY_PACT(WARLOCK), FIEND_PACT(WARLOCK), STAR_PACT(WARLOCK),
-		// wizards
-		ABJURER(WIZARD), CONJUROR(WIZARD), DIVINER(WIZARD), ENCHANTER(WIZARD), EVOKER(WIZARD), ILLUSIONIST(
-				WIZARD), NECROMANCER(WIZARD), TRANSMUTER(WIZARD);
-
-		// fields
-		private final Class job;
-
-		// arrays
-		private static final Subclass[] barbarians = { BERSERKER, BEAR_TOTEM, EAGLE_TOTEM, WOLF_TOTEM };
-		private static final Subclass[] bards = { LORE_COLLEGE, VALOR_COLLEGE };
-		private static final Subclass[] clerics = { DEATH, KNOWLEDGE, LIFE, LIGHT, NATURE, TEMPEST, TRICKERY, WAR };
-		private static final Subclass[] druids = { LAND_CIRCLE, MOON_CIRCLE };
-		private static final Subclass[] fighters = { CHAMPION, BATTLE_MASTER, ELDRITCH_KNIGHT };
-		private static final Subclass[] monks = { OPEN_HAND, SHADOW_WAY, FOUR_ELEMENTS };
-		private static final Subclass[] paladins = { DEVOTION_OATH, ANCIENTS_OATH, VENGEANCE_OATH, OATHBREAKER };
-		private static final Subclass[] rangers = { HUNTER, BEAST_MASTER };
-		private static final Subclass[] rogues = { THIEF, ASSASSIN, ARCANE_TRICKSTER };
-		private static final Subclass[] sorcerers = { DRAGON_ORIGIN, CHAOS_ORIGIN };
-		private static final Subclass[] warlocks = { FEY_PACT, FIEND_PACT, STAR_PACT };
-		private static final Subclass[] wizards = { ABJURER, CONJUROR, DIVINER, ENCHANTER, EVOKER, ILLUSIONIST,
-				NECROMANCER, TRANSMUTER };
-
-		// constructors
-		private Subclass(Class job) {
-			this.job = job;
-		}
-
-		// methods
-		public boolean hasSameJob(Class job) {
-			return job.equals(this.job);
-		}
-
-		public boolean hasSameJob(Subclass Subclass) {
-			return Subclass.job.equals(this.job);
-		}
-
-		public Class getJob() {
-			return job;
-		}
-
-		// static methods
-		public static Subclass selectSubclass(Player actor) {
-			Class job = actor.getJob();
-
-			Subclass Subclass = null;
-			int dice;
-
-			if (job.equals(Class.BARBARIAN)) {
-				dice = Dice.roll(barbarians.length) - 1;
-				Subclass = barbarians[dice];
-			} else if (job.equals(Class.BARD)) {
-				dice = Dice.roll(bards.length) - 1;
-				Subclass = bards[dice];
-			} else if (job.equals(Class.CLERIC)) {
-				dice = Dice.roll(clerics.length) - 1;
-				Subclass = clerics[dice];
-			} else if (job.equals(Class.DRUID)) {
-				dice = Dice.roll(druids.length) - 1;
-				Subclass = druids[dice];
-			} else if (job.equals(Class.FIGHTER)) {
-				dice = Dice.roll(100);
-
-				if (dice < 21 && actor.getIntelligence() > 9) {
-					Subclass = fighters[2]; // 20% of fighters are eldritch knights
-				} else if (dice < 51) {
-					Subclass = fighters[1]; // 30% of fighters are battle masters
-				} else {
-					Subclass = fighters[0]; // 50% of fighters are champions
-				}
-			} else if (job.equals(Class.MONK)) {
-				dice = Dice.roll(monks.length) - 1;
-				Subclass = monks[dice];
-			} else if (job.equals(Class.PALADIN)) {
-				dice = Dice.roll(paladins.length) - 1;
-				Subclass = paladins[dice];
-			} else if (job.equals(Class.RANGER)) {
-				dice = Dice.roll(rangers.length) - 1;
-				Subclass = rangers[dice];
-			} else if (job.equals(Class.ROGUE)) {
-				dice = Dice.roll(100);
-
-				if (dice < 21 && actor.getIntelligence() > 9) {
-					Subclass = rogues[2]; // 20% of rogues are arcane tricksters
-				} else if (dice < 51) {
-					Subclass = rogues[1]; // 30% of rogues are assassins
-				} else {
-					Subclass = rogues[0]; // 50% of rogues are thieves
-				}
-			} else if (job.equals(Class.SORCERER)) {
-				dice = Dice.roll(sorcerers.length) - 1;
-				Subclass = sorcerers[dice];
-			} else if (job.equals(Class.WARLOCK)) {
-				dice = Dice.roll(100);
-
-				if (dice < 41) {
-					Subclass = warlocks[1]; // 40% of warlocks have fiend pacts
-				} else if (dice < 71) {
-					Subclass = warlocks[0]; // 30% of warlocks have fey pacts
-				} else {
-					Subclass = warlocks[2]; // 30% of warlocks have star pacts
-				}
-			} else if (job.equals(Class.WIZARD)) {
-				dice = Dice.roll(100);
-
-				if (dice < 41) {
-					Subclass = wizards[2]; // 40% of wizards are diviners
-				} else if (dice < 56) {
-					Subclass = wizards[4]; // 15% of wizards are evokers
-				} else if (dice < 71) {
-					Subclass = wizards[5]; // 15% of wizards are illusionists
-				} else if (dice < 81) {
-					Subclass = wizards[1]; // 10% of wizards are conjurors
-				} else if (dice < 86) {
-					Subclass = wizards[0]; // 5% of wizards are abjurers
-				} else if (dice < 91) {
-					Subclass = wizards[3]; // 5% of wizards are enchanters
-				} else if (dice < 96) {
-					Subclass = wizards[6]; // 5% of wizards are necromancers
-				} else {
-					Subclass = wizards[7]; // 5% of wizards are transmuters
-				}
-			}
-
-			return Subclass;
-		}
-
-		public static Class getJob(Subclass Subclass) {
-			return Subclass.job;
-		}
 	}
 
 	/*
@@ -431,7 +277,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> barbarian(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -450,15 +296,15 @@ public enum Class implements Option {
 		} else if (level == 3) {
 			// PRIMAL PATH
 			set.add(Feature.RAGE_PER_DAY_3);
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
+			if (archetype.equals(Subclass.BERSERKER)) {
 				set.add(Feature.FRENZY);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+			} else if (archetype.equals(Subclass.BEAR_TOTEM)) {
 				set.add(Feature.SPIRIT_SEEKER);
 				set.add(Feature.BEAR_SPIRIT_3);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+			} else if (archetype.equals(Subclass.EAGLE_TOTEM)) {
 				set.add(Feature.SPIRIT_SEEKER);
 				set.add(Feature.EAGLE_SPIRIT_3);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+			} else if (archetype.equals(Subclass.WOLF_TOTEM)) {
 				set.add(Feature.SPIRIT_SEEKER);
 				set.add(Feature.WOLF_SPIRIT_3);
 			}
@@ -471,13 +317,13 @@ public enum Class implements Option {
 			set.add(Feature.RAGE_PER_DAY_4);
 		} else if (level == 6) {
 			// PRIMAL PATH
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
+			if (archetype.equals(Subclass.BERSERKER)) {
 				set.add(Feature.MINDLESS_RAGE);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+			} else if (archetype.equals(Subclass.BEAR_TOTEM)) {
 				set.add(Feature.BEAR_ASPECT_6);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+			} else if (archetype.equals(Subclass.EAGLE_TOTEM)) {
 				set.add(Feature.EAGLE_ASPECT_6);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+			} else if (archetype.equals(Subclass.WOLF_TOTEM)) {
 				set.add(Feature.WOLF_ASPECT_6);
 			}
 		} else if (level == 7) {
@@ -490,13 +336,13 @@ public enum Class implements Option {
 			set.add(Feature.RAGE_BONUS_3);
 		} else if (level == 10) {
 			// PRIMAL PATH
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
+			if (archetype.equals(Subclass.BERSERKER)) {
 				set.add(Feature.INTIMIDATING_PRESENCE);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+			} else if (archetype.equals(Subclass.BEAR_TOTEM)) {
 				set.add(Feature.SPIRIT_WALKER);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+			} else if (archetype.equals(Subclass.EAGLE_TOTEM)) {
 				set.add(Feature.SPIRIT_WALKER);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+			} else if (archetype.equals(Subclass.WOLF_TOTEM)) {
 				set.add(Feature.SPIRIT_WALKER);
 			}
 		} else if (level == 11) {
@@ -509,13 +355,13 @@ public enum Class implements Option {
 			set.add(Feature.BRUTAL_CRITICAL_2);
 		} else if (level == 14) {
 			// PRIMAL PATH
-			if (archetype.equals(Class.Subclass.BERSERKER)) {
+			if (archetype.equals(Subclass.BERSERKER)) {
 				set.add(Feature.RETALIATION);
-			} else if (archetype.equals(Class.Subclass.BEAR_TOTEM)) {
+			} else if (archetype.equals(Subclass.BEAR_TOTEM)) {
 				set.add(Feature.BEAR_ATTUNEMENT_14);
-			} else if (archetype.equals(Class.Subclass.EAGLE_TOTEM)) {
+			} else if (archetype.equals(Subclass.EAGLE_TOTEM)) {
 				set.add(Feature.EAGLE_ATTUNEMENT_14);
-			} else if (archetype.equals(Class.Subclass.WOLF_TOTEM)) {
+			} else if (archetype.equals(Subclass.WOLF_TOTEM)) {
 				set.add(Feature.WOLF_ATTUNEMENT_14);
 			}
 		} else if (level == 15) {
@@ -545,7 +391,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> bard(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		EnumSet<Skill> skills = actor.getSkills();
 		int level = actor.getLevel();
@@ -572,12 +418,12 @@ public enum Class implements Option {
 
 			// BARD COLLEGE
 			set.addAll(addRandomExpertise(2, actor));
-			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
+			if (archetype.equals(Subclass.LORE_COLLEGE)) {
 				skills.add(Skill.testRandomSkill(actor));
 				skills.add(Skill.testRandomSkill(actor));
 				skills.add(Skill.testRandomSkill(actor));
 				set.add(Feature.CUTTING_WORDS);
-			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
+			} else if (archetype.equals(Subclass.VALOR_COLLEGE)) {
 				actor.getArmorProficiency().addAll(Armor.getMediumArmorList());
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
 				actor.getWeaponProficiency().add(Weapon.SHIELD);
@@ -601,12 +447,12 @@ public enum Class implements Option {
 
 			// BARD COLLEGE
 			set.add(Feature.COUNTERCHARM);
-			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
+			if (archetype.equals(Subclass.LORE_COLLEGE)) {
 				// magical secrets
 				set.add(Feature.MAGICAL_SECRETS_6);
 				Spell.addMagicalSecret(3, actor);
 				Spell.addMagicalSecret(3, actor);
-			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
+			} else if (archetype.equals(Subclass.VALOR_COLLEGE)) {
 				set.add(Feature.EXTRA_ATTACK_1);
 			}
 
@@ -648,9 +494,9 @@ public enum Class implements Option {
 			Spell.addMagicalSecret(7, actor);
 			Spell.addMagicalSecret(7, actor);
 
-			if (archetype.equals(Class.Subclass.LORE_COLLEGE)) {
+			if (archetype.equals(Subclass.LORE_COLLEGE)) {
 				set.add(Feature.PEERLESS_SKILL);
-			} else if (archetype.equals(Class.Subclass.VALOR_COLLEGE)) {
+			} else if (archetype.equals(Subclass.VALOR_COLLEGE)) {
 				set.add(Feature.BATTLE_MAGIC);
 			}
 
@@ -683,7 +529,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> cleric(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -699,48 +545,48 @@ public enum Class implements Option {
 			set.add(Feature.CHARISMA_SAVE);
 			//
 			// divine domain
-			if (archetype.equals(Class.Subclass.DEATH)) {
+			if (archetype.equals(Subclass.DEATH)) {
 				//
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
 				set.add(Feature.DIVINE_DOMAIN_DEATH);
 				set.add(Feature.REAPER);
 				spellsKnown.add(Spell.CHILL_TOUCH);
 
-			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+			} else if (archetype.equals(Subclass.KNOWLEDGE)) {
 				//
 				Skill[] array = { Skill.ARCANA, Skill.HISTORY, Skill.NATURE, Skill.RELIGION };
 				set.add(Feature.DIVINE_DOMAIN_KNOWLEDGE);
 				set.add(Feature.BLESSINGS_OF_KNOWLEDGE);
-				Race.Language.learnNonsecretLanguage(actor);
-				Race.Language.learnNonsecretLanguage(actor);
+				Language.learnNonsecretLanguage(actor);
+				Language.learnNonsecretLanguage(actor);
 				Skill.testSkillFromArray(array, actor);
 				Skill.testSkillFromArray(array, actor);
-			} else if (archetype.equals(Class.Subclass.LIFE)) {
+			} else if (archetype.equals(Subclass.LIFE)) {
 				//
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
 				set.add(Feature.DIVINE_DOMAIN_LIFE);
 				set.add(Feature.DISCIPLE_OF_LIFE);
-			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+			} else if (archetype.equals(Subclass.LIGHT)) {
 				//
 				set.add(Feature.DIVINE_DOMAIN_LIGHT);
 				set.add(Feature.WARDING_FLARE);
 				spellsKnown.add(Spell.LIGHT);
-			} else if (archetype.equals(Class.Subclass.NATURE)) {
+			} else if (archetype.equals(Subclass.NATURE)) {
 				//
 				Spell.addCantripKnown(DRUID, spellsKnown);
 				set.add(Feature.DIVINE_DOMAIN_NATURE);
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
-			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+			} else if (archetype.equals(Subclass.TEMPEST)) {
 				//
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
 				set.add(Feature.DIVINE_DOMAIN_TEMPEST);
 				set.add(Feature.WRATH_OF_THE_STORM);
-			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+			} else if (archetype.equals(Subclass.TRICKERY)) {
 				//
 				set.add(Feature.DIVINE_DOMAIN_TRICKERY);
 				set.add(Feature.BLESSING_OF_THE_TRICKSTER);
-			} else if (archetype.equals(Class.Subclass.WAR)) {
+			} else if (archetype.equals(Subclass.WAR)) {
 				//
 				actor.getWeaponProficiency().addAll(Weapon.getMartialWeaponList());
 				actor.getArmorProficiency().addAll(Armor.getHeavyArmorList());
@@ -751,28 +597,28 @@ public enum Class implements Option {
 		} else if (level == 2) {
 			set.add(Feature.CHANNEL_DIVINITY_1);
 			// divine domain
-			if (archetype.equals(Class.Subclass.DEATH)) {
+			if (archetype.equals(Subclass.DEATH)) {
 				//
 				set.add(Feature.TOUCH_OF_DEATH);
-			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+			} else if (archetype.equals(Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.KNOWLEDGE_OF_THE_AGES);
-			} else if (archetype.equals(Class.Subclass.LIFE)) {
+			} else if (archetype.equals(Subclass.LIFE)) {
 				//
 				set.add(Feature.PRESERVE_LIFE);
-			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+			} else if (archetype.equals(Subclass.LIGHT)) {
 				//
 				set.add(Feature.RADIANCE_OF_THE_DAWN);
-			} else if (archetype.equals(Class.Subclass.NATURE)) {
+			} else if (archetype.equals(Subclass.NATURE)) {
 				//
 				set.add(Feature.CHARM_ANIMALS_AND_PLANTS);
-			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+			} else if (archetype.equals(Subclass.TEMPEST)) {
 				//
 				set.add(Feature.DESTRUCTIVE_WRATH);
-			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+			} else if (archetype.equals(Subclass.TRICKERY)) {
 				//
 				set.add(Feature.INVOKE_DUPLICITY);
-			} else if (archetype.equals(Class.Subclass.WAR)) {
+			} else if (archetype.equals(Subclass.WAR)) {
 				//
 				set.add(Feature.GUIDED_STRIKE);
 			}
@@ -791,28 +637,28 @@ public enum Class implements Option {
 		} else if (level == 6) {
 			set.add(Feature.CHANNEL_DIVINITY_2);
 			// domain
-			if (archetype.equals(Class.Subclass.DEATH)) {
+			if (archetype.equals(Subclass.DEATH)) {
 				//
 				set.add(Feature.INESCAPABLE_DESTRUCTION);
-			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+			} else if (archetype.equals(Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.READ_THOUGHTS);
-			} else if (archetype.equals(Class.Subclass.LIFE)) {
+			} else if (archetype.equals(Subclass.LIFE)) {
 				//
 				set.add(Feature.BLESSED_HEALER);
-			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+			} else if (archetype.equals(Subclass.LIGHT)) {
 				//
 				set.add(Feature.IMPROVED_FLARE);
-			} else if (archetype.equals(Class.Subclass.NATURE)) {
+			} else if (archetype.equals(Subclass.NATURE)) {
 				//
 				set.add(Feature.DAMPEN_ELEMENTS);
-			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+			} else if (archetype.equals(Subclass.TEMPEST)) {
 				//
 				set.add(Feature.THUNDERBOLT_STRIKE);
-			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+			} else if (archetype.equals(Subclass.TRICKERY)) {
 				//
 				set.add(Feature.TRICKERY_CLOAK);
-			} else if (archetype.equals(Class.Subclass.WAR)) {
+			} else if (archetype.equals(Subclass.WAR)) {
 				//
 				set.add(Feature.WAR_GODS_BLESSING);
 			}
@@ -823,28 +669,28 @@ public enum Class implements Option {
 			set.add(Feature.DESTROY_UNDEAD_8);
 			set.add(Feature.ABILITY_BONUS_8);
 			set.add(abilityImprove(actor));
-			if (archetype.equals(Class.Subclass.DEATH)) {
+			if (archetype.equals(Subclass.DEATH)) {
 				//
 				set.add(Feature.DIVINE_STRIKE_DEATH);
-			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+			} else if (archetype.equals(Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.POTENT_SPELLCASTING_CLERIC);
-			} else if (archetype.equals(Class.Subclass.LIFE)) {
+			} else if (archetype.equals(Subclass.LIFE)) {
 				//
 				set.add(Feature.DIVINE_STRIKE_LIFE);
-			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+			} else if (archetype.equals(Subclass.LIGHT)) {
 				//
 				set.add(Feature.POTENT_SPELLCASTING_CLERIC);
-			} else if (archetype.equals(Class.Subclass.NATURE)) {
+			} else if (archetype.equals(Subclass.NATURE)) {
 				//
 				set.add(Feature.DIVINE_STRIKE_NATURE);
-			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+			} else if (archetype.equals(Subclass.TEMPEST)) {
 				//
 				set.add(Feature.DIVINE_STRIKE_TEMPEST);
-			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+			} else if (archetype.equals(Subclass.TRICKERY)) {
 				//
 				set.add(Feature.DIVINE_STRIKE_TRICKERY);
-			} else if (archetype.equals(Class.Subclass.WAR)) {
+			} else if (archetype.equals(Subclass.WAR)) {
 				//
 				set.add(Feature.DIVINE_STRIKE_WAR);
 			}
@@ -874,28 +720,28 @@ public enum Class implements Option {
 			set.add(abilityImprove(actor));
 		} else if (level == 17) {
 			set.add(Feature.DESTROY_UNDEAD_17);
-			if (archetype.equals(Class.Subclass.DEATH)) {
+			if (archetype.equals(Subclass.DEATH)) {
 				//
 				set.add(Feature.IMPROVED_REAPER);
-			} else if (archetype.equals(Class.Subclass.KNOWLEDGE)) {
+			} else if (archetype.equals(Subclass.KNOWLEDGE)) {
 				//
 				set.add(Feature.VISIONS_OF_THE_PAST);
-			} else if (archetype.equals(Class.Subclass.LIFE)) {
+			} else if (archetype.equals(Subclass.LIFE)) {
 				//
 				set.add(Feature.SUPREME_HEALING);
-			} else if (archetype.equals(Class.Subclass.LIGHT)) {
+			} else if (archetype.equals(Subclass.LIGHT)) {
 				//
 				set.add(Feature.POTENT_SPELLCASTING_CLERIC);
-			} else if (archetype.equals(Class.Subclass.NATURE)) {
+			} else if (archetype.equals(Subclass.NATURE)) {
 				//
 				set.add(Feature.MASTER_OF_NATURE);
-			} else if (archetype.equals(Class.Subclass.TEMPEST)) {
+			} else if (archetype.equals(Subclass.TEMPEST)) {
 				//
 				set.add(Feature.STORMBORN);
-			} else if (archetype.equals(Class.Subclass.TRICKERY)) {
+			} else if (archetype.equals(Subclass.TRICKERY)) {
 				//
 				set.add(Feature.IMPROVED_DUPLICITY);
-			} else if (archetype.equals(Class.Subclass.WAR)) {
+			} else if (archetype.equals(Subclass.WAR)) {
 				//
 				set.add(Feature.AVATAR_OF_BATTLE);
 			}
@@ -919,7 +765,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> druid(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -934,12 +780,12 @@ public enum Class implements Option {
 			set.add(Feature.INTELLIGENCE_SAVE);
 			set.add(Feature.WISDOM_SAVE);
 			//
-			Race.Language.addLanguage(Race.Language.DRUIDIC, actor);
+			Language.addLanguage(Language.DRUIDIC, actor);
 			set.add(Feature.RITUAL_CASTING_DRUID);
 
 		} else if (level == 2) {
 			// moon circle gets one wild shape, everyone else gets another
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
+			if (archetype.equals(Subclass.MOON_CIRCLE)) {
 				set.add(Feature.MOON_SHAPE_2);
 				set.add(Feature.COMBAT_WILD_SHAPE);
 
@@ -949,18 +795,18 @@ public enum Class implements Option {
 			}
 
 			// land circle gets a bonus cantrip
-			if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+			if (archetype.equals(Subclass.LAND_CIRCLE))
 				Spell.addCantripKnown(job, spellsKnown);
 
 		} else if (level == 3) {
-			if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+			if (archetype.equals(Subclass.LAND_CIRCLE))
 				set.addAll(Dice.randomAddToSet(1, Feature.CIRCLE_SPELLS, set));
 
 		} else if (level == 4) {
 			// cantrip
 			Spell.addCantripKnown(job, spellsKnown);
 
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE) != true)
+			if (archetype.equals(Subclass.MOON_CIRCLE) != true)
 				set.add(Feature.WILD_SHAPE_4);
 
 			set.add(Feature.ABILITY_BONUS_4);
@@ -968,33 +814,33 @@ public enum Class implements Option {
 		} else if (level == 5) {
 
 		} else if (level == 6) {
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
+			if (archetype.equals(Subclass.MOON_CIRCLE)) {
 				set.add(Feature.MOON_SHAPE_6);
 				set.add(Feature.PRIMAL_STRIKE);
 
-			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+			} else if (archetype.equals(Subclass.LAND_CIRCLE))
 				set.add(Feature.LANDS_STRIDE);
 
 		} else if (level == 7) {
 
 		} else if (level == 8) {
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE) != true)
+			if (archetype.equals(Subclass.MOON_CIRCLE) != true)
 				set.add(Feature.WILD_SHAPE_8);
 
 			set.add(Feature.ABILITY_BONUS_8);
 			set.add(abilityImprove(actor));
 		} else if (level == 9) {
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+			if (archetype.equals(Subclass.MOON_CIRCLE))
 				set.add(Feature.MOON_SHAPE_9);
 
 		} else if (level == 10) {
 			// cantrip
 			Spell.addCantripKnown(job, spellsKnown);
 
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
+			if (archetype.equals(Subclass.MOON_CIRCLE)) {
 				set.add(Feature.ELEMENTAL_SHAPE);
 
-			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE)) {
+			} else if (archetype.equals(Subclass.LAND_CIRCLE)) {
 				set.add(Feature.NATURES_WARD);
 
 			}
@@ -1002,7 +848,7 @@ public enum Class implements Option {
 		} else if (level == 11) {
 
 		} else if (level == 12) {
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+			if (archetype.equals(Subclass.MOON_CIRCLE))
 				set.add(Feature.MOON_SHAPE_12);
 
 			set.add(Feature.ABILITY_BONUS_12);
@@ -1010,13 +856,13 @@ public enum Class implements Option {
 		} else if (level == 13) {
 
 		} else if (level == 14) {
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE)) {
+			if (archetype.equals(Subclass.MOON_CIRCLE)) {
 				set.add(Feature.THOUSAND_FORMS);
-			} else if (archetype.equals(Class.Subclass.LAND_CIRCLE))
+			} else if (archetype.equals(Subclass.LAND_CIRCLE))
 				set.add(Feature.NATURES_SANCTUARY);
 
 		} else if (level == 15) {
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+			if (archetype.equals(Subclass.MOON_CIRCLE))
 				set.add(Feature.MOON_SHAPE_15);
 
 		} else if (level == 16) {
@@ -1025,7 +871,7 @@ public enum Class implements Option {
 		} else if (level == 17) {
 
 		} else if (level == 18) {
-			if (archetype.equals(Class.Subclass.MOON_CIRCLE))
+			if (archetype.equals(Subclass.MOON_CIRCLE))
 				set.add(Feature.MOON_SHAPE_18);
 
 			set.add(Feature.TIMELESS_BODY);
@@ -1046,7 +892,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> fighter(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -1070,17 +916,17 @@ public enum Class implements Option {
 
 		} else if (level == 3) {
 			// Martial archetype
-			if (archetype.equals(Class.Subclass.CHAMPION)) {
+			if (archetype.equals(Subclass.CHAMPION)) {
 				set.add(Feature.IMPROVED_CRITICAL);
 
-			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+			} else if (archetype.equals(Subclass.BATTLE_MASTER)) {
 				set.add(Feature.COMBAT_SUPERIORITY);
 				set.add(Feature.SUPERIORITY_D8);
 				set.add(Feature.SUPERIORITY_DICE_4);
 				set.addAll(addFighterManeuver(3, actor));
 				set.add(Feature.STUDENT_OF_WAR);
 
-			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+			} else if (archetype.equals(Subclass.ELDRITCH_KNIGHT)) {
 				//
 				set.add(Feature.WEAPON_BOND);
 				Spell.addCantripKnown(casterClass, spellsKnown);
@@ -1093,7 +939,7 @@ public enum Class implements Option {
 			set.add(Feature.ABILITY_BONUS_4);
 			set.add(abilityImprove(actor));
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addEldritchKnightSpells(1, 1, actor);
 
 		} else if (level == 5) {
@@ -1105,15 +951,15 @@ public enum Class implements Option {
 
 		} else if (level == 7) {
 			// Martial archetype
-			if (archetype.equals(Class.Subclass.CHAMPION)) {
+			if (archetype.equals(Subclass.CHAMPION)) {
 				set.add(Feature.REMARKABLE_ATHLETE);
 
-			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+			} else if (archetype.equals(Subclass.BATTLE_MASTER)) {
 				set.add(Feature.SUPERIORITY_DICE_5);
 				set.addAll(addFighterManeuver(2, actor));
 				set.add(Feature.KNOW_YOUR_ENEMY);
 
-			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+			} else if (archetype.equals(Subclass.ELDRITCH_KNIGHT)) {
 				//
 				set.add(Feature.WAR_MAGIC);
 				Spell.addEldritchKnightSpells(1, 2, actor);
@@ -1124,7 +970,7 @@ public enum Class implements Option {
 			set.add(Feature.ABILITY_BONUS_8);
 			set.add(abilityImprove(actor));
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addToSpellsKnown(2, casterClass, spellsKnown);
 
 		} else if (level == 9) {
@@ -1132,16 +978,16 @@ public enum Class implements Option {
 
 		} else if (level == 10) {
 			// Martial archetype
-			if (archetype.equals(Class.Subclass.CHAMPION)) {
+			if (archetype.equals(Subclass.CHAMPION)) {
 				set.add(Feature.ADDITIONAL_FIGHTING_STYLE);
 				set.addAll(fighterFightingStyle(1, actor));
 
-			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+			} else if (archetype.equals(Subclass.BATTLE_MASTER)) {
 				//
 				set.add(Feature.SUPERIORITY_D10);
 				set.addAll(addFighterManeuver(2, actor));
 
-			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+			} else if (archetype.equals(Subclass.ELDRITCH_KNIGHT)) {
 				set.add(Feature.ELDRITCH_STRIKE);
 				Spell.addCantripKnown(casterClass, spellsKnown);
 				Spell.addEldritchKnightSpells(1, 2, actor);
@@ -1151,7 +997,7 @@ public enum Class implements Option {
 		} else if (level == 11) {
 			set.add(Feature.EXTRA_ATTACK_2);
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addEldritchKnightSpells(1, 2, actor);
 
 		} else if (level == 12) {
@@ -1161,28 +1007,28 @@ public enum Class implements Option {
 		} else if (level == 13) {
 			set.add(Feature.INDOMITABLE_2);
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addEldritchKnightSpells(1, 3, actor);
 
 		} else if (level == 14) {
 			set.add(Feature.ABILITY_BONUS_14);
 			set.add(abilityImprove(actor));
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addToSpellsKnown(3, casterClass, spellsKnown);
 
 		} else if (level == 15) {
 			// Martial archetype
-			if (archetype.equals(Class.Subclass.CHAMPION)) {
+			if (archetype.equals(Subclass.CHAMPION)) {
 				set.add(Feature.SUPERIOR_CRITICAL);
 
-			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+			} else if (archetype.equals(Subclass.BATTLE_MASTER)) {
 				//
 				set.add(Feature.SUPERIORITY_DICE_6);
 				set.addAll(addFighterManeuver(2, actor));
 				set.add(Feature.RELENTLESS_FIGHTER);
 
-			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+			} else if (archetype.equals(Subclass.ELDRITCH_KNIGHT)) {
 				//
 				set.add(Feature.ARCANE_CHARGE);
 
@@ -1192,7 +1038,7 @@ public enum Class implements Option {
 			set.add(Feature.ABILITY_BONUS_16);
 			set.add(abilityImprove(actor));
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addEldritchKnightSpells(1, 3, actor);
 
 		} else if (level == 17) {
@@ -1201,14 +1047,14 @@ public enum Class implements Option {
 
 		} else if (level == 18) {
 			// Martial archetype
-			if (archetype.equals(Class.Subclass.CHAMPION)) {
+			if (archetype.equals(Subclass.CHAMPION)) {
 				set.add(Feature.SURVIVOR);
 
-			} else if (archetype.equals(Class.Subclass.BATTLE_MASTER)) {
+			} else if (archetype.equals(Subclass.BATTLE_MASTER)) {
 				//
 				set.add(Feature.SUPERIORITY_D12);
 
-			} else if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT)) {
+			} else if (archetype.equals(Subclass.ELDRITCH_KNIGHT)) {
 				//
 				set.add(Feature.WAR_MAGIC);
 
@@ -1218,13 +1064,13 @@ public enum Class implements Option {
 			set.add(Feature.ABILITY_BONUS_19);
 			set.add(abilityImprove(actor));
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addEldritchKnightSpells(1, 4, actor);
 
 		} else if (level == 20) {
 			set.add(Feature.EXTRA_ATTACK_3);
 			//
-			if (archetype.equals(Class.Subclass.ELDRITCH_KNIGHT))
+			if (archetype.equals(Subclass.ELDRITCH_KNIGHT))
 				Spell.addToSpellsKnown(4, casterClass, spellsKnown);
 
 		}
@@ -1237,7 +1083,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> monk(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -1388,7 +1234,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> paladin(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -1523,7 +1369,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> ranger(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -1637,7 +1483,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> rogue(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -1818,7 +1664,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> sorcerer(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -1834,7 +1680,7 @@ public enum Class implements Option {
 				set.add(Feature.CONSTITUTION_SAVE);
 				set.add(Feature.CHARISMA_SAVE);
 				//
-				actor.getLanguages().add(Race.Language.DRACONIC);
+				actor.getLanguages().add(Language.DRACONIC);
 				Option.dragonSorcererAncestry(actor);
 				set.add(Feature.DRACONIC_RESILIENCE);
 
@@ -1943,7 +1789,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> warlock(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -1961,13 +1807,13 @@ public enum Class implements Option {
 			set.add(Option.randomWarlockPact());
 			set.add(Feature.WARLOCK_SLOT_1);
 
-			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+			if (archetype.equals(Subclass.FEY_PACT)) {
 				set.add(Feature.FEY_PRESENCE);
 
-			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+			} else if (archetype.equals(Subclass.FIEND_PACT)) {
 				set.add(Feature.DARK_ONES_BLESSING);
 
-			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+			} else if (archetype.equals(Subclass.STAR_PACT)) {
 				set.add(Feature.AWAKENED_MIND);
 
 			}
@@ -1994,13 +1840,13 @@ public enum Class implements Option {
 		} else if (level == 6) {
 			Spell.addToSpellsKnown(3, casterClass, spellsKnown);
 
-			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+			if (archetype.equals(Subclass.FEY_PACT)) {
 				set.add(Feature.MISTY_ESCAPE);
 
-			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+			} else if (archetype.equals(Subclass.FIEND_PACT)) {
 				set.add(Feature.DARK_ONES_OWN_LUCK);
 
-			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+			} else if (archetype.equals(Subclass.STAR_PACT)) {
 				set.add(Feature.ENTROPIC_WARD);
 
 			}
@@ -2022,13 +1868,13 @@ public enum Class implements Option {
 		} else if (level == 10) {
 			Spell.addCantripKnown(casterClass, spellsKnown);
 			//
-			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+			if (archetype.equals(Subclass.FEY_PACT)) {
 				set.add(Feature.BEGUILING_DEFENSES);
 
-			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+			} else if (archetype.equals(Subclass.FIEND_PACT)) {
 				set.add(Feature.FIENDISH_RESILIENCE);
 
-			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+			} else if (archetype.equals(Subclass.STAR_PACT)) {
 				set.add(Feature.THOUGHT_SHIELD);
 
 			}
@@ -2049,13 +1895,13 @@ public enum Class implements Option {
 			Spell.addToSpellsKnown(5, casterClass, spellsKnown);
 
 		} else if (level == 14) {
-			if (archetype.equals(Class.Subclass.FEY_PACT)) {
+			if (archetype.equals(Subclass.FEY_PACT)) {
 				set.add(Feature.DARK_DELIRIUM);
 
-			} else if (archetype.equals(Class.Subclass.FIEND_PACT)) {
+			} else if (archetype.equals(Subclass.FIEND_PACT)) {
 				set.add(Feature.HURL_THROUGH_HELL);
 
-			} else if (archetype.equals(Class.Subclass.STAR_PACT)) {
+			} else if (archetype.equals(Subclass.STAR_PACT)) {
 				set.add(Feature.CREATE_THRALL);
 
 			}
@@ -2096,7 +1942,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> wizard(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 
@@ -2309,7 +2155,7 @@ public enum Class implements Option {
 	 * 
 	 */
 	public static EnumSet<Feature> blank(Player actor) {
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		EnumSet<Feature> set = EnumSet.noneOf(Feature.class);
 		int level = actor.getLevel();
 

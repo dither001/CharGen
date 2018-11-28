@@ -10,7 +10,7 @@ import magic.Spell;
 import milieu.Names;
 import milieu.Names.AlphabeticalDescending;
 import rules.Dice;
-import rules.Energy;
+import rules.*;
 
 public class Player implements Actor {
 
@@ -21,17 +21,17 @@ public class Player implements Actor {
 	private byte[] abilityScores;
 	private byte[] abilityCeiling;
 	private Size size;
-	private Creature creature;
+	private CreatureType creature;
 	private byte[] hitDice;
 	private boolean isFemale;
 
 	private Race race;
 	private Class job;
-	private Class.Subclass archetype;
+	private Subclass archetype;
 	private EnumSet<Spell> spellsKnown;
 
 	private Deity god;
-	private Actor.Alignment alignment;
+	private Alignment alignment;
 	private Career.Profile career;
 
 	// proficiency
@@ -39,7 +39,7 @@ public class Player implements Actor {
 	private EnumSet<Weapon> weapons;
 	private EnumSet<Skill> skills;
 	private EnumSet<Option.Feature> features;
-	private EnumSet<Race.Language> languages;
+	private EnumSet<Language> languages;
 
 	// gear
 	private Inventory inventory;
@@ -57,13 +57,13 @@ public class Player implements Actor {
 	 */
 	public Player() {
 		//
-		abilityScores = Dice.rollAbilities();
+		abilityScores = Dice.rollAbilitiesByte();
 		abilityCeiling = new byte[] { 20, 20, 20, 20, 20, 20 };
-		alignment = Actor.Alignment.random();
+		alignment = Alignment.random();
 
 		//
 		job = Class.selectClass(this);
-		archetype = Class.Subclass.selectSubclass(this);
+		archetype = Subclass.selectSubclass(this);
 		Race.applyRacialFeatures(this);
 		god = Deity.selectDeity(this);
 		career = new Career.Profile(this);
@@ -95,7 +95,7 @@ public class Player implements Actor {
 
 		// must be after race is determined
 		this.size = (race.equals(Race.LIGHTFOOT_HALFLING) || race.equals(Race.FOREST_GNOME)) ? Size.SMALL : Size.MEDIUM;
-		this.creature = Creature.HUMANOID;
+		this.creature = CreatureType.HUMANOID;
 
 		// inventory setup
 		Inventory.setupStartingGear(this);
@@ -226,7 +226,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public Creature creatureType() {
+	public CreatureType creatureType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -257,7 +257,7 @@ public class Player implements Actor {
 		return job;
 	}
 
-	public Class.Subclass getArchetype() {
+	public Subclass getArchetype() {
 		return archetype;
 	}
 
@@ -302,7 +302,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public EnumSet<Speed> getSpeed() {
+	public EnumSet<MovementType> getSpeed() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -377,11 +377,11 @@ public class Player implements Actor {
 		return null;
 	}
 
-	public EnumSet<Race.Language> getLanguages() {
+	public EnumSet<Language> getLanguages() {
 		return languages;
 	}
 
-	public void setLanguages(EnumSet<Race.Language> languages) {
+	public void setLanguages(EnumSet<Language> languages) {
 		this.languages = languages;
 	}
 

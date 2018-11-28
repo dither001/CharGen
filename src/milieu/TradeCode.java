@@ -23,6 +23,12 @@ public enum TradeCode {
 	public static void setupTradeCodes(World world) {
 		EnumSet<TradeCode> set = EnumSet.noneOf(TradeCode.class);
 
+		// if not a world, set empty set and return
+		if (!WorldType.isWorld(world)) {
+			world.setTradeCodes(set);
+			return;
+		}
+
 		int size = world.getSize();
 		int atmo = world.getAtmosphere();
 		int hydro = world.getHydrosphere();
@@ -221,10 +227,10 @@ public enum TradeCode {
 
 		return index;
 	}
-	
+
 	public static String codeName(TradeCode code) {
 		String string = "";
-		
+
 		switch (code) {
 		case AG:
 			string = "Agricultural";
@@ -273,9 +279,9 @@ public enum TradeCode {
 			break;
 		default:
 			break;
-		
+
 		}
-		
+
 		return string;
 	}
 }

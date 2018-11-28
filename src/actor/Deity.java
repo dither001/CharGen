@@ -1,5 +1,6 @@
 package actor;
-import rules.Dice;
+
+import rules.*;
 
 public enum Deity {
 	ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR;
@@ -30,7 +31,7 @@ public enum Deity {
 
 	// static methods
 	public static Deity selectDeity(Player actor) {
-		Actor.Alignment ali = actor.alignment();
+		Alignment ali = actor.alignment();
 		Class job = actor.getJob();
 		Race race = actor.getRace();
 		Deity deity;
@@ -47,23 +48,23 @@ public enum Deity {
 
 	public static Deity domainToDeity(Player actor) {
 		Deity[] array = null;
-		Class.Subclass domain = actor.getArchetype();
+		Subclass domain = actor.getArchetype();
 
-		if (domain.equals(Class.Subclass.DEATH))
+		if (domain.equals(Subclass.DEATH))
 			array = DEATH_GODS;
-		else if (domain.equals(Class.Subclass.KNOWLEDGE))
+		else if (domain.equals(Subclass.KNOWLEDGE))
 			array = KNOWLEDGE_GODS;
-		else if (domain.equals(Class.Subclass.LIFE))
+		else if (domain.equals(Subclass.LIFE))
 			array = LIFE_GODS;
-		else if (domain.equals(Class.Subclass.LIGHT))
+		else if (domain.equals(Subclass.LIGHT))
 			array = LIGHT_GODS;
-		else if (domain.equals(Class.Subclass.NATURE))
+		else if (domain.equals(Subclass.NATURE))
 			array = NATURE_GODS;
-		else if (domain.equals(Class.Subclass.TEMPEST))
+		else if (domain.equals(Subclass.TEMPEST))
 			array = TEMPEST_GODS;
-		else if (domain.equals(Class.Subclass.TRICKERY))
+		else if (domain.equals(Subclass.TRICKERY))
 			array = TRICKERY_GODS;
-		else if (domain.equals(Class.Subclass.WAR))
+		else if (domain.equals(Subclass.WAR))
 			array = WAR_GODS;
 
 		return Dice.randomFromArray(array);
@@ -124,16 +125,16 @@ public enum Deity {
 		return deity;
 	}
 
-	public static Deity idealDeity(Actor.Alignment ali) {
+	public static Deity idealDeity(Alignment ali) {
 		Deity[] array = null;
 
-		if (ali.equals(Actor.Alignment.LAWFUL)) {
+		if (ali.equals(Alignment.LAWFUL)) {
 			array = LAWFUL_GODS;
-		} else if (ali.equals(Actor.Alignment.GOOD)) {
+		} else if (ali.equals(Alignment.GOOD)) {
 			array = GOOD_GODS;
-		} else if (ali.equals(Actor.Alignment.NEUTRAL)) {
+		} else if (ali.equals(Alignment.NEUTRAL)) {
 			array = NEUTRAL_GODS;
-		} else if (ali.equals(Actor.Alignment.CHAOTIC)) {
+		} else if (ali.equals(Alignment.CHAOTIC)) {
 			array = CHAOTIC_GODS;
 		} else {
 			array = EVIL_GODS;

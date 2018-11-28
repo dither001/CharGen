@@ -4,61 +4,11 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
-import rules.Dice;
-import rules.Energy;
+import rules.*;
 
 //
 
 public interface Actor {
-	public enum Ability {
-		STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA
-	}
-
-	public enum Size {
-		TINY, SMALL, MEDIUM, LARGE, HUGE, GARGANTUAN
-	}
-
-	public enum Creature {
-		ABERRATION, BEAST, CELESTIAL, CONSTRUCT, DRAGON, ELEMENTAL, FAERIE, FIEND, GIANT, HUMANOID, MONSTROSITY, OOZE, PLANT, UNDEAD
-	}
-
-	public enum Alignment {
-		LAWFUL, GOOD, NEUTRAL, CHAOTIC, EVIL;
-
-		public static Alignment random() {
-			// lawful (15%), good (15%, neutral (15%), evil (40%), chaotic (15%)
-			int[] array = new int[] { 15, 15, 15, 40, 15 };
-			Alignment choice;
-
-			int dice = Dice.roll(100);
-			if (dice < 1 + array[0])
-				choice = LAWFUL;
-			else if (dice < 1 + array[0] + array[1])
-				choice = GOOD;
-			else if (dice < 1 + array[0] + array[1] + array[2])
-				choice = NEUTRAL;
-			else if (dice < 1 + array[0] + array[1] + array[2] + array[3])
-				choice = EVIL;
-			else
-				choice = CHAOTIC;
-
-			return choice;
-		}
-
-	}
-
-	public enum Speed {
-		WALK, BURROW, CLIMB, FLY, SWIM
-	}
-
-	public enum Condition {
-		BLINDED, CHARMED, DEAFENED, FRIGHTENED, GRAPPLED, INCAPACITATED, INVISIBLE, PARALYZED, PETRIFIED, POISONED, PRONE, RESTRAINED, STUNNED, UNCONSCIOUS
-	}
-
-	public enum Sense {
-		SIGHT, HEARING, SCENT, TOUCH, TASTE, BLINDSIGHT, DARKVISION, TREMORSENSE, TRUESIGHT
-	}
-
 	/*
 	 * INSTANCE METHODS
 	 * 
@@ -67,7 +17,7 @@ public interface Actor {
 
 	public Size creatureSize();
 
-	public Creature creatureType();
+	public CreatureType creatureType();
 
 	public Alignment alignment();
 
@@ -81,7 +31,7 @@ public interface Actor {
 
 	public void setExp(int exp);
 
-	public EnumSet<Speed> getSpeed();
+	public EnumSet<MovementType> getSpeed();
 
 	public byte[] getAbilityScores();
 

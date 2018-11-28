@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import milieu.Names;
-import rules.Dice;
-import rules.Energy;
+import rules.*;
 
 public class Immortal implements Actor {
 	/*
@@ -137,10 +136,6 @@ public class Immortal implements Actor {
 		 * Chinese ghosts and spirits are well-documented on Wikipedia (must read):
 		 * https://en.wikipedia.org/wiki/Ghosts_in_Chinese_culture
 		 */
-	}
-
-	private enum Domain {
-		DEATH, KNOWLEDGE, LIFE, LIGHT, NATURE, TEMPEST, TRICKERY, WAR
 	}
 
 	private enum Entity {
@@ -985,7 +980,7 @@ public class Immortal implements Actor {
 
 		Entity[] array = null;
 		Lesser lesser = null;
-		Actor.Alignment ali = null;
+		Alignment ali = null;
 		Domain domain = null;
 
 		/*
@@ -993,7 +988,7 @@ public class Immortal implements Actor {
 		 */
 		array = UBAID_KINGS;
 		lesser = Lesser.UBAID;
-		ali = Actor.Alignment.LAWFUL;
+		ali = Alignment.LAWFUL;
 		domain = Domain.LIFE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1004,7 +999,7 @@ public class Immortal implements Actor {
 		 */
 		array = ELOHIM;
 		lesser = Lesser.ELOHIM;
-		ali = Actor.Alignment.LAWFUL;
+		ali = Alignment.LAWFUL;
 		domain = Domain.LIFE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1015,7 +1010,7 @@ public class Immortal implements Actor {
 		 */
 		array = JEWISH_ANGELS;
 		lesser = Lesser.ANGEL;
-		ali = Actor.Alignment.LAWFUL;
+		ali = Alignment.LAWFUL;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1023,7 +1018,7 @@ public class Immortal implements Actor {
 
 		array = JEWISH_DEMONS;
 		lesser = Lesser.DEMON;
-		ali = Actor.Alignment.EVIL;
+		ali = Alignment.EVIL;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1036,12 +1031,12 @@ public class Immortal implements Actor {
 		// TALOS is a bronze giant built by Hephaestus to guard Crete
 		domain = Domain.DEATH;
 		Prototype.prototypes.put(Entity.TALOS,
-				new Prototype(Entity.TALOS, Lesser.ABOMINATION, Actor.Alignment.NEUTRAL, domain));
+				new Prototype(Entity.TALOS, Lesser.ABOMINATION, Alignment.NEUTRAL, domain));
 
 		// HELLENIC - PRIMORDIALS (Uranus et al.)
 		array = Immortal.GREEK_PRIMORDIALS;
 		lesser = Lesser.ELEMENTAL;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1050,7 +1045,7 @@ public class Immortal implements Actor {
 		// HELLENIC - TITANS (Cronus et al.)
 		array = Immortal.TITANS;
 		lesser = Lesser.TITAN;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.KNOWLEDGE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1059,7 +1054,7 @@ public class Immortal implements Actor {
 		// HELLENIC - OLYMPIANS (Zeus et al.)
 		array = Immortal.OLYMPIANS;
 		lesser = Lesser.OLYMPIAN;
-		ali = Actor.Alignment.LAWFUL;
+		ali = Alignment.LAWFUL;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1068,7 +1063,7 @@ public class Immortal implements Actor {
 		// HELLENIC - CHTHONIANS (Hades et al.)
 		array = Immortal.CHTHONIANS;
 		lesser = Lesser.CHTHONIAN;
-		ali = Actor.Alignment.EVIL;
+		ali = Alignment.EVIL;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1077,7 +1072,7 @@ public class Immortal implements Actor {
 		// HELLENIC - OCEANIC (Poseidon et al.)
 		array = Immortal.OCEANIC;
 		lesser = Lesser.OCEANIC;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.TEMPEST;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1086,7 +1081,7 @@ public class Immortal implements Actor {
 		// HELLENIC - Miscellaneous SPIRITS
 		array = Immortal.HELLENIC_SPIRITS;
 		lesser = Lesser.ELEMENTAL;
-		ali = Actor.Alignment.NEUTRAL;
+		ali = Alignment.NEUTRAL;
 		domain = Domain.TRICKERY;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1095,7 +1090,7 @@ public class Immortal implements Actor {
 		// HELLENIC - AMAZONS (war spirits)
 		array = Immortal.AMAZONS;
 		lesser = Lesser.ELEMENTAL;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.WAR;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1104,7 +1099,7 @@ public class Immortal implements Actor {
 		// HELLENIC - ERIC (conflict spirits)
 		array = Immortal.ERIS;
 		lesser = Lesser.ELEMENTAL;
-		ali = Actor.Alignment.EVIL;
+		ali = Alignment.EVIL;
 		domain = Domain.WAR;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1113,7 +1108,7 @@ public class Immortal implements Actor {
 		// HELLENIC - NYMPHS (nature spirits)
 		array = NYMPHS;
 		lesser = Lesser.NYMPH;
-		ali = Actor.Alignment.GOOD;
+		ali = Alignment.GOOD;
 		domain = Domain.LIFE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1122,7 +1117,7 @@ public class Immortal implements Actor {
 		// HELLENIC - NYMPHS (nature spirits)
 		array = CENTAURS;
 		lesser = Lesser.CENTAUR;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.NATURE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1131,7 +1126,7 @@ public class Immortal implements Actor {
 		// HELLENIC - CYCLOPES
 		array = CYCLOPES;
 		lesser = Lesser.CYCLOPS;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.KNOWLEDGE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1140,7 +1135,7 @@ public class Immortal implements Actor {
 		// HELLENIC - NYMPHS (nature spirits)
 		array = GREEK_WITCHES;
 		lesser = Lesser.WITCH;
-		ali = Actor.Alignment.EVIL;
+		ali = Alignment.EVIL;
 		domain = Domain.TRICKERY;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1151,7 +1146,7 @@ public class Immortal implements Actor {
 		 */
 		array = CHRISTIAN_ANGELS;
 		lesser = Lesser.ANGEL;
-		ali = Actor.Alignment.GOOD;
+		ali = Alignment.GOOD;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1159,7 +1154,7 @@ public class Immortal implements Actor {
 
 		array = CHRISTIAN_DEMONS;
 		lesser = Lesser.DEMON;
-		ali = Actor.Alignment.EVIL;
+		ali = Alignment.EVIL;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1170,7 +1165,7 @@ public class Immortal implements Actor {
 		 */
 		array = ISLAMIC_ANGELS;
 		lesser = Lesser.ANGEL;
-		ali = Actor.Alignment.GOOD;
+		ali = Alignment.GOOD;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1178,7 +1173,7 @@ public class Immortal implements Actor {
 
 		array = ISLAMIC_DEMONS;
 		lesser = Lesser.DEMON;
-		ali = Actor.Alignment.EVIL;
+		ali = Alignment.EVIL;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1189,7 +1184,7 @@ public class Immortal implements Actor {
 		 */
 		array = ARABIC_STARS;
 		lesser = Lesser.ANGEL;
-		ali = Actor.Alignment.GOOD;
+		ali = Alignment.GOOD;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1200,7 +1195,7 @@ public class Immortal implements Actor {
 		 */
 		array = AESIR;
 		lesser = Lesser.AESIR;
-		ali = Actor.Alignment.LAWFUL;
+		ali = Alignment.LAWFUL;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1208,7 +1203,7 @@ public class Immortal implements Actor {
 
 		array = VANIR;
 		lesser = Lesser.VANIR;
-		ali = Actor.Alignment.LAWFUL;
+		ali = Alignment.LAWFUL;
 		domain = Domain.LIFE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1216,7 +1211,7 @@ public class Immortal implements Actor {
 
 		array = NORSE_DWARVES;
 		lesser = Lesser.DWARF;
-		ali = Actor.Alignment.NEUTRAL;
+		ali = Alignment.NEUTRAL;
 		domain = Domain.KNOWLEDGE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1224,7 +1219,7 @@ public class Immortal implements Actor {
 
 		array = JOTNAR;
 		lesser = Lesser.JOTUNN;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.KNOWLEDGE;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1235,7 +1230,7 @@ public class Immortal implements Actor {
 		 */
 		array = ENOCHIAN_ANGELS;
 		lesser = Lesser.ANGEL;
-		ali = Actor.Alignment.LAWFUL;
+		ali = Alignment.LAWFUL;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1246,7 +1241,7 @@ public class Immortal implements Actor {
 		 */
 		array = LOA;
 		lesser = Lesser.LOA;
-		ali = Actor.Alignment.NEUTRAL;
+		ali = Alignment.NEUTRAL;
 		domain = Domain.TRICKERY;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1257,7 +1252,7 @@ public class Immortal implements Actor {
 		 */
 		array = OUTER_GODS;
 		lesser = Lesser.ABOMINATION;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1265,7 +1260,7 @@ public class Immortal implements Actor {
 
 		array = ELDER_GODS;
 		lesser = Lesser.ABOMINATION;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1276,7 +1271,7 @@ public class Immortal implements Actor {
 		 */
 		array = ELDAR;
 		lesser = Lesser.ANGEL;
-		ali = Actor.Alignment.GOOD;
+		ali = Alignment.GOOD;
 		domain = Domain.LIGHT;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1287,7 +1282,7 @@ public class Immortal implements Actor {
 		 */
 		array = LUCASITE;
 		lesser = Lesser.SIDHE;
-		ali = Actor.Alignment.CHAOTIC;
+		ali = Alignment.CHAOTIC;
 		domain = Domain.TRICKERY;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1298,7 +1293,7 @@ public class Immortal implements Actor {
 		 */
 		array = RICHEST;
 		lesser = Lesser.PLUTOCRAT;
-		ali = Actor.Alignment.EVIL;
+		ali = Alignment.EVIL;
 		domain = Domain.DEATH;
 		for (int i = 0; i < array.length; ++i) {
 			Prototype.prototypes.put(array[i], new Prototype(array[i], lesser, ali, domain));
@@ -1338,7 +1333,7 @@ public class Immortal implements Actor {
 		return Dice.randomFromArray(PANTHEONS);
 	}
 
-	public static Set<Immortal> powersOfAlignment(Actor.Alignment alignment) {
+	public static Set<Immortal> powersOfAlignment(Alignment alignment) {
 		Set<Immortal> set = new HashSet<Immortal>();
 
 		Immortal instance;
@@ -1358,19 +1353,19 @@ public class Immortal implements Actor {
 		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
-			if (instance.alignment.contains(Actor.Alignment.LAWFUL))
+			if (instance.alignment.contains(Alignment.LAWFUL))
 				++array[0];
 
-			if (instance.alignment.contains(Actor.Alignment.GOOD))
+			if (instance.alignment.contains(Alignment.GOOD))
 				++array[1];
 
-			if (instance.alignment.contains(Actor.Alignment.NEUTRAL))
+			if (instance.alignment.contains(Alignment.NEUTRAL))
 				++array[2];
 
-			if (instance.alignment.contains(Actor.Alignment.EVIL))
+			if (instance.alignment.contains(Alignment.EVIL))
 				++array[3];
 
-			if (instance.alignment.contains(Actor.Alignment.CHAOTIC))
+			if (instance.alignment.contains(Alignment.CHAOTIC))
 				++array[4];
 		}
 
@@ -1387,34 +1382,34 @@ public class Immortal implements Actor {
 		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
-			if (instance.alignment.contains(Actor.Alignment.LAWFUL)
-					&& instance.alignment.contains(Actor.Alignment.GOOD))
+			if (instance.alignment.contains(Alignment.LAWFUL)
+					&& instance.alignment.contains(Alignment.GOOD))
 				++array[0];
-			else if (instance.alignment.contains(Actor.Alignment.LAWFUL)
-					&& instance.alignment.contains(Actor.Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Alignment.LAWFUL)
+					&& instance.alignment.contains(Alignment.NEUTRAL))
 				++array[1];
-			else if (instance.alignment.contains(Actor.Alignment.LAWFUL)
-					&& instance.alignment.contains(Actor.Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.LAWFUL)
+					&& instance.alignment.contains(Alignment.EVIL))
 				++array[2];
-			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL)
-					&& instance.alignment.contains(Actor.Alignment.GOOD))
+			else if (instance.alignment.contains(Alignment.NEUTRAL)
+					&& instance.alignment.contains(Alignment.GOOD))
 				++array[3];
-			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL)
-					&& instance.alignment.contains(Actor.Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.NEUTRAL)
+					&& instance.alignment.contains(Alignment.EVIL))
 				++array[5];
-			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC)
-					&& instance.alignment.contains(Actor.Alignment.GOOD))
+			else if (instance.alignment.contains(Alignment.CHAOTIC)
+					&& instance.alignment.contains(Alignment.GOOD))
 				++array[6];
-			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC)
-					&& instance.alignment.contains(Actor.Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Alignment.CHAOTIC)
+					&& instance.alignment.contains(Alignment.NEUTRAL))
 				++array[7];
-			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC)
-					&& instance.alignment.contains(Actor.Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.CHAOTIC)
+					&& instance.alignment.contains(Alignment.EVIL))
 				++array[8];
-			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) != true
-					&& instance.alignment.contains(Actor.Alignment.CHAOTIC) != true
-					&& instance.alignment.contains(Actor.Alignment.GOOD) != true
-					&& instance.alignment.contains(Actor.Alignment.EVIL) != true)
+			else if (instance.alignment.contains(Alignment.LAWFUL) != true
+					&& instance.alignment.contains(Alignment.CHAOTIC) != true
+					&& instance.alignment.contains(Alignment.GOOD) != true
+					&& instance.alignment.contains(Alignment.EVIL) != true)
 				++array[4];
 		}
 
@@ -1443,34 +1438,34 @@ public class Immortal implements Actor {
 		for (Iterator<Immortal> it = Immortal.instances.iterator(); it.hasNext();) {
 			instance = it.next();
 
-			if (instance.alignment.contains(Actor.Alignment.LAWFUL)
-					&& instance.alignment.contains(Actor.Alignment.GOOD))
+			if (instance.alignment.contains(Alignment.LAWFUL)
+					&& instance.alignment.contains(Alignment.GOOD))
 				array[0].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.LAWFUL)
-					&& instance.alignment.contains(Actor.Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Alignment.LAWFUL)
+					&& instance.alignment.contains(Alignment.NEUTRAL))
 				array[1].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.LAWFUL)
-					&& instance.alignment.contains(Actor.Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.LAWFUL)
+					&& instance.alignment.contains(Alignment.EVIL))
 				array[2].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL)
-					&& instance.alignment.contains(Actor.Alignment.GOOD))
+			else if (instance.alignment.contains(Alignment.NEUTRAL)
+					&& instance.alignment.contains(Alignment.GOOD))
 				array[3].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.NEUTRAL)
-					&& instance.alignment.contains(Actor.Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.NEUTRAL)
+					&& instance.alignment.contains(Alignment.EVIL))
 				array[5].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC)
-					&& instance.alignment.contains(Actor.Alignment.GOOD))
+			else if (instance.alignment.contains(Alignment.CHAOTIC)
+					&& instance.alignment.contains(Alignment.GOOD))
 				array[6].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC)
-					&& instance.alignment.contains(Actor.Alignment.NEUTRAL))
+			else if (instance.alignment.contains(Alignment.CHAOTIC)
+					&& instance.alignment.contains(Alignment.NEUTRAL))
 				array[7].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.CHAOTIC)
-					&& instance.alignment.contains(Actor.Alignment.EVIL))
+			else if (instance.alignment.contains(Alignment.CHAOTIC)
+					&& instance.alignment.contains(Alignment.EVIL))
 				array[8].add(instance);
-			else if (instance.alignment.contains(Actor.Alignment.LAWFUL) != true
-					&& instance.alignment.contains(Actor.Alignment.CHAOTIC) != true
-					&& instance.alignment.contains(Actor.Alignment.GOOD) != true
-					&& instance.alignment.contains(Actor.Alignment.EVIL) != true)
+			else if (instance.alignment.contains(Alignment.LAWFUL) != true
+					&& instance.alignment.contains(Alignment.CHAOTIC) != true
+					&& instance.alignment.contains(Alignment.GOOD) != true
+					&& instance.alignment.contains(Alignment.EVIL) != true)
 				array[4].add(instance);
 		}
 
@@ -1559,40 +1554,40 @@ public class Immortal implements Actor {
 		return string;
 	}
 
-	private static Actor.Alignment[] alignmentRandomizer(Actor.Alignment axis) {
-		Actor.Alignment[][] axes = new Actor.Alignment[][] {
+	private static Alignment[] alignmentRandomizer(Alignment axis) {
+		Alignment[][] axes = new Alignment[][] {
 				// LAWFUL
-				{ Actor.Alignment.LAWFUL, Actor.Alignment.NEUTRAL }, { Actor.Alignment.LAWFUL, Actor.Alignment.GOOD },
-				{ Actor.Alignment.LAWFUL, Actor.Alignment.EVIL },
+				{ Alignment.LAWFUL, Alignment.NEUTRAL }, { Alignment.LAWFUL, Alignment.GOOD },
+				{ Alignment.LAWFUL, Alignment.EVIL },
 				// CHAOTIC
-				{ Actor.Alignment.CHAOTIC, Actor.Alignment.NEUTRAL }, { Actor.Alignment.CHAOTIC, Actor.Alignment.GOOD },
-				{ Actor.Alignment.CHAOTIC, Actor.Alignment.EVIL },
+				{ Alignment.CHAOTIC, Alignment.NEUTRAL }, { Alignment.CHAOTIC, Alignment.GOOD },
+				{ Alignment.CHAOTIC, Alignment.EVIL },
 				// GOOD
-				{ Actor.Alignment.GOOD, Actor.Alignment.NEUTRAL }, { Actor.Alignment.GOOD, Actor.Alignment.CHAOTIC },
-				{ Actor.Alignment.GOOD, Actor.Alignment.LAWFUL },
+				{ Alignment.GOOD, Alignment.NEUTRAL }, { Alignment.GOOD, Alignment.CHAOTIC },
+				{ Alignment.GOOD, Alignment.LAWFUL },
 				// EVIL
-				{ Actor.Alignment.EVIL, Actor.Alignment.NEUTRAL }, { Actor.Alignment.EVIL, Actor.Alignment.CHAOTIC },
-				{ Actor.Alignment.EVIL, Actor.Alignment.LAWFUL } };
+				{ Alignment.EVIL, Alignment.NEUTRAL }, { Alignment.EVIL, Alignment.CHAOTIC },
+				{ Alignment.EVIL, Alignment.LAWFUL } };
 
-		Actor.Alignment[] corners = new Actor.Alignment[] { Actor.Alignment.LAWFUL, Actor.Alignment.CHAOTIC,
-				Actor.Alignment.GOOD, Actor.Alignment.EVIL };
+		Alignment[] corners = new Alignment[] { Alignment.LAWFUL, Alignment.CHAOTIC,
+				Alignment.GOOD, Alignment.EVIL };
 
 		//
-		Actor.Alignment[] alignment = null;
+		Alignment[] alignment = null;
 		int dice = Dice.roll(10);
-		if (axis.equals(Actor.Alignment.LAWFUL)) {
+		if (axis.equals(Alignment.LAWFUL)) {
 			alignment = (dice < 5) ? axes[0] : (dice < 8) ? axes[1] : axes[2];
-		} else if (axis.equals(Actor.Alignment.CHAOTIC)) {
+		} else if (axis.equals(Alignment.CHAOTIC)) {
 			alignment = (dice < 5) ? axes[3] : (dice < 8) ? axes[4] : axes[5];
-		} else if (axis.equals(Actor.Alignment.GOOD)) {
+		} else if (axis.equals(Alignment.GOOD)) {
 			alignment = (dice < 5) ? axes[6] : (dice < 8) ? axes[7] : axes[8];
-		} else if (axis.equals(Actor.Alignment.EVIL)) {
+		} else if (axis.equals(Alignment.EVIL)) {
 			// System.out.println("Evil entity generated.");
 			alignment = (dice < 5) ? axes[9] : (dice < 8) ? axes[10] : axes[11];
 		} else if (dice < 5) {
-			alignment = new Actor.Alignment[] { Actor.Alignment.NEUTRAL };
+			alignment = new Alignment[] { Alignment.NEUTRAL };
 		} else {
-			alignment = new Actor.Alignment[] { Actor.Alignment.NEUTRAL, Dice.randomFromArray(corners) };
+			alignment = new Alignment[] { Alignment.NEUTRAL, Dice.randomFromArray(corners) };
 		}
 
 		return alignment;
@@ -1689,19 +1684,19 @@ public class Immortal implements Actor {
 		private Entity entity;
 		private Lesser affiliation;
 		private EnumSet<Domain> domains;
-		private EnumSet<Actor.Alignment> alignment;
+		private EnumSet<Alignment> alignment;
 
 		/*
 		 * CONSTRUCTOR
 		 */
-		public Prototype(Entity entity, Lesser affiliation, Actor.Alignment alignment, Domain domain) {
+		public Prototype(Entity entity, Lesser affiliation, Alignment alignment, Domain domain) {
 			this.entity = entity;
 			this.affiliation = affiliation;
 
-			Actor.Alignment[] ali = alignmentRandomizer(alignment);
-			this.alignment = EnumSet.noneOf(Actor.Alignment.class);
+			Alignment[] ali = alignmentRandomizer(alignment);
+			this.alignment = EnumSet.noneOf(Alignment.class);
 			if (ali.length > 0) {
-				for (Actor.Alignment el : ali) {
+				for (Alignment el : ali) {
 					this.alignment.add(el);
 				}
 			}
@@ -1729,7 +1724,7 @@ public class Immortal implements Actor {
 
 	private Greater greater;
 	private EnumSet<Domain> domains;
-	private EnumSet<Actor.Alignment> alignment;
+	private EnumSet<Alignment> alignment;
 
 	public Immortal(Prototype prototype) {
 		this.prototype = prototype;
@@ -1776,7 +1771,7 @@ public class Immortal implements Actor {
 	}
 
 	@Override
-	public Creature creatureType() {
+	public CreatureType creatureType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -1818,7 +1813,7 @@ public class Immortal implements Actor {
 	}
 
 	@Override
-	public EnumSet<Speed> getSpeed() {
+	public EnumSet<MovementType> getSpeed() {
 		// TODO Auto-generated method stub
 		return null;
 	}

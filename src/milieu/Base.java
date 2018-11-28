@@ -21,6 +21,12 @@ public enum Base {
 	public static void setupFacilities(World world, World mainWorld) {
 		EnumSet<Base> set = EnumSet.noneOf(Base.class);
 
+		// if not a world, set empty set and return
+		if (!WorldType.isWorld(world)) {
+			world.setWorldFacilities(set);
+			return;
+		}
+
 		int size = world.getSize();
 		int atmo = world.getAtmosphere();
 		int hydro = world.getHydrosphere();
@@ -75,7 +81,9 @@ public enum Base {
 			/*
 			 * MINE
 			 */
-			boolean mainIndustrial = mainWorld.getTradeCodes().contains(TradeCode.IN);
+			boolean mainIndustrial = false;
+			if (mainWorld.getTradeCodes() != null)
+				mainIndustrial = mainWorld.getTradeCodes().contains(TradeCode.IN);
 
 			idealPop = false;
 			if (pop >= 2)
@@ -109,7 +117,9 @@ public enum Base {
 			/*
 			 * MILITARY
 			 */
-			boolean mainPoor = mainWorld.getTradeCodes().contains(TradeCode.PO);
+			boolean mainPoor = false;
+			if (mainWorld.getTradeCodes() != null)
+				mainPoor = mainWorld.getTradeCodes().contains(TradeCode.PO);
 
 			dice = Dice.roll(2, 6);
 			if (mainWorld.getPopulation() >= 8)

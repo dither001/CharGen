@@ -696,7 +696,7 @@ public class StarSystem {
 		for (Iterator<Planetoid> it = group.orderedPlanetList().iterator(); it.hasNext();) {
 			planet = it.next();
 
-			if (WorldType.nameable(planet) && WorldType.notMoon(planet)) {
+			if (WorldType.nameable(planet) && !WorldType.isMoon(planet)) {
 				current = Names.nameShorten(nameIt.next());
 				planet.setName(current);
 

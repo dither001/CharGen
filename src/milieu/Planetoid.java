@@ -57,7 +57,7 @@ public class Planetoid implements World {
 		this.parent = parent;
 		this.type = type;
 		this.orbit = orbit;
-		this.subOrbit = orbit;
+		this.subOrbit = 0;
 		this.name = type.toString();
 
 		/*
@@ -83,7 +83,6 @@ public class Planetoid implements World {
 			if (star.color == 'M')
 				scores[0] -= 2;
 
-			
 			if (WorldType.isMoon(this) && WorldType.largeGiant(parent))
 				scores[0] = (Dice.roll(2, 6) - 4);
 			else if (WorldType.isMoon(this) && WorldType.smallGiant(parent))
@@ -168,6 +167,9 @@ public class Planetoid implements World {
 	 * 
 	 */
 	public void governmentSetup(World mainWorld) {
+		if (!WorldType.isWorld(this))
+			return;
+
 		if (mainWorld.equals(this))
 			this.isMainWorld = true;
 
@@ -189,7 +191,7 @@ public class Planetoid implements World {
 			dice = Dice.roll(2, 6) - 7 + pop;
 
 			// validation step
-			dice = (dice < 0) ? 0 : (dice > 14) ? 14 : dice;
+			dice = (dice < 0) ? 0 : (dice > 13) ? 13 : dice;
 
 			gov = dice;
 
@@ -211,9 +213,9 @@ public class Planetoid implements World {
 			 */
 			gov = Dice.roll(6);
 
-			if (mainGov == 6)
+			if (mainGov == 6) // balkanized mainGov
 				gov += pop;
-			else if (mainGov >= 7)
+			else if (mainGov >= 7) // authoritarian mainGov
 				gov += 1;
 
 			if (gov == 1)
@@ -449,7 +451,8 @@ public class Planetoid implements World {
 		String string;
 
 		string = String.format("%s", (!WorldType.isAsteroid(this)) ? name : "The " + name + " belt");
-		string = String.format("%s (%s)", string, (WorldType.isMoon(this) || WorldType.isRing(this)) ? orbit + "." + subOrbit : orbit);
+		string = String.format("%s (%s)", string,
+				(WorldType.isMoon(this) || WorldType.isRing(this)) ? orbit + "." + subOrbit : orbit);
 
 		return string;
 	}
@@ -504,7 +507,12 @@ public class Planetoid implements World {
 		}
 
 		// facilities
-		String facilities = (getWorldFacilities() != null) ? String.format(" %s", getWorldFacilities()) : "";
+		String facilities = "";
+		if (WorldType.isWorld(this)) {
+			facilities = String.format(" %s", getWorldFacilities());
+			// facilities += String.format(" %s", getType());
+		}
+
 		// world tags
 		String tags = (worldTags != null) ? String.format(" %s", worldTags) : "";
 		string += String.format("%-24s %s", facilities, tags);

@@ -10,6 +10,8 @@ import actor.Class;
 import milieu.Figure;
 import milieu.Star;
 import milieu.StarSystem;
+import milieu.WorldTag;
+import rules.*;
 import vessel.MDrive;
 import vessel.Spaceship;
 
@@ -25,8 +27,15 @@ public class Main {
 
 		// databaseStart();
 
-//		testMainWorld();
+		// testMainWorld();
 		testFigure();
+
+		// int maxLength = 0, current = 0;
+		// for (WorldTag el : WorldTag.ALL_TAGS) {
+		// current = el.toString().length();
+		// maxLength = current > maxLength ? current : maxLength;
+		// }
+		// System.out.println(maxLength);
 
 		// MDrive.prototypePrint();
 		// for (int i = 0; i < 50; ++i) {
@@ -69,7 +78,7 @@ public class Main {
 	public static void testFigure() {
 		Figure group = new Figure();
 
-		while (group.getMainWorld() == null) {
+		while (group.numAsteroids() < 1) {
 			group = new Figure();
 		}
 
@@ -89,8 +98,8 @@ public class Main {
 	}
 
 	public static void powersByAlignment() {
-		Actor.Alignment[] ali = new Actor.Alignment[] { Actor.Alignment.LAWFUL, Actor.Alignment.GOOD,
-				Actor.Alignment.NEUTRAL, Actor.Alignment.EVIL, Actor.Alignment.CHAOTIC };
+		Alignment[] ali = new Alignment[] { Alignment.LAWFUL, Alignment.GOOD, Alignment.NEUTRAL, Alignment.EVIL,
+				Alignment.CHAOTIC };
 
 		for (int i = 0; i < ali.length; ++i) {
 			System.out.print(ali[i] + ": ");
@@ -153,7 +162,7 @@ public class Main {
 		System.out.println();
 	}
 
-	public static void levelUpTestDisplayOnly(int level, Class.Subclass job) {
+	public static void levelUpTestDisplayOnly(int level, Subclass job) {
 		Player player;
 		player = new Player();
 		while (player.getArchetype().equals(job) != true) {
@@ -169,7 +178,7 @@ public class Main {
 		System.out.println();
 	}
 
-	public static void rollCharactersOfArchetype(Class.Subclass job) {
+	public static void rollCharactersOfArchetype(Subclass job) {
 		Player player;
 		for (int i = 0; i < PCS_TO_ROLL; ++i) {
 			player = new Player();
@@ -374,20 +383,20 @@ public class Main {
 		for (int i = 0; i < PCS_TO_ROLL; ++i) {
 			player = new Player();
 
-			if (player.alignment().equals(Actor.Alignment.LAWFUL))
+			if (player.alignment().equals(Alignment.LAWFUL))
 				++array[0];
-			else if (player.alignment().equals(Actor.Alignment.GOOD))
+			else if (player.alignment().equals(Alignment.GOOD))
 				++array[1];
-			else if (player.alignment().equals(Actor.Alignment.NEUTRAL))
+			else if (player.alignment().equals(Alignment.NEUTRAL))
 				++array[2];
-			else if (player.alignment().equals(Actor.Alignment.EVIL))
+			else if (player.alignment().equals(Alignment.EVIL))
 				++array[3];
-			else if (player.alignment().equals(Actor.Alignment.CHAOTIC))
+			else if (player.alignment().equals(Alignment.CHAOTIC))
 				++array[4];
 		}
 
-		Actor.Alignment[] alignments = new Actor.Alignment[] { Actor.Alignment.LAWFUL, Actor.Alignment.GOOD,
-				Actor.Alignment.NEUTRAL, Actor.Alignment.EVIL, Actor.Alignment.CHAOTIC };
+		Alignment[] alignments = new Alignment[] { Alignment.LAWFUL, Alignment.GOOD, Alignment.NEUTRAL, Alignment.EVIL,
+				Alignment.CHAOTIC };
 		for (int i = 0; i < alignments.length; ++i) {
 			String string = String.format("%10s %5d (%5.1f)", alignments[i], array[i],
 					(0.0 + array[i]) / PCS_TO_ROLL * 100);

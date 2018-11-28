@@ -56,7 +56,7 @@ public class Figure implements Persistent {
 				mainWorld = worldList.get(0);
 
 				Planetoid current;
-				for (Iterator<World> it = worldList.iterator(); it.hasNext();) {
+				for (Iterator<World> it = worlds.iterator(); it.hasNext();) {
 					current = (Planetoid) it.next();
 
 					current.governmentSetup(mainWorld);
@@ -82,9 +82,10 @@ public class Figure implements Persistent {
 		star += String.format("Main world: %s", mainWorld.getName());
 		star += String.format("%nStarport: %s || Tech Level: %d || %s", mainWorld.getSpaceport(),
 				mainWorld.getTechLevel(), POPULATIONS[mainWorld.getPopulation()]);
-		star += String.format("%nGovernment: %s", mainWorld.governmentType());
-		// star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
+		star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
 
+		star += String.format("%n");
+		star += String.format("%nGovernment: %s", mainWorld.governmentType());
 		if (economy != null)
 			star += "\n" + economy.toStringDetailed();
 
@@ -101,24 +102,16 @@ public class Figure implements Persistent {
 		for (int i = 1; i < stars.size(); ++i) {
 			star = "" + stars.get(i).color + stars.get(i).size;
 			string += String.format(", %s (%2d)", star, stars.get(i).orbit);
-
 		}
 
-		/*
-		 * PLANET LIST & SORT BY ORBIT ASCENDING
-		 */
+		// PLANET LIST & SORT BY ORBIT ASCENDING
 		String ws = "";
-		List<World> planetList = new ArrayList<World>(worlds);
-		OrbitAscending worldSort = new OrbitAscending();
-		Collections.sort(planetList, worldSort);
+		List<World> planetList = orderedPlanetList();
 		if (planetList.size() > 0) {
 			for (World el : planetList)
 				ws += "\n" + ((Planetoid) el).toStringDetailed();
 		}
 
-		// String etc = String.format("%nOrbits: %d || Giants: %d || Asteroids: %d ||
-		// Captured: %d", maxOrbits, gasGiants,
-		// asteroids, capturedPlanets);
 		return string + ws;
 	}
 
@@ -473,9 +466,7 @@ public class Figure implements Persistent {
 			it.next().setName(currentName);
 		}
 
-		/*
-		 * PLANET LIST & SORT BY ORBIT ASCENDING
-		 */
+		// PLANET LIST & SORT BY ORBIT ASCENDING
 		World currentWorld;
 		int moonCounter = 2;
 		for (Iterator<World> it = orderedPlanetList().iterator(); it.hasNext();) {
@@ -567,7 +558,6 @@ public class Figure implements Persistent {
 
 			return compare;
 		}
-
 	}
 
 	public static class OrbitAscending implements Comparator<World> {
@@ -576,7 +566,7 @@ public class Figure implements Persistent {
 		public int compare(World left, World right) {
 			int compare = left.getOrbit() - right.getOrbit();
 
-			if (WorldType.isMoon(right) && compare == 0)
+			if (compare == 0)
 				compare = left.getSubOrbit() - right.getSubOrbit();
 
 			return compare;

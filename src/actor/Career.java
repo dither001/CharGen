@@ -3,6 +3,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 
 import rules.Dice;
+import rules.Language;
 
 /*
  * I want to implement a slightly choosier strategy for assigning (even) random backgrounds to characters. I want to organize
@@ -905,11 +906,11 @@ public enum Career {
 		Skill[] urchin = { Skill.SLEIGHT_OF_HAND, Skill.STEALTH };
 
 		// languages
-		EnumSet<Race.Language> languages;
+		EnumSet<Language> languages;
 		if (actor.getLanguages() != null)
 			languages = actor.getLanguages();
 		else
-			languages = EnumSet.noneOf(Race.Language.class);
+			languages = EnumSet.noneOf(Language.class);
 
 		// skills
 		EnumSet<Skill> skills;
@@ -923,7 +924,7 @@ public enum Career {
 		 */
 		if (career.equals(ACOLYTE)) {
 			skills.addAll(Dice.addAllToSetOrElse(acolyte, Skill.commonSkills(), skills));
-			languages.addAll(Dice.randomAddToSet(2, Race.exoticLanguages(), languages));
+			languages.addAll(Dice.randomAddToSet(2, Language.exoticLanguages(), languages));
 
 		} else if (career.equals(CHARLATAN)) {
 			skills.addAll(Dice.addAllToSetOrElse(charlatan, Skill.commonSkills(), skills));
@@ -948,26 +949,26 @@ public enum Career {
 		} else if (career.equals(GUILD_ARTISAN)) {
 			skills.addAll(Dice.addAllToSetOrElse(guildArtisan, Skill.commonSkills(), skills));
 			skills.addAll(Dice.randomAddToSet(Skill.professionSkills(), skills));
-			languages.addAll(Dice.randomAddToSet(Race.commonLanguages(), languages));
+			languages.addAll(Dice.randomAddToSet(Language.commonLanguages(), languages));
 
 		} else if (career.equals(HERMIT)) {
 			skills.addAll(Dice.addAllToSetOrElse(hermit, Skill.commonSkills(), skills));
 			skills.add(Skill.HERBALISM_KIT);
-			languages.addAll(Dice.randomAddToSet(Race.exoticLanguages(), languages));
+			languages.addAll(Dice.randomAddToSet(Language.exoticLanguages(), languages));
 
 		} else if (career.equals(NOBLE)) {
 			skills.addAll(Dice.addAllToSetOrElse(noble, Skill.commonSkills(), skills));
 			skills.addAll(Dice.randomAddToSet(Skill.gamingSkills(), skills));
-			languages.addAll(Dice.randomAddToSet(Race.commonLanguages(), languages));
+			languages.addAll(Dice.randomAddToSet(Language.commonLanguages(), languages));
 
 		} else if (career.equals(OUTLANDER)) {
 			skills.addAll(Dice.addAllToSetOrElse(outlander, Skill.commonSkills(), skills));
 			skills.addAll(Dice.randomAddToSet(Skill.instrumentSkills(), skills));
-			languages.addAll(Dice.randomAddToSet(Race.commonLanguages(), languages));
+			languages.addAll(Dice.randomAddToSet(Language.commonLanguages(), languages));
 
 		} else if (career.equals(SAGE)) {
 			skills.addAll(Dice.addAllToSetOrElse(sage, Skill.commonSkills(), skills));
-			languages.addAll(Dice.randomAddToSet(2, Race.exoticLanguages(), languages));
+			languages.addAll(Dice.randomAddToSet(2, Language.exoticLanguages(), languages));
 
 		} else if (career.equals(SAILOR)) {
 			skills.addAll(Dice.addAllToSetOrElse(sailor, Skill.commonSkills(), skills));

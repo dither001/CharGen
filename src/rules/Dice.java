@@ -31,8 +31,17 @@ public abstract class Dice {
 		return result;
 	}
 
-	public static byte[] rollAbilities() {
+	public static byte[] rollAbilitiesByte() {
 		byte[] array = new byte[] { 0, 0, 0, 0, 0, 0 };
+		for (int i = 0; i < array.length; ++i) {
+			array[i] += roll(3, 6);
+		}
+
+		return array;
+	}
+
+	public static int[] rollAbilitiesInt() {
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0 };
 		for (int i = 0; i < array.length; ++i) {
 			array[i] += roll(3, 6);
 		}

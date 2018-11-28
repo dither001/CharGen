@@ -29,10 +29,11 @@ import milieu.WorldType;
 import rules.Dice;
 
 public class SQLiteData {
+	private static final String DB_URL = "jdbc:sqlite:C:/ProgramData/Project.db";
 	private static final int SYSTEMS_PER_SUBSECTOR = 80;
 
 	private Controller controller;
-	private static Connection connection;
+//	private static Connection connection;
 	public static boolean hasData;
 
 	/*
@@ -42,7 +43,6 @@ public class SQLiteData {
 		this.controller = controller;
 
 		hasData = false;
-		connect();
 		databaseSetup();
 	}
 
@@ -66,8 +66,8 @@ public class SQLiteData {
 		PreparedStatement statement;
 
 		int index = 0;
-		try {
-			statement = connection.prepareStatement(string);
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
+			statement = c.prepareStatement(string);
 			ResultSet results = statement.executeQuery();
 
 			if (results.next()) {
@@ -75,25 +75,27 @@ public class SQLiteData {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return index;
 	}
+	
+	public void insertSubsector() {
+		
+	}
 
 	public boolean addSubsector(int sector) {
 		boolean add = false;
 
-		if (connection == null)
-			connect();
+//		if (connection == null)
+//			connect();
 
 		int systemIndex = getNextSystemIndex();
 		int starIndex = getNextStarIndex();
 		int worldIndex = getNextWorldIndex();
 
-		try {
-			// connection.setAutoCommit(false);
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
 			StarSystem starSystem;
 			PreparedStatement statement;
 
@@ -108,7 +110,7 @@ public class SQLiteData {
 					starSystem = new StarSystem(sector, i, systemIndex);
 
 					String string = String.format("INSERT INTO STARSYSTEM VALUES( ?, ?, ? );");
-					statement = connection.prepareStatement(string);
+					statement = c.prepareStatement(string);
 
 					//
 					statement.setString(pos++, String.valueOf(systemIndex));
@@ -119,7 +121,7 @@ public class SQLiteData {
 					/*
 					 * INSERT STARS
 					 */
-					statement = connection.prepareStatement("INSERT INTO STAR VALUES( ?, ?, ?, ?, ?, ?, ? );");
+					statement = c.prepareStatement("INSERT INTO STAR VALUES( ?, ?, ?, ?, ?, ?, ? );");
 					for (Iterator<Star> it = starSystem.starList().iterator(); it.hasNext();) {
 						pos = 1;
 						star = it.next();
@@ -147,7 +149,7 @@ public class SQLiteData {
 					}
 
 					for (Iterator<Planetoid> it = starSystem.getSpaceObjects().iterator(); it.hasNext();) {
-						statement = connection
+						statement = c
 								.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 						pos = 1;
 						world = it.next();
@@ -173,7 +175,7 @@ public class SQLiteData {
 							statement.execute();
 
 							if (world.mainWorld() && world.getTradeCodes() != null) {
-								statement = connection.prepareStatement("INSERT INTO TRADE_WORLDS VALUES( ?, ? );");
+								statement = c.prepareStatement("INSERT INTO TRADE_WORLDS VALUES( ?, ? );");
 								for (Iterator<TradeCode> its = world.getTradeCodes().iterator(); its.hasNext();) {
 									code = its.next();
 
@@ -185,7 +187,7 @@ public class SQLiteData {
 							}
 
 							if (world.getWorldFacilities() != null) {
-								statement = connection.prepareStatement("INSERT INTO BASE VALUES( ?, ? );");
+								statement = c.prepareStatement("INSERT INTO BASE VALUES( ?, ? );");
 								for (Iterator<Base> its = world.getWorldFacilities().iterator(); its.hasNext();) {
 									base = its.next();
 
@@ -215,14 +217,6 @@ public class SQLiteData {
 		} catch (SQLException e) {
 			e.printStackTrace();
 
-		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 		}
 
 		return add;
@@ -231,8 +225,8 @@ public class SQLiteData {
 	public boolean insertStarSystem(int ssIndex, StarSystem ss) {
 		boolean add = false;
 
-		if (connection == null)
-			connect();
+//		if (connection == null)
+//			connect();
 
 		int systemIndex;
 		if (ss.isPersistent())
@@ -242,10 +236,10 @@ public class SQLiteData {
 
 		PreparedStatement statement;
 		String string = String.format("INSERT INTO STARSYSTEM VALUES( ?, ?, ? );");
-		try {
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
+			statement = c.prepareStatement(string);
 			// FIXME - this performs insert
 			int pos = 1;
-			statement = connection.prepareStatement(string);
 
 			// address (doesn't use sub-orbit)
 			statement.setString(pos++, String.valueOf(systemIndex));
@@ -268,8 +262,8 @@ public class SQLiteData {
 	public boolean insertStar(int starsystem, Star star) {
 		boolean add = false;
 
-		if (connection == null)
-			connect();
+//		if (connection == null)
+//			connect();
 
 		int starIndex;
 		if (star.isPersistent())
@@ -279,10 +273,10 @@ public class SQLiteData {
 
 		PreparedStatement statement;
 		String string = String.format("INSERT INTO STAR VALUES( ?, ?, ?, ?, ?, ?, ? );");
-		try {
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
+			statement = c.prepareStatement(string);
 			// FIXME - this performs insert
 			int pos = 1;
-			statement = connection.prepareStatement(string);
 
 			// address (doesn't use sub-orbit)
 			statement.setString(pos++, String.valueOf(starIndex));
@@ -311,8 +305,8 @@ public class SQLiteData {
 	public boolean insertWorld(int starsystem, World world) {
 		boolean add = false;
 
-		if (connection == null)
-			connect();
+//		if (connection == null)
+//			connect();
 
 		int worldIndex;
 		if (world.isPersistent())
@@ -320,11 +314,11 @@ public class SQLiteData {
 		else
 			worldIndex = 0;
 
-		try {
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
 			PreparedStatement statement;
 			int pos = 1;
 
-			statement = connection
+			statement = c
 					.prepareStatement("INSERT INTO WORLD VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 
 			// cast world as "address" to access these methods
@@ -374,13 +368,13 @@ public class SQLiteData {
 
 		PreparedStatement statement;
 		String query;
-		if (connection == null)
-			connect();
+//		if (connection == null)
+//			connect();
 
-		try {
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
 			// TODO
 			query = String.format("SELECT * FROM STAR ORDER BY id");
-			statement = connection.prepareStatement(query);
+			statement = c.prepareStatement(query);
 			results = statement.executeQuery();
 
 		} catch (SQLException e) {
@@ -406,12 +400,12 @@ public class SQLiteData {
 		boolean recordExists = false;
 		ResultSet set = null;
 
-		try {
-			if (connection == null)
-				connect();
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
+//			if (connection == null)
+//				connect();
 
 			String query = "SELECT * FROM " + table + " WHERE index = ?";
-			PreparedStatement statement = connection.prepareStatement(query);
+			PreparedStatement statement = c.prepareStatement(query);
 			statement.setString(1, String.valueOf(index));
 
 			set = statement.executeQuery();
@@ -428,52 +422,52 @@ public class SQLiteData {
 	 * CONNECT TO DATABASE
 	 * 
 	 */
-	private void connect() {
-		String filename = "Project.db";
-
-		try {
-			Class.forName("org.sqlite.JDBC");
-			String databaseFilePath = "jdbc:sqlite:C:/ProgramData/" + filename;
-
-			connection = DriverManager.getConnection(databaseFilePath);
-
-		} catch (SQLException | ClassNotFoundException e) {
-			// currently only configured for Linux/Windows
-
-			try {
-				Class.forName("org.sqlite.JDBC");
-				File homedir = new File(System.getProperty("user.home/"));
-				String databaseFilePath = "jdbc:sqlite:" + homedir + filename;
-
-				connection = DriverManager.getConnection(databaseFilePath);
-				Statement statement = connection.createStatement();
-				ResultSet test = statement.executeQuery("PRAGMA foreign_keys = ON;");
-
-				if (test == null)
-					System.out.println("Null");
-				else
-					System.out.println("Not null");
-
-			} catch (SQLException | ClassNotFoundException e2) {
-				e2.printStackTrace();
-				System.out.println("This only works for PC and Linux.");
-
-			}
-		}
-
-		databaseSetup();
-	}
+//	private void connect() {
+//		String filename = "Project.db";
+//
+//		try {
+//			Class.forName("org.sqlite.JDBC");
+//			String databaseFilePath = "jdbc:sqlite:C:/ProgramData/" + filename;
+//
+//			connection = DriverManager.getConnection(databaseFilePath);
+//
+//		} catch (SQLException | ClassNotFoundException e) {
+//			// currently only configured for Linux/Windows
+//
+//			try {
+//				Class.forName("org.sqlite.JDBC");
+//				File homedir = new File(System.getProperty("user.home/"));
+//				String databaseFilePath = "jdbc:sqlite:" + homedir + filename;
+//
+//				connection = DriverManager.getConnection(databaseFilePath);
+//				Statement statement = connection.createStatement();
+//				ResultSet test = statement.executeQuery("PRAGMA foreign_keys = ON;");
+//
+//				if (test == null)
+//					System.out.println("Null");
+//				else
+//					System.out.println("Not null");
+//
+//			} catch (SQLException | ClassNotFoundException e2) {
+//				e2.printStackTrace();
+//				System.out.println("This only works for PC and Linux.");
+//
+//			}
+//		}
+//
+//		databaseSetup();
+//	}
 
 	private void databaseSetup() {
 		if (!hasData) {
 			hasData = true;
 
 			Statement statement;
-			String string;
+			String string = null;
 			String tableName, key, address, data, fk;
 
-			try {
-				statement = connection.createStatement();
+			try (Connection c = DriverManager.getConnection(DB_URL)) {
+				statement = c.prepareStatement(string);
 
 				/*
 				 * STATIC TABLE INITIALIZATION
@@ -484,7 +478,7 @@ public class SQLiteData {
 				// BASE_TYPE table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='BASE_TYPE'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "BASE_TYPE";
 					key = "id INTEGER PRIMARY KEY";
@@ -503,7 +497,7 @@ public class SQLiteData {
 				// GOV_TYPE table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='GOV_TYPE'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "GOV_TYPE";
 					key = "id INTEGER PRIMARY KEY";
@@ -522,7 +516,7 @@ public class SQLiteData {
 				// TRADE_CODE table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='TRADE_CODE'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "TRADE_CODE";
 					key = "id INTEGER PRIMARY KEY";
@@ -541,7 +535,7 @@ public class SQLiteData {
 				// WORLD_TAG table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_TAG'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "WORLD_TAG";
 					key = "id INTEGER PRIMARY KEY";
@@ -560,7 +554,7 @@ public class SQLiteData {
 				// WORLD_TYPE table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_TYPE'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 					string = "CREATE TABLE WORLD_TYPE(id INTEGER PRIMARY KEY, name VARCHAR);";
 					statement.executeUpdate(string);
 					init = true;
@@ -579,7 +573,7 @@ public class SQLiteData {
 				// STARSYSTEM table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STARSYSTEM'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "STARSYSTEM";
 					key = "id INTEGER PRIMARY KEY";
@@ -594,7 +588,7 @@ public class SQLiteData {
 				// ECONOMY table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='ECONOMY'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "ECONOMY";
 					key = "id INTEGER PRIMARY KEY";
@@ -608,7 +602,7 @@ public class SQLiteData {
 				// STAR table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='STAR'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "STAR";
 					key = "id INTEGER PRIMARY KEY";
@@ -625,7 +619,7 @@ public class SQLiteData {
 				// WORLD table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "WORLD";
 					key = "id INTEGER PRIMARY KEY";
@@ -647,7 +641,7 @@ public class SQLiteData {
 				// TRADE_WORLDS table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='TRADE_WORLDS'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "TRADE_WORLDS";
 					//
@@ -667,7 +661,7 @@ public class SQLiteData {
 				// BASE table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='BASE'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "BASE";
 
@@ -688,7 +682,7 @@ public class SQLiteData {
 				// SPACEPORT table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='SPACEPORT'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "SPACEPORT";
 					key = "id INTEGER PRIMARY KEY";
@@ -709,7 +703,7 @@ public class SQLiteData {
 				// TAGGED WORLDS table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='TAGGED_WORLDS'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "TAGGED_WORLDS";
 
@@ -731,7 +725,7 @@ public class SQLiteData {
 				// WORLD_ECONOMY table setup
 				string = "SELECT name FROM sqlite_master WHERE type='table' AND name='WORLD_ECONOMY'";
 				if (!statement.executeQuery(string).next()) {
-					statement = connection.createStatement();
+					statement = c.createStatement();
 
 					tableName = "WORLD_ECONOMY";
 					key = "id INTEGER PRIMARY KEY";
@@ -753,9 +747,9 @@ public class SQLiteData {
 		PreparedStatement statement;
 
 		String string = String.format("INSERT INTO %s VALUES( ?, ? );", tableName);
-		try {
+		try (Connection c = DriverManager.getConnection(DB_URL)) {
+			statement = c.prepareStatement(string);
 			int length = array.length;
-			statement = connection.prepareStatement(string);
 
 			for (int i = 0; i < length; ++i) {
 				statement.setString(1, String.valueOf(i));

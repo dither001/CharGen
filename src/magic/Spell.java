@@ -9,6 +9,7 @@ import java.util.Set;
 import actor.Actor;
 import actor.Class;
 import actor.Player;
+import actor.Subclass;
 import rules.Dice;
 
 public enum Spell {
@@ -1012,7 +1013,7 @@ public enum Spell {
 			spellsKnown = actor.getSpellsKnown();
 
 		Class job = actor.getJob();
-		Class.Subclass archetype = actor.getArchetype();
+		Subclass archetype = actor.getArchetype();
 		if (job.equals(Class.BARD)) {
 			spellSelector(2, 0, job, spellsKnown);
 			spellSelector(4, 1, job, spellsKnown);
