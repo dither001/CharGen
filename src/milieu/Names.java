@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import rules.Dice;
+import com.norvendae.rules.misc.Dice;
 
 public abstract class Names {
 

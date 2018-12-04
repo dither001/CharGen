@@ -1,4 +1,4 @@
-package rules;
+package com.norvendae.rules.misc;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +40,16 @@ public abstract class Dice {
 		return array;
 	}
 
-	public static int[] rollAbilitiesInt() {
+	public static int[] rollAbilities2d6() {
+		int[] array = new int[] { 0, 0, 0, 0, 0, 0 };
+		for (int i = 0; i < array.length; ++i) {
+			array[i] += roll(2, 6);
+		}
+
+		return array;
+	}
+
+	public static int[] rollAbilities3d6() {
 		int[] array = new int[] { 0, 0, 0, 0, 0, 0 };
 		for (int i = 0; i < array.length; ++i) {
 			array[i] += roll(3, 6);

@@ -7,11 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.norvendae.rules.misc.Dice;
+
 import actor.Actor;
 import actor.Class;
 import actor.Combat;
 import actor.Player;
-import rules.Dice;
 
 public class Inventory {
 	/*

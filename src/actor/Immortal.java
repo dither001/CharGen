@@ -7,8 +7,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.norvendae.rules.dnd5e.*;
+import com.norvendae.rules.misc.Dice;
+
 import milieu.Names;
-import rules.*;
 
 public class Immortal implements Actor {
 	/*

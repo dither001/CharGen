@@ -5,13 +5,14 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.norvendae.rules.dnd5e.*;
+
 import actor.*;
 import actor.Class;
 import milieu.Figure;
 import milieu.Star;
 import milieu.StarSystem;
 import milieu.WorldTag;
-import rules.*;
 import vessel.MDrive;
 import vessel.Spaceship;
 
@@ -78,7 +79,7 @@ public class Main {
 	public static void testFigure() {
 		Figure group = new Figure();
 
-		while (group.numAsteroids() < 1) {
+		while (group.getMainWorld() == null) {
 			group = new Figure();
 		}
 

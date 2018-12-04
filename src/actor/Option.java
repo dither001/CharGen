@@ -1,8 +1,9 @@
 package actor;
 import java.util.EnumSet;
 
+import com.norvendae.rules.misc.Dice;
+
 import magic.Spell;
-import rules.Dice;
 
 public interface Option {
 	public enum Feature {

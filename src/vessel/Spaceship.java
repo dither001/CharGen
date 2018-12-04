@@ -1,6 +1,6 @@
 package vessel;
 
-import rules.Dice;
+import com.norvendae.rules.misc.Dice;
 
 public class Spaceship {
 	public enum Config {

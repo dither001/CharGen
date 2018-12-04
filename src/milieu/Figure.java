@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import rules.Dice;
+import com.norvendae.rules.misc.Dice;
 
 public class Figure implements Persistent {
 	private static int FAR_ORBIT = 32;
@@ -78,30 +78,27 @@ public class Figure implements Persistent {
 	 * INSTANCE METHODS
 	 */
 	public String toStringDetailed() {
-		String star = "";
-		star += String.format("Main world: %s", mainWorld.getName());
-		star += String.format("%nStarport: %s || Tech Level: %d || %s", mainWorld.getSpaceport(),
+		String mw = "";
+		mw += String.format("Main world: %s", mainWorld.getName());
+		mw += String.format("%nStarport: %s || Tech Level: %d || %s", mainWorld.getSpaceport(),
 				mainWorld.getTechLevel(), POPULATIONS[mainWorld.getPopulation()]);
-		star += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
+		mw += String.format("%nTrade Codes: %s", mainWorld.getTradeCodes());
 
-		star += String.format("%n");
-		star += String.format("%nGovernment: %s", mainWorld.governmentType());
+		mw += String.format("%n");
+		mw += String.format("%nGovernment: %s", mainWorld.governmentType());
 		if (economy != null)
-			star += "\n" + economy.toStringDetailed();
+			mw += "\n" + economy.toStringDetailed();
 
-		//
-		star += String.format("%n%n%s", mainWorld);
-		star += "\n- - -";
+		mw += String.format("%n%n%s", mainWorld);
 
-		star += "\n" + stars.get(0).color + stars.get(0).size;
-		// String string = String.format("%s (U: %2d || I: %2d >> H:%2d)", star,
-		// unavailableZones, this.innerZone,
-		// habitableZone);
-		String string = String.format("%s", star);
+		// STAR LIST
+		String ss = "\n- - -\n";
 
-		for (int i = 1; i < stars.size(); ++i) {
-			star = "" + stars.get(i).color + stars.get(i).size;
-			string += String.format(", %s (%2d)", star, stars.get(i).orbit);
+		Star star;
+		for (Iterator<Star> it = starList().iterator(); it.hasNext();) {
+			star = it.next();
+			ss += String.format("%c%c", star.color, star.size);
+			ss += it.hasNext() ? ", " : "";
 		}
 
 		// PLANET LIST & SORT BY ORBIT ASCENDING
@@ -112,7 +109,7 @@ public class Figure implements Persistent {
 				ws += "\n" + ((Planetoid) el).toStringDetailed();
 		}
 
-		return string + ws;
+		return mw + ss + ws;
 	}
 
 	public List<Star> starList() {
@@ -480,9 +477,7 @@ public class Figure implements Persistent {
 				currentWorld.setName(currentName + " " + Names.romanNumeral(moonCounter));
 				++moonCounter;
 			}
-
 		}
-
 	}
 
 	/*

@@ -1,5 +1,5 @@
 package gear;
-import rules.Dice;
+import com.norvendae.rules.misc.Dice;
 
 public enum Tool {
 	// professions

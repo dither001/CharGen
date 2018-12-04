@@ -6,9 +6,10 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
+import com.norvendae.rules.misc.Dice;
+
 import milieu.Base;
 import milieu.TradeCode;
-import rules.Dice;
 
 public class Planetoid implements World {
 	/*

@@ -1,4 +1,6 @@
-package rules;
+package com.norvendae.rules.dnd5e;
+
+import com.norvendae.rules.misc.Dice;
 
 public enum Alignment {
 	LAWFUL, GOOD, NEUTRAL, CHAOTIC, EVIL;

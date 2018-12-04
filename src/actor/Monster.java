@@ -2,7 +2,7 @@ package actor;
 
 import java.util.EnumSet;
 
-import rules.*;
+import com.norvendae.rules.dnd5e.*;
 
 public abstract class Monster implements Actor {
 

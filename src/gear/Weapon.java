@@ -8,13 +8,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import com.norvendae.rules.dnd5e.Energy;
+import com.norvendae.rules.misc.Dice;
+
 import actor.Actor;
 import actor.Class;
 import actor.Option;
 import actor.Player;
 import milieu.Names;
-import rules.Dice;
-import rules.Energy;
 
 public enum Weapon {
 	UNARMED, CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE, QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING, BATTLEAXE, FLAIL, GLAIVE, GREATAXE, GREATSWORD, HALBERD, LANCE, LONGSWORD, MAUL, MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD, TRIDENT, WAR_PICK, WARHAMMER, WHIP, BLOWGUN, HAND_CROSSBOW, HEAVY_CROSSBOW, LONGBOW, NET, SHIELD, ARROW, BOLT, BULLET, NEEDLE, CRYSTAL, ORB, ROD, ARCANE_STAFF, WAND, MISTLETOE, TOTEM, WOODEN_STAFF, YEW_WAND, AMULET, EMBLEM, RELIQUARY;

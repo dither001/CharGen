@@ -3,14 +3,15 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.norvendae.rules.dnd5e.*;
+import com.norvendae.rules.misc.Dice;
+
 import gear.Armor;
 import gear.Inventory;
 import gear.Weapon;
 import magic.Spell;
 import milieu.Names;
 import milieu.Names.AlphabeticalDescending;
-import rules.Dice;
-import rules.*;
 
 public class Player implements Actor {
 

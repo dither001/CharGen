@@ -1,11 +1,12 @@
 package actor;
 import java.util.EnumSet;
 
+import com.norvendae.rules.dnd5e.Language;
+import com.norvendae.rules.misc.Dice;
+
 import gear.Armor;
 import gear.Weapon;
 import magic.Spell;
-import rules.Dice;
-import rules.Language;
 
 public enum Race implements Option {
 	HUMAN, DRAGONBORN, HALF_ELF, HALF_ORC, TIEFLING,

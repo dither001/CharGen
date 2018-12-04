@@ -17,6 +17,8 @@ import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
+import com.norvendae.rules.misc.Dice;
+
 import adapter.Controller;
 import milieu.Base;
 import milieu.Planetoid;
@@ -26,7 +28,6 @@ import milieu.TradeCode;
 import milieu.World;
 import milieu.WorldTag;
 import milieu.WorldType;
-import rules.Dice;
 
 public class SQLiteData {
 	private static final String DB_URL = "jdbc:sqlite:C:/ProgramData/Project.db";

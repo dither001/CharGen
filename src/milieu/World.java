@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import rules.Dice;
+import com.norvendae.rules.misc.Dice;
 
 public interface World extends Persistent {
 	/*

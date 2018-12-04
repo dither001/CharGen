@@ -1,6 +1,6 @@
 package milieu;
 
-import rules.Dice;
+import com.norvendae.rules.misc.Dice;
 
 public class Star implements Persistent {
 	/*

@@ -2,8 +2,8 @@ package actor;
 import java.util.EnumSet;
 import java.util.HashMap;
 
-import rules.Dice;
-import rules.Language;
+import com.norvendae.rules.dnd5e.Language;
+import com.norvendae.rules.misc.Dice;
 
 /*
  * I want to implement a slightly choosier strategy for assigning (even) random backgrounds to characters. I want to organize

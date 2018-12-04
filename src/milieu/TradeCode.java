@@ -3,7 +3,7 @@ package milieu;
 import java.util.EnumSet;
 import java.util.Set;
 
-import rules.Dice;
+import com.norvendae.rules.misc.Dice;
 
 public enum TradeCode {
 	AG, AS, BA, DE, FL, HI, IC, IN, LO, NA, NI, PO, RI, VA, WA;
