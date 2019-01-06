@@ -19,11 +19,11 @@ public class Player implements Actor {
 	 * INSTANCE FIELDS
 	 * 
 	 */
-	private byte[] abilityScores;
-	private byte[] abilityCeiling;
+	private int[] abilityScores;
+	private int[] abilityCeiling;
 	private Size size;
 	private CreatureType creature;
-	private byte[] hitDice;
+	private int[] hitDice;
 	private boolean isFemale;
 
 	private Race race;
@@ -58,8 +58,8 @@ public class Player implements Actor {
 	 */
 	public Player() {
 		//
-		abilityScores = Dice.rollAbilitiesByte();
-		abilityCeiling = new byte[] { 20, 20, 20, 20, 20, 20 };
+		abilityScores = Dice.rollAbilities3d6();
+		abilityCeiling = new int[] { 20, 20, 20, 20, 20, 20 };
 		alignment = Alignment.random();
 
 		//
@@ -77,9 +77,9 @@ public class Player implements Actor {
 
 		// pre-roll hit dice
 		int hitDieSize = Class.getHitDie(job);
-		byte[] rolls = new byte[20];
+		int[] rolls = new int[20];
 		for (int i = 0; i < rolls.length; ++i) {
-			rolls[i] = (byte) Dice.roll(hitDieSize);
+			rolls[i] = Dice.roll(hitDieSize);
 		}
 
 		this.hitDice = rolls;
@@ -242,7 +242,7 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public byte[] getHitDice() {
+	public int[] getHitDice() {
 		return hitDice;
 	}
 
@@ -309,17 +309,17 @@ public class Player implements Actor {
 	}
 
 	@Override
-	public byte[] getAbilityScores() {
+	public int[] getAbilityScores() {
 		return abilityScores;
 	}
 
 	@Override
-	public byte[] getAbilityCeiling() {
+	public int[] getAbilityCeiling() {
 		return abilityCeiling;
 	}
 
 	@Override
-	public byte[] getSavingThrows() {
+	public int[] getSavingThrows() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -350,12 +350,6 @@ public class Player implements Actor {
 
 	@Override
 	public EnumSet<Energy> getResistance() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EnumSet<Energy> getImmunity() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -510,6 +504,54 @@ public class Player implements Actor {
 		Class job = Class.WIZARD;
 
 		return hasJob(job);
+	}
+
+	@Override
+	public void setAbilityScores(int[] abilityScores) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAbilityCeiling(int[] abilityCeiling) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setResistance(EnumSet<Energy> resistance) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public EnumSet<Energy> getEnergyImmunity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setEnergyImmunity(EnumSet<Energy> energyImmunity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setConditionImmunity(EnumSet<Condition> conditionImmunity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setConditions(EnumSet<Condition> conditions) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSenses(EnumSet<Sense> senses) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -11,7 +11,6 @@ import com.norvendae.rules.dnd5e.*;
 public interface Actor {
 	/*
 	 * INSTANCE METHODS
-	 * 
 	 */
 	public String toStringDetailed();
 
@@ -21,7 +20,7 @@ public interface Actor {
 
 	public Alignment alignment();
 
-	public byte[] getHitDice();
+	public int[] getHitDice();
 
 	public int getLevel();
 
@@ -33,25 +32,38 @@ public interface Actor {
 
 	public EnumSet<MovementType> getSpeed();
 
-	public byte[] getAbilityScores();
+	public int[] getAbilityScores();
+	
+	public void setAbilityScores(int[] abilityScores);
 
-	public byte[] getAbilityCeiling();
+	public int[] getAbilityCeiling();
+	
+	public void setAbilityCeiling(int[] abilityCeiling);
 
-	public byte[] getSavingThrows();
+	public int[] getSavingThrows();
 
 	public EnumSet<Energy> getResistance();
+	
+	public void setResistance(EnumSet<Energy> resistance); 
 
-	public EnumSet<Energy> getImmunity();
+	public EnumSet<Energy> getEnergyImmunity();
+	
+	public void setEnergyImmunity(EnumSet<Energy> energyImmunity);
 
 	public EnumSet<Condition> getConditionImmunity();
+	
+	public void setConditionImmunity(EnumSet<Condition> conditionImmunity);
 
 	public EnumSet<Condition> getConditions();
+	
+	public void setConditions(EnumSet<Condition> conditions);
 
 	public EnumSet<Sense> getSenses();
+	
+	public void setSenses(EnumSet<Sense> senses);
 
 	/*
 	 * DEFAULT METHODS
-	 * 
 	 */
 	public default int proficiency() {
 		int bonus, level = getLevel();

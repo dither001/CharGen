@@ -20,32 +20,20 @@ import milieu.Names;
 public enum Weapon {
 	UNARMED, CLUB, DAGGER, GREATCLUB, HANDAXE, JAVELIN, LIGHT_HAMMER, MACE, QUARTERSTAFF, SICKLE, SPEAR, LIGHT_CROSSBOW, DART, SHORTBOW, SLING, BATTLEAXE, FLAIL, GLAIVE, GREATAXE, GREATSWORD, HALBERD, LANCE, LONGSWORD, MAUL, MORNINGSTAR, PIKE, RAPIER, SCIMITAR, SHORTSWORD, TRIDENT, WAR_PICK, WARHAMMER, WHIP, BLOWGUN, HAND_CROSSBOW, HEAVY_CROSSBOW, LONGBOW, NET, SHIELD, ARROW, BOLT, BULLET, NEEDLE, CRYSTAL, ORB, ROD, ARCANE_STAFF, WAND, MISTLETOE, TOTEM, WOODEN_STAFF, YEW_WAND, AMULET, EMBLEM, RELIQUARY;
 
-	public enum Type {
-		UNARMED, CLUB, DAGGER, AXE, SPEAR, MACE, STAFF, SPECIAL, CROSSBOW, BOW, POLEARM, SWORD, SHIELD, AMMUNITION, ARCANE_FOCUS, DRUID_FOCUS, HOLY_SYMBOL
-	};
-
-	public enum Trait {
-		FINESSE, REACH, THROWN, AMMUNITION, LOADING, IMPROVISED, STACKABLE
-	};
-
-	public enum Hand {
-		LIGHT, ONE, VERSATILE, TWO, HEAVY
-	};
-
 	public static class Prototype {
 		private Weapon weapon;
-		private Type type;
+		private WeaponClass type;
 		private int dice, faces;
 		private Energy energy;
-		private Hand hand;
-		private EnumSet<Trait> traits;
+		private WeaponHands hand;
+		private EnumSet<WeaponTrait> traits;
 
 		//
-		public Prototype(Weapon weapon, Type type, int face, Energy energy, Hand hand, Trait... args) {
+		public Prototype(Weapon weapon, WeaponClass type, int face, Energy energy, WeaponHands hand, WeaponTrait... args) {
 			this(weapon, type, 1, face, energy, hand, args);
 		}
 
-		public Prototype(Weapon weapon, Type type, int dice, int face, Energy energy, Hand hand, Trait... args) {
+		public Prototype(Weapon weapon, WeaponClass type, int dice, int face, Energy energy, WeaponHands hand, WeaponTrait... args) {
 			this.weapon = weapon;
 			this.type = type;
 			this.dice = dice;
@@ -53,7 +41,7 @@ public enum Weapon {
 			this.energy = energy;
 			this.hand = hand;
 
-			this.traits = EnumSet.noneOf(Trait.class);
+			this.traits = EnumSet.noneOf(WeaponTrait.class);
 			for (int i = 0; i < args.length; ++i) {
 				traits.add(args[i]);
 			}
@@ -75,7 +63,7 @@ public enum Weapon {
 		private int quantity;
 
 		//
-		private EnumSet<Trait> traits;
+		private EnumSet<WeaponTrait> traits;
 		private int dice, faces;
 
 		//
@@ -100,7 +88,7 @@ public enum Weapon {
 			this.quantity = quantity;
 
 			// TODO - take into account magic
-			if (prototype.type.equals(Type.SHIELD))
+			if (prototype.type.equals(WeaponClass.SHIELD))
 				this.armorBonus = 2;
 			else
 				this.armorBonus = 0;
@@ -118,7 +106,7 @@ public enum Weapon {
 			return prototype.weapon;
 		}
 
-		public Type getType() {
+		public WeaponClass getType() {
 			return prototype.type;
 		}
 
@@ -144,7 +132,7 @@ public enum Weapon {
 
 		public boolean rangedOnly() {
 			boolean rangedOnly = false;
-			if (traits.contains(Trait.AMMUNITION))
+			if (traits.contains(WeaponTrait.AMMUNITION))
 				rangedOnly = true;
 
 			return rangedOnly;
@@ -152,7 +140,7 @@ public enum Weapon {
 
 		public boolean rangedOrThrown() {
 			boolean rangedOrThrown = false;
-			if (traits.contains(Trait.AMMUNITION) || traits.contains(Trait.THROWN))
+			if (traits.contains(WeaponTrait.AMMUNITION) || traits.contains(WeaponTrait.THROWN))
 				rangedOrThrown = true;
 
 			return rangedOrThrown;
@@ -160,7 +148,7 @@ public enum Weapon {
 
 		public boolean useDexterity() {
 			boolean useDexterity = false;
-			if (traits.contains(Trait.AMMUNITION) || traits.contains(Trait.FINESSE))
+			if (traits.contains(WeaponTrait.AMMUNITION) || traits.contains(WeaponTrait.FINESSE))
 				useDexterity = true;
 
 			return useDexterity;
@@ -174,17 +162,17 @@ public enum Weapon {
 			return prototype.energy;
 		}
 
-		public Hand getHand() {
+		public WeaponHands getHand() {
 			return prototype.hand;
 		}
 
 		public boolean oneHandUseable() {
-			return prototype.hand.equals(Hand.LIGHT) || prototype.hand.equals(Hand.ONE)
-					|| prototype.hand.equals(Hand.VERSATILE);
+			return prototype.hand.equals(WeaponHands.LIGHT) || prototype.hand.equals(WeaponHands.ONE)
+					|| prototype.hand.equals(WeaponHands.VERSATILE);
 		}
 
 		public boolean stackable() {
-			return traits.contains(Trait.STACKABLE);
+			return traits.contains(WeaponTrait.STACKABLE);
 		}
 
 		public int getQuantity() {
@@ -288,101 +276,101 @@ public enum Weapon {
 
 	static {
 		weaponPrototypeMap = new HashMap<Weapon, Prototype>();
-		weaponPrototypeMap.put(UNARMED, new Prototype(UNARMED, Type.UNARMED, 1, 1, Energy.BLUDGEONING, Hand.LIGHT));
-		weaponPrototypeMap.put(CLUB, new Prototype(CLUB, Type.CLUB, 1, 4, Energy.BLUDGEONING, Hand.LIGHT));
+		weaponPrototypeMap.put(UNARMED, new Prototype(UNARMED, WeaponClass.UNARMED, 1, 1, Energy.BLUDGEONING, WeaponHands.LIGHT));
+		weaponPrototypeMap.put(CLUB, new Prototype(CLUB, WeaponClass.CLUB, 1, 4, Energy.BLUDGEONING, WeaponHands.LIGHT));
 		weaponPrototypeMap.put(DAGGER,
-				new Prototype(DAGGER, Type.DAGGER, 1, 4, Energy.PIERCING, Hand.LIGHT, Trait.FINESSE, Trait.THROWN));
-		weaponPrototypeMap.put(GREATCLUB, new Prototype(GREATCLUB, Type.CLUB, 1, 8, Energy.BLUDGEONING, Hand.TWO));
+				new Prototype(DAGGER, WeaponClass.DAGGER, 1, 4, Energy.PIERCING, WeaponHands.LIGHT, WeaponTrait.FINESSE, WeaponTrait.THROWN));
+		weaponPrototypeMap.put(GREATCLUB, new Prototype(GREATCLUB, WeaponClass.CLUB, 1, 8, Energy.BLUDGEONING, WeaponHands.TWO));
 		weaponPrototypeMap.put(HANDAXE,
-				new Prototype(HANDAXE, Type.AXE, 1, 6, Energy.SLASHING, Hand.LIGHT, Trait.THROWN));
+				new Prototype(HANDAXE, WeaponClass.AXE, 1, 6, Energy.SLASHING, WeaponHands.LIGHT, WeaponTrait.THROWN));
 		weaponPrototypeMap.put(JAVELIN,
-				new Prototype(JAVELIN, Type.SPEAR, 1, 6, Energy.PIERCING, Hand.ONE, Trait.THROWN, Trait.STACKABLE));
+				new Prototype(JAVELIN, WeaponClass.SPEAR, 1, 6, Energy.PIERCING, WeaponHands.ONE, WeaponTrait.THROWN, WeaponTrait.STACKABLE));
 		weaponPrototypeMap.put(LIGHT_HAMMER,
-				new Prototype(LIGHT_HAMMER, Type.MACE, 1, 4, Energy.BLUDGEONING, Hand.LIGHT));
-		weaponPrototypeMap.put(MACE, new Prototype(MACE, Type.MACE, 1, 6, Energy.BLUDGEONING, Hand.ONE));
+				new Prototype(LIGHT_HAMMER, WeaponClass.MACE, 1, 4, Energy.BLUDGEONING, WeaponHands.LIGHT));
+		weaponPrototypeMap.put(MACE, new Prototype(MACE, WeaponClass.MACE, 1, 6, Energy.BLUDGEONING, WeaponHands.ONE));
 		weaponPrototypeMap.put(QUARTERSTAFF,
-				new Prototype(QUARTERSTAFF, Type.STAFF, 1, 6, Energy.BLUDGEONING, Hand.VERSATILE));
-		weaponPrototypeMap.put(SICKLE, new Prototype(SICKLE, Type.SPECIAL, 1, 4, Energy.SLASHING, Hand.LIGHT));
+				new Prototype(QUARTERSTAFF, WeaponClass.STAFF, 1, 6, Energy.BLUDGEONING, WeaponHands.VERSATILE));
+		weaponPrototypeMap.put(SICKLE, new Prototype(SICKLE, WeaponClass.SPECIAL, 1, 4, Energy.SLASHING, WeaponHands.LIGHT));
 		weaponPrototypeMap.put(SPEAR,
-				new Prototype(SPEAR, Type.SPEAR, 1, 6, Energy.PIERCING, Hand.VERSATILE, Trait.THROWN));
-		weaponPrototypeMap.put(LIGHT_CROSSBOW, new Prototype(LIGHT_CROSSBOW, Type.CROSSBOW, 1, 8, Energy.PIERCING,
-				Hand.TWO, Trait.AMMUNITION, Trait.LOADING));
-		weaponPrototypeMap.put(DART, new Prototype(DART, Type.SPECIAL, 1, 4, Energy.PIERCING, Hand.ONE, Trait.FINESSE,
-				Trait.THROWN, Trait.STACKABLE));
+				new Prototype(SPEAR, WeaponClass.SPEAR, 1, 6, Energy.PIERCING, WeaponHands.VERSATILE, WeaponTrait.THROWN));
+		weaponPrototypeMap.put(LIGHT_CROSSBOW, new Prototype(LIGHT_CROSSBOW, WeaponClass.CROSSBOW, 1, 8, Energy.PIERCING,
+				WeaponHands.TWO, WeaponTrait.AMMUNITION, WeaponTrait.LOADING));
+		weaponPrototypeMap.put(DART, new Prototype(DART, WeaponClass.SPECIAL, 1, 4, Energy.PIERCING, WeaponHands.ONE, WeaponTrait.FINESSE,
+				WeaponTrait.THROWN, WeaponTrait.STACKABLE));
 		weaponPrototypeMap.put(SHORTBOW,
-				new Prototype(SHORTBOW, Type.BOW, 1, 6, Energy.PIERCING, Hand.TWO, Trait.AMMUNITION));
+				new Prototype(SHORTBOW, WeaponClass.BOW, 1, 6, Energy.PIERCING, WeaponHands.TWO, WeaponTrait.AMMUNITION));
 		weaponPrototypeMap.put(SLING,
-				new Prototype(SLING, Type.SPECIAL, 1, 4, Energy.BLUDGEONING, Hand.ONE, Trait.AMMUNITION));
-		weaponPrototypeMap.put(BATTLEAXE, new Prototype(BATTLEAXE, Type.AXE, 1, 8, Energy.SLASHING, Hand.VERSATILE));
-		weaponPrototypeMap.put(FLAIL, new Prototype(FLAIL, Type.SPECIAL, 1, 8, Energy.BLUDGEONING, Hand.ONE));
+				new Prototype(SLING, WeaponClass.SPECIAL, 1, 4, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.AMMUNITION));
+		weaponPrototypeMap.put(BATTLEAXE, new Prototype(BATTLEAXE, WeaponClass.AXE, 1, 8, Energy.SLASHING, WeaponHands.VERSATILE));
+		weaponPrototypeMap.put(FLAIL, new Prototype(FLAIL, WeaponClass.SPECIAL, 1, 8, Energy.BLUDGEONING, WeaponHands.ONE));
 		weaponPrototypeMap.put(GLAIVE,
-				new Prototype(GLAIVE, Type.POLEARM, 1, 10, Energy.SLASHING, Hand.HEAVY, Trait.REACH));
-		weaponPrototypeMap.put(GREATAXE, new Prototype(GREATAXE, Type.AXE, 1, 12, Energy.SLASHING, Hand.HEAVY));
-		weaponPrototypeMap.put(GREATSWORD, new Prototype(GREATSWORD, Type.SWORD, 1, 6, Energy.SLASHING, Hand.HEAVY));
+				new Prototype(GLAIVE, WeaponClass.POLEARM, 1, 10, Energy.SLASHING, WeaponHands.HEAVY, WeaponTrait.REACH));
+		weaponPrototypeMap.put(GREATAXE, new Prototype(GREATAXE, WeaponClass.AXE, 1, 12, Energy.SLASHING, WeaponHands.HEAVY));
+		weaponPrototypeMap.put(GREATSWORD, new Prototype(GREATSWORD, WeaponClass.SWORD, 1, 6, Energy.SLASHING, WeaponHands.HEAVY));
 		weaponPrototypeMap.put(HALBERD,
-				new Prototype(HALBERD, Type.POLEARM, 1, 10, Energy.SLASHING, Hand.HEAVY, Trait.REACH));
+				new Prototype(HALBERD, WeaponClass.POLEARM, 1, 10, Energy.SLASHING, WeaponHands.HEAVY, WeaponTrait.REACH));
 		weaponPrototypeMap.put(LANCE,
-				new Prototype(LANCE, Type.SPECIAL, 1, 12, Energy.PIERCING, Hand.HEAVY, Trait.REACH));
-		weaponPrototypeMap.put(LONGSWORD, new Prototype(LONGSWORD, Type.SWORD, 1, 8, Energy.SLASHING, Hand.VERSATILE));
-		weaponPrototypeMap.put(MAUL, new Prototype(MAUL, Type.MACE, 2, 6, Energy.BLUDGEONING, Hand.HEAVY));
-		weaponPrototypeMap.put(MORNINGSTAR, new Prototype(MORNINGSTAR, Type.MACE, 1, 8, Energy.PIERCING, Hand.ONE));
+				new Prototype(LANCE, WeaponClass.SPECIAL, 1, 12, Energy.PIERCING, WeaponHands.HEAVY, WeaponTrait.REACH));
+		weaponPrototypeMap.put(LONGSWORD, new Prototype(LONGSWORD, WeaponClass.SWORD, 1, 8, Energy.SLASHING, WeaponHands.VERSATILE));
+		weaponPrototypeMap.put(MAUL, new Prototype(MAUL, WeaponClass.MACE, 2, 6, Energy.BLUDGEONING, WeaponHands.HEAVY));
+		weaponPrototypeMap.put(MORNINGSTAR, new Prototype(MORNINGSTAR, WeaponClass.MACE, 1, 8, Energy.PIERCING, WeaponHands.ONE));
 		weaponPrototypeMap.put(PIKE,
-				new Prototype(PIKE, Type.POLEARM, 1, 10, Energy.PIERCING, Hand.HEAVY, Trait.REACH));
+				new Prototype(PIKE, WeaponClass.POLEARM, 1, 10, Energy.PIERCING, WeaponHands.HEAVY, WeaponTrait.REACH));
 		weaponPrototypeMap.put(RAPIER,
-				new Prototype(RAPIER, Type.SWORD, 1, 8, Energy.PIERCING, Hand.ONE, Trait.FINESSE));
+				new Prototype(RAPIER, WeaponClass.SWORD, 1, 8, Energy.PIERCING, WeaponHands.ONE, WeaponTrait.FINESSE));
 		weaponPrototypeMap.put(SCIMITAR,
-				new Prototype(SCIMITAR, Type.SWORD, 1, 6, Energy.SLASHING, Hand.LIGHT, Trait.FINESSE));
+				new Prototype(SCIMITAR, WeaponClass.SWORD, 1, 6, Energy.SLASHING, WeaponHands.LIGHT, WeaponTrait.FINESSE));
 		weaponPrototypeMap.put(SHORTSWORD,
-				new Prototype(SHORTSWORD, Type.SWORD, 1, 6, Energy.PIERCING, Hand.LIGHT, Trait.FINESSE));
+				new Prototype(SHORTSWORD, WeaponClass.SWORD, 1, 6, Energy.PIERCING, WeaponHands.LIGHT, WeaponTrait.FINESSE));
 		weaponPrototypeMap.put(TRIDENT,
-				new Prototype(TRIDENT, Type.SPEAR, 1, 6, Energy.PIERCING, Hand.VERSATILE, Trait.THROWN));
-		weaponPrototypeMap.put(WAR_PICK, new Prototype(WAR_PICK, Type.AXE, 1, 8, Energy.PIERCING, Hand.ONE));
+				new Prototype(TRIDENT, WeaponClass.SPEAR, 1, 6, Energy.PIERCING, WeaponHands.VERSATILE, WeaponTrait.THROWN));
+		weaponPrototypeMap.put(WAR_PICK, new Prototype(WAR_PICK, WeaponClass.AXE, 1, 8, Energy.PIERCING, WeaponHands.ONE));
 		weaponPrototypeMap.put(WARHAMMER,
-				new Prototype(WARHAMMER, Type.MACE, 1, 8, Energy.BLUDGEONING, Hand.VERSATILE));
+				new Prototype(WARHAMMER, WeaponClass.MACE, 1, 8, Energy.BLUDGEONING, WeaponHands.VERSATILE));
 		weaponPrototypeMap.put(WHIP,
-				new Prototype(WHIP, Type.SPECIAL, 1, 4, Energy.SLASHING, Hand.ONE, Trait.FINESSE, Trait.REACH));
+				new Prototype(WHIP, WeaponClass.SPECIAL, 1, 4, Energy.SLASHING, WeaponHands.ONE, WeaponTrait.FINESSE, WeaponTrait.REACH));
 		weaponPrototypeMap.put(BLOWGUN,
-				new Prototype(BLOWGUN, Type.SPECIAL, 1, 1, Energy.PIERCING, Hand.ONE, Trait.AMMUNITION, Trait.LOADING));
-		weaponPrototypeMap.put(HAND_CROSSBOW, new Prototype(HAND_CROSSBOW, Type.CROSSBOW, 1, 6, Energy.PIERCING,
-				Hand.LIGHT, Trait.AMMUNITION, Trait.LOADING));
-		weaponPrototypeMap.put(HEAVY_CROSSBOW, new Prototype(HEAVY_CROSSBOW, Type.CROSSBOW, 1, 10, Energy.PIERCING,
-				Hand.HEAVY, Trait.AMMUNITION, Trait.LOADING));
+				new Prototype(BLOWGUN, WeaponClass.SPECIAL, 1, 1, Energy.PIERCING, WeaponHands.ONE, WeaponTrait.AMMUNITION, WeaponTrait.LOADING));
+		weaponPrototypeMap.put(HAND_CROSSBOW, new Prototype(HAND_CROSSBOW, WeaponClass.CROSSBOW, 1, 6, Energy.PIERCING,
+				WeaponHands.LIGHT, WeaponTrait.AMMUNITION, WeaponTrait.LOADING));
+		weaponPrototypeMap.put(HEAVY_CROSSBOW, new Prototype(HEAVY_CROSSBOW, WeaponClass.CROSSBOW, 1, 10, Energy.PIERCING,
+				WeaponHands.HEAVY, WeaponTrait.AMMUNITION, WeaponTrait.LOADING));
 		weaponPrototypeMap.put(LONGBOW,
-				new Prototype(LONGBOW, Type.BOW, 1, 8, Energy.PIERCING, Hand.HEAVY, Trait.AMMUNITION));
-		weaponPrototypeMap.put(NET, new Prototype(NET, Type.SPECIAL, 1, 4, Energy.BLUDGEONING, Hand.ONE, Trait.THROWN));
-		weaponPrototypeMap.put(SHIELD, new Prototype(SHIELD, Type.SHIELD, 1, 4, Energy.BLUDGEONING, Hand.LIGHT));
-		weaponPrototypeMap.put(ARROW, new Prototype(ARROW, Type.AMMUNITION, 1, 1, Energy.PIERCING, Hand.LIGHT,
-				Trait.IMPROVISED, Trait.STACKABLE));
-		weaponPrototypeMap.put(BOLT, new Prototype(BOLT, Type.AMMUNITION, 1, 1, Energy.PIERCING, Hand.LIGHT,
-				Trait.IMPROVISED, Trait.STACKABLE));
-		weaponPrototypeMap.put(BULLET, new Prototype(BULLET, Type.AMMUNITION, 1, 1, Energy.BLUDGEONING, Hand.LIGHT,
-				Trait.IMPROVISED, Trait.STACKABLE));
-		weaponPrototypeMap.put(NEEDLE, new Prototype(NEEDLE, Type.AMMUNITION, 1, 1, Energy.PIERCING, Hand.LIGHT,
-				Trait.IMPROVISED, Trait.STACKABLE));
+				new Prototype(LONGBOW, WeaponClass.BOW, 1, 8, Energy.PIERCING, WeaponHands.HEAVY, WeaponTrait.AMMUNITION));
+		weaponPrototypeMap.put(NET, new Prototype(NET, WeaponClass.SPECIAL, 1, 4, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.THROWN));
+		weaponPrototypeMap.put(SHIELD, new Prototype(SHIELD, WeaponClass.SHIELD, 1, 4, Energy.BLUDGEONING, WeaponHands.LIGHT));
+		weaponPrototypeMap.put(ARROW, new Prototype(ARROW, WeaponClass.AMMUNITION, 1, 1, Energy.PIERCING, WeaponHands.LIGHT,
+				WeaponTrait.IMPROVISED, WeaponTrait.STACKABLE));
+		weaponPrototypeMap.put(BOLT, new Prototype(BOLT, WeaponClass.AMMUNITION, 1, 1, Energy.PIERCING, WeaponHands.LIGHT,
+				WeaponTrait.IMPROVISED, WeaponTrait.STACKABLE));
+		weaponPrototypeMap.put(BULLET, new Prototype(BULLET, WeaponClass.AMMUNITION, 1, 1, Energy.BLUDGEONING, WeaponHands.LIGHT,
+				WeaponTrait.IMPROVISED, WeaponTrait.STACKABLE));
+		weaponPrototypeMap.put(NEEDLE, new Prototype(NEEDLE, WeaponClass.AMMUNITION, 1, 1, Energy.PIERCING, WeaponHands.LIGHT,
+				WeaponTrait.IMPROVISED, WeaponTrait.STACKABLE));
 		weaponPrototypeMap.put(CRYSTAL,
-				new Prototype(CRYSTAL, Type.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(CRYSTAL, WeaponClass.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(ORB,
-				new Prototype(ORB, Type.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(ORB, WeaponClass.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(ROD,
-				new Prototype(ROD, Type.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(ROD, WeaponClass.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(ARCANE_STAFF,
-				new Prototype(ARCANE_STAFF, Type.STAFF, 1, 6, Energy.BLUDGEONING, Hand.VERSATILE));
+				new Prototype(ARCANE_STAFF, WeaponClass.STAFF, 1, 6, Energy.BLUDGEONING, WeaponHands.VERSATILE));
 		weaponPrototypeMap.put(WAND,
-				new Prototype(WAND, Type.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(WAND, WeaponClass.ARCANE_FOCUS, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(MISTLETOE,
-				new Prototype(MISTLETOE, Type.DRUID_FOCUS, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(MISTLETOE, WeaponClass.DRUID_FOCUS, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(TOTEM,
-				new Prototype(TOTEM, Type.DRUID_FOCUS, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(TOTEM, WeaponClass.DRUID_FOCUS, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(WOODEN_STAFF,
-				new Prototype(WOODEN_STAFF, Type.STAFF, 1, 6, Energy.BLUDGEONING, Hand.VERSATILE));
+				new Prototype(WOODEN_STAFF, WeaponClass.STAFF, 1, 6, Energy.BLUDGEONING, WeaponHands.VERSATILE));
 		weaponPrototypeMap.put(YEW_WAND,
-				new Prototype(YEW_WAND, Type.DRUID_FOCUS, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(YEW_WAND, WeaponClass.DRUID_FOCUS, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(AMULET,
-				new Prototype(AMULET, Type.HOLY_SYMBOL, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(AMULET, WeaponClass.HOLY_SYMBOL, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(EMBLEM,
-				new Prototype(EMBLEM, Type.HOLY_SYMBOL, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(EMBLEM, WeaponClass.HOLY_SYMBOL, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 		weaponPrototypeMap.put(RELIQUARY,
-				new Prototype(RELIQUARY, Type.HOLY_SYMBOL, 1, 1, Energy.BLUDGEONING, Hand.ONE, Trait.IMPROVISED));
+				new Prototype(RELIQUARY, WeaponClass.HOLY_SYMBOL, 1, 1, Energy.BLUDGEONING, WeaponHands.ONE, WeaponTrait.IMPROVISED));
 
 	}
 
@@ -402,7 +390,7 @@ public enum Weapon {
 
 	public static Instance monkUnarmedStrike(Player actor) {
 		Instance weapon = new Instance(UNARMED);
-		weapon.traits.add(Trait.FINESSE);
+		weapon.traits.add(WeaponTrait.FINESSE);
 
 		EnumSet<Option.Feature> features = actor.getFeatures();
 		if (features.contains(Option.Feature.MARTIAL_ARTS_D10))
@@ -736,9 +724,9 @@ public enum Weapon {
 	 * 
 	 */
 	public static class SortByTrait implements Comparator<Instance> {
-		private Trait trait;
+		private WeaponTrait trait;
 
-		public SortByTrait(Trait trait) {
+		public SortByTrait(WeaponTrait trait) {
 			this.trait = trait;
 		}
 
@@ -773,18 +761,18 @@ public enum Weapon {
 		@Override
 		public int compare(Instance one, Instance two) {
 			int left = 0, right = 0;
-			if (one.getHand().equals(Hand.VERSATILE))
+			if (one.getHand().equals(WeaponHands.VERSATILE))
 				left += 5;
-			else if (one.getHand().equals(Hand.ONE))
+			else if (one.getHand().equals(WeaponHands.ONE))
 				left += 2;
-			else if (one.getHand().equals(Hand.LIGHT))
+			else if (one.getHand().equals(WeaponHands.LIGHT))
 				left += 1;
 
-			if (two.getHand().equals(Hand.VERSATILE))
+			if (two.getHand().equals(WeaponHands.VERSATILE))
 				right += 5;
-			else if (two.getHand().equals(Hand.ONE))
+			else if (two.getHand().equals(WeaponHands.ONE))
 				right += 2;
-			else if (two.getHand().equals(Hand.LIGHT))
+			else if (two.getHand().equals(WeaponHands.LIGHT))
 				right += 1;
 
 			left += (one.isShield()) ? 10 : 0;

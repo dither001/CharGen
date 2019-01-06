@@ -1,4 +1,5 @@
 package actor;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,7 +11,6 @@ import java.util.Set;
 
 import gear.Inventory;
 import gear.Weapon;
-import gear.Weapon.Instance;
 import magic.Spell;
 
 public class Combat implements Option {
@@ -134,7 +134,7 @@ public class Combat implements Option {
 	private void calcHitPoints() {
 		// TODO - doesn't take into account magical bonuses or other features
 		int level = owner.getLevel();
-		byte[] hitDice = owner.getHitDice();
+		int[] hitDice = owner.getHitDice();
 		int constitution = owner.getConstitutionModifier();
 
 		int hp = 0, perLevel = constitution;

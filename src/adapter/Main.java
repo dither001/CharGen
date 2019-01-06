@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import com.norvendae.rules.dnd5e.*;
+import com.starswonumber.deadnames.*;
 
 import actor.*;
 import actor.Class;
@@ -29,7 +30,10 @@ public class Main {
 		// databaseStart();
 
 		// testMainWorld();
-		testFigure();
+		// testFigure();
+
+		// System.out.println(Motivation.motivations().length);
+		testLostTypes();
 
 		// int maxLength = 0, current = 0;
 		// for (WorldTag el : WorldTag.ALL_TAGS) {
@@ -96,6 +100,29 @@ public class Main {
 
 		System.out.println(group.toStringDetailed());
 		System.out.println();
+	}
+
+	public static void testLostTypes() {
+		double total = 10000;
+		int[] types = new int[] { 0, 0, 0, 0 };
+		for (int i = 0; i < total; ++i) {
+			Lost lost = Lost.randomLost();
+
+			if (lost.equals(Lost.TRANSHUMAN))
+				++types[0];
+			else if (lost.equals(Lost.EXTRATERRESTRIAL))
+				++types[1];
+			else if (lost.equals(Lost.SYNTHETIC))
+				++types[2];
+			else
+				++types[3];
+		}
+
+		System.out.println("Transhuman " + (types[0] / total));
+		System.out.println("Extraterrestrial " + (types[1] / total));
+		System.out.println("Synthetic " + (types[2] / total));
+		System.out.println("Metadimensional " + (types[3] / total));
+
 	}
 
 	public static void powersByAlignment() {

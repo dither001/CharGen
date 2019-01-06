@@ -12,7 +12,7 @@ import com.norvendae.rules.misc.Dice;
 
 import milieu.Names;
 
-public class Immortal implements Actor {
+public class Immortal {
 	/*
 	 * Many, many gods exist, and comparatively few classed "primordials." It's my
 	 * intent to class the majority of entities that are either abstract, elemental
@@ -1758,114 +1758,6 @@ public class Immortal implements Actor {
 		String string = String.format("%s", name);
 
 		return string;
-	}
-
-	@Override
-	public String toStringDetailed() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Size creatureSize() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CreatureType creatureType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Alignment alignment() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public byte[] getHitDice() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getLevel() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setLevel(int level) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public int getExperience() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setExp(int exp) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public EnumSet<MovementType> getSpeed() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public byte[] getAbilityScores() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public byte[] getAbilityCeiling() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public byte[] getSavingThrows() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EnumSet<Energy> getResistance() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EnumSet<Energy> getImmunity() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EnumSet<Condition> getConditionImmunity() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EnumSet<Condition> getConditions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EnumSet<Sense> getSenses() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -35,30 +35,30 @@ public enum Class implements Option {
 	public static int getHitDie(Class job) {
 		int hitDie = 8;
 
-		if (job.equals(BARBARIAN))
+		switch (job) {
+		case BARBARIAN:
 			hitDie = 12;
-		else if (job.equals(BARD))
+			break;
+		case BARD:
+		case CLERIC:
+		case DRUID:
+		case MONK:
+		case ROGUE:
+		case WARLOCK:
 			hitDie = 8;
-		else if (job.equals(CLERIC))
-			hitDie = 8;
-		else if (job.equals(DRUID))
-			hitDie = 8;
-		else if (job.equals(FIGHTER))
+			break;
+		case FIGHTER:
+		case PALADIN:
+		case RANGER:
 			hitDie = 10;
-		else if (job.equals(MONK))
-			hitDie = 8;
-		else if (job.equals(PALADIN))
-			hitDie = 10;
-		else if (job.equals(RANGER))
-			hitDie = 10;
-		else if (job.equals(ROGUE))
-			hitDie = 8;
-		else if (job.equals(SORCERER))
+			break;
+		case SORCERER:
+		case WIZARD:
 			hitDie = 6;
-		else if (job.equals(WARLOCK))
-			hitDie = 8;
-		else if (job.equals(WIZARD))
-			hitDie = 6;
+			break;
+		default:
+			break;
+		}
 
 		return hitDie;
 	}
@@ -66,30 +66,28 @@ public enum Class implements Option {
 	public static int getNumberOfSkills(Class job) {
 		int jobSkills = 2;
 
-		if (job.equals(BARBARIAN))
+		switch (job) {
+		case BARBARIAN:
+		case CLERIC:
+		case DRUID:
+		case FIGHTER:
+		case MONK:
+		case PALADIN:
+		case SORCERER:
+		case WARLOCK:
+		case WIZARD:
 			jobSkills = 2;
-		else if (job.equals(BARD))
+			break;
+		case BARD:
+		case RANGER:
 			jobSkills = 3;
-		else if (job.equals(CLERIC))
-			jobSkills = 2;
-		else if (job.equals(DRUID))
-			jobSkills = 2;
-		else if (job.equals(FIGHTER))
-			jobSkills = 2;
-		else if (job.equals(MONK))
-			jobSkills = 2;
-		else if (job.equals(PALADIN))
-			jobSkills = 2;
-		else if (job.equals(RANGER))
-			jobSkills = 3;
-		else if (job.equals(ROGUE))
+			break;
+		case ROGUE:
 			jobSkills = 4;
-		else if (job.equals(SORCERER))
-			jobSkills = 2;
-		else if (job.equals(WARLOCK))
-			jobSkills = 2;
-		else if (job.equals(WIZARD))
-			jobSkills = 2;
+			break;
+		default:
+			break;
+		}
 
 		return jobSkills;
 	}
@@ -97,30 +95,32 @@ public enum Class implements Option {
 	public static Ability getPrimaryAbility(Class job) {
 		Ability ability = Ability.STRENGTH;
 
-		if (job.equals(BARBARIAN))
+		switch (job) {
+		case BARBARIAN:
+		case FIGHTER:
+		case PALADIN:
 			ability = Ability.STRENGTH;
-		else if (job.equals(BARD))
+			break;
+		case BARD:
+		case SORCERER:
+		case WARLOCK:
 			ability = Ability.CHARISMA;
-		else if (job.equals(CLERIC))
+			break;
+		case CLERIC:
+		case DRUID:
 			ability = Ability.WISDOM;
-		else if (job.equals(DRUID))
-			ability = Ability.WISDOM;
-		else if (job.equals(FIGHTER))
-			ability = Ability.STRENGTH;
-		else if (job.equals(MONK))
+			break;
+		case MONK:
+		case RANGER:
+		case ROGUE:
 			ability = Ability.DEXTERITY;
-		else if (job.equals(PALADIN))
-			ability = Ability.STRENGTH;
-		else if (job.equals(RANGER))
-			ability = Ability.DEXTERITY;
-		else if (job.equals(ROGUE))
-			ability = Ability.DEXTERITY;
-		else if (job.equals(SORCERER))
-			ability = Ability.CHARISMA;
-		else if (job.equals(WARLOCK))
-			ability = Ability.CHARISMA;
-		else if (job.equals(WIZARD))
+			break;
+		case WIZARD:
 			ability = Ability.INTELLIGENCE;
+			break;
+		default:
+			break;
+		}
 
 		return ability;
 	}
