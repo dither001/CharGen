@@ -1,6 +1,6 @@
 package com.starswonumber.deadnames;
 
-import com.norvendae.rules.misc.Dice;
+import com.norvendae.misc.Dice;
 
 public enum Lost {
 	TRANSHUMAN, EXTRATERRESTRIAL, SYNTHETIC, TRANSDIMENSIONAL;

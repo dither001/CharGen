@@ -1,6 +1,6 @@
 package actor;
 
-import com.norvendae.rules.misc.Dice;
+import com.norvendae.misc.Dice;
 
 public enum Subclass {
 	BERSERKER, BEAR_TOTEM, EAGLE_TOTEM, WOLF_TOTEM, // barbarians

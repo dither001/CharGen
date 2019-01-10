@@ -1,7 +1,7 @@
 package actor;
 import java.util.EnumSet;
 
-import com.norvendae.rules.misc.Dice;
+import com.norvendae.misc.Dice;
 
 public enum Skill {
 	/*

@@ -9,9 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import gear.Inventory;
-import gear.Weapon;
-import magic.Spell;
+import com.dnd5e.gear.Inventory;
+import com.dnd5e.gear.Weapon;
+import com.dnd5e.magic.Spell;
 
 public class Combat implements Option {
 	public enum Role {

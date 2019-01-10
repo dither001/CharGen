@@ -17,17 +17,17 @@ import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
-import com.norvendae.rules.misc.Dice;
+import com.norvendae.misc.Dice;
+import com.starswonumber.definitions.WorldTag;
+import com.traveller1e.worlds.Base;
+import com.traveller1e.worlds.Planetoid;
+import com.traveller1e.worlds.Star;
+import com.traveller1e.worlds.StarSystem;
+import com.traveller1e.worlds.TradeCode;
+import com.traveller1e.worlds.World;
+import com.traveller1e.worlds.WorldType;
 
 import adapter.Controller;
-import milieu.Base;
-import milieu.Planetoid;
-import milieu.Star;
-import milieu.StarSystem;
-import milieu.TradeCode;
-import milieu.World;
-import milieu.WorldTag;
-import milieu.WorldType;
 
 public class SQLiteData {
 	private static final String DB_URL = "jdbc:sqlite:C:/ProgramData/Project.db";

@@ -5,17 +5,18 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
-import com.norvendae.rules.dnd5e.*;
+import com.dnd5e.definitions.*;
+import com.norvendae.misc.Dice;
 import com.starswonumber.deadnames.*;
+import com.starswonumber.definitions.WorldTag;
+import com.traveller1e.starships.MDrive;
+import com.traveller1e.starships.Spaceship;
+import com.traveller1e.worlds.Figure;
+import com.traveller1e.worlds.Star;
+import com.traveller1e.worlds.StarSystem;
 
 import actor.*;
 import actor.Class;
-import milieu.Figure;
-import milieu.Star;
-import milieu.StarSystem;
-import milieu.WorldTag;
-import vessel.MDrive;
-import vessel.Spaceship;
 
 public class Main {
 	private static int PCS_TO_ROLL = 50;
@@ -33,7 +34,13 @@ public class Main {
 		// testFigure();
 
 		// System.out.println(Motivation.motivations().length);
-		testLostTypes();
+		// testLostTypes();
+
+		Madness madness = null;
+		for (int i = 0; i < 50; ++i) {
+			madness = Dice.randomFromArray(Madness.madnesses());
+			System.out.println(madness.toString() + " (" + Madness.getIndex(madness) + ")");
+		}
 
 		// int maxLength = 0, current = 0;
 		// for (WorldTag el : WorldTag.ALL_TAGS) {

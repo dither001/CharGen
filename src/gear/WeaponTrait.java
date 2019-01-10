@@ -1,5 +1,0 @@
-package gear;
-
-public enum WeaponTrait {
-	FINESSE, REACH, THROWN, AMMUNITION, LOADING, IMPROVISED, STACKABLE
-}

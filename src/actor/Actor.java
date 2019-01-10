@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.norvendae.rules.dnd5e.*;
+import com.dnd5e.definitions.*;
 
 //
 

@@ -13,9 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
-import com.norvendae.rules.misc.Dice;
+import com.norvendae.misc.Dice;
 
-import milieu.*;
 import model.SQLiteData;
 import view.Frame;
 

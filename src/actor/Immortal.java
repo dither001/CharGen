@@ -7,10 +7,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.norvendae.rules.dnd5e.*;
-import com.norvendae.rules.misc.Dice;
-
-import milieu.Names;
+import com.dnd5e.definitions.*;
+import com.norvendae.misc.Dice;
+import com.norvendae.misc.Names;
 
 public class Immortal {
 	/*

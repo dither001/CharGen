@@ -1,7 +1,7 @@
 package actor;
 
-import com.norvendae.rules.dnd5e.*;
-import com.norvendae.rules.misc.Dice;
+import com.dnd5e.definitions.*;
+import com.norvendae.misc.Dice;
 
 public enum Deity {
 	ASMODEUS, AVANDRA, BAHAMUT, BANE, CORELLON, ERATHIS, GRUUMSH, IOUN, KORD, LOLTH, MELORA, MORADIN, PELOR, RAVEN_QUEEN, SEHANINE, THARIZDUN, TIAMAT, TOROG, VECNA, ZEHIR;

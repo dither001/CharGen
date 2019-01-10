@@ -1,5 +1,0 @@
-package com.norvendae.rules.dnd5e;
-
-public enum CreatureType {
-	ABERRATION, BEAST, CELESTIAL, CONSTRUCT, DRAGON, ELEMENTAL, FAERIE, FIEND, GIANT, HUMANOID, MONSTROSITY, OOZE, PLANT, UNDEAD
-}

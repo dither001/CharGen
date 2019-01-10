@@ -1,12 +1,12 @@
 package com.starswonumber.deadnames;
 
-import com.norvendae.rules.misc.*;
+import com.norvendae.misc.*;
 
 public abstract class Descriptor {
 	private static final String[] LOST = { "Transhuman", "Extraterrestrial", "Synthetics", "Metadimensional" };
 
 	// thirty-six madnesses
-	private static final String[] MADNESS = { "Abstention. Greatness is in poverty. To have and need nothing is best.",
+	public static final String[] MADNESS = { "Abstention. Greatness is in poverty. To have and need nothing is best.",
 			"Anguish. Personal suffering is magnificence. Sought exotic forms of self-torment.",
 			"Arete. Excellence in strength, wisdom, and beauty is the only worthy goal.",
 			"Beauty. All life is directed toward the creation of beauty in form, action, and meaning.",

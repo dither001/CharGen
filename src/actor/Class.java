@@ -2,12 +2,11 @@ package actor;
 
 import java.util.EnumSet;
 
-import com.norvendae.rules.dnd5e.*;
-import com.norvendae.rules.misc.Dice;
-
-import gear.Armor;
-import gear.Weapon;
-import magic.Spell;
+import com.dnd5e.definitions.*;
+import com.dnd5e.gear.Armor;
+import com.dnd5e.gear.Weapon;
+import com.dnd5e.magic.Spell;
+import com.norvendae.misc.Dice;
 
 public enum Class implements Option {
 	BARBARIAN, BARD, CLERIC, DRUID, FIGHTER, MONK, PALADIN, RANGER, ROGUE, SORCERER, WARLOCK, WIZARD;
